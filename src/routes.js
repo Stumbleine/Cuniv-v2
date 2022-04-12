@@ -34,7 +34,7 @@ export default function Router() {
 			return <Navigate to="/admin/home" replace />;
 		} else if (isAuth === true && user.role === 'Provider') {
 			return <Navigate to="/provider/home" replace />;
-		} else if (isAuth === true && user.role === 'Cashier') {
+		} else if (isAuth === true && user.role === 'Cajero') {
 			return <Navigate to="/cashier/redeem" replace />;
 		}
 	}
@@ -85,10 +85,10 @@ export default function Router() {
 			path: 'admin',
 			element: aunthenticated('Administrador') ? (
 				<DashboardLayout />
-			) : !isAuth ? (
+			) : isAuth ? (
 				<Navigate to="/error/404" replace />
 			) : (
-				<Navigate to="/login" replace />
+				<Navigate to="/" replace />
 			),
 			children: [
 				{ path: 'home', element: <HomePage /> },
@@ -122,8 +122,10 @@ export default function Router() {
 			path: 'provider',
 			element: aunthenticated('Proveedor') ? (
 				<DashboardLayout />
-			) : (
+			) : isAuth ? (
 				<Navigate to="/error/404" replace />
+			) : (
+				<Navigate to="/" replace />
 			),
 			children: [
 				{ path: 'home', element: <HomePage /> },
@@ -134,7 +136,7 @@ export default function Router() {
 				{ path: 'createOffer', element: <CreateOfferPage /> },
 				{ path: 'products', element: <ProductsPage /> },
 
-				{ path: 'staticts', element: <StaticsPage /> },
+				{ path: 'statics', element: <StaticsPage /> },
 			],
 		},
 		{
@@ -142,9 +144,9 @@ export default function Router() {
 			element: aunthenticated('Cajero') ? (
 				<DashboardLayout />
 			) : isAuth ? (
-				<Navigate to="/login" replace />
-			) : (
 				<Navigate to="/error/404" replace />
+			) : (
+				<Navigate to="/" replace />
 			),
 			children: [{ path: 'redeem', element: <RedeemPage /> }],
 		},

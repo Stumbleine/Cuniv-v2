@@ -9,6 +9,7 @@ import {
 	Toolbar,
 	Link,
 	Button,
+	CircularProgress,
 } from '@mui/material';
 
 import { Box } from '@mui/system';
@@ -103,7 +104,9 @@ export default function AuthLayout({ children }) {
 									component={RouterLink}
 									sx={{ color: 'white', mr: 2 }}
 									to="/login">
-									<Button color="inherit">Iniciar Sesion</Button>
+									<Button size="small" color="inherit">
+										Iniciar Sesion
+									</Button>
 								</Link>
 								<Link
 									underline="none"
@@ -111,7 +114,7 @@ export default function AuthLayout({ children }) {
 									component={RouterLink}
 									sx={{ color: 'white' }}
 									to="/register">
-									<Button variant="outlined" color="inherit">
+									<Button size="small" variant="outlined" color="inherit">
 										Registrarse
 									</Button>
 								</Link>

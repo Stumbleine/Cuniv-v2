@@ -11,7 +11,7 @@ import {
 import { Box } from '@mui/system';
 import MenuPopover from './MenuPopover';
 import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { alpha, styled } from '@mui/material/styles';
 import { setLogout } from '../store/loginSlice';
@@ -25,27 +25,11 @@ import {
 	ShoppingCart,
 } from '@mui/icons-material';
 
-const MENU_OPTIONS = [
-	{
-		label: 'Home',
-		icon: 'eva:home-fill',
-		linkTo: '/',
-	},
-	{
-		label: 'Profile',
-		icon: 'eva:person-fill',
-		linkTo: '#',
-	},
-	{
-		label: 'Settings',
-		icon: 'eva:settings-2-fill',
-		linkTo: '#',
-	},
-];
 function AccountPopover() {
 	const dispatch = useDispatch();
-
+	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.user);
+	const { isAuth } = useSelector((state) => state.login);
 
 	const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -212,6 +196,7 @@ function AccountPopover() {
 					onClick={() => {
 						handleCloseUserMenu();
 						dispatch(setLogout());
+						if (isAuth) navigate('/', { replace: true });
 					}}
 					to="home">
 					<Logout

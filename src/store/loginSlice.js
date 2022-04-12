@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
 	isAuth: false,
-	isLodaing: false,
+	isLoading: false,
 	isAuthFailed: false,
 };
 
@@ -15,20 +15,21 @@ const loginSlice = createSlice({
 		},
 		setAuth: (state) => {
 			state.isAuth = true;
-			state.isLodaing = false;
+			state.isLoading = false;
 			console.log(state.isAuth);
 		},
 		setLoading: (state) => {
-			state.isLodaing = true;
+			state.isLoading = true;
 		},
 		setAuthFailed: (state) => {
 			state.isAuth = false;
-			state.isLodaing = false;
+			state.isLoading = false;
 			state.isAuthFailed = true;
 		},
 		setLogout: (state) => {
-			// state.isAuth = false;
+			state.isAuth = false;
 			window.localStorage.removeItem('applicationState');
+			window.localStorage.clear();
 		},
 	},
 });

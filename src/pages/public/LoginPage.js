@@ -6,6 +6,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import { Link as RouterLink } from 'react-router-dom';
 import {
 	Button,
+	CircularProgress,
 	Container,
 	IconButton,
 	InputAdornment,
@@ -22,13 +23,14 @@ import {
 	VisibilityOff,
 } from '@mui/icons-material';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { cyan } from '@mui/material/colors';
+import { cyan, green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setAuth, setAuthFailed } from '../../store/loginSlice';
 import { setUser } from '../../store/userSlice';
 function LoginPage() {
 	const dispatch = useDispatch();
 	const users = useSelector((state) => state.users.users);
+	const { isLoading } = useSelector((state) => state.login);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showlogoutButton, setShowlogoutButton] = useState(false);
 	const [showloginButton, setShowloginButton] = useState(true);
@@ -97,7 +99,7 @@ function LoginPage() {
 							<Typography>Ingrese sus datos</Typography>
 						</Box>
 						<Stack spacing={1}>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[100] }}>
+							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
 								<Typography>adminEmail: </Typography>
 								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
 									admin123@gmail.com
@@ -107,7 +109,7 @@ function LoginPage() {
 									admin123
 								</Typography>
 							</Box>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[100] }}>
+							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
 								<Typography>providerEmaiil: </Typography>
 								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
 									provider123@gmail.com
@@ -117,7 +119,7 @@ function LoginPage() {
 									provider123
 								</Typography>
 							</Box>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[100] }}>
+							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
 								<Typography>cashierEmail: </Typography>
 								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
 									cashier123@gmail.com
@@ -129,6 +131,60 @@ function LoginPage() {
 								</Typography>
 							</Box>
 						</Stack>
+
+						<Box sx={{ py: 2 }}>
+							<GoogleLogin
+								clientId={clientId}
+								buttonText="Sign In"
+								onSuccess={onLoginSuccess}
+								onFailure={onLoginFailure}
+								cookiePolicy={'single_host_origin'}
+								isSignedIn={true}
+								render={(renderProps) => (
+									<Button
+										onClick={renderProps.onClick}
+										disabled={renderProps.disabled}
+										fullWidth
+										color="error"
+										startIcon={<Google />}
+										size="large"
+										variant="contained">
+										Iniciar Sesion con Google
+									</Button>
+								)}
+							/>
+
+							{/* <GoogleLogout
+											clientId={clientId}
+											buttonText="Sign Out"
+											onLogoutSuccess={onSignoutSuccess}
+											render={(renderProps) => (
+												<Button
+													onClick={renderProps.onClick}
+													disabled={renderProps.disabled}
+													fullWidth
+													color="grey"
+																									sx={{
+													background: grey[200],
+													color: grey[800],
+													
+												}}
+													startIcon={<Logout />}
+													size="large"
+													variant="contained">
+													Cerrar Sesion
+												</Button>
+											)}
+										/> */}
+						</Box>
+						<Box
+							sx={{
+								mb: 2,
+							}}>
+							<Typography align="center" color="textSecondary" variant="body1">
+								o
+							</Typography>
+						</Box>
 						<Box sx={{ width: '100%' }}>
 							<TextField
 								fullWidth
@@ -162,73 +218,30 @@ function LoginPage() {
 								helperText={touched.password && errors.password}
 							/>
 
-							<Box sx={{ py: 2 }}>
+							<Box sx={{ py: 2, position: 'relative' }}>
 								<Button
 									color="primary"
 									/* 						disabled={formik.isSubmitting} */
 									fullWidth
 									size="large"
 									type="submit"
+									disabled={isLoading}
 									variant="contained">
 									Iniciar Sesion
 								</Button>
-							</Box>
-							<Box
-								sx={{
-									pb: 1,
-									pt: 1,
-								}}>
-								<Typography
-									align="center"
-									color="textSecondary"
-									variant="body1">
-									o iniciar sesion con google
-								</Typography>
-							</Box>
-							<Box sx={{ py: 2 }}>
-								<GoogleLogin
-									clientId={clientId}
-									buttonText="Sign In"
-									onSuccess={onLoginSuccess}
-									onFailure={onLoginFailure}
-									cookiePolicy={'single_host_origin'}
-									isSignedIn={true}
-									render={(renderProps) => (
-										<Button
-											onClick={renderProps.onClick}
-											disabled={renderProps.disabled}
-											fullWidth
-											color="error"
-											startIcon={<Google />}
-											size="large"
-											variant="contained">
-											Iniciar Sesion con Google
-										</Button>
-									)}
-								/>
-
-								{/* <GoogleLogout
-											clientId={clientId}
-											buttonText="Sign Out"
-											onLogoutSuccess={onSignoutSuccess}
-											render={(renderProps) => (
-												<Button
-													onClick={renderProps.onClick}
-													disabled={renderProps.disabled}
-													fullWidth
-													color="grey"
-																									sx={{
-													background: grey[200],
-													color: grey[800],
-													
-												}}
-													startIcon={<Logout />}
-													size="large"
-													variant="contained">
-													Cerrar Sesion
-												</Button>
-											)}
-										/> */}
+								{isLoading && (
+									<CircularProgress
+										size={24}
+										sx={{
+											color: green[500],
+											position: 'absolute',
+											top: '50%',
+											left: '50%',
+											marginTop: '-12px',
+											marginLeft: '-12px',
+										}}
+									/>
+								)}
 							</Box>
 						</Box>
 					</Form>

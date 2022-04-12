@@ -39,13 +39,20 @@ export default function NavBar() {
 	//	itemNav
 	const ItemNav = (props) => {
 		const router = useLocation();
+		const routeRole =
+			user.role === 'Administrador'
+				? '/admin/'
+				: user.role === 'Proveedor'
+				? '/provider/'
+				: null;
 		console.log(props.href, router.pathname);
 		const active = props.href
-			? router.pathname === '/admin/' + props.href
+			? router.pathname === routeRole + props.href
 			: false;
 		return (
 			<NavLink to={props.href} style={{ textDecoration: 'none' }}>
 				<Button
+					size="small"
 					sx={{
 						my: 2,
 						color: active ? orange[300] : 'white',
@@ -231,7 +238,9 @@ export default function NavBar() {
 
 						{/* Contenendor de pestañas/pagesLinks */}
 						<Box sx={{ display: { xs: 'none', sm: 'flex' }, flexGrow: 1 }}>
-							<ItemNav href={'home'} text={'Home'} />
+							{user.role !== 'Cajero' ? (
+								<ItemNav href={'home'} text={'Home'} />
+							) : null}
 
 							{user.role !== 'Cajero' ? (
 								<ItemNav href={'offers'} text={'Ofertas'} />
