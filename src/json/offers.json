@@ -1,0 +1,468 @@
+[
+	{
+		"id_offer": 1,
+		"title": "Cinecenter",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://trecobox.com.br/wp-content/uploads/2022/02/the-batman-2.jpg",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12",
+					"longitud": "-17.1233.1213123"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 2,
+		"title": "Panchita pipo kid",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "10% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.flpb1-1.fna.fbcdn.net/v/t1.6435-9/186541731_5661290510611323_3408743774099774528_n.png?_nc_cat=101&ccb=1-5&_nc_sid=973b4a&_nc_ohc=BnTy9RXzHZ0AX-ikiXA&_nc_ht=scontent.flpb1-1.fna&oh=00_AT-bAg0n-n-_7x-g1klifYZCl4gVYe8UQCkkEI1d3vgp8Q&oe=625569C3",
+		"empresa": {
+			"name": "Panchita",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				},
+				{
+					"name": "sucursal 1",
+					"address": "Av. Boliviar y Santa cruz",
+					"latitud": "-1231235.23423.12"
+				},
+				{
+					"name": "sucursal 1",
+					"address": "Av. Blanco Galindo km4",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 3,
+		"title": "Auto reparaciones",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "10% descuento en piezas mecanicas! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.flpb1-1.fna.fbcdn.net/v/t1.6435-9/91119000_631979560917858_8315948406165995520_n.jpg?stp=dst-jpg_p526x395&_nc_cat=101&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=z5QGO8ksnScAX_LDGa3&_nc_ht=scontent.flpb1-1.fna&oh=00_AT-Y5LivEHLHB4wuwfkrLYZO7pO9ov_G5oFB0xFbaEAsDw&oe=62548E9C",
+		"empresa": {
+			"name": "El mecanico",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 4,
+		"title": "Salteñas Tikis",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "15% descuento en salteñas y refrescos! esta oferta solo es aplicable en pedidos mayor a 4 ",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.fcbb1-1.fna.fbcdn.net/v/t39.30808-6/273827070_5090610000985849_2580992233286805588_n.png?_nc_cat=108&ccb=1-5&_nc_sid=730e14&_nc_ohc=BhXE7gRSKuQAX--1zgJ&_nc_ht=scontent.fcbb1-1.fna&oh=00_AT-GUjOOp5rJWh0HmIiI8N_BdsI5p-aLIV-OhyoTNetfPw&oe=6233776B",
+		"empresa": {
+			"name": "Salteñas Tikis",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Blanco Galindo y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 5,
+		"title": "Gimnasio adele",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://pbs.twimg.com/media/EyidjwaXMAA90Z-?format=png&name=900x900",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 6,
+		"title": "Sangsumg",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://samsungplus.com.bo/assets/img/a71/1.png",
+		"empresa": {
+			"name": "Samgsung",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 7,
+		"title": "Vanilla coffe",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://media-cdn.tripadvisor.com/media/photo-s/12/f9/79/b3/quite-simply-we-offer.jpg",
+		"empresa": {
+			"name": "Vanilla coffee",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 8,
+		"title": "overtime p.",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://img4.findglocal.com/823/169/558005238231692.jpg",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Ballvian #634",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+
+	{
+		"id_offer": 9,
+		"title": "Museo Convento de Santa Teresa",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "10% descuento en entradas! esta oferta solo esta disponible para cbba",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/36/e0/ad/photo5jpg.jpg?w=500&h=400&s=1",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+
+	{
+		"id_offer": 10,
+		"title": "Pico tunari",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/08/5f/4b/65/pico-tunari.jpg?w=500&h=-1&s=1",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 1,
+		"title": "Cinecenter",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://trecobox.com.br/wp-content/uploads/2022/02/the-batman-2.jpg",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12",
+					"longitud": "-17.1233.1213123"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 2,
+		"title": "Panchita pipo kid",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "10% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.flpb1-1.fna.fbcdn.net/v/t1.6435-9/186541731_5661290510611323_3408743774099774528_n.png?_nc_cat=101&ccb=1-5&_nc_sid=973b4a&_nc_ohc=BnTy9RXzHZ0AX-ikiXA&_nc_ht=scontent.flpb1-1.fna&oh=00_AT-bAg0n-n-_7x-g1klifYZCl4gVYe8UQCkkEI1d3vgp8Q&oe=625569C3",
+		"empresa": {
+			"name": "Panchita",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				},
+				{
+					"name": "sucursal 1",
+					"address": "Av. Boliviar y Santa cruz",
+					"latitud": "-1231235.23423.12"
+				},
+				{
+					"name": "sucursal 1",
+					"address": "Av. Blanco Galindo km4",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 3,
+		"title": "Auto reparaciones",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "10% descuento en piezas mecanicas! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.flpb1-1.fna.fbcdn.net/v/t1.6435-9/91119000_631979560917858_8315948406165995520_n.jpg?stp=dst-jpg_p526x395&_nc_cat=101&ccb=1-5&_nc_sid=cdbe9c&_nc_ohc=z5QGO8ksnScAX_LDGa3&_nc_ht=scontent.flpb1-1.fna&oh=00_AT-Y5LivEHLHB4wuwfkrLYZO7pO9ov_G5oFB0xFbaEAsDw&oe=62548E9C",
+		"empresa": {
+			"name": "El mecanico",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 4,
+		"title": "Salteñas Tikis",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "15% descuento en salteñas y refrescos! esta oferta solo es aplicable en pedidos mayor a 4 ",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://scontent.fcbb1-1.fna.fbcdn.net/v/t39.30808-6/273827070_5090610000985849_2580992233286805588_n.png?_nc_cat=108&ccb=1-5&_nc_sid=730e14&_nc_ohc=BhXE7gRSKuQAX--1zgJ&_nc_ht=scontent.fcbb1-1.fna&oh=00_AT-GUjOOp5rJWh0HmIiI8N_BdsI5p-aLIV-OhyoTNetfPw&oe=6233776B",
+		"empresa": {
+			"name": "Salteñas Tikis",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Blanco Galindo y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 5,
+		"title": "Gimnasio adele",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://pbs.twimg.com/media/EyidjwaXMAA90Z-?format=png&name=900x900",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 6,
+		"title": "Sangsumg",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://samsungplus.com.bo/assets/img/a71/1.png",
+		"empresa": {
+			"name": "Samgsung",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 7,
+		"title": "Vanilla coffe",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://media-cdn.tripadvisor.com/media/photo-s/12/f9/79/b3/quite-simply-we-offer.jpg",
+		"empresa": {
+			"name": "Vanilla coffee",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+	{
+		"id_offer": 8,
+		"title": "overtime p.",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://img4.findglocal.com/823/169/558005238231692.jpg",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Ballvian #634",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+
+	{
+		"id_offer": 9,
+		"title": "Museo Convento de Santa Teresa",
+		"status": "vigente",
+		"discount": "10%",
+		"conditions": "10% descuento en entradas! esta oferta solo esta disponible para cbba",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/36/e0/ad/photo5jpg.jpg?w=500&h=400&s=1",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	},
+
+	{
+		"id_offer": 10,
+		"title": "Pico tunari",
+		"status": "expirado",
+		"discount": "10%",
+		"conditions": "25% descuento en boletos! esta oferta solo esta disponible para las peliculas de Batman",
+		"about_products": "peliculas en 4K, y 3D",
+		"fecha_inicio": "12-10-2022",
+		"fecha_fin": "12-12-2022",
+		"image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/08/5f/4b/65/pico-tunari.jpg?w=500&h=-1&s=1",
+		"empresa": {
+			"name": "Cinecenter",
+			"sucursales": [
+				{
+					"name": "sucursal 1",
+					"address": "Av. Billazon y Caracas",
+					"latitud": "-1231235.23423.12"
+				}
+			],
+			"socials": { "fb": "cinecenter.fb.com", "ig": "cinecenter.com" }
+		}
+	}
+]

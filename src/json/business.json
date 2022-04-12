@@ -1,0 +1,121 @@
+[
+	{
+		"razonSocial": "Doña Panchita",
+		"descripcion": "Doña Panchita, sabor de la familia es una marca originalmente boliviana, que ofrece diferentes platos sobre deliciosas recetas de pollo.",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t1.6435-9/83041229_1508139649341680_1227974267103084544_n.png?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=wdf1aYYBiGMAX80xjYG&tn=nJoPhB-vgb6rPN-v&_nc_ht=scontent.flpb1-2.fna&oh=00_AT-Xg-o4sG3Ol2i9rNfXEuuNpsdJsgEwKy5qWR1gKkXr_g&oe=6256BDAB",
+		"nit": "12354896984",
+		"telefono": "69410910",
+		"sucursales": [
+			{
+				"name": "Sucursal-1",
+				"direccion": "Av. Blanco Galindo y Av. Segunda Av. Villazon",
+				"location": {
+					"latitud": "-17.375001804909505, -66.13568911792227",
+					"longitud": "-66.150593"
+				}
+			},
+			{
+				"name": "sucursal-2",
+				"direccion": "Av. Oquendo #234",
+				"location": {
+					"latitud": "-17.375001804909505, -66.13568911792227",
+					"longitud": "-66.150593"
+				}
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/DnaPanchita",
+			"ig": ""
+		}
+	},
+	{
+		"razonSocial": "Rapido Cafe",
+		"descripcion": "Rapido CAFÉ es un café temático, único en su género en Cochabamba, el cual se dedicará a fomentar la sensualidad, el erotismo y una sexualidad sana y plena",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t1.6435-9/51034489_2189541064422750_1643464567184949248_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=emtCsXBIKQsAX_kuEFa&_nc_ht=scontent.flpb1-2.fna&oh=00_AT8eLBZYGMumcPTAbOnmV5oDE3Qo4f2EDYMgMVY_4wgDHQ&oe=6256434F",
+		"nit": "12354896984",
+		"telefono": "4 4258747",
+		"sucursales": [
+			{
+				"name": "",
+				"direccion": "CBBA, calle 16 de julio nro 221",
+				"location": { "latitud": "-17.394606", "longitud": "-66.150593" }
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/Rapido-CAF%C3%89-2170947119615478/",
+			"ig": ""
+		}
+	},
+	{
+		"razonSocial": "Blue Gym Center",
+		"descripcion": "Centro de actividades fisicas, Gimnasio",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t1.18169-9/12803205_1581431842174892_5869286498523467231_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=kE7Dn1FYTW0AX_5ahiu&_nc_ht=scontent.flpb1-2.fna&oh=00_AT9wdEWvJDBiVuEH9NIAsCUAVYwwu0Bh8xSDyH5v6438iw&oe=62557893",
+		"nit": "12354896984",
+		"telefono": "+591 4222692",
+		"sucursales": [
+			{
+				"name": "",
+				"direccion": " C. San Martin, Cochabamba #1150",
+				"location": { "latitud": "-17.394606", "longitud": "-66.150593" }
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/blugymcenter/",
+			"ig": ""
+		}
+	},
+	{
+		"razonSocial": "JAVI Estilismo",
+		"descripcion": "Pensamos de manera diferente en la belleza, creando tu propia personalidad y estilo",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t1.6435-9/51034489_2189541064422750_1643464567184949248_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=emtCsXBIKQsAX_kuEFa&_nc_ht=scontent.flpb1-2.fna&oh=00_AT8eLBZYGMumcPTAbOnmV5oDE3Qo4f2EDYMgMVY_4wgDHQ&oe=6256434F",
+		"nit": "12354896984",
+		"telefono": "77485481",
+		"sucursales": [
+			{
+				"name": "",
+				"direccion": "Antezana 725 cbba",
+				"location": { "latitud": "-17.394606", "longitud": "-66.150593" }
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/JaviEstilismo/",
+			"ig": ""
+		}
+	},
+	{
+		"razonSocial": "DA VINCI Pizzeria Bar",
+		"descripcion": "Da Vinci te da momentos especiales en tu hogar. Sabemos lo importante que es desconectarte y tener una experiencia única, es parte de nuestro trabajo. ¡Ten tu experiencia Da Vinci!",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t39.30808-6/245187802_3472695862956671_2990178239331673811_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=ZQbiMA2beIsAX98qoth&tn=nJoPhB-vgb6rPN-v&_nc_ht=scontent.flpb1-2.fna&oh=00_AT_kHJq05iCEN5IRzkteMoLan-Q8GdFJJAsyWlegtiTu1Q&oe=62369B5F",
+		"nit": "12354896984",
+		"telefono": "72243301",
+		"sucursales": [
+			{
+				"name": "",
+				"direccion": "Antezana, entre La Paz y Chuquisaca",
+				"location": { "latitud": "-17.394606", "longitud": "-66.150593" }
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/DaVinciPizzeriaBar",
+			"ig": "@davincipizzeriabar"
+		}
+	},
+	{
+		"razonSocial": "NEXT Level",
+		"descripcion": "NEXT LEVEL es distribuidor oficial de Samsung para Bolivia, SMARTPHONE,AUDIO, WEARABLES, ACCESORIOS",
+		"logo": "https://scontent.flpb1-2.fna.fbcdn.net/v/t1.6435-9/152105862_1637796906405403_6381843468784917292_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=0X8YqXZMupsAX93Gg8n&_nc_ht=scontent.flpb1-2.fna&oh=00_AT_6enx7g5Gc4kU-59DNR_joej8m-KgDzk2wy6vDNFteOQ&oe=625859CB",
+		"nit": "12354896984",
+		"telefono": "70303867",
+		"sucursales": [
+			{
+				"name": "",
+				"direccion": "Av. Pando #1193 cbba",
+				"location": { "latitud": "-17.394606", "longitud": "-66.150593" }
+			}
+		],
+		"social": {
+			"fb": "https://www.facebook.com/NextLevelCochabamba/",
+			"ig": "@Next_Level_Cochabamba"
+		}
+	}
+]
