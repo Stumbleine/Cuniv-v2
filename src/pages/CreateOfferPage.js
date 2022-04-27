@@ -14,11 +14,15 @@ import {
 	Button,
 	Card,
 	Grid,
+	Snackbar,
+	Alert,
+	FormControlLabel,
+	Checkbox,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState, forwardRef } from 'react';
 
-import { grey, orange, pink, cyan, blue } from '@mui/material/colors';
+import { grey, orange, pink, cyan, blue, green } from '@mui/material/colors';
 import { CheckBox, Image } from '@mui/icons-material';
 
 function CreateOfferPage() {
@@ -32,8 +36,30 @@ function CreateOfferPage() {
 		setimage(URL.createObjectURL(e.target.files[0]));
 	};
 	const [image, setimage] = useState(null);
+
+	const [open, setOpen] = useState(false);
+
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setOpen(false);
+		// Navigate('/reg-task');
+	};
 	return (
 		<Container maxWidth="lg">
+			<Snackbar
+				open={open}
+				autoHideDuration={3000}
+				// sx={{ background: green[400] }}
+				onClose={handleClose}>
+				<Alert
+					onClose={handleClose}
+					severity="success"
+					sx={{ width: '100%', background: green[400], color: 'white' }}>
+					Empresa creado exitosamente
+				</Alert>
+			</Snackbar>
 			<Box>
 				<Box>
 					<Typography
@@ -44,14 +70,9 @@ function CreateOfferPage() {
 				</Box>
 
 				{/* <Box sx={{ display: 'flex', width: 1, background: pink[600] }}> */}
-				<Grid
-					container
-					spacing={2}
-					sx={{
-						background: pink[600],
-					}}>
+				<Grid container spacing={2} sx={{}}>
 					{/* primer panel(image y titulos) */}
-					<Grid item xs={12} md={6} lg={6} sx={{ background: blue[200] }}>
+					<Grid item xs={12} md={6} lg={6} sx={{}}>
 						<Card sx={{ p: 2 }}>
 							<Box
 								sx={{
@@ -309,7 +330,7 @@ function CreateOfferPage() {
 												overflowY: 'scroll',
 												height: 246,
 											}}>
-											{[1, 2, 3, 4, 5, 6].map((n, index) => (
+											{S.map((n, index) => (
 												<Paper
 													key={index}
 													sx={{
@@ -318,15 +339,18 @@ function CreateOfferPage() {
 														width: '90%',
 														minWidth: 200,
 														minHeight: 60,
+														p: 1,
 														bgcolor: 'background.paper',
 													}}>
-													<CheckBox sx={{ ml: 1 }} />
-													<Box sx={{ ml: 2 }}>
-														<Typography variant="body1">
-															NombreSucursal
-														</Typography>
+													{/* <CheckBox chec sx={{ ml: 1 }} /> */}
+													<FormControlLabel
+														control={<Checkbox />}
+														sx={{ ml: 1 }}
+													/>
+													<Box sx={{ ml: 1 }}>
+														<Typography variant="body1">{n.nombre}</Typography>
 														<Typography variant="body2">
-															direccion: av.asdasdadasd
+															direccion: {n.direccion}
 														</Typography>
 													</Box>
 												</Paper>
@@ -343,7 +367,13 @@ function CreateOfferPage() {
 									mt: 2,
 								}}>
 								<Button size="small">Cancelar</Button>
-								<Button size="small" sx={{ ml: 2 }} variant="contained">
+								<Button
+									size="small"
+									onClick={() => {
+										setOpen(true);
+									}}
+									sx={{ ml: 2 }}
+									variant="contained">
 									Crear Oferta
 								</Button>
 							</Box>
@@ -354,5 +384,11 @@ function CreateOfferPage() {
 		</Container>
 	);
 }
-
+export const S = [
+	{
+		nombre: 'Sucursal plaza lyncoln',
+		direccion: 'Calle Illapa casi Parque Lyncoln 591, Cbba - Bolivia ',
+	},
+	{ nombre: 'Sucursal central', direccion: 'Plaza Lyncoln ' },
+];
 export default CreateOfferPage;

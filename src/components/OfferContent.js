@@ -5,7 +5,6 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogTitle,
 	Slide,
 	CardMedia,
 	Typography,
@@ -14,12 +13,13 @@ import {
 	ListItem,
 	ListItemText,
 	Divider,
-	ListItemButton,
 	ListItemIcon,
 } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOfferDetailAsync } from '../store/offersSlice';
 import StatusLabel from './StatusLabel';
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -27,9 +27,26 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function OfferContent(props) {
 	const [open, setOpen] = React.useState(false);
-	const offer = props.offer;
-	const company = offer.empresa;
-	const sucursales = offer.empresa.sucursales;
+
+	const [offer, setOffer] = useState(null);
+	const [company, setCompany] = useState(null);
+	const [sucursales, setSucursales] = useState(null);
+	// const company = offer.empresa;
+	// const sucursales = useSelector()
+	const dispatch = useDispatch();
+	useEffect(() => {
+		const fetchOffer = async () => {
+			const data = await dispatch(getOfferDetailAsync(props.offer.id_oferta));
+			setOffer(data);
+		};
+		fetchOffer();
+	}, []);
+	useEffect(() => {
+		setCompany(offer?.empresa);
+		setSucursales(offer?.sucursales);
+		console.log('offerContetn', offer?.condiciones);
+	}, [offer]);
+
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -58,9 +75,9 @@ function OfferContent(props) {
 						component="div"
 						variant="subtitle1"
 						sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
-						{company.name}
+						{offer?.empresa?.razon_social}
 					</Typography>
-					<StatusLabel status={offer.status} />
+					<StatusLabel status={offer?.status} />
 					{/* <Box sx={{ p: 0.5, background: red[400], borderRadius: 2 }}>
 						<Typography
 							sx={{
@@ -80,7 +97,7 @@ function OfferContent(props) {
 						height="200"
 						component="img"
 						alt="green iguana"
-						image={offer.image}
+						image={offer?.image}
 					/>
 					<DialogContent sx={{ p: 2 }}>
 						<Box>
@@ -89,11 +106,13 @@ function OfferContent(props) {
 								variant="subtitle1"
 								noWrap
 								sx={{ fontWeight: 'bold', flexGrow: 1 }}>
-								{offer.title}
+								{offer?.titulo}
 							</Typography>
 
 							<Typography gutterBottom component="div" variant="body2">
-								{offer.discount} de descuento
+								{offer?.descuento}{' '}
+								{offer?.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de
+								descuento
 							</Typography>
 						</Box>
 						<Box>
@@ -106,22 +125,25 @@ function OfferContent(props) {
 								Duracion
 							</Typography>
 							<Typography gutterBottom component="div" variant="body2" noWrap>
-								{offer.fecha_inicio + ' / ' + offer.fecha_fin}
+								{offer?.fecha_inicio + ' / ' + offer?.fecha_fin}
 							</Typography>
 						</Box>
-						<Box>
-							<Typography
-								gutterBottom
-								component="div"
-								variant="subtitle2"
-								noWrap
-								sx={{ fontWeight: 'bold' }}>
-								Condiciones de reclamo
-							</Typography>
-							<Typography gutterBottom component="div" variant="body2" noWrap>
-								{offer.conditions}
-							</Typography>
-						</Box>
+						{offer?.condiciones ? (
+							<Box>
+								<Typography
+									gutterBottom
+									component="div"
+									variant="subtitle2"
+									noWrap
+									sx={{ fontWeight: 'bold' }}>
+									Condiciones de reclamo
+								</Typography>
+
+								<Typography gutterBottom component="div" variant="body2" noWrap>
+									{offer?.condiciones}
+								</Typography>
+							</Box>
+						) : null}
 						<Box>
 							<Typography
 								gutterBottom
@@ -132,7 +154,7 @@ function OfferContent(props) {
 								Productos incluidos
 							</Typography>
 							<Typography gutterBottom component="div" variant="body2" noWrap>
-								{offer.about_products}
+								{offer?.productos?.productos}
 							</Typography>
 						</Box>
 						<Box>
@@ -147,7 +169,7 @@ function OfferContent(props) {
 							<List
 								sx={{ width: '100%', background: orange[100], borderRadius: 2 }}
 								disablePadding>
-								{sucursales.map((sucursal, index) => (
+								{sucursales?.map((sucursal, index) => (
 									<Box key={index}>
 										<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
 											<ListItemIcon
@@ -159,14 +181,14 @@ function OfferContent(props) {
 											<ListItemText
 												primary={
 													<Typography variant="body1">
-														{sucursal.name}
+														{sucursal?.name}
 													</Typography>
 												}
 												secondary={
 													<Typography
 														variant="body2"
 														sx={{ fontStyle: 'italic' }}>
-														{sucursal.direccion}
+														{sucursal?.direccion}
 													</Typography>
 												}
 											/>

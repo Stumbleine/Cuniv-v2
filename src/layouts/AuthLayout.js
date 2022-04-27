@@ -22,7 +22,7 @@ const MainStyle = styled('div')(({ theme }) => ({
 	alignItems: 'center',
 	justifyContent: 'center',
 
-	// paddingTop: APP_BAR_MOBILE + 24,
+	paddingTop: 40,
 	// paddingBottom: theme.spacing(10),
 	// [theme.breakpoints.up('lg')]: {
 	// 	paddingTop: APP_BAR_DESKTOP + 24,
@@ -30,6 +30,51 @@ const MainStyle = styled('div')(({ theme }) => ({
 	// 	paddingRight: theme.spacing(2),
 	// },
 }));
+const screenSizes = () => {
+	return (
+		<>
+			<Typography variant="h6" sx={{ display: { xs: 'flex', sm: 'none' } }}>
+				[ xs ]
+			</Typography>
+			<Typography
+				variant="6"
+				sx={{ display: { xs: 'none', sm: 'flex', md: 'none' } }}>
+				[ sm ]
+			</Typography>
+			<Typography
+				variant="h6"
+				sx={{ display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' } }}>
+				[ md ]
+			</Typography>
+			<Typography
+				variant="h6"
+				sx={{
+					display: {
+						xs: 'none',
+						sm: 'none',
+						md: 'none',
+						lg: 'flex',
+						xl: 'none',
+					},
+				}}>
+				[ lg ]
+			</Typography>
+			<Typography
+				variant="h6"
+				sx={{
+					display: {
+						xs: 'none',
+						sm: 'none',
+						md: 'none',
+						lg: 'none',
+						xl: 'flex',
+					},
+				}}>
+				[ xl ]
+			</Typography>
+		</>
+	);
+};
 export default function AuthLayout({ children }) {
 	const { pathname } = useLocation();
 	return (
@@ -60,6 +105,8 @@ export default function AuthLayout({ children }) {
 								</Typography>
 							</RouterLink>
 						</Box>
+						{/* {screenSizes()} */}
+
 						{pathname === '/login' ? (
 							<Typography
 								variant="body1"
@@ -95,7 +142,6 @@ export default function AuthLayout({ children }) {
 								</Link>
 							</Typography>
 						) : null}
-
 						{pathname === '/index' ? (
 							<Box sx={{ display: 'flex' }}>
 								<Link
@@ -104,11 +150,11 @@ export default function AuthLayout({ children }) {
 									component={RouterLink}
 									sx={{ color: 'white', mr: 2 }}
 									to="/login">
-									<Button size="small" color="inherit">
+									<Button size="small" color="inherit" variant="outlined">
 										Iniciar Sesion
 									</Button>
 								</Link>
-								<Link
+								{/* <Link
 									underline="none"
 									variant="subtitle2"
 									component={RouterLink}
@@ -117,7 +163,7 @@ export default function AuthLayout({ children }) {
 									<Button size="small" variant="outlined" color="inherit">
 										Registrarse
 									</Button>
-								</Link>
+								</Link> */}
 							</Box>
 						) : null}
 					</Toolbar>

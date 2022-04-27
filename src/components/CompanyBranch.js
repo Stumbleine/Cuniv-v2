@@ -4,7 +4,7 @@ import { Delete, Edit } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { grey, orange } from '@mui/material/colors';
 
-function CompanyBranch({ sucursal, sayHello, key }) {
+function CompanyBranch({ sucursal, sayHello }) {
 	const sucursaL = sucursal;
 	return (
 		<Paper
@@ -19,8 +19,8 @@ function CompanyBranch({ sucursal, sayHello, key }) {
 				background: orange[50],
 			}}>
 			<Box sx={{ ml: 2, flexGrow: 1 }}>
-				<Typography variant="body1">{sucursaL.name}</Typography>
-				<Typography variant="body2">dir. {sucursaL.address} </Typography>
+				<Typography variant="body1">{sucursaL.nombre}</Typography>
+				<Typography variant="body2">dir. {sucursaL.direccion} </Typography>
 			</Box>
 
 			<Box sx={{ mr: 1 }}>

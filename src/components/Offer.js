@@ -50,7 +50,8 @@ export default function Offer(props) {
 						position: 'absolute',
 					}}
 				/>
-				<AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" />
+				{/* <AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" /> */}
+				<AvatarCustom alt={offer.rz_empresa} src={offer.logo_empresa} />
 				<CardContent sx={{ p: 1, mt: 1.5 }}>
 					<Typography
 						gutterBottom
@@ -58,10 +59,16 @@ export default function Offer(props) {
 						variant="subtitle2"
 						noWrap
 						sx={{ fontWeight: 'bold' }}>
-						{offer.title}
+						{offer.titulo}
 					</Typography>
-					<Typography gutterBottom component="div" variant="body2">
-						{offer.discount} descuento
+					<Typography
+						gutterBottom
+						component="div"
+						variant="body2"
+						noWrap
+						sx={{ overflow: 'hidden' }}>
+						{offer.descuento}
+						{offer.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de descuento
 					</Typography>
 				</CardContent>{' '}
 			</OfferContent>

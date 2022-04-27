@@ -1,7 +1,7 @@
 import React from 'react';
 
-function SupplierCompanyDialog() {
-	return <div>SupplierCompanyDialog</div>;
+function SupplierCompanyContent() {
+	return <div>SupplierCompanyContent</div>;
 }
 
-export default SupplierCompanyDialog;
+export default SupplierCompanyContent;

@@ -1,4 +1,11 @@
-import { Delete, Edit, Facebook, Instagram } from '@mui/icons-material';
+import {
+	Delete,
+	Edit,
+	Email,
+	Facebook,
+	Instagram,
+	Language,
+} from '@mui/icons-material';
 import {
 	Card,
 	CardActionArea,
@@ -9,7 +16,7 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { blue, orange, pink, red } from '@mui/material/colors';
+import { blue, grey, orange, pink, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -25,10 +32,10 @@ function SupplierCompany(props) {
 			}}>
 			<CardActionArea
 				component={Link}
-				to={`/admin/supplierCompanies/${companie.razonSocial}`}>
+				to={`/admin/supplierCompanies/${companie.id_empresa}`}>
 				<CardMedia
 					component="img"
-					alt="green iguana"
+					alt={companie.razon_social}
 					height="140"
 					width="140"
 					sx={{ backgroundRepeat: 'no-repeat' }}
@@ -55,7 +62,7 @@ function SupplierCompany(props) {
 					variant="subtitle1"
 					noWrap
 					sx={{ fontWeight: 'bold' }}>
-					{companie.razonSocial}
+					{companie.razon_social}
 				</Typography>
 				<Box
 					sx={{
@@ -63,18 +70,38 @@ function SupplierCompany(props) {
 						width: '100%',
 						justifyContent: 'center',
 					}}>
-					<IconButton onClick={() => window.open(companie.social.fb)}>
-						<Facebook
-							sx={{
-								color: blue[500],
-							}}></Facebook>
-					</IconButton>
-					<IconButton onClick={() => window.open(companie.social.ig)}>
-						<Instagram
-							sx={{
-								color: pink[500],
-							}}></Instagram>
-					</IconButton>
+					{companie.facebook ? (
+						<IconButton onClick={() => window.open(companie.facebook)}>
+							<Facebook
+								sx={{
+									color: blue[500],
+								}}></Facebook>
+						</IconButton>
+					) : null}
+					{companie.instagram ? (
+						<IconButton onClick={() => window.open(companie.instagram)}>
+							<Instagram
+								sx={{
+									color: pink[500],
+								}}></Instagram>
+						</IconButton>
+					) : null}
+					{companie.sitio_web ? (
+						<IconButton onClick={() => window.open(companie.sitio_web)}>
+							<Language
+								sx={{
+									color: grey[700],
+								}}></Language>
+						</IconButton>
+					) : null}
+					{companie.email ? (
+						<IconButton>
+							<Email
+								sx={{
+									color: blue[500],
+								}}></Email>
+						</IconButton>
+					) : null}
 				</Box>
 				{/* <Typography gutterBottom component="div" variant="body2">
 					{companie.descripcion}

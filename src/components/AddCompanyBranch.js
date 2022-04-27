@@ -56,9 +56,10 @@ function AddCompanyBranch({ handleAddSucursal }) {
 		validate: validateMap,
 		onSubmit: (valores, { resetForm }) => {
 			const sucursal = {
-				name: valores.name,
-				address: valores.address,
-				position: position,
+				nombre: valores.name,
+				direccion: valores.address,
+				latitud: position.lat,
+				longitud: position.lng,
 			};
 			handleAddSucursal(sucursal);
 			resetForm();
@@ -89,7 +90,7 @@ function AddCompanyBranch({ handleAddSucursal }) {
 				sx={{ minWidth: 500 }}>
 				<DialogTitle sx={{ color: 'primary.main' }}>Nueva Sucursal</DialogTitle>
 				<DialogContent>
-					<FormikProvider value="formik">
+					<FormikProvider value={formik}>
 						<Form noValidate onSubmit={handleSubmit}>
 							<Box>
 								<TextField

@@ -13,23 +13,23 @@ function SupplierCompaniesPage() {
 	const companies = useSelector((state) => state.companies.companies);
 
 	return (
-		<Container maxWidth="lg" sx={{ background: 'pink' }}>
-			<Box sx={{ background: blue[200] }}>
+		<Container maxWidth="lg">
+			<Box>
 				<Box>
 					<Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
-						Proveedores
+						Empresas
 					</Typography>
 					<Stack
 						direction="row"
 						flexWrap="wrap-reverse"
 						alignItems="center"
 						justifyContent="flex-end"
-						sx={{ mb: 2 }}>
+						sx={{ mb: 3 }}>
 						<Link
 							to="/admin/createSupplierCompanie"
 							style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
-								Proveedor
+								Empresa
 							</Button>
 						</Link>
 					</Stack>
@@ -38,7 +38,6 @@ function SupplierCompaniesPage() {
 					container
 					spacing={2}
 					sx={{
-						background: 'pink',
 						display: 'flex',
 						justifyContent: 'center',
 					}}>

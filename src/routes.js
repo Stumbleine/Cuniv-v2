@@ -103,7 +103,7 @@ export default function Router() {
 					element: <SupplierCompaniesPage />,
 				},
 				{
-					path: 'supplierCompanies/:id',
+					path: 'supplierCompanies/:idEmpresa',
 					element: <CompanieProfile />,
 				},
 				{

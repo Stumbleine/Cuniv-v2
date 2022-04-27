@@ -8,7 +8,8 @@ import {
 	MapConsumer,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationCity } from '@mui/icons-material';
+import { LocationCity, Room } from '@mui/icons-material';
+import L from 'leaflet';
 function LocationMarker() {
 	const [position, setPosition] = useState(null);
 	const map = useMapEvents({
@@ -36,6 +37,15 @@ function MapView({ sendPosition }) {
 			height: 200,
 		},
 	};
+	const myIcon = L.icon({
+		iconUrl: 'location.svg',
+		iconSize: [38, 50],
+		iconAnchor: [22, 94],
+		popupAnchor: [-3, -76],
+		// shadowUrl: 'my-icon-shadow.png',
+		// shadowSize: [68, 95],
+		// shadowAnchor: [22, 94],
+	});
 	return (
 		<MapContainer
 			style={{ width: '100%', height: '100%' }}
@@ -59,7 +69,7 @@ function MapView({ sendPosition }) {
 
 					return position === null ? null : (
 						<Marker position={position}>
-							<Popup>You are here</Popup>
+							<Popup>yo are here</Popup>
 						</Marker>
 					);
 				}}

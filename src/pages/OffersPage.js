@@ -34,7 +34,6 @@ function OffersPage() {
 					container
 					spacing={2}
 					sx={{
-						background: blue[200],
 						display: 'flex',
 						justifyContent: 'center',
 					}}>

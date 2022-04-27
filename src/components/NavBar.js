@@ -249,14 +249,14 @@ export default function NavBar() {
 							{user.role === 'Administrador' ? (
 								<ItemNav href={'supplierCompanies'} text={'Empresas'} />
 							) : null}
-							{user.role === 'Aministrador' ? (
+							{user.role === 'Administrador' ? (
 								<ItemNav href={'users'} text={'Usuarios'} />
 							) : null}
 							{user.role !== 'Cajero' ? (
 								<ItemNav href={'statics'} text={'Estadisticas'} />
 							) : null}
 						</Box>
-						{screenSizes()}
+						{/* {screenSizes()} */}
 						<AccountPopover />
 					</Toolbar>
 				</Container>
