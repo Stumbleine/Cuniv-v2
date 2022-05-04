@@ -60,11 +60,11 @@ function UsersTable() {
 			<Card>
 				<TableContainer>
 					<Table>
-						<TableHead>
+						<TableHead sx={{ bgcolor: 'primary.main' }}>
 							<TableRow>
 								{TABLE_HEAD.map((cell) => (
-									<TableCell key={cell.id}>
-										<TableSortLabel hideSortIcon>{cell.label}</TableSortLabel>
+									<TableCell key={cell.id} sx={{ color: 'white' }}>
+										<Typography noWrap>{cell.label}</Typography>
 									</TableCell>
 								))}
 							</TableRow>
@@ -106,7 +106,6 @@ function UsersTable() {
 										<TableCell align="center">Si</TableCell>
 										<TableCell align="center">
 											<Box
-												variant="ghost"
 												sx={{
 													p: 0.5,
 													borderRadius: 2,

@@ -55,7 +55,7 @@ function SupplierCompany(props) {
 					}}
 				/> */}
 			{/* <AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" /> */}
-			<CardContent sx={{ p: 1, textAlign: 'center' }}>
+			<CardContent sx={{ textAlign: 'center' }}>
 				<Typography
 					gutterBottom
 					component="div"
@@ -95,7 +95,15 @@ function SupplierCompany(props) {
 						</IconButton>
 					) : null}
 					{companie.email ? (
-						<IconButton>
+						<IconButton
+							onClick={(e) => {
+								window.location = 'mailto:' + companie.email;
+								e.preventDefault();
+								// Linking.openURL(
+								// 	'mailto:support@example.com?subject=SendMail&body=Description'
+								// );
+							}}
+							title="support@example.com">
 							<Email
 								sx={{
 									color: blue[500],
@@ -109,7 +117,7 @@ function SupplierCompany(props) {
 			</CardContent>
 
 			<Divider />
-			<CardActions sx={{ p: 0, pb: 0.5, justifyContent: 'end' }}>
+			<CardActions sx={{ justifyContent: 'end' }}>
 				<IconButton size="small">
 					<Edit
 						sx={{

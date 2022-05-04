@@ -9,6 +9,7 @@ import {
 	Container,
 	MenuItem,
 	Button,
+	Divider,
 } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import { Link, NavLink, useLocation } from 'react-router-dom';
@@ -21,7 +22,7 @@ import { orange } from '@mui/material/colors';
 import { setLogout } from '../store/loginSlice';
 export default function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
-	const user = useSelector((state) => state.user.user);
+	const { rule } = useSelector((state) => state.user);
 	/*   const [anchorElUser, setAnchorElUser] = React.useState(null); */
 
 	const dispatch = useDispatch();
@@ -40,23 +41,19 @@ export default function NavBar() {
 	const ItemNav = (props) => {
 		const router = useLocation();
 		const routeRole =
-			user.role === 'Administrador'
-				? '/admin/'
-				: user.role === 'Proveedor'
-				? '/provider/'
-				: null;
-		console.log(props.href, router.pathname);
+			rule === 'ADM' ? '/admin/' : rule === 'PRV' ? '/provider/' : null;
 		const active = props.href
 			? router.pathname === routeRole + props.href
 			: false;
 		return (
 			<NavLink to={props.href} style={{ textDecoration: 'none' }}>
 				<Button
-					size="small"
+					// size="small"
 					sx={{
-						my: 2,
-						color: active ? orange[300] : 'white',
+						color: active ? 'primary.main' : 'text.disabled',
 						fontWeight: 'bold',
+						fontStyle: 'italic',
+						px: 1,
 					}}>
 					{props.text}
 				</Button>
@@ -66,21 +63,26 @@ export default function NavBar() {
 	const screenSizes = () => {
 		return (
 			<>
-				<Typography variant="h6" sx={{ display: { xs: 'flex', sm: 'none' } }}>
-					[ xs ]
+				<Typography
+					sx={{ display: { xs: 'flex', sm: 'none' }, color: 'secondary.main' }}>
+					xs
 				</Typography>
 				<Typography
 					variant="6"
-					sx={{ display: { xs: 'none', sm: 'flex', md: 'none' } }}>
-					[ sm ]
+					sx={{
+						display: { xs: 'none', sm: 'flex', md: 'none' },
+						color: 'secondary.main',
+					}}>
+					sm
 				</Typography>
 				<Typography
-					variant="h6"
-					sx={{ display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' } }}>
-					[ md ]
+					sx={{
+						display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' },
+						color: 'secondary.main',
+					}}>
+					md
 				</Typography>
 				<Typography
-					variant="h6"
 					sx={{
 						display: {
 							xs: 'none',
@@ -89,11 +91,11 @@ export default function NavBar() {
 							lg: 'flex',
 							xl: 'none',
 						},
+						color: 'secondary.main',
 					}}>
-					[ lg ]
+					lg
 				</Typography>
 				<Typography
-					variant="h6"
 					sx={{
 						display: {
 							xs: 'none',
@@ -102,8 +104,9 @@ export default function NavBar() {
 							lg: 'none',
 							xl: 'flex',
 						},
+						color: 'secondary.main',
 					}}>
-					[ xl ]
+					xl
 				</Typography>
 			</>
 		);
@@ -112,9 +115,8 @@ export default function NavBar() {
 		<>
 			<AppBar
 				position="static"
-				elevation={0}
 				sx={{
-					// background: 'grey',
+					background: 'white',
 					zIndex: 'tooltip',
 				}}>
 				<Container maxWidth="xl">
@@ -123,21 +125,26 @@ export default function NavBar() {
 							component="div"
 							noWrap
 							sx={{
-								mr: 2,
+								mr: { xs: 0.5, md: 2 },
 								display: {
 									xs: 'none',
 									sm: 'flex',
 								},
 							}}>
 							<Link to="/" style={{ textDecoration: 'none' }}>
-								<Typography
+								<img
+									src="/svgs/logoCuniv.svg"
+									style={{ width: 'auto', height: 50 }}
+								/>
+
+								{/* <Typography
 									variant="h5"
 									sx={{
 										fontWeight: 'bold',
 										color: 'white',
 									}}>
 									CUNIV
-								</Typography>
+								</Typography> */}
 							</Link>
 						</Box>
 
@@ -212,7 +219,7 @@ export default function NavBar() {
 						</Box>
 						{/* Logo para pantallas pequeñas */}
 						{/*           <Typography
-            variant="h6"
+            
             noWrap
             component="div"
             id="logo"
@@ -228,35 +235,61 @@ export default function NavBar() {
 							component="div"
 							noWrap
 							sx={{
-								mr: 2,
 								flexGrow: 1,
+								p: 1,
 								display: { xs: 'flex', sm: 'none' },
 								color: 'primary.main',
 							}}>
-							<Typography>{logo}</Typography>
+							<img src="/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
+							{/* <Typography>{logo}</Typography> */}
 						</Box>
 
 						{/* Contenendor de pestañas/pagesLinks */}
 						<Box sx={{ display: { xs: 'none', sm: 'flex' }, flexGrow: 1 }}>
-							{user.role !== 'Cajero' ? (
-								<ItemNav href={'home'} text={'Home'} />
+							{rule !== 'Cajero' ? (
+								<>
+									<ItemNav href={'home'} text={'Inicio'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
+							) : null}
+							{rule !== 'CJR' ? (
+								<>
+									<ItemNav href={'offers'} text={'Ofertas'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
 							) : null}
 
-							{user.role !== 'Cajero' ? (
-								<ItemNav href={'offers'} text={'Ofertas'} />
+							{rule === 'ADM' ? (
+								<>
+									<ItemNav href={'supplierCompanies'} text={'Empresas'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
 							) : null}
 
-							{user.role === 'Administrador' ? (
-								<ItemNav href={'supplierCompanies'} text={'Empresas'} />
+							{rule === 'PRV' ? (
+								<>
+									<ItemNav href={'products'} text={'Productos'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
 							) : null}
-							{user.role === 'Administrador' ? (
-								<ItemNav href={'users'} text={'Usuarios'} />
+							{rule === 'PRV' ? (
+								<>
+									<ItemNav href={'profileCompanie'} text={'myEmpresa'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
 							) : null}
-							{user.role !== 'Cajero' ? (
+							{rule === 'ADM' ? (
+								<>
+									<ItemNav href={'users'} text={'Usuarios'} />
+									<Divider orientation="vertical" flexItem variant="middle" />
+								</>
+							) : null}
+
+							{rule !== 'CJR' ? (
 								<ItemNav href={'statics'} text={'Estadisticas'} />
 							) : null}
 						</Box>
-						{/* {screenSizes()} */}
+						{screenSizes()}
 						<AccountPopover />
 					</Toolbar>
 				</Container>

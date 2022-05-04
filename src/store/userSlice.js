@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 const initialState = {
 	user: {},
+	rule: '',
+	rulepath: '',
 };
 
 const userSlice = createSlice({
@@ -11,21 +13,28 @@ const userSlice = createSlice({
 		sayHello: (state) => {
 			console.log('hello');
 		},
-		setUser: (state, action) => {
-			state.user = action.payload;
-			// console.log('USERDEMO=>', state.user);
+		setUser: (state, { payload }) => {
+			state.user = payload;
+
+			state.rule = payload.rules.find((e) => e === 'PRV' || 'ADM');
+			console.log('user=>', state.user, state.rule);
+			if (state.rule === 'ADM') state.rulepath = 'admin';
+			if (state.rule === 'PRV') state.rulepath = 'provider';
+		},
+		setCompnieID: (state, { payload }) => {
+			state.user = { ...state.user, id_empresa: payload };
 		},
 	},
 });
 
 export const getUserDataAync = (idUser) => async (dispatch) => {
-	// try {
-	// 	const r = await API.get(`/usuario/user-info?id=${idUser}`);
-	// 	dispatch(setUser(r.data));
-	// 	console.log('userData->r:', r.data);
-	// } catch (e) {
-	// 	throw new Error(e);
-	// }
+	try {
+		const r = await API.get(`/usuario/user-info?id=${idUser}`);
+		dispatch(setUser(r.data));
+		// console.log('userData->r:', r.data);
+	} catch (e) {
+		throw new Error(e);
+	}
 };
-export const { setUser } = userSlice.actions;
+export const { setUser, setCompnieID } = userSlice.actions;
 export default userSlice.reducer;

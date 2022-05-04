@@ -81,11 +81,10 @@ function LandingPage() {
 								</Box>
 								<GoogleLogin
 									clientId={clientId}
-									buttonText="Sign In"
 									onSuccess={onLoginSuccess}
 									onFailure={onLoginFailure}
 									cookiePolicy={'single_host_origin'}
-									isSignedIn={true}
+									// isSignedIn={false}
 									render={(renderProps) => (
 										<Button
 											onClick={renderProps.onClick}
@@ -134,7 +133,6 @@ function LandingPage() {
 										display: 'flex',
 										textAlign: 'center',
 										alignItems: 'center',
-										background: grey[100],
 										zIndex: 'modal',
 										position: 'relative',
 										p: 2,

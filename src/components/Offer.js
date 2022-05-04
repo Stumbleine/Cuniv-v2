@@ -20,39 +20,49 @@ export default function Offer(props) {
 	const offer = props.offer;
 	const AvatarCustom = styled(Avatar)(({ theme }) => ({
 		zIndex: 9,
-		width: 32,
-		height: 32,
+		width: 37,
+		height: 37,
 		position: 'absolute',
 		left: theme.spacing(3),
-		bottom: theme.spacing(8),
+		bottom: theme.spacing(7.7),
 		// bottom: theme.spacing(21),
+	}));
+	const BorderAvatar = styled(Box)(({ theme }) => ({
+		width: 41,
+		height: 41,
+		zIndex: 9,
+		position: 'absolute',
+		left: theme.spacing(2.8),
+		bottom: theme.spacing(7.4),
+		borderRadius: '50%',
+		background: theme.palette.primary.main,
 	}));
 	return (
 		<Card
 			sx={{
 				/* width: 240, height: 270, */ bgcolor: 'background.paper',
-				borderRadius: 2,
 			}}>
 			<OfferContent offer={offer}>
 				<CardMedia
 					component="img"
-					alt="green iguana"
+					alt={offer.titulo}
 					height="140"
 					image={offer.image}></CardMedia>
-				<BgAvatar
+				{/* <BgAvatar
 					color="paper"
 					src="/mock-images/avatars/shape-avatar.svg"
 					sx={{
 						width: 80,
-						height: 36,
+						height: 35,
 						zIndex: 9,
 						bottom: 64,
 						position: 'absolute',
 					}}
-				/>
+				/> */}
 				{/* <AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" /> */}
+				<BorderAvatar />
 				<AvatarCustom alt={offer.rz_empresa} src={offer.logo_empresa} />
-				<CardContent sx={{ p: 1, mt: 1.5 }}>
+				<CardContent sx={{ mt: 2 }}>
 					<Typography
 						gutterBottom
 						component="div"
@@ -62,23 +72,21 @@ export default function Offer(props) {
 						{offer.titulo}
 					</Typography>
 					<Typography
-						gutterBottom
-						component="div"
 						variant="body2"
 						noWrap
-						sx={{ overflow: 'hidden' }}>
+						sx={{ overflow: 'hidden', color: 'text.secondary' }}>
 						{offer.descuento}
 						{offer.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de descuento
 					</Typography>
 				</CardContent>{' '}
 			</OfferContent>
-			<CardActions sx={{ p: 0, pb: 0.5, justifyContent: 'end' }}>
+			<CardActions sx={{ justifyContent: 'end' }}>
 				<IconButton size="small">
 					<Edit
 						sx={{
 							color: 'text.icon',
 							'&:hover': {
-								color: 'primary.main',
+								color: 'warning.light',
 							},
 						}}></Edit>
 				</IconButton>
@@ -87,7 +95,7 @@ export default function Offer(props) {
 						sx={{
 							color: 'text.icon',
 							'&:hover': {
-								color: 'primary.main',
+								color: 'error.light',
 							},
 						}}
 					/>

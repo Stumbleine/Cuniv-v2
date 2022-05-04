@@ -1,4 +1,4 @@
-import { Check, Label } from '@mui/icons-material';
+import { Check } from '@mui/icons-material';
 import {
 	Button,
 	CardActionArea,
@@ -14,6 +14,7 @@ import {
 	ListItemText,
 	Divider,
 	ListItemIcon,
+	Chip,
 } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
@@ -68,7 +69,8 @@ function OfferContent(props) {
 				<Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
 					<Avatar
 						alt="logo"
-						src="/mock-images/avatars/avatar_3.jpg"
+						// src="/mock-images/avatars/avatar_3.jpg"
+						src={company?.logo}
 						sx={{ width: 32, height: 32 }}
 					/>
 					<Typography
@@ -91,7 +93,7 @@ function OfferContent(props) {
 					</Box> */}
 				</Box>
 
-				<Box sx={{ width: 400 }}>
+				<Box sx={{ width: 420 }}>
 					{' '}
 					<CardMedia
 						height="200"
@@ -109,7 +111,7 @@ function OfferContent(props) {
 								{offer?.titulo}
 							</Typography>
 
-							<Typography gutterBottom component="div" variant="body2">
+							<Typography gutterBottom sx={{ ml: 1 }} variant="body2">
 								{offer?.descuento}{' '}
 								{offer?.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de
 								descuento
@@ -120,11 +122,14 @@ function OfferContent(props) {
 								gutterBottom
 								component="div"
 								variant="subtitle2"
-								noWrap
 								sx={{ fontWeight: 'bold' }}>
 								Duracion
 							</Typography>
-							<Typography gutterBottom component="div" variant="body2" noWrap>
+							<Typography
+								sx={{ ml: 1 }}
+								gutterBottom
+								component="div"
+								variant="body2">
 								{offer?.fecha_inicio + ' / ' + offer?.fecha_fin}
 							</Typography>
 						</Box>
@@ -132,14 +137,16 @@ function OfferContent(props) {
 							<Box>
 								<Typography
 									gutterBottom
-									component="div"
 									variant="subtitle2"
-									noWrap
 									sx={{ fontWeight: 'bold' }}>
 									Condiciones de reclamo
 								</Typography>
 
-								<Typography gutterBottom component="div" variant="body2" noWrap>
+								<Typography
+									sx={{ ml: 1 }}
+									gutterBottom
+									component="div"
+									variant="body2">
 									{offer?.condiciones}
 								</Typography>
 							</Box>
@@ -153,9 +160,9 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold' }}>
 								Productos incluidos
 							</Typography>
-							<Typography gutterBottom component="div" variant="body2" noWrap>
-								{offer?.productos?.productos}
-							</Typography>
+							{offer?.productos.map((p) => (
+								<Chip key={p.id_producto} label={p.nombre} sx={{ ml: 1 }} />
+							))}
 						</Box>
 						<Box>
 							<Typography
@@ -166,9 +173,7 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold' }}>
 								Disponible en:
 							</Typography>
-							<List
-								sx={{ width: '100%', background: orange[100], borderRadius: 2 }}
-								disablePadding>
+							<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>
 								{sucursales?.map((sucursal, index) => (
 									<Box key={index}>
 										<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
@@ -181,7 +186,7 @@ function OfferContent(props) {
 											<ListItemText
 												primary={
 													<Typography variant="body1">
-														{sucursal?.name}
+														{sucursal?.nombre}
 													</Typography>
 												}
 												secondary={
@@ -202,7 +207,6 @@ function OfferContent(props) {
 				</Box>
 				<DialogActions>
 					<Button onClick={handleClose}>Cerrar</Button>
-					<Button onClick={handleClose}>Guardar</Button>
 				</DialogActions>
 			</Dialog>
 		</>

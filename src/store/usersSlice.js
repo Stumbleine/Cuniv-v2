@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import usersDATA from '../json/users.json';
 const initialState = {
-	users: usersDATA,
+	users: null,
 };
 
 const usersSlice = createSlice({
@@ -24,5 +24,6 @@ export const getUsersListAync = () => async (dispatch) => {
 		throw new Error(e);
 	}
 };
+
 export const { setUsers } = usersSlice.actions;
 export default usersSlice.reducer;

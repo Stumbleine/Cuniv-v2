@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import companiesData from '../json/business.json';
-
+import { setCompnieID } from './userSlice';
 const initialState = {
-	companies: companiesData,
+	companies: null,
+	sucursales: [],
 };
 
 const companiesSlice = createSlice({
@@ -12,6 +13,9 @@ const companiesSlice = createSlice({
 	reducers: {
 		setCompanies: (state, { payload }) => {
 			state.companies = payload;
+		},
+		setSucursales: (state, { payload }) => {
+			state.sucursales = payload;
 		},
 	},
 });
@@ -33,20 +37,7 @@ export const getCompanieAsync = (idCompanie) => async () => {
 		throw new Error(e);
 	}
 };
-// export const convertBase64 = (file) => {
-// 	return new Promise((resolve, reject) => {
-// 		const fileReader = new FileReader();
-// 		fileReader.readAsDataURL(file);
 
-// 		fileReader.onload = () => {
-// 			resolve(fileReader.result);
-// 		};
-
-// 		fileReader.onerror = (error) => {
-// 			reject(error);
-// 		};
-// 	});
-// };
 export const convertb64 = (file) => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -64,24 +55,37 @@ export const convertb64 = (file) => {
 	// };
 };
 export const createCompanieAsync =
-	(empresa, sucursales, logo) => async (dispatch) => {
+	(dataform, sucursales, logo, idProveedor) => async (dispatch) => {
 		// console.log(empresa, sucursales, logo);
 		// var logo64 = null;
-		const b64 = await convertb64(logo);
+		let succes = false;
+		const b64 = logo ? await convertb64(logo) : null;
 
 		const data = {
-			...empresa,
-			logo: b64,
+			empresa: { ...dataform, logo: b64, id_proveedor: idProveedor },
+			sucursales: sucursales,
 		};
-		console.log('DATa=>', data);
-		// try {
-		// 	const r = await API.post('/empresa/create', empresa);
-		// 	dispatch(getCompaniesAsync());
-		// 	console.log('createEmpresa->r:', r.data);
-		// } catch (e) {
-		// 	throw new Error(e);
-		// }
-	};
+		console.log('data armado', data);
+		try {
+			const r = await API.post('/empresa/create', data);
+			dispatch(getCompaniesAsync());
+			dispatch(setCompnieID(r.data.id));
 
-export const { setCompanies } = companiesSlice.actions;
+			console.log('createEmpresa->r:', r.data);
+			succes = true;
+		} catch (e) {
+			throw new Error(e);
+		}
+		return succes;
+	};
+export const getSucursales = (idEmpresa) => async (dispatch) => {
+	try {
+		const r = await API.get('/empresa/sucursales?id_e=' + idEmpresa);
+		dispatch(setSucursales(r.data));
+		console.log('sucursales->r:', r.data);
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+export const { setCompanies, setSucursales } = companiesSlice.actions;
 export default companiesSlice.reducer;

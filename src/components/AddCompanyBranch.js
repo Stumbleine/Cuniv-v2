@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material';
+import { Add, Edit } from '@mui/icons-material';
 import {
 	Dialog,
 	Button,
@@ -8,6 +8,7 @@ import {
 	DialogTitle,
 	TextField,
 	Typography,
+	IconButton,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { grey } from '@mui/material/colors';
@@ -18,9 +19,18 @@ import * as Yup from 'yup';
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
-function AddCompanyBranch({ handleAddSucursal }) {
+function AddCompanyBranch({
+	handleAddSucursal,
+	actionType,
+	handleEditSucursal,
+	editData,
+}) {
 	const [open, setOpen] = useState(false);
-	const [position, setPosition] = useState(null);
+	const [position, setPosition] = useState(
+		actionType === 'edit'
+			? { lat: editData?.latitud, lng: editData?.longitud }
+			: null
+	);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -41,9 +51,9 @@ function AddCompanyBranch({ handleAddSucursal }) {
 	};
 	const formik = useFormik({
 		initialValues: {
-			name: '',
-			address: '',
-			pos: 0,
+			name: actionType === 'edit' ? editData?.nombre : '',
+			address: actionType === 'edit' ? editData?.direccion : '',
+			pos: '',
 		},
 
 		validationSchema: Yup.object().shape({
@@ -58,12 +68,17 @@ function AddCompanyBranch({ handleAddSucursal }) {
 			const sucursal = {
 				nombre: valores.name,
 				direccion: valores.address,
-				latitud: position.lat,
-				longitud: position.lng,
+				latitud: position.lat.toString(),
+				longitud: position.lng.toString(),
 			};
-			handleAddSucursal(sucursal);
+			if (actionType === 'edit') {
+				handleEditSucursal(sucursal);
+			} else {
+				handleAddSucursal(sucursal);
+				setPosition(null);
+			}
 			resetForm();
-			setPosition(null);
+
 			handleClose();
 		},
 	});
@@ -78,9 +93,23 @@ function AddCompanyBranch({ handleAddSucursal }) {
 	} = formik;
 	return (
 		<>
-			<Button onClick={handleClickOpen} startIcon={<Add></Add>}>
-				Sucursal
-			</Button>
+			{actionType === 'edit' ? (
+				<IconButton onClick={handleClickOpen}>
+					<Edit
+						sx={{
+							color: 'text.icon',
+							'&:hover': {
+								color: 'warning.light',
+							},
+						}}
+					/>
+				</IconButton>
+			) : (
+				<Button onClick={handleClickOpen} startIcon={<Add></Add>}>
+					Sucursal
+				</Button>
+			)}
+
 			<Dialog
 				open={open}
 				TransitionComponent={Transition}
@@ -88,7 +117,9 @@ function AddCompanyBranch({ handleAddSucursal }) {
 				onClose={handleClose}
 				aria-describedby="alert-dialog-slide-description"
 				sx={{ minWidth: 500 }}>
-				<DialogTitle sx={{ color: 'primary.main' }}>Nueva Sucursal</DialogTitle>
+				<DialogTitle sx={{ color: 'primary.main' }}>
+					{actionType === 'edit' ? 'Editar Sucursal' : 'Nueva Sucursal'}
+				</DialogTitle>
 				<DialogContent>
 					<FormikProvider value={formik}>
 						<Form noValidate onSubmit={handleSubmit}>

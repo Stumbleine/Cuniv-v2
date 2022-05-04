@@ -7,14 +7,15 @@ import {
 	MenuItem,
 	Tooltip,
 	Typography,
+	alpha,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import MenuPopover from './MenuPopover';
 import { useRef, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { alpha, styled } from '@mui/material/styles';
 import { setLogout } from '../store/loginSlice';
+import { GoogleLogout } from 'react-google-login';
 import {
 	Analytics,
 	Group,
@@ -24,7 +25,7 @@ import {
 	Settings,
 	ShoppingCart,
 } from '@mui/icons-material';
-
+// import styled from '@emotion/styled';
 function AccountPopover() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -32,8 +33,8 @@ function AccountPopover() {
 	const { isAuth } = useSelector((state) => state.login);
 
 	const [anchorElUser, setAnchorElUser] = useState(null);
-
 	const [open, setOpen] = useState(false);
+	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
@@ -41,9 +42,33 @@ function AccountPopover() {
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
+	const logOut = () => {
+		console.log('logg???');
+		// renderProps.onClick();
+		dispatch(setLogout());
+		handleCloseUserMenu();
+		// if (!isAuth) navigate('/', { replace: true });
+	};
+	// const ArrowStyle = styled('span')(({ theme }) => ({
+	// 	[theme.breakpoints.up('sm')]: {
+	// 		top: -7,
+	// 		zIndex: 1,
+	// 		width: 12,
+	// 		right: 20,
+	// 		height: 12,
+	// 		content: "''",
 
+	// 		position: 'absolute',
+	// 		borderRadius: '0 0 4px 0',
+	// 		transform: 'rotate(-135deg)',
+	// 		background: 'black',
+	// 		borderRight: `solid 1px ${alpha(theme.palette.grey[500], 0.12)}`,
+	// 		borderBottom: `solid 1px ${alpha(theme.palette.grey[500], 0.12)}`,
+	// 	},
+	// }));
 	return (
 		<Box sx={{ position: 'relative' }}>
+			{/* <ArrowStyle className="arrow" /> */}
 			<Box
 				sx={{
 					// backgroundColor: 'rgba(255, 255, 255, .90)',
@@ -69,7 +94,7 @@ function AccountPopover() {
 						sx={{
 							p: 0,
 						}}>
-						<Avatar alt={user.name} src={user.avatar} />
+						<Avatar alt={user.nombres} src={user?.picture} />
 					</IconButton>
 				</Tooltip>
 			</Box>
@@ -90,8 +115,11 @@ function AccountPopover() {
 				open={Boolean(anchorElUser)}
 				onClose={handleCloseUserMenu}>
 				<Box sx={{ my: 1, px: 2.5 }}>
-					<Typography variant="subtitle1" noWrap>
-						{user.name}
+					<Typography
+						variant="subtitle1"
+						noWrap
+						sx={{ textTransform: 'lowercase' }}>
+						{user.nombres} {user.apellidos}
 					</Typography>
 					<Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
 						{user.email}
@@ -190,25 +218,28 @@ function AccountPopover() {
 					/>{' '}
 					Cofiguracion
 				</MenuItem>
-				<MenuItem
-					sx={{ typography: 'body2', py: 1, px: 2.5 }}
-					component={RouterLink}
-					onClick={() => {
-						handleCloseUserMenu();
-						dispatch(setLogout());
-						if (isAuth) navigate('/', { replace: true });
+				<GoogleLogout
+					clientId={clientId}
+					onLogoutSuccess={() => {
+						console.log('logSucces');
 					}}
-					to="home">
-					<Logout
-						sx={{
-							mr: 2,
-							width: 24,
-							height: 24,
-							color: 'text.secondary',
-						}}
-					/>{' '}
-					Cerrar Sesion
-				</MenuItem>
+					render={(renderProps) => (
+						<MenuItem
+							sx={{ typography: 'body2', py: 1, px: 2.5 }}
+							// component={RouterLink}
+							onClick={() => logOut()}>
+							<Logout
+								sx={{
+									mr: 2,
+									width: 24,
+									height: 24,
+									color: 'text.secondary',
+								}}
+							/>{' '}
+							Cerrar Sesion
+						</MenuItem>
+					)}
+				/>
 			</Menu>
 		</Box>
 	);

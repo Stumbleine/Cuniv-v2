@@ -38,7 +38,7 @@ function MapView({ sendPosition }) {
 		},
 	};
 	const myIcon = L.icon({
-		iconUrl: 'location.svg',
+		iconUrl: '/location.svg',
 		iconSize: [38, 50],
 		iconAnchor: [22, 94],
 		popupAnchor: [-3, -76],
@@ -68,7 +68,7 @@ function MapView({ sendPosition }) {
 					});
 
 					return position === null ? null : (
-						<Marker position={position}>
+						<Marker position={position} icon={myIcon}>
 							<Popup>yo are here</Popup>
 						</Marker>
 					);

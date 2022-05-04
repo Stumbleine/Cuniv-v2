@@ -10,40 +10,40 @@ import {
 	Link,
 	Button,
 	CircularProgress,
+	Stack,
 } from '@mui/material';
 
 import { Box } from '@mui/system';
 
-const MainStyle = styled('div')(({ theme }) => ({
+const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
 	overflow: 'auto',
-	minHeight: '92vh',
+	minHeight: '93vh',
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
-
-	paddingTop: 40,
-	// paddingBottom: theme.spacing(10),
-	// [theme.breakpoints.up('lg')]: {
-	// 	paddingTop: APP_BAR_DESKTOP + 24,
-	// 	paddingLeft: theme.spacing(2),
-	// 	paddingRight: theme.spacing(2),
-	// },
+	paddingTop: theme.spacing(2),
+	paddingBottom: theme.spacing(2),
 }));
 const screenSizes = () => {
 	return (
 		<>
-			<Typography variant="h6" sx={{ display: { xs: 'flex', sm: 'none' } }}>
+			<Typography
+				sx={{ display: { xs: 'flex', sm: 'none' }, color: 'text.primary' }}>
 				[ xs ]
 			</Typography>
 			<Typography
-				variant="6"
-				sx={{ display: { xs: 'none', sm: 'flex', md: 'none' } }}>
+				sx={{
+					display: { xs: 'none', sm: 'flex', md: 'none' },
+					color: 'text.primary',
+				}}>
 				[ sm ]
 			</Typography>
 			<Typography
-				variant="h6"
-				sx={{ display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' } }}>
+				sx={{
+					display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' },
+					color: 'text.primary',
+				}}>
 				[ md ]
 			</Typography>
 			<Typography
@@ -56,11 +56,11 @@ const screenSizes = () => {
 						lg: 'flex',
 						xl: 'none',
 					},
+					color: 'text.primary',
 				}}>
 				[ lg ]
 			</Typography>
 			<Typography
-				variant="h6"
 				sx={{
 					display: {
 						xs: 'none',
@@ -69,17 +69,18 @@ const screenSizes = () => {
 						lg: 'none',
 						xl: 'flex',
 					},
+					color: 'text.primary',
 				}}>
 				[ xl ]
 			</Typography>
 		</>
 	);
 };
-export default function AuthLayout({ children }) {
+export default function AuthLayout() {
 	const { pathname } = useLocation();
 	return (
 		<>
-			<AppBar position="static">
+			<AppBar position="static" sx={{ background: 'white' }}>
 				<Container maxWidth="xl">
 					<Toolbar disableGutters>
 						<Box
@@ -95,52 +96,40 @@ export default function AuthLayout({ children }) {
 								textDecoration: 'none',
 							}}>
 							<RouterLink to="/" style={{ textDecoration: 'none' }}>
-								<Typography
-									variant="h5"
-									sx={{
-										fontWeight: 'bold',
-										color: 'white',
-									}}>
-									CUNIV-LOGO
-								</Typography>
+								<img
+									src="/svgs/logoCuniv.svg"
+									style={{ width: 'auto', height: 50 }}
+								/>
 							</RouterLink>
 						</Box>
-						{/* {screenSizes()} */}
+						{screenSizes()}
 
 						{pathname === '/login' ? (
-							<Typography
-								variant="body1"
-								sx={{
-									display: { xs: 'none', sm: 'block' },
-									mt: { md: -2 },
-								}}>
-								Aun no tiene una cuenta? &nbsp;
+							<Stack direction="row" spacing={2}>
+								<Typography color="textPrimary">
+									Aun no tiene una cuenta?
+								</Typography>
 								<Link
-									underline="none"
-									variant="subtitle2"
+									// underline="none"
+									// variant="subtitle1"
 									component={RouterLink}
-									to="/register"
-									sx={{ color: 'white' }}>
+									to="/register">
 									Registrarse
 								</Link>
-							</Typography>
+							</Stack>
 						) : pathname === '/register' ? (
-							<Typography
-								variant="body1"
-								sx={{
-									display: { xs: 'none', sm: 'block' },
-									mt: { md: -2 },
-								}}>
-								Ya tiene una cuenta? &nbsp;
+							<Stack direction="row" spacing={2}>
+								<Typography color="textPrimary">
+									Ya tiene una cuenta?
+								</Typography>
 								<Link
-									underline="none"
-									variant="subtitle2"
+									// underline="none"
+									// variant="subtitle1"
 									component={RouterLink}
-									to="/login"
-									sx={{ color: 'white' }}>
+									to="/login">
 									Iniciar Sesion
 								</Link>
-							</Typography>
+							</Stack>
 						) : null}
 						{pathname === '/index' ? (
 							<Box sx={{ display: 'flex' }}>
@@ -148,7 +137,7 @@ export default function AuthLayout({ children }) {
 									underline="none"
 									variant="subtitle2"
 									component={RouterLink}
-									sx={{ color: 'white', mr: 2 }}
+									sx={{ mr: 2 }}
 									to="/login">
 									<Button size="small" color="inherit" variant="outlined">
 										Iniciar Sesion
@@ -169,9 +158,9 @@ export default function AuthLayout({ children }) {
 					</Toolbar>
 				</Container>
 			</AppBar>
-			<MainStyle>
+			<ContainerStyle>
 				<Outlet />
-			</MainStyle>
+			</ContainerStyle>
 		</>
 	);
 }

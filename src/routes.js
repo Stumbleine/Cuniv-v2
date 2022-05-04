@@ -21,37 +21,37 @@ import CompanieProfile from './pages/CompanieProfile';
 import LandingPage from './pages/public/LandingPage';
 export default function Router() {
 	const isAuth = useSelector((state) => state.login.isAuth);
-	const user = useSelector((state) => state.user.user);
+	const rule = useSelector((state) => state.user.rule);
 	// useEffect(() => {
 	// 	console.log('isAuth=>', isAuth);
 	// }, [isAuth]);
 	function rbac() {
-		// console.log('rbac', user.role);
+		console.log('rbac', isAuth, rule);
 
 		if (isAuth === false) {
 			return <Navigate to="/index" replace />;
-		} else if (isAuth === true && user.role === 'Administrador') {
+		} else if (isAuth === true && rule === 'ADM') {
 			return <Navigate to="/admin/home" replace />;
-		} else if (isAuth === true && user.role === 'Provider') {
+		} else if (isAuth === true && rule === 'PRV') {
 			return <Navigate to="/provider/home" replace />;
-		} else if (isAuth === true && user.role === 'Cajero') {
+		} else if (isAuth === true && rule === 'CJR') {
 			return <Navigate to="/cashier/redeem" replace />;
 		}
 	}
 	function rbacLogin() {
-		// console.log('rbac', user.role);
-		if (isAuth === true && user.role === 'Administrador') {
+		// console.log('rbac', rule);
+		if (isAuth === true && rule === 'ADM') {
 			return <Navigate to="/admin/home" replace />;
-		} else if (isAuth === true && user.role === 'Proveedor') {
+		} else if (isAuth === true && rule === 'PRV') {
 			return <Navigate to="/provider/home" replace />;
-		} else if (isAuth === true && user.role === 'Cajero') {
+		} else if (isAuth === true && rule === 'CJR') {
 			return <Navigate to="/cashier/redeem" replace />;
 		}
 		return null;
 	}
 	const aunthenticated = (rol) => {
-		// console.log(isAuth, rol, user.role);
-		if (isAuth === true && user.role === rol) return true;
+		// console.log(isAuth, rol, rule);
+		if (isAuth === true && rule === rol) return true;
 	};
 	return useRoutes([
 		{
@@ -61,7 +61,7 @@ export default function Router() {
 				{
 					path: '/',
 					element: rbac(),
-					// isAuth === true && user.role === 'Administrador' ? (
+					// isAuth === true && rule === 'ADM' ? (
 					// 	<Navigate to="/admin/home" replace />
 					// ) : (
 					// 	<Navigate to="/login" replace />
@@ -83,7 +83,7 @@ export default function Router() {
 		},
 		{
 			path: 'admin',
-			element: aunthenticated('Administrador') ? (
+			element: aunthenticated('ADM') ? (
 				<DashboardLayout />
 			) : isAuth ? (
 				<Navigate to="/error/404" replace />
@@ -120,7 +120,7 @@ export default function Router() {
 		},
 		{
 			path: 'provider',
-			element: aunthenticated('Proveedor') ? (
+			element: aunthenticated('PRV') ? (
 				<DashboardLayout />
 			) : isAuth ? (
 				<Navigate to="/error/404" replace />
@@ -135,13 +135,15 @@ export default function Router() {
 				},
 				{ path: 'createOffer', element: <CreateOfferPage /> },
 				{ path: 'products', element: <ProductsPage /> },
+				{ path: 'profileCompanie', element: <CompanieProfile /> },
+				{ path: 'registerCompanie', element: <CreateSupplierCompanyPage /> },
 
 				{ path: 'statics', element: <StaticsPage /> },
 			],
 		},
 		{
 			path: 'cashier',
-			element: aunthenticated('Cajero') ? (
+			element: aunthenticated('CJR') ? (
 				<DashboardLayout />
 			) : isAuth ? (
 				<Navigate to="/error/404" replace />

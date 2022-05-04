@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import AuthLayout from '../../layouts/AuthLayout';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box } from '@mui/system';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
 
 function RegisterPage() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -20,6 +20,12 @@ function RegisterPage() {
 	return (
 		<Container maxWidth="sm">
 			<Box>
+				<Button
+					component={RouterLink}
+					to="/"
+					startIcon={<ArrowBack></ArrowBack>}>
+					Inicio
+				</Button>
 				<Box sx={{ my: 3 }}>
 					<Typography color="textPrimary" variant="h4" gutterBottom>
 						Registrarse

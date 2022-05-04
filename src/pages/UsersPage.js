@@ -11,6 +11,7 @@ function UsersPage() {
 	const dispatch = useDispatch();
 	const users = useSelector((state) => state.users.users);
 	useEffect(() => {
+		document.title = 'cuniv | usuarios';
 		const fetchusers = async () => {
 			const users = await dispatch(getUsersListAync());
 		};
@@ -21,7 +22,14 @@ function UsersPage() {
 		<Container maxWidth="lg">
 			<Box>
 				<Box>
-					<Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
+					<Typography
+						variant="h5"
+						sx={{
+							mb: 2,
+							fontWeight: 'bold',
+							color: 'text.title',
+							fontStyle: 'italic',
+						}}>
 						Usuarios
 					</Typography>
 					<Stack
@@ -29,7 +37,7 @@ function UsersPage() {
 						flexWrap="wrap-reverse"
 						alignItems="center"
 						justifyContent="flex-end"
-						sx={{ mb: 2 }}>
+						sx={{ mb: 3 }}>
 						<Link to="/provider/createOffer" style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Usuario

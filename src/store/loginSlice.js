@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
+import { getUserDataAync } from './userSlice';
 
 const initialState = {
 	isAuth: false,
@@ -36,6 +37,7 @@ const loginSlice = createSlice({
 		},
 		setToken: (state, { payload }) => {
 			state.accessToken = payload;
+			console.log('token->r :', payload);
 		},
 	},
 });
@@ -44,15 +46,16 @@ export const loginAsync = (user) => async (dispatch) => {
 	const data = {
 		username: user.email,
 		email: user.email,
-		picture: user.picture,
+		picture: user.imageUrl,
 		nombres: user.givenName,
 		apellidos: user.familyName,
 	};
 	try {
-		const r = await API.post('/auth/login', user);
+		const r = await API.post('/auth/login', data);
 		console.log('login->r :', r);
+		dispatch(setToken(r.data.idUser));
+		await dispatch(getUserDataAync(r.data.idUser));
 		dispatch(setAuth());
-		dispatch(setToken(r.data.accessToken));
 	} catch (e) {
 		throw new Error(e);
 	}

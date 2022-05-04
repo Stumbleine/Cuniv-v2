@@ -3,11 +3,12 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import AuthLayout from '../../layouts/AuthLayout';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import {
 	Button,
 	CircularProgress,
 	Container,
+	Grid,
 	IconButton,
 	InputAdornment,
 	Stack,
@@ -89,16 +90,16 @@ function LoginPage() {
 	};
 	return (
 		<Container maxWidth="sm">
-			<Box>
-				<FormikProvider value={formik}>
-					<Form onSubmit={handleSubmit}>
-						<Box sx={{ my: 3 }}>
-							<Typography color="textPrimary" variant="h4">
-								Iniciar Sesion
-							</Typography>
-							<Typography>Ingrese sus datos</Typography>
-						</Box>
-						<Stack spacing={1}>
+			<FormikProvider value={formik}>
+				<Form onSubmit={handleSubmit}>
+					<Button component={Link} to="/" startIcon={<ArrowBack></ArrowBack>}>
+						Inicio
+					</Button>
+					<Box sx={{ my: 3 }}>
+						<Typography variant="h4">Iniciar Sesion</Typography>
+						<Typography>Ingrese sus datos</Typography>
+					</Box>
+					{/* <Stack spacing={1}>
 							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
 								<Typography>adminEmail: </Typography>
 								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
@@ -130,31 +131,31 @@ function LoginPage() {
 									cashier123
 								</Typography>
 							</Box>
-						</Stack>
+						</Stack> */}
 
-						<Box sx={{ py: 2 }}>
-							<GoogleLogin
-								clientId={clientId}
-								buttonText="Sign In"
-								onSuccess={onLoginSuccess}
-								onFailure={onLoginFailure}
-								cookiePolicy={'single_host_origin'}
-								isSignedIn={true}
-								render={(renderProps) => (
-									<Button
-										onClick={renderProps.onClick}
-										disabled={renderProps.disabled}
-										fullWidth
-										color="error"
-										startIcon={<Google />}
-										size="large"
-										variant="contained">
-										Iniciar Sesion con Google
-									</Button>
-								)}
-							/>
+					<Box sx={{ py: 2 }}>
+						<GoogleLogin
+							clientId={clientId}
+							buttonText="Sign In"
+							onSuccess={onLoginSuccess}
+							onFailure={onLoginFailure}
+							cookiePolicy={'single_host_origin'}
+							isSignedIn={true}
+							render={(renderProps) => (
+								<Button
+									onClick={renderProps.onClick}
+									disabled={renderProps.disabled}
+									fullWidth
+									color="error"
+									startIcon={<Google />}
+									size="large"
+									variant="contained">
+									Iniciar Sesion con Google
+								</Button>
+							)}
+						/>
 
-							{/* <GoogleLogout
+						{/* <GoogleLogout
 											clientId={clientId}
 											buttonText="Sign Out"
 											onLogoutSuccess={onSignoutSuccess}
@@ -176,77 +177,76 @@ function LoginPage() {
 												</Button>
 											)}
 										/> */}
-						</Box>
-						<Box
-							sx={{
-								mb: 2,
-							}}>
-							<Typography align="center" color="textSecondary" variant="body1">
-								o
-							</Typography>
-						</Box>
-						<Box sx={{ width: '100%' }}>
-							<TextField
-								fullWidth
-								autoComplete="username"
-								margin="normal"
-								label="Correo Electronico"
-								type="email"
-								variant="outlined"
-								{...getFieldProps('email')}
-								error={Boolean(touched.email && errors.email)}
-								helperText={touched.email && errors.email}
-							/>
-							<TextField
-								fullWidth
-								margin="normal"
-								label="Contraseña"
-								variant="outlined"
-								autoComplete="current-password"
-								type={showPassword ? 'text' : 'password'}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton onClick={handleShowPassword}>
-												{showPassword ? <Visibility /> : <VisibilityOff />}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
-								{...getFieldProps('password')}
-								error={Boolean(touched.password && errors.password)}
-								helperText={touched.password && errors.password}
-							/>
+					</Box>
+					<Box
+						sx={{
+							mb: 2,
+						}}>
+						<Typography align="center" color="textSecondary" variant="body1">
+							o
+						</Typography>
+					</Box>
+					<Box sx={{ width: '100%' }}>
+						<TextField
+							fullWidth
+							autoComplete="username"
+							margin="normal"
+							label="Correo Electronico"
+							type="email"
+							variant="outlined"
+							{...getFieldProps('email')}
+							error={Boolean(touched.email && errors.email)}
+							helperText={touched.email && errors.email}
+						/>
+						<TextField
+							fullWidth
+							margin="normal"
+							label="Contraseña"
+							variant="outlined"
+							autoComplete="current-password"
+							type={showPassword ? 'text' : 'password'}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton onClick={handleShowPassword}>
+											{showPassword ? <Visibility /> : <VisibilityOff />}
+										</IconButton>
+									</InputAdornment>
+								),
+							}}
+							{...getFieldProps('password')}
+							error={Boolean(touched.password && errors.password)}
+							helperText={touched.password && errors.password}
+						/>
 
-							<Box sx={{ py: 2, position: 'relative' }}>
-								<Button
-									color="primary"
-									/* 						disabled={formik.isSubmitting} */
-									fullWidth
-									size="large"
-									type="submit"
-									disabled={isLoading}
-									variant="contained">
-									Iniciar Sesion
-								</Button>
-								{isLoading && (
-									<CircularProgress
-										size={24}
-										sx={{
-											color: green[500],
-											position: 'absolute',
-											top: '50%',
-											left: '50%',
-											marginTop: '-12px',
-											marginLeft: '-12px',
-										}}
-									/>
-								)}
-							</Box>
+						<Box sx={{ py: 2, position: 'relative' }}>
+							<Button
+								color="primary"
+								/* 						disabled={formik.isSubmitting} */
+								fullWidth
+								size="large"
+								type="submit"
+								disabled={isLoading}
+								variant="contained">
+								Iniciar Sesion
+							</Button>
+							{isLoading && (
+								<CircularProgress
+									size={24}
+									sx={{
+										color: green[500],
+										position: 'absolute',
+										top: '50%',
+										left: '50%',
+										marginTop: '-12px',
+										marginLeft: '-12px',
+									}}
+								/>
+							)}
 						</Box>
-					</Form>
-				</FormikProvider>
-			</Box>
+					</Box>
+				</Form>
+			</FormikProvider>
 		</Container>
 	);
 }
