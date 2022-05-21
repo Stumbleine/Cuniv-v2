@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import NavBar from '../components/NavBar';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
+import NavBar from './NavBar';
+import SideBar from './SideBar';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
 	overflow: 'auto',
@@ -14,9 +15,12 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 	paddingBottom: theme.spacing(2),
 }));
 function DashboardLayout() {
+	const [openSB, setOpenSB] = useState(false);
+
 	return (
 		<>
-			<NavBar></NavBar>
+			<NavBar onOpenSidebar={() => setOpenSB(true)} />
+			<SideBar openSideBar={openSB} onCloseSideBar={() => setOpenSB(false)} />
 			<ContainerStyle>
 				<Outlet />
 			</ContainerStyle>

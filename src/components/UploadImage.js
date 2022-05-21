@@ -1,9 +1,9 @@
+import React, { useState } from 'react';
 import { Image } from '@mui/icons-material';
 import { Box, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import React, { useState } from 'react';
 
-function UploadImage({ handleChangeFile, formFather }) {
+function UploadImage({ handleChangeFile, type, label, children }) {
 	const [uploadHover, setUploadHover] = useState(false);
 
 	const [logo, setLogo] = useState(null);
@@ -14,18 +14,18 @@ function UploadImage({ handleChangeFile, formFather }) {
 		setLogo(URL.createObjectURL(e.target.files[0]));
 	};
 	const styles = {
-		BoxContainerCompanie: {
+		BoxContainerCircle: {
 			width: '100%',
 			minHeight: 210,
 			display: 'center',
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
-		BoxContaineroffer: {
+		BoxContainerRectangle: {
 			width: '100%',
 			minHeight: 210,
 		},
-		BoxContainer2Companie: {
+		BoxContainer2Circle: {
 			width: 200,
 			height: 200,
 			border: 1,
@@ -35,7 +35,7 @@ function UploadImage({ handleChangeFile, formFather }) {
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
-		BoxMouseoverOffer: {
+		BoxMouseoverRectangle: {
 			width: 'inherit',
 			height: 250,
 			display: 'flex',
@@ -47,7 +47,7 @@ function UploadImage({ handleChangeFile, formFather }) {
 			background: grey[200],
 			overflowY: 'hidden',
 		},
-		BoxMouseoverCompanie: {
+		BoxMouseoverCircle: {
 			width: '90%',
 			height: '90%',
 			display: 'flex',
@@ -58,13 +58,13 @@ function UploadImage({ handleChangeFile, formFather }) {
 			position: 'relative',
 			background: grey[200],
 		},
-		BoxImageOffer: {
+		BoxImageRectangle: {
 			width: '100%',
 			height: '100%',
 			borderRadius: 5,
 			objectFit: 'cover',
 		},
-		BoxImageCompanie: {
+		BoxImageCircle: {
 			width: '100%',
 			height: '100%',
 			borderRadius: '100%',
@@ -77,9 +77,9 @@ function UploadImage({ handleChangeFile, formFather }) {
 		<>
 			<Box
 				sx={
-					formFather === 'companie'
-						? styles.BoxContainerCompanie
-						: styles.BoxContaineroffer
+					type === 'Circle'
+						? styles.BoxContainerCircle
+						: styles.BoxContainerRectangle
 				}>
 				<label htmlFor="contained-button-file">
 					<TextField
@@ -91,18 +91,15 @@ function UploadImage({ handleChangeFile, formFather }) {
 						onChange={handleChangeLogo}
 						sx={{ display: 'none' }}
 					/>
-					<Box
-						sx={
-							formFather === 'companie' ? styles.BoxContainer2Companie : null
-						}>
+					<Box sx={type === 'Circle' ? styles.BoxContainer2Circle : null}>
 						<Box
 							component="span"
 							onMouseOver={() => setUploadHover(true)}
 							onMouseLeave={() => setUploadHover(false)}
 							sx={
-								formFather === 'companie'
-									? styles.BoxMouseoverCompanie
-									: styles.BoxMouseoverOffer
+								type === 'Circle'
+									? styles.BoxMouseoverCircle
+									: styles.BoxMouseoverRectangle
 							}>
 							{logo === null ? (
 								<Box
@@ -110,18 +107,16 @@ function UploadImage({ handleChangeFile, formFather }) {
 										textAlign: 'center',
 									}}>
 									<Image></Image>
-									<Typography>
-										Subir {formFather === 'companie' ? 'logo' : 'imagen'}
-									</Typography>
+									<Typography>Subir {label}</Typography>
 								</Box>
 							) : (
 								<Box
 									component="img"
 									src={logo}
 									style={
-										formFather === 'companie'
-											? styles.BoxImageCompanie
-											: styles.BoxImageOffer
+										type === 'Circle'
+											? styles.BoxImageCircle
+											: styles.BoxImageRectangle
 									}
 									sx={{ zIndex: 'modal' }}></Box>
 							)}
@@ -132,7 +127,7 @@ function UploadImage({ handleChangeFile, formFather }) {
 										height: '100%',
 										background: 'rgba(31, 30, 31, 0.3)',
 										zIndex: 'tooltip',
-										borderRadius: formFather === 'companie' ? '50%' : 'inherit',
+										borderRadius: type === 'Circle' ? '50%' : 'inherit',
 										position: 'absolute',
 										textAlign: 'center',
 										display: 'flex',
@@ -142,7 +137,7 @@ function UploadImage({ handleChangeFile, formFather }) {
 									<Box>
 										<Image sx={{ color: 'white' }}></Image>
 										<Typography sx={{ color: 'white' }}>
-											Cambiar {formFather === 'companie' ? 'logo' : 'imagen'}
+											Cambiar {label}
 										</Typography>
 									</Box>
 								</Box>
@@ -153,6 +148,8 @@ function UploadImage({ handleChangeFile, formFather }) {
 					</Box>
 				</label>
 			</Box>
+
+			{children}
 			<Box sx={{ width: '100%', textAlign: 'center', mt: 1 }}>
 				<Typography variant="body2" color="textSecondary">
 					imagenes de 300x200 y formato *.png *.jpg

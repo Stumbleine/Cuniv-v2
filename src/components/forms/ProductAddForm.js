@@ -2,9 +2,7 @@ import {
 	Alert,
 	Button,
 	Card,
-	InputLabel,
 	MenuItem,
-	Paper,
 	Select,
 	Slide,
 	Snackbar,
@@ -23,12 +21,8 @@ function TransitionLeft(props) {
 }
 function ProductAddForm() {
 	const [fileImage, setFileImage] = useState(null);
-	const [discountType, setdiscountType] = useState(10);
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.user);
-	const handlediscountType = (event) => {
-		setdiscountType(event.target.value);
-	};
 	const handleChangeFile = (file) => {
 		console.log('file-add-success', file);
 		setFileImage(file);
@@ -107,7 +101,11 @@ function ProductAddForm() {
 					{setting.message}
 				</Alert>
 			</Snackbar>
-			<UploadImage handleChangeFile={handleChangeFile} formFather="product" />
+			<UploadImage
+				label="imagen"
+				handleChangeFile={handleChangeFile}
+				type="Rectangle"
+			/>
 			<FormikProvider value={formik}>
 				<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
 					<Box sx={{ mt: 2 }}>

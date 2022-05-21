@@ -11,10 +11,14 @@ import {
 	Button,
 	CircularProgress,
 	Stack,
+	IconButton,
 } from '@mui/material';
 
 import { Box } from '@mui/system';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setThemeMode } from '../store/settingSlice';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import NightlightIcon from '@mui/icons-material/Nightlight';
 const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
 	overflow: 'auto',
@@ -77,6 +81,12 @@ const screenSizes = () => {
 	);
 };
 export default function AuthLayout() {
+	const dispatch = useDispatch();
+	const mode = useSelector((state) => state.setting.theme.mode);
+	//	functiosns
+	const changeMode = () => {
+		dispatch(setThemeMode());
+	};
 	const { pathname } = useLocation();
 	return (
 		<>
@@ -102,6 +112,15 @@ export default function AuthLayout() {
 								/>
 							</RouterLink>
 						</Box>
+						{/* <Box>
+							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
+								{mode === 'dark' ? (
+									<LightModeIcon sx={{ color: 'text.icon' }}></LightModeIcon>
+								) : (
+									<NightlightIcon sx={{ color: 'text.icon' }}></NightlightIcon>
+								)}
+							</IconButton>
+						</Box> */}
 						{screenSizes()}
 
 						{pathname === '/login' ? (

@@ -10,6 +10,8 @@ import { getUsersListAync } from '../store/usersSlice';
 function UsersPage() {
 	const dispatch = useDispatch();
 	const users = useSelector((state) => state.users.users);
+	const { rulepath, user, rule } = useSelector((state) => state.user);
+
 	useEffect(() => {
 		document.title = 'cuniv | usuarios';
 		const fetchusers = async () => {
@@ -37,8 +39,18 @@ function UsersPage() {
 						flexWrap="wrap-reverse"
 						alignItems="center"
 						justifyContent="flex-end"
+						spacing={2}
 						sx={{ mb: 3 }}>
-						<Link to="/provider/createOffer" style={{ textDecoration: 'none' }}>
+						<Link
+							to={`/${rulepath}/createRole`}
+							style={{ textDecoration: 'none' }}>
+							<Button startIcon={<Add />} variant="contained">
+								Rol
+							</Button>
+						</Link>
+						<Link
+							to={`/${rulepath}/createUser`}
+							style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Usuario
 							</Button>

@@ -12,12 +12,16 @@ import { getUserDataAync } from '../store/userSlice';
 
 function HomePage() {
 	const iduser = useSelector((state) => state.login.acccesToken);
+	const { rulepath, user, rule } = useSelector((state) => state.user);
+
 	const dispatch = useDispatch();
 	useEffect(() => {
 		document.title = 'cuniv | inicio';
 		// dispatch(getUserDataAync(iduser));
 		// dispatch(getOffersAsync());
-		// dispatch(getCompaniesAsync());
+		dispatch(getOffersAsync(user.id_empresa, rule));
+
+		dispatch(getCompaniesAsync());
 	}, []);
 
 	return (
@@ -28,7 +32,7 @@ function HomePage() {
 					display: 'flex',
 					justifyContent: 'center',
 				}}>
-				<Steps />
+				{rule !== 'ADM' && <Steps />}
 			</Box>
 		</Container>
 	);

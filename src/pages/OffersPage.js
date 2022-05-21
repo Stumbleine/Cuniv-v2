@@ -21,6 +21,17 @@ function OffersPage() {
 	}, []);
 
 	const offers = useSelector((state) => state.offers.offers);
+	const show = () => {
+		let s = false;
+		if (rule === 'ADM') {
+			s = true;
+		} else if (rule === 'PRV') {
+			if (user.id_empresa) {
+				s = true;
+			}
+		}
+		return s;
+	};
 	return (
 		<Container maxWidth="lg">
 			{/* <Helmet>
@@ -40,7 +51,7 @@ function OffersPage() {
 						}}>
 						Ofertas
 					</Typography>
-					{user.id_empresa && (
+					{show() && (
 						<Stack
 							direction="row"
 							flexWrap="wrap-reverse"
@@ -57,7 +68,7 @@ function OffersPage() {
 						</Stack>
 					)}
 				</Box>
-				{user.id_empresa ? (
+				{show() ? (
 					<Grid
 						container
 						spacing={2}

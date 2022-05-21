@@ -1,9 +1,7 @@
-import { Delete, Edit, Label } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import {
-	Container,
 	Stack,
 	Typography,
-	Button,
 	Card,
 	TableContainer,
 	Table,
@@ -13,7 +11,6 @@ import {
 	Avatar,
 	IconButton,
 	TableHead,
-	TableSortLabel,
 	TablePagination,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
@@ -45,18 +42,6 @@ function UsersTable() {
 	};
 	return (
 		<Box>
-			{/* <Stack
-					direction="row"
-					alignItems="center"
-					justifyContent="space-between"
-					mb={5}>
-					<Typography variant="h4" gutterBottom>
-						User
-					</Typography>
-					<Button variant="contained" to="#">
-						Crear Usuario
-					</Button>
-				</Stack> */}
 			<Card>
 				<TableContainer>
 					<Table>

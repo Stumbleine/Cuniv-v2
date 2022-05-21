@@ -52,7 +52,7 @@ function SupplierCompaniesPage() {
 						display: 'flex',
 						justifyContent: 'center',
 					}}>
-					{companies.map((companie, index) => (
+					{companies?.map((companie, index) => (
 						<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
 							<SupplierCompany companie={companie} />
 						</Grid>

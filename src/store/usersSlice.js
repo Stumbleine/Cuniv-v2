@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import usersDATA from '../json/users.json';
 const initialState = {
-	users: null,
+	users: [],
 };
 
 const usersSlice = createSlice({

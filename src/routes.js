@@ -3,7 +3,7 @@ import AuthLayout from './layouts/AuthLayout';
 import DashboardLayout from './layouts/DashboardLayout';
 import CreateOfferPage from './pages/CreateOfferPage';
 import CreateSupplierCompanyPage from './pages/CreateSupplierCompanyPage';
-import CreateUserpage from './pages/CreateUserpage';
+import CreateUserpage from './pages/admin/CreateUserpage';
 import HomePage from './pages/HomePage';
 import OffersPage from './pages/OffersPage';
 import ProductsPage from './pages/ProductsPage';
@@ -19,6 +19,8 @@ import { useEffect } from 'react';
 import RedeemPage from './pages/RedeemPage';
 import CompanieProfile from './pages/CompanieProfile';
 import LandingPage from './pages/public/LandingPage';
+import CreateRolepage from './pages/admin/CreateRolepage';
+import RubrosPage from './pages/RubrosPage';
 export default function Router() {
 	const isAuth = useSelector((state) => state.login.isAuth);
 	const rule = useSelector((state) => state.user.rule);
@@ -111,10 +113,16 @@ export default function Router() {
 					element: <CreateSupplierCompanyPage />,
 				},
 				{
+					path: 'rubros',
+					element: <RubrosPage />,
+				},
+				{
 					path: 'users',
 					element: <UsersPage />,
 				},
 				{ path: 'createUser', element: <CreateUserpage /> },
+				{ path: 'createRole', element: <CreateRolepage /> },
+
 				{ path: 'statics', element: <StaticsPage /> },
 			],
 		},

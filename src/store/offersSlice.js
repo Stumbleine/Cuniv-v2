@@ -15,10 +15,12 @@ const offersSlice = createSlice({
 	},
 });
 export const getOffersAsync = (idEmpresa, rule) => async (dispatch) => {
+	const url =
+		rule === 'PRV'
+			? '/beneficio/lista?id_e=' + idEmpresa + '&rule=' + rule
+			: '/beneficio/lista';
 	try {
-		const r = await API.get(
-			'/beneficio/lista?id_e=' + idEmpresa + '&rule=' + rule
-		);
+		const r = await API.get(url);
 		dispatch(setOffers(r.data));
 		console.log('ofertas->r:', r.data);
 	} catch (e) {

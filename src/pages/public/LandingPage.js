@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import { Google, Restaurant } from '@mui/icons-material';
 import {
 	AppBar,
@@ -29,6 +30,7 @@ function srcset(image, width, height, rows = 1, cols = 1) {
 	};
 }
 function LandingPage() {
+	const theme = useTheme();
 	const [muestra, setMuestra] = useState(Data.slice(0, 5));
 	const { isLoading } = useSelector((state) => state.login);
 	const dispatch = useDispatch();
@@ -57,15 +59,23 @@ function LandingPage() {
 							<Stack spacing={2}>
 								<Typography
 									variant="h4"
-									sx={{ fontWeight: 'bold', lineHeight: 1, color: grey[800] }}>
+									color="textSecondary"
+									sx={{
+										fontWeight: 'bold',
+										lineHeight: 1,
+									}}>
 									Comparte ofertas, promociona productos y{' '}
 								</Typography>
 								<Typography
 									variant="h2"
-									sx={{ fontWeight: 'bold', lineHeight: 1, color: grey[900] }}>
+									sx={{
+										fontWeight: 'bold',
+										lineHeight: 1,
+										color: 'textPrimary',
+									}}>
 									BENEFICIA ESTUDIANTES
 								</Typography>
-								<Typography variant="h6" sx={{ color: grey[800] }}>
+								<Typography variant="h6" color="textSecondary">
 									Se parte de una de las empresas afiliadas, obten una cuenta,
 									comienza a compartir tus promociones y productos con los
 									estudiantes de la UMSS.
@@ -90,6 +100,7 @@ function LandingPage() {
 											onClick={renderProps.onClick}
 											disabled={renderProps.disabled}
 											// sx={{ minWidth: 400 }}
+											// color={theme.palette.error.main}
 											color="error"
 											startIcon={<Google />}
 											size="large"
@@ -147,14 +158,14 @@ function LandingPage() {
 										<Typography
 											sx={{
 												fontWeight: 'bold',
-												color: blue[600],
+												color: 'text.primary',
 												fontSize: 40,
 												// background: 'blue',
 											}}>
 											{paso.paso}
 										</Typography>
 									</Box>
-									<Typography>{paso.texto}</Typography>
+									<Typography color="textSecondary">{paso.texto}</Typography>
 								</Paper>
 							))}
 						</Stack>

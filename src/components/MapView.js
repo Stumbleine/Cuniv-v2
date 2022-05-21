@@ -8,35 +8,10 @@ import {
 	MapConsumer,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationCity, Room } from '@mui/icons-material';
 import L from 'leaflet';
-function LocationMarker() {
-	const [position, setPosition] = useState(null);
-	const map = useMapEvents({
-		click() {
-			map.locate();
-		},
-		locationfound(e) {
-			setPosition(e.latlng);
-			map.flyTo(e.latlng, map.getZoom());
-		},
-	});
-
-	return position === null ? null : (
-		<Marker position={position}>
-			<Popup>You are here</Popup>
-		</Marker>
-	);
-}
 function MapView({ sendPosition }) {
 	const [position, setPosition] = useState(null);
 	const positionDefault = [-17.393862599382608, -66.14674424552783];
-	const style = {
-		mapContainer: {
-			width: 300,
-			height: 200,
-		},
-	};
 	const myIcon = L.icon({
 		iconUrl: '/location.svg',
 		iconSize: [38, 50],

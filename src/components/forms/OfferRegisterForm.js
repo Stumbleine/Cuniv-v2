@@ -1,5 +1,4 @@
 import {
-	Container,
 	Typography,
 	TextField,
 	InputLabel,
@@ -9,8 +8,6 @@ import {
 	InputAdornment,
 	Paper,
 	Stack,
-	TableRow,
-	TableCell,
 	Button,
 	Card,
 	Grid,
@@ -22,14 +19,12 @@ import {
 	Chip,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState } from 'react';
 
-import { grey, orange, pink, cyan, blue, green } from '@mui/material/colors';
-import { CheckBox, Image } from '@mui/icons-material';
 import UploadImage from '../UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { Form, FormikProvider, useFormik, yupToFormErrors } from 'formik';
+import { Form, FormikProvider, useFormik } from 'formik';
 import { createOfferAsync } from '../../store/offersSlice';
 import * as Yup from 'yup';
 
@@ -119,7 +114,6 @@ function OfferRegisterForm() {
 		onSubmit: (values, { resetForm }) => {
 			console.log(values);
 			let success = false;
-
 			async function post() {
 				success = await dispatch(
 					createOfferAsync(values, fileImage, prdInclude, user.id_empresa, rule)
@@ -180,7 +174,8 @@ function OfferRegisterForm() {
 					<Grid item xs={12} md={6} lg={6} sx={{}}>
 						<Card sx={{ p: 2 }}>
 							<UploadImage
-								formFather="offer"
+								type="Rectangle"
+								label="imagen"
 								handleChangeFile={handleChangeFile}
 							/>
 							{/* datos de la oferta */}

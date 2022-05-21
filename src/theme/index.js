@@ -47,21 +47,21 @@ export const darkTheme = createTheme({
 	mode: 'dark',
 	palette: {
 		primary: {
-			main: '#003770',
-			light: blue[200],
+			main: grey[900],
+			light: grey[800],
 		},
 		secondary: {
-			main: '#E30613',
+			main: grey[300],
 		},
 		background: {
-			paper: '#fff',
-			default: grey[100],
+			paper: grey[200],
+			default: grey[800],
 		},
 		text: {
-			primary: grey[900],
-			secondary: grey[800],
-			disabled: grey[600],
-			icon: grey[600],
+			primary: grey[100],
+			secondary: grey[500],
+			disabled: grey[200],
+			icon: grey[400],
 		},
 		warning: {
 			main: orange[800],

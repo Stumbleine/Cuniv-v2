@@ -12,6 +12,8 @@ import productsReducer from './productsSlice';
 import companiesReducer from './companiesSlice';
 import statisticsReducer from './statisticsSlice';
 import publicReducer from './publicSlice';
+import settingReducer from './settingSlice';
+import rubrosReducer from './rubrosSlice';
 // MIDDLEWARE
 const localStorageMiddleware = ({ getState }) => {
 	return (next) => (action) => {
@@ -41,6 +43,7 @@ const reHydrateStore = () => {
 // }
 export default configureStore({
 	reducer: {
+		setting: settingReducer,
 		public: publicReducer,
 		user: userReducer,
 		login: loginReducer,
@@ -48,6 +51,7 @@ export default configureStore({
 		companies: companiesReducer,
 		offers: offersReducer,
 		products: productsReducer,
+		rubros: rubrosReducer,
 		statics: statisticsReducer,
 	},
 

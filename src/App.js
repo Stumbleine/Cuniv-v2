@@ -3,11 +3,13 @@ import Router from './routes';
 
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-import { lightTheme } from './theme';
+import { darkTheme, lightTheme } from './theme';
+import { useSelector } from 'react-redux';
 function App() {
+	const mode = useSelector((state) => state.setting.theme.mode);
 	return (
 		<BrowserRouter>
-			<ThemeProvider theme={lightTheme}>
+			<ThemeProvider theme={mode === 'light' ? lightTheme : darkTheme}>
 				<CssBaseline></CssBaseline>
 
 				<Router />

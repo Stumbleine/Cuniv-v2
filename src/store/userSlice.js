@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
+import { setConfigNav } from './settingSlice';
 const initialState = {
 	user: {},
 	rule: '',
@@ -31,6 +32,7 @@ export const getUserDataAync = (idUser) => async (dispatch) => {
 	try {
 		const r = await API.get(`/usuario/user-info?id=${idUser}`);
 		dispatch(setUser(r.data));
+		dispatch(setConfigNav(r.data.rules));
 		// console.log('userData->r:', r.data);
 	} catch (e) {
 		throw new Error(e);

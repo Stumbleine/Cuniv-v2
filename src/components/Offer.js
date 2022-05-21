@@ -1,7 +1,7 @@
-import { Delete, Edit, OpenInFull } from '@mui/icons-material';
+import React from 'react';
+import { Delete, Edit } from '@mui/icons-material';
 import {
 	Card,
-	CardActionArea,
 	CardActions,
 	CardContent,
 	CardMedia,
@@ -11,9 +11,6 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
-
-import React from 'react';
-import BgAvatar from './BgAvatar';
 import OfferContent from './OfferContent';
 
 export default function Offer(props) {
@@ -40,7 +37,7 @@ export default function Offer(props) {
 	return (
 		<Card
 			sx={{
-				/* width: 240, height: 270, */ bgcolor: 'background.paper',
+				bgcolor: 'background.paper',
 			}}>
 			<OfferContent offer={offer}>
 				<CardMedia
@@ -48,18 +45,6 @@ export default function Offer(props) {
 					alt={offer.titulo}
 					height="140"
 					image={offer.image}></CardMedia>
-				{/* <BgAvatar
-					color="paper"
-					src="/mock-images/avatars/shape-avatar.svg"
-					sx={{
-						width: 80,
-						height: 35,
-						zIndex: 9,
-						bottom: 64,
-						position: 'absolute',
-					}}
-				/> */}
-				{/* <AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" /> */}
 				<BorderAvatar />
 				<AvatarCustom alt={offer.rz_empresa} src={offer.logo_empresa} />
 				<CardContent sx={{ mt: 2 }}>

@@ -157,7 +157,8 @@ function CompanieRegisterForm() {
 					<Grid item xs={12} md={6}>
 						<Paper sx={{ p: 2, borderRadius: 2 }}>
 							<UploadImage
-								formFather="companie"
+								label="logo"
+								type="Circle"
 								handleChangeFile={handleChangeFile}
 							/>
 							<Box sx={{ mt: 2 }}>

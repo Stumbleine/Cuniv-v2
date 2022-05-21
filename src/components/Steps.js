@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Steps() {
-	const { rulepath } = useSelector((state) => state.user);
+	const { rulepath, rule, user } = useSelector((state) => state.user);
 	return (
 		<Stack spacing={2} maxWidth="md">
 			<Typography variant="h4">Primero lo primero</Typography>
@@ -13,19 +13,28 @@ function Steps() {
 				Aqui algunos pasos a seguir sugeridos
 			</Typography>
 			<Paper sx={{ p: 2 }}>
-				<Typography variant="h6">#1 Registrar su empresa</Typography>
-				<Typography color="textSecondary">
-					Antes de publicar su ofertas, es necesario registrar su empresa, de
-					esta forma los beneficiarios conoceran más sobre su empresa.
-				</Typography>
-				<Box sx={{ textAlign: 'end', mt: 2 }}>
-					<Button
-						component={Link}
-						to={`/${rulepath}/registerCompanie`}
-						variant="contained">
-						Registrar Empresa
-					</Button>
-				</Box>
+				{user.id_empresa ? (
+					<>
+						<Typography variant="h6">#1 Registrar su empresa</Typography>
+						<Typography color="textSecondary">Completado</Typography>
+					</>
+				) : (
+					<>
+						<Typography variant="h6">#1 Registrar su empresa</Typography>
+						<Typography color="textSecondary">
+							Antes de publicar su ofertas, es necesario registrar su empresa,
+							de esta forma los beneficiarios conoceran más sobre su empresa.
+						</Typography>
+						<Box sx={{ textAlign: 'end', mt: 2 }}>
+							<Button
+								component={Link}
+								to={`/${rulepath}/registerCompanie`}
+								variant="contained">
+								Registrar Empresa
+							</Button>
+						</Box>
+					</>
+				)}
 			</Paper>
 			<Paper sx={{ p: 2 }}>
 				<Typography variant="h6">#2 Registrar productos</Typography>

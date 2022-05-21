@@ -16,7 +16,6 @@ import {
 	ListItemIcon,
 	Chip,
 } from '@mui/material';
-import { grey, orange, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,8 +31,6 @@ function OfferContent(props) {
 	const [offer, setOffer] = useState(null);
 	const [company, setCompany] = useState(null);
 	const [sucursales, setSucursales] = useState(null);
-	// const company = offer.empresa;
-	// const sucursales = useSelector()
 	const dispatch = useDispatch();
 	useEffect(() => {
 		const fetchOffer = async () => {
@@ -80,17 +77,6 @@ function OfferContent(props) {
 						{offer?.empresa?.razon_social}
 					</Typography>
 					<StatusLabel status={offer?.status} />
-					{/* <Box sx={{ p: 0.5, background: red[400], borderRadius: 2 }}>
-						<Typography
-							sx={{
-								textTransform: 'uppercase',
-								fontSize: 11,
-								color: 'white',
-								px: 1,
-							}}>
-							Expirado
-						</Typography>
-					</Box> */}
 				</Box>
 
 				<Box sx={{ width: 420 }}>

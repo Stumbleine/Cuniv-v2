@@ -27,7 +27,7 @@ function SupplierCompany(props) {
 	return (
 		<Card
 			sx={{
-				/* width: 240, height: 270, */ bgcolor: 'background.paper',
+				bgcolor: 'background.paper',
 				borderRadius: 2,
 			}}>
 			<CardActionArea
@@ -42,19 +42,6 @@ function SupplierCompany(props) {
 					image={companie.logo}
 				/>
 			</CardActionArea>
-
-			{/* <BgAvatar
-					color="paper"
-					src="/mock-images/avatars/shape-avatar.svg"
-					sx={{
-						width: 80,
-						height: 36,
-						zIndex: 9,
-						bottom: 64,
-						position: 'absolute',
-					}}
-				/> */}
-			{/* <AvatarCustom alt="hello" src="/mock-images/avatars/avatar_3.jpg" /> */}
 			<CardContent sx={{ textAlign: 'center' }}>
 				<Typography
 					gutterBottom
