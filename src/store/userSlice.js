@@ -1,42 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
-import { setConfigNav } from './settingSlice';
+import { setNavlinks } from './settingSlice';
 const initialState = {
 	user: {},
-	rule: '',
-	rulepath: '',
+	isAdmin: false,
 };
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		sayHello: (state) => {
-			console.log('hello');
-		},
 		setUser: (state, { payload }) => {
 			state.user = payload;
 
-			state.rule = payload.rules.find((e) => e === 'PRV' || 'ADM');
-			console.log('user=>', state.user, state.rule);
-			if (state.rule === 'ADM') state.rulepath = 'admin';
-			if (state.rule === 'PRV') state.rulepath = 'provider';
+			payload.roles.forEach(r => {
+				r.isadmin === true && (state.isAdmin = true);
+			});
 		},
-		setCompnieID: (state, { payload }) => {
-			state.user = { ...state.user, id_empresa: payload };
+		setCompanie: (state, { payload }) => {
+			state.user = { ...state.user, empresa: payload };
+		},
+		setPermissions: (state, { payload }) => {
+			state.permissions = payload;
 		},
 	},
 });
 
-export const getUserDataAync = (idUser) => async (dispatch) => {
+export const getUserAsync = token => async dispatch => {
 	try {
-		const r = await API.get(`/usuario/user-info?id=${idUser}`);
+		const r = await API.get(`user`, { headers: { Authorization: `Bearer ${token}` } });
+		dispatch(setNavlinks(r.data.permisos));
 		dispatch(setUser(r.data));
-		dispatch(setConfigNav(r.data.rules));
-		// console.log('userData->r:', r.data);
+		console.log('userData->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const { setUser, setCompnieID } = userSlice.actions;
+export const { setUser, setCompanie } = userSlice.actions;
 export default userSlice.reducer;

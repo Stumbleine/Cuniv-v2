@@ -1,48 +1,72 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import API from '../conection';
-import { getUserDataAync } from './userSlice';
+import { getUserAsync } from './userSlice';
 
 const initialState = {
 	isAuth: false,
 	isLoading: false,
 	isAuthFailed: false,
 	accessToken: null,
+	registerSuccess: false,
+	registerFailed: false,
 };
 
 const loginSlice = createSlice({
 	name: 'login',
 	initialState,
 	reducers: {
-		sayHello: (state) => {
-			console.log('hello');
-		},
-		setAuth: (state) => {
+		setAuth: state => {
 			state.isAuth = true;
 			state.isLoading = false;
-			console.log(state.isAuth);
+			state.isAuthFailed = false;
 		},
-		setLoading: (state) => {
+		setLoading: state => {
 			state.isLoading = true;
 		},
-		setAuthFailed: (state) => {
+		setAuthFailed: state => {
 			state.isAuth = false;
 			state.isLoading = false;
 			state.isAuthFailed = true;
-		},
-		setLogout: (state) => {
-			state.isAuth = false;
-			state.accessToken = null;
-			window.localStorage.removeItem('applicationState');
-			window.localStorage.clear();
 		},
 		setToken: (state, { payload }) => {
 			state.accessToken = payload;
 			console.log('token->r :', payload);
 		},
+		setLogout: state => {
+			state.isAuth = false;
+			state.accessToken = null;
+			window.localStorage.removeItem('applicationState');
+			window.localStorage.clear();
+		},
+		setRegister: state => {
+			state.registerSuccess = true;
+			state.registerFailed = false;
+			state.isLoading = false;
+		},
+		setRegisterFailed: state => {
+			state.registerSuccess = false;
+			state.registerFailed = true;
+			state.isLoading = false;
+		},
 	},
 });
+export const loginAsync = user => async dispatch => {
+	dispatch(setLoading());
+	try {
+		const r = await API.post('auth/login', user);
+		console.log('loginManual->r :', r);
+		dispatch(setToken(r.data.token));
+		// dispatch(setAuth());
+		await dispatch(getUserAsync(r.data.token));
+		dispatch(setAuth());
+	} catch (e) {
+		dispatch(setAuthFailed(true));
+		throw new Error(e);
+	}
+};
 
-export const loginAsync = (user) => async (dispatch) => {
+export const loginGoogleAsync = user => async dispatch => {
 	const data = {
 		username: user.email,
 		email: user.email,
@@ -51,23 +75,47 @@ export const loginAsync = (user) => async (dispatch) => {
 		apellidos: user.familyName,
 	};
 	try {
-		const r = await API.post('/auth/login', data);
+		const r = await API.post('auth/login', data);
 		console.log('login->r :', r);
 		dispatch(setToken(r.data.idUser));
-		await dispatch(getUserDataAync(r.data.idUser));
+		await dispatch(getUserAsync());
 		dispatch(setAuth());
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const logoutAsync = (accessToken) => async (dispatch) => {
+
+export const logoutAsync = () => async dispatch => {
 	try {
-		const r = await API.post('/auth/logout');
+		const r = await API.post('auth/logout');
+		dispatch(setLogout());
 		console.log('logOut->r :', r);
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const { setLoading, setAuth, setAuthFailed, setLogout, setToken } =
-	loginSlice.actions;
+export const registerAsync = user => async dispatch => {
+	// const { registerSuccess } = useSelector(state => state.login);
+	let succes = false;
+	dispatch(setLoading());
+	try {
+		const r = await API.post('auth/register', user);
+		dispatch(setRegister());
+		succes = true;
+	} catch (e) {
+		dispatch(setRegisterFailed());
+		throw new Error(e);
+	}
+	return succes;
+};
+
+export const {
+	setLoading,
+	setAuth,
+	setAuthFailed,
+	setLogout,
+	setToken,
+	setRegister,
+	setRegisterFailed,
+} = loginSlice.actions;
 export default loginSlice.reducer;

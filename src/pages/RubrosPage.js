@@ -2,13 +2,13 @@ import { Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import RubroAddForm from '../components/forms/RubroAddForm';
-import RubrosTable from '../components/RubrosTable';
-import ShowRule from '../components/ShowRule';
+import RubrosTable from '../components/tables/RubrosTable';
+import ShowRoles from '../components/ShowRoles';
 
 function RubrosPage() {
 	return (
 		<Container maxWidth="lg">
-			<ShowRule />
+			<ShowRoles />
 			<Box>
 				<Box>
 					<Typography

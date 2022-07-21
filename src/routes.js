@@ -15,15 +15,14 @@ import UsersPage from './pages/UsersPage';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import NotFoundPage from './pages/public/NotFoundPage';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import RedeemPage from './pages/RedeemPage';
 import CompanieProfile from './pages/CompanieProfile';
 import LandingPage from './pages/public/LandingPage';
 import CreateRolepage from './pages/admin/CreateRolepage';
 import RubrosPage from './pages/RubrosPage';
 export default function Router() {
-	const isAuth = useSelector((state) => state.login.isAuth);
-	const rule = useSelector((state) => state.user.rule);
+	const isAuth = useSelector(state => state.login.isAuth);
+	const rule = useSelector(state => state.user.rule);
 	// useEffect(() => {
 	// 	console.log('isAuth=>', isAuth);
 	// }, [isAuth]);
@@ -51,7 +50,7 @@ export default function Router() {
 		}
 		return null;
 	}
-	const aunthenticated = (rol) => {
+	const aunthenticated = rol => {
 		// console.log(isAuth, rol, rule);
 		if (isAuth === true && rule === rol) return true;
 	};
@@ -63,11 +62,6 @@ export default function Router() {
 				{
 					path: '/',
 					element: rbac(),
-					// isAuth === true && rule === 'ADM' ? (
-					// 	<Navigate to="/admin/home" replace />
-					// ) : (
-					// 	<Navigate to="/login" replace />
-					// ),
 				},
 				{
 					path: 'index',
@@ -83,6 +77,7 @@ export default function Router() {
 				},
 			],
 		},
+
 		{
 			path: 'admin',
 			element: aunthenticated('ADM') ? (
@@ -145,7 +140,6 @@ export default function Router() {
 				{ path: 'products', element: <ProductsPage /> },
 				{ path: 'profileCompanie', element: <CompanieProfile /> },
 				{ path: 'registerCompanie', element: <CreateSupplierCompanyPage /> },
-
 				{ path: 'statics', element: <StaticsPage /> },
 			],
 		},

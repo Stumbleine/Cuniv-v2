@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { createRef, useState } from 'react';
 import { Image } from '@mui/icons-material';
 import { Box, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
-function UploadImage({ handleChangeFile, type, label, children }) {
+function UploadImage({ handleChangeFile, id, type, label, preload, children }) {
 	const [uploadHover, setUploadHover] = useState(false);
-
-	const [logo, setLogo] = useState(null);
-	const handleChangeLogo = (e) => {
+	const [logo, setLogo] = useState(preload !== undefined ? preload : null);
+	const handleChangeLogo = e => {
 		console.log('changeLogo');
 		console.log(e.target.files);
 		handleChangeFile(e.target.files);
-		setLogo(URL.createObjectURL(e.target.files[0]));
+		setLogo(URL.createObjectURL(e.target?.files[0]));
 	};
 	const styles = {
 		BoxContainerCircle: {
@@ -76,18 +75,13 @@ function UploadImage({ handleChangeFile, type, label, children }) {
 	return (
 		<>
 			<Box
-				sx={
-					type === 'Circle'
-						? styles.BoxContainerCircle
-						: styles.BoxContainerRectangle
-				}>
-				<label htmlFor="contained-button-file">
+				sx={type === 'Circle' ? styles.BoxContainerCircle : styles.BoxContainerRectangle}>
+				<label htmlFor={id}>
 					<TextField
 						type="file"
-						required
 						multiple
 						accept="image/*"
-						id="contained-button-file"
+						id={id}
 						onChange={handleChangeLogo}
 						sx={{ display: 'none' }}
 					/>
@@ -114,9 +108,7 @@ function UploadImage({ handleChangeFile, type, label, children }) {
 									component="img"
 									src={logo}
 									style={
-										type === 'Circle'
-											? styles.BoxImageCircle
-											: styles.BoxImageRectangle
+										type === 'Circle' ? styles.BoxImageCircle : styles.BoxImageRectangle
 									}
 									sx={{ zIndex: 'modal' }}></Box>
 							)}
@@ -136,9 +128,7 @@ function UploadImage({ handleChangeFile, type, label, children }) {
 									}}>
 									<Box>
 										<Image sx={{ color: 'white' }}></Image>
-										<Typography sx={{ color: 'white' }}>
-											Cambiar {label}
-										</Typography>
+										<Typography sx={{ color: 'white' }}>Cambiar {label}</Typography>
 									</Box>
 								</Box>
 							) : (
@@ -150,13 +140,19 @@ function UploadImage({ handleChangeFile, type, label, children }) {
 			</Box>
 
 			{children}
-			<Box sx={{ width: '100%', textAlign: 'center', mt: 1 }}>
+			{/* <Box sx={{ width: '100%', textAlign: 'center', mt: 1 }}>
 				<Typography variant="body2" color="textSecondary">
 					imagenes de 300x200 y formato *.png *.jpg
 				</Typography>
 
 				<Typography variant="body2" color="textSecondary">
 					tamaño max. 3 MB
+				</Typography>
+			</Box> */}
+			<Box sx={{ width: '100%', textAlign: 'center', mt: 1 }}>
+				<Typography variant="body2" color="textSecondary">
+					Recomendacion: imagenes de dimensiones {type === 'Circle' ? '4:3' : '16:9'} y
+					formato *.png *.jpg unicamente
 				</Typography>
 			</Box>
 		</>

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-	rubros: [],
+	rubros: null,
+	isLoading: false,
 };
 
 const rubrosSlice = createSlice({
@@ -8,10 +9,15 @@ const rubrosSlice = createSlice({
 	initialState,
 	reducers: {
 		setRubros: (state, { payload }) => {
+			state.isLoading = false;
+
 			state.rubros = payload;
+		},
+		setLoading: state => {
+			state.isLoading = true;
 		},
 	},
 });
 
-export const { sayHello } = rubrosSlice.actions;
+export const { setRubros, setLoading } = rubrosSlice.actions;
 export default rubrosSlice.reducer;

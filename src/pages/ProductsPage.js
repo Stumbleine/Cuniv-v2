@@ -3,19 +3,29 @@ import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductAddForm from '../components/forms/ProductAddForm';
-import ProductsTable from '../components/ProductsTable';
-import ShowRule from '../components/ShowRule';
-import { getProductsPRV } from '../store/productsSlice';
+import ProductsTable from '../components/tables/ProductsTable';
+import ShowRoles from '../components/ShowRoles';
+import { productsAsync } from '../store/productsSlice';
+import { hasPrivilege } from '../Utils/RBAC';
+import WarningVerified from '../components/WarningVerified';
 function ProductsPage() {
-	const { user } = useSelector((state) => state.user);
+	const { user } = useSelector(state => state.user);
+	const { products, isLoading } = useSelector(state => state.user);
 	const dispatch = useDispatch();
+	const { accessToken } = useSelector(state => state.login);
+	const privilegeCreate = hasPrivilege(
+		['gestionar productos', 'crear producto'],
+		user.permisos
+	);
+	// const privilegeListar = hasPrivilege(['gestionar productos','listar productos'],user.permisos)
+
 	useEffect(() => {
-		dispatch(getProductsPRV(user.id_empresa));
+		dispatch(productsAsync(accessToken));
 		document.title = 'cuniv | productos';
 	}, []);
 	return (
 		<Container maxWidth="lg">
-			<ShowRule />
+			<ShowRoles />
 			<Box>
 				<Box>
 					<Typography
@@ -29,13 +39,22 @@ function ProductsPage() {
 						Productos
 					</Typography>
 				</Box>
+				{user?.companieVerified === false && (
+					<WarningVerified>
+						¡Sus productos no son visibles para estudiantes, debido a que su empresa a un
+						no fue verificado!
+					</WarningVerified>
+				)}
+
 				<Grid container spacing={2}>
-					<Grid item xs={12} md={7}>
+					<Grid item xs={12} md={privilegeCreate ? 7 : 12}>
 						<ProductsTable />
 					</Grid>
-					<Grid item xs={12} md={5}>
-						<ProductAddForm />
-					</Grid>
+					{privilegeCreate && (
+						<Grid item xs={12} md={5}>
+							<ProductAddForm />
+						</Grid>
+					)}
 				</Grid>
 			</Box>
 		</Container>

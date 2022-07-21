@@ -1,11 +1,4 @@
-import {
-	Delete,
-	Edit,
-	Email,
-	Facebook,
-	Instagram,
-	Language,
-} from '@mui/icons-material';
+import { Delete, Edit, Email, Facebook, Instagram, Language } from '@mui/icons-material';
 import {
 	Card,
 	CardActionArea,
@@ -32,7 +25,7 @@ function SupplierCompany(props) {
 			}}>
 			<CardActionArea
 				component={Link}
-				to={`/admin/supplierCompanies/${companie.id_empresa}`}>
+				to={`/main/supplierCompanies/${companie.id_empresa}`}>
 				<CardMedia
 					component="img"
 					alt={companie.razon_social}
@@ -51,6 +44,7 @@ function SupplierCompany(props) {
 					sx={{ fontWeight: 'bold' }}>
 					{companie.razon_social}
 				</Typography>
+
 				<Box
 					sx={{
 						display: 'flex',
@@ -83,7 +77,7 @@ function SupplierCompany(props) {
 					) : null}
 					{companie.email ? (
 						<IconButton
-							onClick={(e) => {
+							onClick={e => {
 								window.location = 'mailto:' + companie.email;
 								e.preventDefault();
 								// Linking.openURL(

@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-	statics: {},
+	statics: null,
 };
 
 const staticsSlice = createSlice({
 	name: 'statics',
 	initialState,
 	reducers: {
-		sayHello: (state) => {
+		sayHello: state => {
 			console.log('hello');
 		},
 	},

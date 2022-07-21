@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import OfferContent from './OfferContent';
+import OfferContent from '../dialogs/OfferContent';
 
 export default function Offer(props) {
 	const offer = props.offer;
@@ -42,11 +42,11 @@ export default function Offer(props) {
 			<OfferContent offer={offer}>
 				<CardMedia
 					component="img"
-					alt={offer.titulo}
+					alt={offer.title}
 					height="140"
 					image={offer.image}></CardMedia>
 				<BorderAvatar />
-				<AvatarCustom alt={offer.rz_empresa} src={offer.logo_empresa} />
+				<AvatarCustom alt={offer.companie.name} src={offer.companie.logo} />
 				<CardContent sx={{ mt: 2 }}>
 					<Typography
 						gutterBottom
@@ -54,16 +54,16 @@ export default function Offer(props) {
 						variant="subtitle2"
 						noWrap
 						sx={{ fontWeight: 'bold' }}>
-						{offer.titulo}
+						{offer.title}
 					</Typography>
 					<Typography
 						variant="body2"
 						noWrap
 						sx={{ overflow: 'hidden', color: 'text.secondary' }}>
-						{offer.descuento}
-						{offer.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de descuento
+						{offer.discount} asdasdasdasdasdas
+						{offer.discount_type === 'Porcentual' ? '%' : 'Bs.'} de descuento
 					</Typography>
-				</CardContent>{' '}
+				</CardContent>
 			</OfferContent>
 			<CardActions sx={{ justifyContent: 'end' }}>
 				<IconButton size="small">

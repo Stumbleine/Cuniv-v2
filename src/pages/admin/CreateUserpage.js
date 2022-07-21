@@ -2,12 +2,12 @@ import { Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import UserCreateForm from '../../components/forms/UserCreateForm';
-import ShowRule from '../../components/ShowRule';
+import ShowRoles from '../../components/ShowRoles';
 
 function CreateUserpage() {
 	return (
 		<Container>
-			<ShowRule />
+			<ShowRoles />
 
 			<Box>
 				<Typography

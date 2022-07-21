@@ -4,16 +4,12 @@ import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import {
-	adminNavigation,
-	providerNavigation,
-} from '../assets/mocks/configNavigation';
 
 function SideBar({ openSideBar, onCloseSideBar }) {
 	const theme = useTheme();
 	const { pathname } = useLocation();
-	const { user, rulepath, rule } = useSelector((state) => state.user);
-	const configNav = rule === 'ADM' ? adminNavigation : providerNavigation;
+	const { user } = useSelector(state => state.user);
+	const navlinks = useSelector(state => state.setting.navlinks);
 	useEffect(() => {
 		if (openSideBar) {
 			onCloseSideBar();
@@ -23,10 +19,7 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 		<Drawer open={openSideBar} onClose={onCloseSideBar}>
 			<Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
 				<Link component={RouterLink} to="/" style={{ textDecoration: 'none' }}>
-					<img
-						src="/svgs/logoCuniv.svg"
-						style={{ width: 'auto', height: 50 }}
-					/>
+					<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
 
 					{/* <Typography
 									variant="h5"
@@ -60,7 +53,7 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 								{user.nombres + ' ' + user.apellidos}
 							</Typography>
 							<Typography variant="body2" sx={{ color: 'text.secondary' }}>
-								{rulepath}
+								Administrador
 							</Typography>
 						</Box>
 					</Box>
@@ -68,14 +61,24 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 			</Box>
 			{/* contenido */}
 			<Box sx={{ px: 2.5 }}>
-				{configNav?.map((item) => (
+				{navlinks.map(item => (
 					<MenuItem
-						key={item.text}
+						key={item.name}
 						sx={{ typography: 'body2', py: 2, px: 2, borderRadius: 2 }}
 						component={RouterLink}
 						to={item.path}>
-						{item.icon}
-						{item.text}
+						<img
+							src={`/svgs/icons/nav/${item.icon}.svg`}
+							alr="icon"
+							style={{
+								marginRight: '20px',
+								width: 24,
+								height: 24,
+								color: 'text.primary',
+							}}
+						/>
+						<img src=""></img>
+						{item.name}
 					</MenuItem>
 				))}
 			</Box>

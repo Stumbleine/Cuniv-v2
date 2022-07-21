@@ -22,7 +22,7 @@ export const lightTheme = createTheme({
 			secondary: '#547290',
 			terciario: '#3A3A3A',
 			disabled: 'rgba(0,0,0,0.6)',
-			icon: '#003770',
+			icon: '#547290',
 		},
 		warning: {
 			main: orange[800],
@@ -34,7 +34,7 @@ export const lightTheme = createTheme({
 			delete: red[200],
 		},
 		// grey: GREY,
-		divider: 'rgba(30,30,30,0.30)',
+		// divider: 'rgba(30,30,30,0.30)',
 	},
 	typography: {
 		fontFamily: "'Open Sans', sans-serif",

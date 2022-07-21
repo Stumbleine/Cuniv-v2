@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import companiesData from '../json/business.json';
-import { setCompnieID } from './userSlice';
+import { setCompanie } from './userSlice';
 const initialState = {
 	companies: null,
+	companiesNotVerified: null,
 	sucursales: [],
+	profile: null,
+	isLoading: false,
 };
 
 const companiesSlice = createSlice({
@@ -14,31 +17,62 @@ const companiesSlice = createSlice({
 		setCompanies: (state, { payload }) => {
 			state.companies = payload;
 		},
+		setCompaniesNV: (state, { payload }) => {
+			state.companiesNotVerified = payload;
+		},
 		setSucursales: (state, { payload }) => {
 			state.sucursales = payload;
 		},
+		setCompanieProfile: (state, { payload }) => {
+			state.isLoading = false;
+			state.profile = payload;
+		},
+		setLoading: state => {
+			state.isLoading = true;
+		},
 	},
 });
-export const getCompaniesAsync = () => async (dispatch) => {
+
+export const getCompaniesAsync = token => async dispatch => {
 	try {
-		const r = await API.get('/empresa/lista');
+		const r = await API.get('empresa/list', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
 		dispatch(setCompanies(r.data));
-		console.log('empresas->r:', r.data);
+		// console.log('empresas->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const getCompanieAsync = (idCompanie) => async () => {
+
+export const compNotVerifiedAsync = token => async dispatch => {
 	try {
-		const r = await API.get(`/empresa/perfil?id=${idCompanie}`);
+		const r = await API.get('empresa/list-not-verified', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setCompaniesNV(r.data));
+		// console.log('empresasNV->r:', r.data);
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const profileCompanieAsync = (idCompanie, token) => async dispatch => {
+	console.log('si entra', idCompanie);
+	dispatch(setLoading());
+	try {
+		const r = await API.get(`empresa/profile?id=${idCompanie}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
 		console.log('perfilEmpresa->r:', r.data);
+		dispatch(setCompanieProfile(r.data));
 		return r.data;
 	} catch (e) {
 		throw new Error(e);
 	}
 };
 
-export const convertb64 = (file) => {
+export const convertb64 = file => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.readAsDataURL(file[0]);
@@ -46,7 +80,7 @@ export const convertb64 = (file) => {
 			resolve(reader.result);
 		};
 
-		reader.onerror = (error) => {
+		reader.onerror = error => {
 			reject(error);
 		};
 	});
@@ -54,8 +88,9 @@ export const convertb64 = (file) => {
 	// 	return reader.result;
 	// };
 };
+
 export const createCompanieAsync =
-	(dataform, sucursales, logo, idProveedor) => async (dispatch) => {
+	(dataform, sucursales, logo, idProveedor) => async dispatch => {
 		// console.log(empresa, sucursales, logo);
 		// var logo64 = null;
 		let succes = false;
@@ -67,9 +102,9 @@ export const createCompanieAsync =
 		};
 		console.log('data armado', data);
 		try {
-			const r = await API.post('/empresa/create', data);
+			const r = await API.post('empresa/create', data);
 			dispatch(getCompaniesAsync());
-			dispatch(setCompnieID(r.data.id));
+			dispatch(setCompanie(r.data.id));
 
 			console.log('createEmpresa->r:', r.data);
 			succes = true;
@@ -78,14 +113,53 @@ export const createCompanieAsync =
 		}
 		return succes;
 	};
-export const getSucursales = (idEmpresa) => async (dispatch) => {
+
+export const getSucursales = idEmpresa => async dispatch => {
 	try {
-		const r = await API.get('/empresa/sucursales?id_e=' + idEmpresa);
+		const r = await API.get('empresa/sucursales?id_e=' + idEmpresa);
 		dispatch(setSucursales(r.data));
 		console.log('sucursales->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const { setCompanies, setSucursales } = companiesSlice.actions;
+
+export const rejectCompanieAsync = (token, values) => async dispatch => {
+	try {
+		const r = await API.post('empresa/reject', values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		setTimeout(() => {
+			dispatch(compNotVerifiedAsync(token));
+			dispatch(getCompaniesAsync(token));
+		}, 2000);
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+export const approveCompanieAsync = (token, id) => async dispatch => {
+	const data = {
+		id_empresa: id,
+		verified: true,
+	};
+	try {
+		const r = await API.post('empresa/approve', data, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		setTimeout(() => {
+			dispatch(compNotVerifiedAsync(token));
+			dispatch(getCompaniesAsync(token));
+		}, 2000);
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const {
+	setCompanies,
+	setSucursales,
+	setLoading,
+	setCompanieProfile,
+	setCompaniesNV,
+} = companiesSlice.actions;
 export default companiesSlice.reducer;

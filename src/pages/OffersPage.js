@@ -1,43 +1,113 @@
-import { Add } from '@mui/icons-material';
+import {
+	Add,
+	IndeterminateCheckBox,
+	SignalCellularNullOutlined,
+	Warning,
+} from '@mui/icons-material';
 import { Container, Grid, Typography, Stack, Button } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
+import { amber, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Offer from '../components/Offer';
-import ShowRule from '../components/ShowRule';
-import { getCompaniesAsync } from '../store/companiesSlice';
+import Offer from '../components/cards/Offer';
+import ShowRoles from '../components/ShowRoles';
+import SkeletonOffer from '../components/skeletons/SkeletonOffer';
+import WarningVerified from '../components/WarningVerified';
 import { getOffersAsync } from '../store/offersSlice';
+import { hasPrivilege } from '../Utils/RBAC';
 
 function OffersPage() {
-	const { rulepath, user, rule } = useSelector((state) => state.user);
+	const { user, isAdmin } = useSelector(state => state.user);
+	const { accessToken } = useSelector(state => state.login);
 	const dispatch = useDispatch();
+
 	useEffect(() => {
-		dispatch(getOffersAsync(user.id_empresa, rule));
+		dispatch(getOffersAsync(accessToken));
 		document.title = 'cuniv | ofertas';
-		console.log(rulepath);
 	}, []);
 
-	const offers = useSelector((state) => state.offers.offers);
-	const show = () => {
-		let s = false;
-		if (rule === 'ADM') {
-			s = true;
-		} else if (rule === 'PRV') {
-			if (user.id_empresa) {
-				s = true;
-			}
+	const { offers, isLoading } = useSelector(state => state.offers);
+	const [showButton, setShowButton] = useState(false);
+	const [disabledBtn, setDisabledBtn] = useState(false);
+	const [showList, setShowList] = useState(null);
+	useEffect(() => {
+		if (hasPrivilege(['crear oferta', 'gestionar ofertas'], user.permisos) || isAdmin) {
+			setShowButton(true);
 		}
-		return s;
+		if (user.companie !== null || isAdmin) {
+			setDisabledBtn(false);
+			setShowButton(true);
+		} else {
+			setDisabledBtn(true);
+		}
+		if (hasPrivilege(['gestionar ofertas', 'listar ofertas'], user.permisos) || isAdmin) {
+			setDisabledBtn(false);
+			setShowList(listOffers);
+		}
+		if (user.companie !== null || isAdmin) {
+			setShowList(listOffers);
+		} else {
+			setShowList(msgCompanyNull);
+		}
+	}, [offers, user]);
+
+	const msgOffersNull = () => {
+		return (
+			<Box>
+				<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
+					<Typography>No hay ninguna oferta publicada aun</Typography>
+					<Typography color="textSecondary">
+						Publique sus ofertas ahora pulsando en + Oferta
+					</Typography>
+				</Stack>
+			</Box>
+		);
 	};
+
+	const listOffers = () => {
+		return (
+			<Grid container spacing={2}>
+				{offers !== null
+					? offers.map(offer => (
+							<Grid item key={offer.id_beneficio} xs={6} sm={4} md={3} xl={3}>
+								<Offer offer={offer} />
+							</Grid>
+					  ))
+					: isLoading
+					? [1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
+							<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
+								<SkeletonOffer />
+							</Grid>
+					  ))
+					: msgOffersNull()}
+			</Grid>
+		);
+	};
+	const msgCompanyNull = () => {
+		return (
+			<Box>
+				<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
+					<Typography>No ha registrado su empresa aun</Typography>
+					<Typography color="textSecondary">
+						registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas
+						con su empresa
+					</Typography>
+					<Button component={Link} to={`/main/registerCompanie`} variant="contained">
+						Registrar Empresa
+					</Button>
+				</Stack>
+			</Box>
+		);
+	};
+
 	return (
 		<Container maxWidth="lg">
 			{/* <Helmet>
 				<title>{title}</title>
 			</Helmet> */}
-			<ShowRule />
+			<ShowRoles />
 
 			<Box>
 				<Box>
@@ -51,70 +121,31 @@ function OffersPage() {
 						}}>
 						Ofertas
 					</Typography>
-					{show() && (
-						<Stack
-							direction="row"
-							flexWrap="wrap-reverse"
-							alignItems="center"
-							justifyContent="flex-end"
-							sx={{ mb: 3 }}>
-							<Link
-								to={`/${rulepath}/createOffer`}
-								style={{ textDecoration: 'none' }}>
-								<Button startIcon={<Add />} variant="contained">
-									Oferta
-								</Button>
-							</Link>
-						</Stack>
-					)}
-				</Box>
-				{show() ? (
-					<Grid
-						container
-						spacing={2}
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-						}}>
-						{offers ? (
-							offers.map((offer, id = offer.id) => (
-								<Grid item key={id} xs={6} sm={4} md={3} xl={3}>
-									<Offer offer={offer}></Offer>
-								</Grid>
-							))
-						) : (
-							<Box>
-								<Stack
-									maxWidth="lg"
-									spacing={2}
-									alignItems="center"
-									sx={{ mt: 2 }}>
-									<Typography>No hay ninguna oferta publicada aun</Typography>
-									<Typography color="textSecondary">
-										Publique sus ofertas ahora pulsando en + Oferta
-									</Typography>
-								</Stack>
-							</Box>
-						)}
-					</Grid>
-				) : (
-					<Box>
-						<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-							<Typography>No ha registrado su empresa aun</Typography>
-							<Typography color="textSecondary">
-								registrar su empresa ayudara a que sus ofertas sean facilmente
-								relacionadas con su empresa
-							</Typography>
-
+					<Stack
+						direction="row"
+						flexWrap="wrap-reverse"
+						alignItems="center"
+						justifyContent="flex-end"
+						sx={{ mb: 3 }}>
+						{showButton && (
 							<Button
+								disabled={disabledBtn}
 								component={Link}
-								to={`/${rulepath}/registerCompanie`}
+								to={`/main/createOffer`}
+								startIcon={<Add />}
 								variant="contained">
-								Registrar Empresa
+								Oferta
 							</Button>
-						</Stack>
-					</Box>
+						)}
+					</Stack>
+				</Box>
+				{user?.companieVerified === false && (
+					<WarningVerified>
+						¡Sus productos no son visibles para estudiantes, debido a que su empresa a un
+						no fue verificado!
+					</WarningVerified>
 				)}
+				{showList}
 			</Box>
 		</Container>
 	);

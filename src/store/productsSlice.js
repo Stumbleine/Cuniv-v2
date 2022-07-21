@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 const initialState = {
-	products: [],
+	products: null,
+	isLoading: false,
+	// companiesToAsing:null
 };
 
 const productsSlice = createSlice({
@@ -10,37 +12,64 @@ const productsSlice = createSlice({
 	reducers: {
 		setProducts: (state, { payload }) => {
 			state.products = payload;
+			state.isLoading = false;
 		},
+		setLoading: (state, { payload }) => {
+			state.isLoading = payload;
+		},
+		// setCompanies:(state,{payload}) =>{
+		// 	state.companiesToAsing = payload;
+		// }
 	},
 });
 
-export const getProductsPRV = (idEmpresa) => async (dispatch) => {
+export const productsAsync = token => async dispatch => {
+	dispatch(setLoading(true));
 	try {
-		const r = await API.get(`/producto/lista-prov?id_e=${idEmpresa}`);
+		const r = await API.get(`producto/list`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
 		dispatch(setProducts(r.data));
 		console.log('productsData->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
 };
-export const addProductAsync =
-	(producto, image, idEmpresa) => async (dispatch) => {
-		const b64 = image ? await convertb64(image) : null;
 
-		const data = { ...producto, image: b64, id_empresa: idEmpresa };
-		console.log('product', data);
-		let success = false;
-		try {
-			const r = await API.post('/producto/create', data);
-			dispatch(getProductsPRV(idEmpresa));
-			console.log('createProduct->r', r.data);
-			success = true;
-		} catch (e) {
-			throw new Error(e);
-		}
-		return success;
-	};
-export const convertb64 = (file) => {
+export const addProductAsync = (token, producto, image) => async dispatch => {
+	let succes = null;
+	dispatch(setLoading(true));
+	const b64 = image ? await convertb64(image) : null;
+	const data = { ...producto, image: b64 };
+	console.log('productFORM', data);
+	try {
+		const r = await API.post('producto/create', data, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setLoading(true));
+		dispatch(productsAsync(token));
+
+		succes = r.data;
+	} catch (e) {
+		succes = e;
+		throw new Error(e);
+	}
+	console.log(succes);
+	return succes;
+};
+
+export const companiesAsignAsync = token => async () => {
+	let r = [];
+	try {
+		r = await API.get('producto/companies', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+	} catch (e) {
+		throw new Error(e);
+	}
+	return r;
+};
+export const convertb64 = file => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.readAsDataURL(file[0]);
@@ -48,10 +77,10 @@ export const convertb64 = (file) => {
 			resolve(reader.result);
 		};
 
-		reader.onerror = (error) => {
+		reader.onerror = error => {
 			reject(error);
 		};
 	});
 };
-export const { setProducts } = productsSlice.actions;
+export const { setProducts, setLoading } = productsSlice.actions;
 export default productsSlice.reducer;

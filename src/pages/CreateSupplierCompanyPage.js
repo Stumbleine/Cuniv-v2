@@ -3,11 +3,11 @@ import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import ShowRule from '../components/ShowRule';
+import ShowRoles from '../components/ShowRoles';
 import CompanieRegisterForm from '../components/forms/CompanieRegisterForm';
 
 function CreateSupplierCompanyPage() {
-	const { rule, user, rulepath } = useSelector((state) => state.user);
+	const { rule, user, rulepath } = useSelector(state => state.user);
 	const [open, setOpen] = useState(false);
 
 	// useEffect(() => {
@@ -27,7 +27,7 @@ function CreateSupplierCompanyPage() {
 
 	return (
 		<Container maxWidth="lg">
-			<ShowRule />
+			<ShowRoles />
 
 			{/* <Snackbar
 				open={open}

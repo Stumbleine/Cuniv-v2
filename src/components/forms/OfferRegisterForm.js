@@ -17,6 +17,8 @@ import {
 	Checkbox,
 	OutlinedInput,
 	Chip,
+	CardActions,
+	CircularProgress,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -27,48 +29,41 @@ import { useTheme } from '@emotion/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { createOfferAsync } from '../../store/offersSlice';
 import * as Yup from 'yup';
+import SnackCustom from '../SnackCustom';
+import API from '../../conection';
+import { green } from '@mui/material/colors';
+import CheckFrequency from './CheckFrequency';
 
 function OfferRegisterForm() {
 	const dispatch = useDispatch();
-	const [discountType, setdiscountType] = useState(10);
-	const products = useSelector((state) => state.products.products);
-	const { user, rule } = useSelector((state) => state.user);
-	const { sucursales } = useSelector((state) => state.companies);
-	const handlediscountType = (event) => {
-		setdiscountType(event.target.value);
-	};
+	const products = useSelector(state => state.products.products);
+	const { user, isAdmin } = useSelector(state => state.user);
+	const { accessToken } = useSelector(state => state.login);
+	const { sucursales } = useSelector(state => state.companies);
 	const [fileImage, setFileImage] = useState(null);
-
-	const handleChangeFile = (file) => {
-		console.log('file-add-success', file);
-		setFileImage(file);
-	};
 	const [prdInclude, setPrdInclude] = useState([]);
 	const [checkSucursal, setCheckSucursal] = useState([]);
-
-	const handleChange = (event) => {
-		const {
-			target: { value },
-		} = event;
-		setPrdInclude(
-			// On autofill we get a stringified value.
-			typeof value === 'string' ? value.split(',') : value
-		);
-	};
-
-	const handleCheckSucursal = (event) => {
-		const {
-			target: { value },
-		} = event;
-		setCheckSucursal(
-			// On autofill we get a stringified value.
-			typeof value === 'string' ? value.split(',') : value
-		);
-	};
+	const [companies, setCompanies] = useState(null);
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	useEffect(() => {
+		async function fetch() {
+			const r = await API.get('producto/companies', {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setCompanies(r.data);
+		}
+		fetch();
+	}, []);
 	useEffect(() => {
 		console.log('productos Seleccionados', prdInclude);
 		console.log('sucursal Seleccionados', checkSucursal);
 	}, [prdInclude, checkSucursal]);
+
 	const theme = useTheme();
 	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
@@ -80,6 +75,29 @@ function OfferRegisterForm() {
 			},
 		},
 	};
+
+	const handleChangeFile = file => {
+		console.log('file-add-success', file);
+		setFileImage(file);
+	};
+
+	const handleChange = event => {
+		const {
+			target: { value },
+		} = event;
+		setPrdInclude(
+			// On autofill we get a stringified value.
+			typeof value === 'string' ? value.split(',') : value
+		);
+	};
+
+	const handleCheckSucursal = event => {
+		const {
+			target: { value },
+		} = event;
+		setCheckSucursal(typeof value === 'string' ? value.split(',') : value);
+	};
+
 	function getStyles(name, personName, theme) {
 		return {
 			fontWeight:
@@ -88,88 +106,59 @@ function OfferRegisterForm() {
 					: theme.typography.fontWeightMedium,
 		};
 	}
-	const ids = sucursales.map((s) => {
+
+	const ids = sucursales.map(s => {
 		let array = [];
 		array.push(s.id_sucursal.toString());
 		return array;
 	});
+
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
 
 	const formik = useFormik({
 		initialValues: {
 			titulo: '',
 			fecha_inicio: '',
 			fecha_fin: '',
-			tipo_descuento: '',
+			tipo_descuento: 'Porcentual',
 			descuento: '',
 			condiciones: '',
 			sucursales_disp: { ids: ids },
+			id_empresa: 'none',
 		},
 		validationSchema: Yup.object().shape({
 			titulo: Yup.string().required('Titulo de oferta es necesario'),
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
-			tipo_descuento: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
+			id_empresa: isAdmin
+				? Yup.number().typeError('Debe elegir la empresa').required()
+				: '',
 		}),
 		onSubmit: (values, { resetForm }) => {
 			console.log(values);
-			let success = false;
-			async function post() {
-				success = await dispatch(
-					createOfferAsync(values, fileImage, prdInclude, user.id_empresa, rule)
-				);
-				if (success === true) {
-					console.log('success_true', success);
-					setSetting({
-						...setting,
-						open: true,
-						severity: 'success',
-						message: 'La empresa se ha registrado con exito',
-					});
-				} else {
-					console.log('success_false', success);
-					setSetting({
-						...setting,
-						open: true,
-						severity: 'error',
-						message: 'Hubo un problema al registrar la empresa',
-					});
-				}
-				return success;
-			}
-			post();
+			const register = async () => {
+				const r = await dispatch(createOfferAsync(values, fileImage, prdInclude));
+				r
+					? handleSnack('Producto agregado exitosamente', 'success')
+					: handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			};
+			register();
 			// resetForm();
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
-	const [setting, setSetting] = useState({
-		open: false,
-		message: '',
-		variant: '',
-	});
-	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setSetting({ ...setting, open: false });
-	};
+	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 	return (
 		<FormikProvider value={formik}>
+			<SnackCustom data={snack} closeSnack={closeSnack} />
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
 				<Grid container spacing={2} sx={{}}>
-					<Snackbar
-						open={setting.open}
-						autoHideDuration={3000}
-						onClose={handleClose}>
-						<Alert
-							onClose={handleClose}
-							severity={setting.severity || 'success'}
-							sx={{ width: '100%' }}>
-							{setting.message}
-						</Alert>
-					</Snackbar>
 					{/* primer panel(image y titulos) */}
 					<Grid item xs={12} md={6} lg={6} sx={{}}>
 						<Card sx={{ p: 2 }}>
@@ -179,8 +168,8 @@ function OfferRegisterForm() {
 								handleChangeFile={handleChangeFile}
 							/>
 							{/* datos de la oferta */}
-							<Box sx={{ mt: 2 }}>
-								<Typography sx={{ fontWeight: 'bold' }}>Información</Typography>
+							<Typography sx={{ fontWeight: 'bold', mb: 1 }}>Información</Typography>
+							<Stack spacing={2}>
 								<TextField
 									required
 									variant="outlined"
@@ -190,16 +179,17 @@ function OfferRegisterForm() {
 									{...getFieldProps('titulo')}
 									error={Boolean(touched.titulo && errors.titulo)}
 									helperText={touched.titulo && errors.titulo}
-									sx={{ width: '100%', mt: 2 }}
 								/>
-
-								<Box
-									sx={{
-										mt: 2,
-										width: '100%',
-										display: 'flex',
-									}}>
-									<Box sx={{ width: '50%', mr: 1 }}>
+								<TextField
+									fullWidth
+									variant="outlined"
+									label="Condiciones de canje (opcional)"
+									multiline
+									{...getFieldProps('condiciones')}
+									size="small"
+								/>
+								<Stack spacing={2} direction="row">
+									<Box sx={{ width: '50%' }}>
 										<InputLabel>Fecha inicio *</InputLabel>
 										<TextField
 											required
@@ -207,15 +197,13 @@ function OfferRegisterForm() {
 											variant="outlined"
 											type="date"
 											{...getFieldProps('fecha_inicio')}
-											error={Boolean(
-												touched.fecha_inicio && errors.fecha_inicio
-											)}
+											error={Boolean(touched.fecha_inicio && errors.fecha_inicio)}
 											helperText={touched.fecha_inicio && errors.fecha_inicio}
 											sx={{ width: '100%', mt: 1 }}
 										/>
 									</Box>
 
-									<Box sx={{ width: '50%', ml: 1 }}>
+									<Box sx={{ width: '50%' }}>
 										<InputLabel>Fecha fin *</InputLabel>
 										<TextField
 											required
@@ -228,28 +216,21 @@ function OfferRegisterForm() {
 											sx={{ width: '100%', mt: 1 }}
 										/>
 									</Box>
-								</Box>
-								<Box sx={{ mt: 2, width: '100%' }}>
+								</Stack>
+								<Stack spacing={1}>
 									<InputLabel>Tipo de descuento *</InputLabel>
-
 									<Box
 										sx={{
 											display: 'flex',
-
 											justifyContent: 'space-between',
 											alignItems: 'center',
-											mt: 1,
 										}}>
 										<FormControl sx={{ width: '35%' }}>
 											<Select
-												sx={{ width: '100%' }}
-												// value={discountType}
-												// onChange={handlediscountType}
-												{...getFieldProps('tipo_descuento')}
-												error={Boolean(
-													touched.tipo_descuento && errors.tipo_descuento
-												)}
+												fullWidth
 												size="small"
+												{...getFieldProps('tipo_descuento')}
+												error={Boolean(touched.tipo_descuento && errors.tipo_descuento)}
 												inputProps={{ 'aria-label': 'Without label' }}>
 												<MenuItem value="Porcentual">porcentaje</MenuItem>
 												<MenuItem value="Monetario">monto</MenuItem>
@@ -262,28 +243,24 @@ function OfferRegisterForm() {
 											variant="outlined"
 											{...getFieldProps('descuento')}
 											placeholder={
-												discountType === 'Descripcion'
-													? 'ejem: lleva 2x1 ..'
-													: ''
+												values.tipo_descuento === 'Descripcion' ? 'ejem: lleva 2x1..' : ''
 											}
 											InputProps={{
 												startAdornment:
-													discountType === 'Porcentual' ? (
+													values.tipo_descuento === 'Porcentual' ? (
 														<InputAdornment position="start">%</InputAdornment>
-													) : discountType === 'Monetario' ? (
-														<InputAdornment position="start">
-															Bs.
-														</InputAdornment>
 													) : (
-														<></>
+														values.tipo_descuento === 'Monetario' && (
+															<InputAdornment position="start">Bs.</InputAdornment>
+														)
 													),
 											}}
 											error={Boolean(touched.descuento && errors.descuento)}
 											sx={{ width: '65%' }}
 										/>
 									</Box>
-								</Box>
-							</Box>
+								</Stack>
+							</Stack>
 						</Card>
 					</Grid>
 					{/* segundo panel */}
@@ -297,114 +274,133 @@ function OfferRegisterForm() {
 								flexDirection: 'column',
 								direction: 'row',
 							}}>
-							<Box sx={{ display: 'flex' }}>
-								<Box sx={{ width: '100%' }}>
-									<Box sx={{ width: '100%', mt: 1 }}>
-										<TextField
-											variant="outlined"
-											label="Condiciones de canje (opcional)"
-											multiline
-											{...getFieldProps('condiciones')}
-											size="small"
-											sx={{ width: '100%' }}
-										/>
-									</Box>
-									<Box sx={{ mt: 2 }}>
-										<Typography fontWeight="bold">Sucursales</Typography>
+							<Stack spacing={2}>
+								{isAdmin && (
+									<Box>
 										<Typography color="textSecondary" sx={{ mb: 1 }}>
-											Seleccione las sucursales donde se encuentra disponible la
-											oferta
+											Empresa para el cual es la oferta *
 										</Typography>
-										<Stack
-											direction="column"
-											spacing={1}
-											sx={{
-												alignItems: 'center',
-												bgcolor: 'grey.100',
-												py: 2,
-												borderRadius: 2,
-												overflowY: 'scroll',
-												height: 200,
-											}}>
-											{sucursales?.map((n) => (
-												<Paper
-													key={n.id_sucursal}
-													sx={{
-														display: 'flex',
-														alignItems: 'center',
-														width: '90%',
-														minWidth: 200,
-														minHeight: 60,
-														p: 1,
-														bgcolor: 'background.paper',
-													}}>
-													{/* <CheckBox chec sx={{ ml: 1 }} /> */}
-													<FormControlLabel
-														control={<Checkbox value={n} />}
-														sx={{ ml: 1 }}
-													/>
-													<Box sx={{ ml: 1 }}>
-														<Typography variant="body1">{n.nombre}</Typography>
-														<Typography variant="body2">
-															direccion: {n.direccion}
-														</Typography>
-													</Box>
-												</Paper>
-											))}
-										</Stack>
-									</Box>
-
-									<Box sx={{ width: '100%', mt: 2 }}>
-										<Typography sx={{ fontWeight: 'bold' }}>
-											Productos
-										</Typography>
-										<InputLabel sx={{ mb: 1 }}>
-											Seleccione los productos que incluye la oferta (opcional)
-										</InputLabel>
 										<Select
-											labelId="prd-select-label"
-											multiple
 											fullWidth
 											size="small"
-											value={prdInclude}
-											onChange={handleChange}
-											input={<OutlinedInput />}
-											renderValue={(selected) => (
-												<Box
-													sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-													{selected.map((value) => (
-														<Chip
-															key={value.id_producto}
-															label={value.nombre}
-														/>
-													))}
-												</Box>
-											)}
-											MenuProps={MenuProps}>
-											{products.map((p) => (
-												<MenuItem
-													key={p.id_producto}
-													value={p}
-													style={getStyles(p.nombre, prdInclude, theme)}>
-													{p.nombre}
+											{...getFieldProps('id_empresa')}
+											error={Boolean(touched.id_empresa && errors.id_empresa)}>
+											{companies?.map(item => (
+												<MenuItem key={item.id_empresa} value={item.id_empresa}>
+													{item.razon_social}
 												</MenuItem>
 											))}
+											<MenuItem value="none">None</MenuItem>
 										</Select>
+										<Typography sx={{ ml: 2 }} variant="caption" color="error">
+											{errors.id_empresa}
+										</Typography>
 									</Box>
+								)}
+								<Box>
+									<Typography fontWeight="bold">Sucursales</Typography>
+									<Typography color="textSecondary" sx={{ mb: 1 }}>
+										Seleccione las sucursales donde se encuentra disponible la oferta
+									</Typography>
+									<Stack
+										direction="column"
+										spacing={1}
+										sx={{
+											alignItems: 'center',
+											bgcolor: 'grey.100',
+											py: 2,
+											borderRadius: 2,
+											overflowY: 'scroll',
+											height: 200,
+										}}>
+										{sucursales?.map(n => (
+											<Paper
+												key={n.id_sucursal}
+												sx={{
+													display: 'flex',
+													alignItems: 'center',
+													width: '90%',
+													minWidth: 200,
+													minHeight: 60,
+													p: 1,
+													bgcolor: 'background.paper',
+												}}>
+												{/* <CheckBox chec sx={{ ml: 1 }} /> */}
+												<FormControlLabel
+													control={<Checkbox value={n} />}
+													sx={{ ml: 1 }}
+												/>
+												<Box sx={{ ml: 1 }}>
+													<Typography variant="body1">{n.nombre}</Typography>
+													<Typography variant="body2">
+														direccion: {n.direccion}
+													</Typography>
+												</Box>
+											</Paper>
+										))}
+									</Stack>
 								</Box>
-							</Box>
-							<Box
-								sx={{
-									display: 'flex',
-									width: '100%',
-									justifyContent: 'end',
-									mt: 2,
-								}}>
-								<Button onClick={() => console.log(values)}>Cancelar</Button>
-								<Button type="submit" sx={{ ml: 2 }} variant="contained">
-									Crear Oferta
-								</Button>
-							</Box>
+
+								<Box sx={{ width: '100%' }}>
+									<Typography sx={{ fontWeight: 'bold' }}>Productos</Typography>
+									<InputLabel sx={{ mb: 1 }}>
+										Seleccione los productos que incluye la oferta (opcional)
+									</InputLabel>
+									<Select
+										labelId="prd-select-label"
+										multiple
+										fullWidth
+										size="small"
+										value={prdInclude}
+										onChange={handleChange}
+										input={<OutlinedInput />}
+										renderValue={selected => (
+											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+												{selected?.map(value => (
+													<Chip key={value.id_producto} label={value.nombre} />
+												))}
+											</Box>
+										)}
+										MenuProps={MenuProps}>
+										{products?.map(p => (
+											<MenuItem
+												key={p.id_producto}
+												value={p}
+												style={getStyles(p.nombre, prdInclude, theme)}>
+												{p.nombre}
+											</MenuItem>
+										))}
+									</Select>
+								</Box>
+
+								<CheckFrequency />
+								<CardActions sx={{ justifyContent: 'end', p: 0 }}>
+									<Button onClick={() => console.log(values)}>Cancelar</Button>
+									<Box sx={{ position: 'relative' }}>
+										<Button
+											color="primary"
+											fullWidth
+											type="submit"
+											disabled={isSubmitting}
+											variant="contained">
+											Crear oferta
+										</Button>
+										{isSubmitting && (
+											<CircularProgress
+												size={24}
+												sx={{
+													color: green[500],
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													marginTop: '-12px',
+													marginLeft: '-12px',
+												}}
+											/>
+										)}
+									</Box>{' '}
+								</CardActions>
+							</Stack>
 						</Card>
 					</Grid>
 				</Grid>

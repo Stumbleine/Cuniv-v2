@@ -13,7 +13,7 @@ import {
 import { Box } from '@mui/system';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState, forwardRef } from 'react';
-import MapView from './MapView';
+import MapView from '../MapView';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 const Transition = forwardRef(function Transition(props, ref) {
@@ -27,9 +27,7 @@ function AddCompanyBranch({
 }) {
 	const [open, setOpen] = useState(false);
 	const [position, setPosition] = useState(
-		actionType === 'edit'
-			? { lat: editData?.latitud, lng: editData?.longitud }
-			: null
+		actionType === 'edit' ? { lat: editData?.latitud, lng: editData?.longitud } : null
 	);
 
 	const handleClickOpen = () => {
@@ -38,11 +36,11 @@ function AddCompanyBranch({
 	const handleClose = () => {
 		setOpen(false);
 	};
-	const sendPosition = (pos) => {
+	const sendPosition = pos => {
 		setPosition(pos);
 		console.log(typeof pos.lat);
 	};
-	const validateMap = (valores) => {
+	const validateMap = valores => {
 		let errores = {};
 		if (position === null) {
 			errores.pos = 'No se ha elegido la ubicacion';
@@ -159,8 +157,7 @@ function AddCompanyBranch({
 							<Typography variant="body2" sx={{ mt: 2 }}>
 								Seleccione la ubicación
 							</Typography>
-							<Box
-								sx={{ width: '100%', height: 250, background: 'pink', mt: 1 }}>
+							<Box sx={{ width: '100%', height: 250, background: 'pink', mt: 1 }}>
 								<MapView sendPosition={sendPosition}></MapView>
 							</Box>
 							<Box sx={{ display: 'flex' }}>

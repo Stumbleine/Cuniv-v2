@@ -8,7 +8,6 @@ import {
 	Button,
 	CircularProgress,
 	Container,
-	Grid,
 	IconButton,
 	InputAdornment,
 	Stack,
@@ -26,37 +25,30 @@ import {
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { cyan, green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading, setAuth, setAuthFailed } from '../../store/loginSlice';
+import { setLoading, setAuth, setAuthFailed, loginAsync } from '../../store/loginSlice';
 import { setUser } from '../../store/userSlice';
 function LoginPage() {
 	const dispatch = useDispatch();
-	const users = useSelector((state) => state.users.users);
-	const { isLoading } = useSelector((state) => state.login);
+	const users = useSelector(state => state.users.users);
+	const { isLoading, isAuthFailed } = useSelector(state => state.login);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showlogoutButton, setShowlogoutButton] = useState(false);
 	const [showloginButton, setShowloginButton] = useState(true);
 	const clientId =
 		'147363332194-u205vroo6c09j366f56qc6d7pbkob6q2.apps.googleusercontent.com';
-	const onLoginSuccess = (res) => {
+	const onLoginSuccess = res => {
 		// console.log('Login Success:', res.profileObj);
 		setShowloginButton(false);
 		setShowlogoutButton(true);
 	};
 
-	const onLoginFailure = (res) => {
+	const onLoginFailure = res => {
 		console.log('Login Failed:', res);
 	};
 
-	// const onSignoutSuccess = () => {
-	// 	console.log('You have been logged out successfully');
-	// 	setShowloginButton(true);
-	// 	setShowlogoutButton(false);
-	// };
 	const LoginSchema = Yup.object().shape({
 		email: Yup.string()
-			.email(
-				'El correo electrónico debe ser una dirección de correo electrónico válida'
-			)
+			.email('El correo electrónico debe ser una dirección de correo electrónico válida')
 			.required('Correo Electronico es requerido'),
 		password: Yup.string().required('Contraseña es requerido'),
 	});
@@ -67,26 +59,13 @@ function LoginPage() {
 			remember: true,
 		},
 		validationSchema: LoginSchema,
-		onSubmit: (valuesForm, { resetForm }) => {
-			dispatch(setLoading());
-			if (valuesForm.password === 'admin123') {
-				dispatch(setUser(users[0]));
-			} else if (valuesForm.password === 'provider123') {
-				dispatch(setUser(users[1]));
-			} else if (valuesForm.password === 'cashier123') {
-				dispatch(setUser(users[2]));
-			}
-
-			setTimeout(function () {
-				dispatch(setAuth());
-				resetForm();
-			}, 5000);
+		onSubmit: (values, { resetForm }) => {
+			dispatch(loginAsync(values));
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
+	const { errors, touched, values, handleSubmit, getFieldProps } = formik;
 	const handleShowPassword = () => {
-		setShowPassword((show) => !show);
+		setShowPassword(show => !show);
 	};
 	return (
 		<Container maxWidth="sm">
@@ -99,41 +78,7 @@ function LoginPage() {
 						<Typography variant="h4">Iniciar Sesion</Typography>
 						<Typography>Ingrese sus datos</Typography>
 					</Box>
-					{/* <Stack spacing={1}>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
-								<Typography>adminEmail: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									admin123@gmail.com
-								</Typography>
-								<Typography>/ password: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									admin123
-								</Typography>
-							</Box>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
-								<Typography>providerEmaiil: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									provider123@gmail.com
-								</Typography>
-								<Typography>/ password: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									provider123
-								</Typography>
-							</Box>
-							<Box sx={{ display: 'flex', p: 1, background: cyan[50] }}>
-								<Typography>cashierEmail: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									cashier123@gmail.com
-								</Typography>
-								<Typography>/ password: </Typography>
-								<Typography sx={{ fontWeight: 'bold', mx: 1 }}>
-									{' '}
-									cashier123
-								</Typography>
-							</Box>
-						</Stack> */}
-
-					<Box sx={{ py: 2 }}>
+					<Stack spacing={3}>
 						<GoogleLogin
 							clientId={clientId}
 							buttonText="Sign In"
@@ -141,7 +86,7 @@ function LoginPage() {
 							onFailure={onLoginFailure}
 							cookiePolicy={'single_host_origin'}
 							isSignedIn={true}
-							render={(renderProps) => (
+							render={renderProps => (
 								<Button
 									onClick={renderProps.onClick}
 									disabled={renderProps.disabled}
@@ -154,39 +99,11 @@ function LoginPage() {
 								</Button>
 							)}
 						/>
-
-						{/* <GoogleLogout
-											clientId={clientId}
-											buttonText="Sign Out"
-											onLogoutSuccess={onSignoutSuccess}
-											render={(renderProps) => (
-												<Button
-													onClick={renderProps.onClick}
-													disabled={renderProps.disabled}
-													fullWidth
-													color="grey"
-																									sx={{
-													background: grey[200],
-													color: grey[800],
-													
-												}}
-													startIcon={<Logout />}
-													size="large"
-													variant="contained">
-													Cerrar Sesion
-												</Button>
-											)}
-										/> */}
-					</Box>
-					<Box
-						sx={{
-							mb: 2,
-						}}>
-						<Typography align="center" color="textSecondary" variant="body1">
-							o
-						</Typography>
-					</Box>
-					<Box sx={{ width: '100%' }}>
+						<Box sx={{}}>
+							<Typography align="center" color="textSecondary" variant="body1">
+								o
+							</Typography>
+						</Box>
 						<TextField
 							fullWidth
 							autoComplete="username"
@@ -219,7 +136,7 @@ function LoginPage() {
 							helperText={touched.password && errors.password}
 						/>
 
-						<Box sx={{ py: 2, position: 'relative' }}>
+						<Box sx={{ py: 1, position: 'relative' }}>
 							<Button
 								color="primary"
 								/* 						disabled={formik.isSubmitting} */
@@ -244,7 +161,13 @@ function LoginPage() {
 								/>
 							)}
 						</Box>
-					</Box>
+						{isAuthFailed && (
+							<Typography color="error" variant="caption" textAlign="center">
+								{' '}
+								Las credenciales no son correctas, vuelva a intentarlo.
+							</Typography>
+						)}
+					</Stack>
 				</Form>
 			</FormikProvider>
 		</Container>

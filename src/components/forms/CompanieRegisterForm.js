@@ -17,8 +17,8 @@ import {
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
-import AddCompanyBranch from '../AddCompanyBranch';
-import CompanyBranch from '../CompanyBranch';
+import AddCompanyBranch from './AddCompanyBranch';
+import CompanyBranch from '../cards/CompanyBranch';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCompanieAsync } from '../../store/companiesSlice';
@@ -27,8 +27,8 @@ import UploadImage from '../UploadImage';
 
 function CompanieRegisterForm() {
 	const dispatch = useDispatch();
-	const { rule, user, rulepath } = useSelector((state) => state.user);
-	const { accessToken } = useSelector((state) => state.login);
+	const { rule, user, rulepath } = useSelector(state => state.user);
+	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [fileLogo, setFileLogo] = useState(null);
 	const defaultSucursal = {
@@ -109,13 +109,12 @@ function CompanieRegisterForm() {
 			resetForm();
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
-	const handleChangeFile = (file) => {
+	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+	const handleChangeFile = file => {
 		console.log('file-add-success', file);
 		setFileLogo(file);
 	};
-	const handleAddSucursal = (sucursal) => {
+	const handleAddSucursal = sucursal => {
 		console.log('changeSucursal	');
 		setListSucursal([...listSucursal, sucursal]);
 	};
@@ -142,10 +141,7 @@ function CompanieRegisterForm() {
 	return (
 		<FormikProvider value={formik}>
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-				<Snackbar
-					open={setting.open}
-					autoHideDuration={3000}
-					onClose={handleClose}>
+				<Snackbar open={setting.open} autoHideDuration={3000} onClose={handleClose}>
 					<Alert
 						onClose={handleClose}
 						severity={setting.severity || 'success'}
@@ -213,7 +209,7 @@ function CompanieRegisterForm() {
 											disablePortal
 											options={proveedores}
 											sx={{ width: '100%', mt: 2 }}
-											renderInput={(params) => (
+											renderInput={params => (
 												<TextField
 													{...params}
 													required
@@ -232,12 +228,7 @@ function CompanieRegisterForm() {
 											labelId="rubro-label"
 											fullWidth
 											id="select-multiple-chip"
-											input={
-												<OutlinedInput
-													id="select-multiple-chip"
-													label="rubro"
-												/>
-											}
+											input={<OutlinedInput id="select-multiple-chip" label="rubro" />}
 											{...getFieldProps('rubro')}
 											error={Boolean(touched.rubro && errors.rubro)}
 											// helperText={touched.rubro && errors.rubro}
@@ -245,9 +236,7 @@ function CompanieRegisterForm() {
 											<MenuItem value="Restaurant">Restaurant</MenuItem>
 											<MenuItem value="Tecnologia">Tecnologia</MenuItem>
 											<MenuItem value="Belleza">Belleza</MenuItem>
-											<MenuItem value="Entretenimiento">
-												Entretenimiento
-											</MenuItem>
+											<MenuItem value="Entretenimiento">Entretenimiento</MenuItem>
 											<MenuItem value="Deporte">Deporte</MenuItem>
 										</Select>
 									</FormControl>
@@ -268,12 +257,10 @@ function CompanieRegisterForm() {
 
 								<Box>
 									<Box>
-										<Typography sx={{ fontWeight: 'bold' }}>
-											Sucursales
-										</Typography>
+										<Typography sx={{ fontWeight: 'bold' }}>Sucursales</Typography>
 										<Typography variant="body2" color="textSecondary">
-											Se creo una sucursal por defecto, modifique sus datos
-											(direccion, geolocalización) *
+											Se creo una sucursal por defecto, modifique sus datos (direccion,
+											geolocalización) *
 										</Typography>
 									</Box>
 									<Stack
@@ -333,9 +320,7 @@ function CompanieRegisterForm() {
 								<Box sx={{ width: '100%', mt: 1 }}>
 									<Box sx={{}}>
 										<Box sx={{ display: 'flex' }}>
-											<Typography sx={{ fontWeight: 'bold' }}>
-												Social
-											</Typography>
+											<Typography sx={{ fontWeight: 'bold' }}>Social</Typography>
 											<Typography sx={{ fontWeight: 'none', ml: 1 }}>
 												(opcional)
 											</Typography>

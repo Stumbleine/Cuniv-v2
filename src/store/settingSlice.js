@@ -1,11 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import {
-	adminNavigation,
-	providerNavigation,
-} from '../assets/mocks/configNavigation';
+import { getNavlinks } from '../Utils/RBAC';
+
 const initialState = {
-	configNav: {},
+	navlinks: [],
 	theme: {
 		mode: 'light',
 	},
@@ -15,21 +13,17 @@ const settingSlice = createSlice({
 	name: 'setting',
 	initialState,
 	reducers: {
-		setConfigNav: (state, { payload }) => {
-			let rule = payload.find((e) => e === 'PRV' || 'ADM');
-			if (rule === 'ADM') {
-				state.configNav = 'adminNavigation';
-			} else if (rule === 'PRV') {
-				state.configNav = 'providerNavigation';
-			}
+		setNavlinks: (state, { payload }) => {
+			console.log('payload', payload);
+			state.navlinks = getNavlinks(payload);
 		},
 
-		setThemeMode: (state) => {
+		setThemeMode: state => {
 			let m = state.theme.mode === 'light' ? 'dark' : 'light';
 			state.theme.mode = m;
 		},
 	},
 });
 
-export const { setConfigNav, setThemeMode } = settingSlice.actions;
+export const { setNavlinks, setThemeMode } = settingSlice.actions;
 export default settingSlice.reducer;

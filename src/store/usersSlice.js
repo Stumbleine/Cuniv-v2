@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
-import usersDATA from '../json/users.json';
 const initialState = {
-	users: [],
+	users: null,
+	isLoading: false,
 };
 
 const usersSlice = createSlice({
@@ -11,11 +11,16 @@ const usersSlice = createSlice({
 	reducers: {
 		setUsers: (state, { payload }) => {
 			state.users = payload;
+			state.isLoading = false;
+		},
+		setLoading: state => {
+			state.isLoading = true;
 		},
 	},
 });
 
-export const getUsersListAync = () => async (dispatch) => {
+export const usersAsync = () => async dispatch => {
+	dispatch(setLoading());
 	try {
 		const r = await API.get(`/usuario/lista`);
 		dispatch(setUsers(r.data));
@@ -25,5 +30,5 @@ export const getUsersListAync = () => async (dispatch) => {
 	}
 };
 
-export const { setUsers } = usersSlice.actions;
+export const { setUsers, setLoading } = usersSlice.actions;
 export default usersSlice.reducer;

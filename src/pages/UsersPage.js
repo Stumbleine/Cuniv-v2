@@ -4,24 +4,23 @@ import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import UsersTable from '../components/UsersTable';
-import { getUsersListAync } from '../store/usersSlice';
+import ShowRoles from '../components/ShowRoles';
+import UsersTable from '../components/tables/UsersTable';
+import { usersAsync } from '../store/usersSlice';
 
 function UsersPage() {
 	const dispatch = useDispatch();
-	const users = useSelector((state) => state.users.users);
-	const { rulepath, user, rule } = useSelector((state) => state.user);
+	const { users, isLoading } = useSelector(state => state.users);
+	const { rulepath, user, rule } = useSelector(state => state.user);
 
 	useEffect(() => {
 		document.title = 'cuniv | usuarios';
-		const fetchusers = async () => {
-			const users = await dispatch(getUsersListAync());
-		};
-		fetchusers();
+		dispatch(usersAsync());
 	}, []);
 
 	return (
 		<Container maxWidth="lg">
+			<ShowRoles />
 			<Box>
 				<Box>
 					<Typography
@@ -41,16 +40,12 @@ function UsersPage() {
 						justifyContent="flex-end"
 						spacing={2}
 						sx={{ mb: 3 }}>
-						<Link
-							to={`/${rulepath}/createRole`}
-							style={{ textDecoration: 'none' }}>
+						<Link to={`/createRole`} style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Rol
 							</Button>
 						</Link>
-						<Link
-							to={`/${rulepath}/createUser`}
-							style={{ textDecoration: 'none' }}>
+						<Link to={`/createUser`} style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Usuario
 							</Button>

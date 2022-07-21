@@ -2,12 +2,12 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
 import AssignPrivilegesForm from '../../components/forms/AssignPrivilegesForm';
 import RoleCreateForm from '../../components/forms/RoleCreateForm';
-import ShowRule from '../../components/ShowRule';
+import ShowRoles from '../../components/ShowRoles';
 
 function CreateRolepage() {
 	return (
 		<Container>
-			<ShowRule />
+			<ShowRoles />
 			<Box>
 				<Typography
 					variant="h5"

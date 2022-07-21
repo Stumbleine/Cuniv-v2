@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setThemeMode } from '../store/settingSlice';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightlightIcon from '@mui/icons-material/Nightlight';
+import { screenSizes } from '../Utils/Breakpoints';
 const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
 	overflow: 'auto',
@@ -29,61 +30,10 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingBottom: theme.spacing(2),
 }));
-const screenSizes = () => {
-	return (
-		<>
-			<Typography
-				sx={{ display: { xs: 'flex', sm: 'none' }, color: 'text.primary' }}>
-				[ xs ]
-			</Typography>
-			<Typography
-				sx={{
-					display: { xs: 'none', sm: 'flex', md: 'none' },
-					color: 'text.primary',
-				}}>
-				[ sm ]
-			</Typography>
-			<Typography
-				sx={{
-					display: { xs: 'none', sm: 'none', md: 'flex', lg: 'none' },
-					color: 'text.primary',
-				}}>
-				[ md ]
-			</Typography>
-			<Typography
-				variant="h6"
-				sx={{
-					display: {
-						xs: 'none',
-						sm: 'none',
-						md: 'none',
-						lg: 'flex',
-						xl: 'none',
-					},
-					color: 'text.primary',
-				}}>
-				[ lg ]
-			</Typography>
-			<Typography
-				sx={{
-					display: {
-						xs: 'none',
-						sm: 'none',
-						md: 'none',
-						lg: 'none',
-						xl: 'flex',
-					},
-					color: 'text.primary',
-				}}>
-				[ xl ]
-			</Typography>
-		</>
-	);
-};
 export default function AuthLayout() {
 	const dispatch = useDispatch();
-	const mode = useSelector((state) => state.setting.theme.mode);
-	//	functiosns
+	const mode = useSelector(state => state.setting.theme.mode);
+	//	functions
 	const changeMode = () => {
 		dispatch(setThemeMode());
 	};
@@ -106,10 +56,7 @@ export default function AuthLayout() {
 								textDecoration: 'none',
 							}}>
 							<RouterLink to="/" style={{ textDecoration: 'none' }}>
-								<img
-									src="/svgs/logoCuniv.svg"
-									style={{ width: 'auto', height: 50 }}
-								/>
+								<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
 							</RouterLink>
 						</Box>
 						{/* <Box>
@@ -125,9 +72,7 @@ export default function AuthLayout() {
 
 						{pathname === '/login' ? (
 							<Stack direction="row" spacing={2}>
-								<Typography color="textPrimary">
-									Aun no tiene una cuenta?
-								</Typography>
+								<Typography color="textPrimary">Aun no tiene una cuenta?</Typography>
 								<Link
 									// underline="none"
 									// variant="subtitle1"
@@ -138,9 +83,7 @@ export default function AuthLayout() {
 							</Stack>
 						) : pathname === '/register' ? (
 							<Stack direction="row" spacing={2}>
-								<Typography color="textPrimary">
-									Ya tiene una cuenta?
-								</Typography>
+								<Typography color="textPrimary">Ya tiene una cuenta?</Typography>
 								<Link
 									// underline="none"
 									// variant="subtitle1"

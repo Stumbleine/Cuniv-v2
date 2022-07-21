@@ -19,8 +19,8 @@ import {
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOfferDetailAsync } from '../store/offersSlice';
-import StatusLabel from './StatusLabel';
+import StatusLabel from '../StatusLabel';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -28,21 +28,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function OfferContent(props) {
 	const [open, setOpen] = React.useState(false);
 
-	const [offer, setOffer] = useState(null);
-	const [company, setCompany] = useState(null);
-	const [sucursales, setSucursales] = useState(null);
+	const [offer, setOffer] = useState(props.offer);
+	// const branchOffices = props.offer.branch_offices;
+	// const companie = props.offer.companie;
+	// const products = props.offer.products;
 	const dispatch = useDispatch();
+	// useEffect(() => {
+	// }, []);
 	useEffect(() => {
-		const fetchOffer = async () => {
-			const data = await dispatch(getOfferDetailAsync(props.offer.id_oferta));
-			setOffer(data);
-		};
-		fetchOffer();
-	}, []);
-	useEffect(() => {
-		setCompany(offer?.empresa);
-		setSucursales(offer?.sucursales);
-		console.log('offerContetn', offer?.condiciones);
+		console.log('offerContetn', offer);
 	}, [offer]);
 
 	const handleClickOpen = () => {
@@ -53,9 +47,7 @@ function OfferContent(props) {
 	};
 	return (
 		<>
-			<CardActionArea onClick={handleClickOpen}>
-				{props.children}
-			</CardActionArea>
+			<CardActionArea onClick={handleClickOpen}>{props.children}</CardActionArea>
 			<Dialog
 				open={open}
 				TransitionComponent={Transition}
@@ -67,14 +59,14 @@ function OfferContent(props) {
 					<Avatar
 						alt="logo"
 						// src="/mock-images/avatars/avatar_3.jpg"
-						src={company?.logo}
+						src={offer.companie?.logo}
 						sx={{ width: 32, height: 32 }}
 					/>
 					<Typography
 						component="div"
 						variant="subtitle1"
 						sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
-						{offer?.empresa?.razon_social}
+						{offer.companie?.razon_social}
 					</Typography>
 					<StatusLabel status={offer?.status} />
 				</Box>
@@ -94,12 +86,11 @@ function OfferContent(props) {
 								variant="subtitle1"
 								noWrap
 								sx={{ fontWeight: 'bold', flexGrow: 1 }}>
-								{offer?.titulo}
+								{offer?.title}
 							</Typography>
 
 							<Typography gutterBottom sx={{ ml: 1 }} variant="body2">
-								{offer?.descuento}{' '}
-								{offer?.tipo_descuento === 'Porcentual' ? '%' : 'Bs.'} de
+								{offer?.discount} {offer?.discount_type === 'Porcentual' ? '%' : 'Bs.'} de
 								descuento
 							</Typography>
 						</Box>
@@ -111,29 +102,18 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold' }}>
 								Duracion
 							</Typography>
-							<Typography
-								sx={{ ml: 1 }}
-								gutterBottom
-								component="div"
-								variant="body2">
-								{offer?.fecha_inicio + ' / ' + offer?.fecha_fin}
+							<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
+								{offer?.start_date + ' / ' + offer?.end_date}
 							</Typography>
 						</Box>
-						{offer?.condiciones ? (
+						{offer?.conditions ? (
 							<Box>
-								<Typography
-									gutterBottom
-									variant="subtitle2"
-									sx={{ fontWeight: 'bold' }}>
+								<Typography gutterBottom variant="subtitle2" sx={{ fontWeight: 'bold' }}>
 									Condiciones de reclamo
 								</Typography>
 
-								<Typography
-									sx={{ ml: 1 }}
-									gutterBottom
-									component="div"
-									variant="body2">
-									{offer?.condiciones}
+								<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
+									{offer?.conditions}
 								</Typography>
 							</Box>
 						) : null}
@@ -146,8 +126,8 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold' }}>
 								Productos incluidos
 							</Typography>
-							{offer?.productos.map((p) => (
-								<Chip key={p.id_producto} label={p.nombre} sx={{ ml: 1 }} />
+							{offer.products?.map((p, index) => (
+								<Chip key={index} label={p.name} sx={{ ml: 1 }} />
 							))}
 						</Box>
 						<Box>
@@ -160,7 +140,7 @@ function OfferContent(props) {
 								Disponible en:
 							</Typography>
 							<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>
-								{sucursales?.map((sucursal, index) => (
+								{offer.branch_offices?.map((branch, index) => (
 									<Box key={index}>
 										<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
 											<ListItemIcon
@@ -170,21 +150,17 @@ function OfferContent(props) {
 												<Check />
 											</ListItemIcon>
 											<ListItemText
-												primary={
-													<Typography variant="body1">
-														{sucursal?.nombre}
-													</Typography>
-												}
+												primary={<Typography variant="body1">{branch?.name}</Typography>}
 												secondary={
-													<Typography
-														variant="body2"
-														sx={{ fontStyle: 'italic' }}>
-														{sucursal?.direccion}
+													<Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+														{branch?.address}
 													</Typography>
 												}
 											/>
 										</ListItem>
-										<Divider sx={{ ml: 2, mr: 2 }} component="li" />
+										{index !== offer.branch_offices?.length - 1 && (
+											<Divider variant="inset" />
+										)}
 									</Box>
 								))}
 							</List>

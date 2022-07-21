@@ -16,9 +16,10 @@ import {
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import SkeletonTable from '../skeletons/SkeletonTable';
 
 function RubrosTable() {
-	const { rubros } = useSelector((state) => state.rubros);
+	const { rubros, isLoading } = useSelector(state => state.rubros);
 
 	const TABLE_HEAD = [
 		{ id: 'nombre', label: 'Nombre rubro', alignRight: false },
@@ -32,7 +33,7 @@ function RubrosTable() {
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
-	const handleChangeRowsPerPage = (event) => {
+	const handleChangeRowsPerPage = event => {
 		console.log('CantPerpage', event.target.value);
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
@@ -43,7 +44,7 @@ function RubrosTable() {
 				<Table>
 					<TableHead sx={{ bgcolor: 'primary.main' }}>
 						<TableRow>
-							{TABLE_HEAD.map((cell) => (
+							{TABLE_HEAD.map(cell => (
 								<TableCell key={cell.id} sx={{ color: 'white' }}>
 									<Typography noWrap> {cell.label}</Typography>
 								</TableCell>
@@ -51,30 +52,34 @@ function RubrosTable() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{rubros
-							?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map((rubro) => (
-								<TableRow key={rubro.nombre} hover>
-									<TableCell component="th" scope="row">
-										<Stack alignItems="center" direction="row" spacing={1}>
-											<Avatar alt={rubro.nombre} src={rubro.picture} />
+						{rubros ? (
+							rubros
+								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								.map(rubro => (
+									<TableRow key={rubro.nombre} hover>
+										<TableCell component="th" scope="row">
+											<Stack alignItems="center" direction="row" spacing={1}>
+												<Avatar alt={rubro.nombre} src={rubro.picture} />
 
-											<Typography noWrap>{rubro.nombre}</Typography>
-										</Stack>
-									</TableCell>
-									<TableCell>{rubro.descripcion}</TableCell>
-									<TableCell align="right">
-										<Box sx={{ display: 'flex' }}>
-											<IconButton>
-												<Edit></Edit>
-											</IconButton>
-											<IconButton>
-												<Delete></Delete>
-											</IconButton>
-										</Box>
-									</TableCell>
-								</TableRow>
-							))}
+												<Typography noWrap>{rubro.nombre}</Typography>
+											</Stack>
+										</TableCell>
+										<TableCell>{rubro.descripcion}</TableCell>
+										<TableCell align="right">
+											<Box sx={{ display: 'flex' }}>
+												<IconButton>
+													<Edit></Edit>
+												</IconButton>
+												<IconButton>
+													<Delete></Delete>
+												</IconButton>
+											</Box>
+										</TableCell>
+									</TableRow>
+								))
+						) : isLoading ? (
+							<SkeletonTable head={TABLE_HEAD} />
+						) : null}
 					</TableBody>
 				</Table>
 				{rubros.length === 0 && (
@@ -84,15 +89,17 @@ function RubrosTable() {
 						</Typography>
 					</Box>
 				)}
-				<TablePagination
-					rowsPerPageOptions={[5, 10]}
-					component="div"
-					count={rubros.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
+				{rubros && (
+					<TablePagination
+						rowsPerPageOptions={[5, 10]}
+						component="div"
+						count={rubros.length}
+						rowsPerPage={rowsPerPage}
+						page={page}
+						onPageChange={handleChangePage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
+				)}
 			</TableContainer>
 		</Card>
 	);

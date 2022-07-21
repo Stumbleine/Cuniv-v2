@@ -14,9 +14,10 @@ import statisticsReducer from './statisticsSlice';
 import publicReducer from './publicSlice';
 import settingReducer from './settingSlice';
 import rubrosReducer from './rubrosSlice';
+import umssSlice from './umssSlice';
 // MIDDLEWARE
 const localStorageMiddleware = ({ getState }) => {
-	return (next) => (action) => {
+	return next => action => {
 		const result = next(action);
 		localStorage.setItem('applicationState', JSON.stringify(getState()));
 		return result;
@@ -44,7 +45,7 @@ const reHydrateStore = () => {
 export default configureStore({
 	reducer: {
 		setting: settingReducer,
-		public: publicReducer,
+		// public: publicReducer,
 		user: userReducer,
 		login: loginReducer,
 		users: usersReducer,
@@ -52,10 +53,11 @@ export default configureStore({
 		offers: offersReducer,
 		products: productsReducer,
 		rubros: rubrosReducer,
-		statics: statisticsReducer,
+		// statics: statisticsReducer,
+		umss: umssSlice,
 	},
 
-	middleware: (curryGetDefaultMiddleware) =>
+	middleware: curryGetDefaultMiddleware =>
 		curryGetDefaultMiddleware().concat(localStorageMiddleware),
 	preloadedState: reHydrateStore(),
 });

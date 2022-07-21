@@ -8,10 +8,7 @@ import { getSucursales } from '../store/companiesSlice';
 
 function CreateOfferPage() {
 	const dispatch = useDispatch();
-	const { user } = useSelector((state) => state.user);
-	useEffect(() => {
-		dispatch(getSucursales(user.id_empresa));
-	}, []);
+	const { user } = useSelector(state => state.user);
 
 	return (
 		<Container maxWidth="lg">

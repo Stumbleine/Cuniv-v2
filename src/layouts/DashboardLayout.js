@@ -11,7 +11,7 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
-	paddingTop: theme.spacing(3),
+	paddingTop: theme.spacing(2),
 	paddingBottom: theme.spacing(2),
 }));
 function DashboardLayout() {

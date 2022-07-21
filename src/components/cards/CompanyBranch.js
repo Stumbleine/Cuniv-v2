@@ -3,11 +3,11 @@ import { Paper, Typography, IconButton, Divider } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { grey, orange } from '@mui/material/colors';
-import AddCompanyBranch from './AddCompanyBranch';
+import AddCompanyBranch from '../forms/AddCompanyBranch';
 
 function CompanyBranch({ sucursal, edit, index }) {
 	const sucursaL = sucursal;
-	const handleEditSucursal = (s) => {
+	const handleEditSucursal = s => {
 		edit(s, index);
 	};
 	return (
