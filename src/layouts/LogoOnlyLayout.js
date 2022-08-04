@@ -4,6 +4,7 @@ import React from 'react';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 import { Typography, AppBar, Container, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
+import Logo from '../components/Logo';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
@@ -34,12 +35,7 @@ const LogoOnlyLayout = () => {
 								flexGrow: 1,
 								mr: 2,
 							}}>
-							<RouterLink to="/" style={{ textDecoration: 'none' }}>
-								<img
-									src="/svgs/logoCuniv.svg"
-									style={{ width: 'auto', height: 50 }}
-								/>
-							</RouterLink>
+							<Logo />
 						</Box>
 					</Toolbar>
 				</Container>

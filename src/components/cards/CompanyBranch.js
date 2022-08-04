@@ -1,54 +1,115 @@
-import React from 'react';
-import { Paper, Typography, IconButton, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Paper, Typography, IconButton, Divider, Stack } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { grey, orange } from '@mui/material/colors';
 import AddCompanyBranch from '../forms/AddCompanyBranch';
 
-function CompanyBranch({ sucursal, edit, index }) {
-	const sucursaL = sucursal;
-	const handleEditSucursal = s => {
-		edit(s, index);
+function CompanyBranch({ updateListBranchs }) {
+	// const sucursaL = sucursal;
+	const defaultBranch = {
+		nombre: 'Sucursal central',
+		direccion: 's/n',
+		latitud: 's/n',
+		longitud: 's/n',
 	};
-	return (
-		<Paper
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				minWidth: 300,
-				width: '80%',
-				maxWidth: 600,
+	const [branchs, setBranchs] = useState([defaultBranch]);
+	useEffect(() => {
+		updateListBranchs(branchs);
+	}, [branchs]);
 
-				minHeight: 60,
-				background: orange[50],
-			}}>
-			<Box sx={{ ml: 2, flexGrow: 1 }}>
-				<Typography variant="body1">{sucursaL.nombre}</Typography>
+	const handleAddBranch = sucursal => {
+		setBranchs([...branchs, sucursal]);
+	};
+
+	const handleEditBranch = (data, index) => {
+		setBranchs([
+			...branchs.slice(0, index),
+			data,
+			...branchs.slice(index + 1, branchs.length),
+		]);
+	};
+	const handleDeleteBranch = index => {
+		setBranchs([...branchs.slice(0, index), ...branchs.slice(index + 1, branchs.length)]);
+	};
+
+	return (
+		<>
+			<Box>
+				<Typography sx={{ fontWeight: 'bold' }}>Sucursales</Typography>
 				<Typography variant="body2" color="textSecondary">
-					dir: {sucursaL.direccion}{' '}
+					Se creo una sucursal por defecto, modifique sus datos (direccion,
+					geolocalización) *
 				</Typography>
 			</Box>
-			<Box sx={{ mr: 1 }}>
-				<AddCompanyBranch
-					actionType="edit"
-					editData={sucursal}
-					handleEditSucursal={handleEditSucursal}
-				/>
-
-				{/* {key === 1 ? ( */}
-				<IconButton>
-					<Delete
+			<Stack
+				direction="column"
+				spacing={1}
+				sx={{
+					alignItems: 'center',
+					p: 1,
+					py: 2,
+					borderRadius: 2,
+					maxHeight: 250,
+					background: grey[100],
+					overflowY: 'scroll',
+				}}>
+				{branchs.map((b, index) => (
+					<Paper
+						key={index}
 						sx={{
-							color: 'text.icon',
-							'&:hover': {
-								color: 'error.light',
-							},
-						}}
-					/>
-				</IconButton>
-				{/* ) : null} */}
+							display: 'flex',
+							alignItems: 'center',
+							width: '80%',
+							minWidth: 300,
+							maxWidth: 600,
+							minHeight: 60,
+							background: orange[50],
+						}}>
+						<Box sx={{ ml: 2, flexGrow: 1 }}>
+							<Typography variant="body1">{b.nombre}</Typography>
+							<Typography variant="body2" color="textSecondary">
+								dir: {b.direccion}
+							</Typography>
+						</Box>
+						<Box sx={{ mr: 1 }}>
+							<AddCompanyBranch
+								actionType="edit"
+								editData={{
+									...b,
+									index: index,
+								}}
+								handleEditSucursal={handleEditBranch}
+							/>
+
+							{/* {key === 1 ? ( */}
+							<IconButton
+								disabled={index === 0}
+								onClick={() => {
+									handleDeleteBranch(index);
+								}}>
+								<Delete
+									sx={{
+										color: index === 0 ? 'disabled' : 'text.icon',
+										'&:hover': {
+											color: 'error.light',
+										},
+									}}
+								/>
+							</IconButton>
+							{/* ) : null} */}
+						</Box>
+					</Paper>
+				))}
+			</Stack>
+			<Box
+				sx={{
+					width: '100%',
+					textAlign: 'end',
+				}}>
+				<AddCompanyBranch actionType="add" handleAddSucursal={handleAddBranch} />
 			</Box>
-		</Paper>
+		</>
 	);
 }
 

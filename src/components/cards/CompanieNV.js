@@ -1,4 +1,3 @@
-import { Delete, Edit, Email, Facebook, Instagram, Language } from '@mui/icons-material';
 import {
 	Button,
 	Card,
@@ -6,14 +5,9 @@ import {
 	CardActions,
 	CardContent,
 	CardMedia,
-	Divider,
-	IconButton,
-	Stack,
 	Typography,
 } from '@mui/material';
-import { blue, grey, orange, pink, red } from '@mui/material/colors';
-import { Box } from '@mui/system';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { approveCompanieAsync } from '../../store/companiesSlice';
@@ -54,7 +48,6 @@ export default function CompanieNV(props) {
 			sx={{
 				bgcolor: 'background.paper',
 				borderRadius: 2,
-				// height: 200,
 			}}>
 			<SnackCustom data={snack} closeSnack={closeSnack} />
 
@@ -77,23 +70,6 @@ export default function CompanieNV(props) {
 				<Typography variant="body1" color="textSecondary">
 					{companie.email}
 				</Typography>
-				{/* <Box
-						sx={{
-							height: 100,
-							overflow: 'hidden',
-							// textOverflow: 'ellipsis',
-							// whiteSpace: 'auto',
-						}}>
-						<Typography
-							gutterBottom
-							variant="body2"
-							sx={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'normal',
-							}}>
-							{companie.descripcion}
-						</Typography>
-					</Box> */}
 			</CardContent>
 			<CardActions sx={{ justifyContent: 'end' }}>
 				<Button onClick={submitApprove}>Aprobar</Button>

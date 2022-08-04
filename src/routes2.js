@@ -11,6 +11,7 @@ import WebLinksPage from './pages/admin/WebLinksPage';
 import CompanieProfile from './pages/CompanieProfile';
 import CreateOfferPage from './pages/CreateOfferPage';
 import CreateSupplierCompanyPage from './pages/CreateSupplierCompanyPage';
+import EditCompaniePage from './pages/EditCompaniePage';
 import HomePage from './pages/HomePage';
 import OffersPage from './pages/OffersPage';
 import ProductsPage from './pages/ProductsPage';
@@ -27,7 +28,9 @@ import { construct, hasPrivilege } from './Utils/RBAC';
 
 export default function Router() {
 	const isAuth = useSelector(state => state.login.isAuth);
-	const permissions = useSelector(state => state.user.user.permisos) || [];
+	const { user } = useSelector(state => state.user);
+
+	const permissions = user?.permisos || [];
 	return useRoutes([
 		// public routes
 		{
@@ -125,6 +128,10 @@ export default function Router() {
 					),
 				},
 				{
+					path: 'updateCompanie',
+					element: <EditCompaniePage />,
+				},
+				{
 					path: 'rubros',
 					element: construct(
 						['gestionar rubros', 'listar rubros'],
@@ -142,7 +149,11 @@ export default function Router() {
 				},
 				{
 					path: 'createUser',
-					element: construct(['crear usuario'], <CreateUserpage />, permissions),
+					element: construct(
+						['crear usuario', 'gestionar usuarios'],
+						<CreateUserpage />,
+						permissions
+					),
 				},
 				{
 					path: 'createRole',

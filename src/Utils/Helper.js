@@ -5,7 +5,6 @@ export const convertToB64 = file => {
 		reader.onload = () => {
 			resolve(reader.result);
 		};
-
 		reader.onerror = error => {
 			reject(error);
 		};

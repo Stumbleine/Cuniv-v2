@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import StatusLabel from '../StatusLabel';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -29,15 +29,12 @@ function OfferContent(props) {
 	const [open, setOpen] = React.useState(false);
 
 	const [offer, setOffer] = useState(props.offer);
-	// const branchOffices = props.offer.branch_offices;
-	// const companie = props.offer.companie;
-	// const products = props.offer.products;
 	const dispatch = useDispatch();
 	// useEffect(() => {
 	// }, []);
-	useEffect(() => {
-		console.log('offerContetn', offer);
-	}, [offer]);
+	// useEffect(() => {
+	// 	console.log('offerContetn', offer);
+	// }, [offer]);
 
 	const handleClickOpen = () => {
 		setOpen(true);

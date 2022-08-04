@@ -1,17 +1,23 @@
+import { Edit } from '@mui/icons-material';
 import {
 	Avatar,
-	Divider,
+	IconButton,
 	List,
 	ListItem,
 	ListItemAvatar,
+	ListItemIcon,
 	ListItemText,
+	Tooltip,
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import { useSelector } from 'react-redux';
+import EditCompanieField from '../dialogs/EditCompanieField';
 
 export default function ProfileUsers(props) {
 	const { users } = props;
+	const { isAdmin } = useSelector(state => state.user);
+
 	return (
 		<Box>
 			<Typography variant="body1" sx={{ fontWeight: 'bold' }}>
@@ -24,7 +30,7 @@ export default function ProfileUsers(props) {
 					borderRadius: 2,
 				}}>
 				{users?.map(user => (
-					<ListItem key={user.id} alignItems="flex-start" sx={{ py: 0, px: 2 }}>
+					<ListItem key={user.id} alignItems="center" sx={{ py: 0, px: 2 }}>
 						<ListItemAvatar>
 							<Avatar alt={user.nombres} src={user.picture} />
 						</ListItemAvatar>
@@ -32,6 +38,15 @@ export default function ProfileUsers(props) {
 							primary={user.nombres + user.apellidos}
 							secondary="responsable"
 						/>
+						{isAdmin && (
+							<ListItemIcon>
+								<EditCompanieField
+									tooltip="Cambiar responsable"
+									fieldName="responsable"
+									data={user.id}
+								/>
+							</ListItemIcon>
+						)}
 					</ListItem>
 				))}
 			</List>

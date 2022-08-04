@@ -126,15 +126,7 @@ export default function AddLinkForm() {
 						/>
 
 						<Box sx={{ position: 'relative' }}>
-							<Button
-								color="primary"
-								fullWidth
-								type="submit"
-								disabled={isSubmitting}
-								onClick={() => {
-									console.log(values);
-								}}
-								variant="contained">
+							<Button fullWidth type="submit" disabled={isSubmitting} variant="contained">
 								Añadir
 							</Button>
 							{isSubmitting && (

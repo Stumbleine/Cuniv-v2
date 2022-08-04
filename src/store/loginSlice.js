@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import API from '../conection';
-import { getUserAsync } from './userSlice';
+import { setNavlinks } from './settingSlice';
+import { getUserAsync, setUser } from './userSlice';
 
 const initialState = {
 	isAuth: false,
@@ -34,10 +35,9 @@ const loginSlice = createSlice({
 			console.log('token->r :', payload);
 		},
 		setLogout: state => {
-			state.isAuth = false;
 			state.accessToken = null;
-			window.localStorage.removeItem('applicationState');
-			window.localStorage.clear();
+
+			state.isAuth = false;
 		},
 		setRegister: state => {
 			state.registerSuccess = true;
@@ -88,6 +88,9 @@ export const loginGoogleAsync = user => async dispatch => {
 export const logoutAsync = () => async dispatch => {
 	try {
 		const r = await API.post('auth/logout');
+
+		// await dispatch(setUser(null));
+		// await dispatch(setNavlinks([]));
 		dispatch(setLogout());
 		console.log('logOut->r :', r);
 	} catch (e) {

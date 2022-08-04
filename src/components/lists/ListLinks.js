@@ -1,26 +1,20 @@
 import { Edit, Language } from '@mui/icons-material';
 import {
 	Avatar,
-	Container,
 	Divider,
-	Grid,
-	IconButton,
 	List,
 	ListItem,
 	ListItemAvatar,
 	ListItemIcon,
 	ListItemText,
-	Paper,
 	Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSiteAsync, getSitesAsync } from '../../store/umssSlice';
 import DeleteDialog from '../dialogs/DeleteDialog';
 import EditLink from '../dialogs/EditLink';
 import SkeletonList from '../skeletons/SkeletonList';
-import SnackCustom from '../SnackCustom';
 
 export default function ListLinks() {
 	const { accessToken } = useSelector(state => state.login);
@@ -30,14 +24,9 @@ export default function ListLinks() {
 		dispatch(getSitesAsync(accessToken));
 	}, []);
 
-	// const deleteAsync = id => {
-	// 	console.log('delete', id);
 	const deleteAsync = async id => {
 		return await dispatch(deleteSiteAsync(accessToken, id));
 	};
-	// del()
-
-	// };
 	return (
 		<List>
 			{webSites ? (

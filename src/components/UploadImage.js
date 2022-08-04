@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import { useState } from 'react';
 import { Image } from '@mui/icons-material';
 import { Box, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -7,8 +7,7 @@ function UploadImage({ handleChangeFile, id, type, label, preload, children }) {
 	const [uploadHover, setUploadHover] = useState(false);
 	const [logo, setLogo] = useState(preload !== undefined ? preload : null);
 	const handleChangeLogo = e => {
-		console.log('changeLogo');
-		console.log(e.target.files);
+		// console.log(e.target.files);
 		handleChangeFile(e.target.files);
 		setLogo(URL.createObjectURL(e.target?.files[0]));
 	};

@@ -1,6 +1,4 @@
 import { Grid, Paper, Skeleton, Stack } from '@mui/material';
-import { Box } from '@mui/system';
-import React from 'react';
 
 export default function SkeletonProfile() {
 	return (
@@ -45,10 +43,5 @@ export default function SkeletonProfile() {
 				</Paper>
 			</Grid>
 		</Grid>
-		// <Stack spacing={1}>
-		// 	<Skeleton animation="wave"  variant="text" />
-		// 	<Skeleton animation="wave"  variant="circular" width={40} height={40} />
-		// 	<Skeleton animation="wave"  variant="rectangular" width={210} height={118} />
-		// </Stack>
 	);
 }

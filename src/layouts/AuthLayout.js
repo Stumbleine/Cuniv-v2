@@ -20,6 +20,7 @@ import { setThemeMode } from '../store/settingSlice';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightlightIcon from '@mui/icons-material/Nightlight';
 import { screenSizes } from '../Utils/Breakpoints';
+import Logo from '../components/Logo';
 const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
 	overflow: 'auto',
@@ -55,9 +56,7 @@ export default function AuthLayout() {
 								// },
 								textDecoration: 'none',
 							}}>
-							<RouterLink to="/" style={{ textDecoration: 'none' }}>
-								<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
-							</RouterLink>
+							<Logo />
 						</Box>
 						{/* <Box>
 							<IconButton sx={{ ml: 1 }} onClick={changeMode}>

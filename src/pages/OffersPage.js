@@ -1,13 +1,7 @@
-import {
-	Add,
-	IndeterminateCheckBox,
-	SignalCellularNullOutlined,
-	Warning,
-} from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { Container, Grid, Typography, Stack, Button } from '@mui/material';
-import { amber, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -21,17 +15,19 @@ import { hasPrivilege } from '../Utils/RBAC';
 function OffersPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
+	const { isLoading, offers } = useSelector(state => state.offers);
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(getOffersAsync(accessToken));
-		document.title = 'cuniv | ofertas';
-	}, []);
-
-	const { offers, isLoading } = useSelector(state => state.offers);
+	// const [offers, setOffers] = useState(null);
 	const [showButton, setShowButton] = useState(false);
 	const [disabledBtn, setDisabledBtn] = useState(false);
-	const [showList, setShowList] = useState(null);
+	const [showList, setShowList] = useState(false);
+
+	useEffect(() => {
+		document.title = 'cuniv | ofertas';
+		dispatch(getOffersAsync(accessToken));
+	}, []);
+
 	useEffect(() => {
 		if (hasPrivilege(['crear oferta', 'gestionar ofertas'], user.permisos) || isAdmin) {
 			setShowButton(true);
@@ -43,35 +39,23 @@ function OffersPage() {
 			setDisabledBtn(true);
 		}
 		if (hasPrivilege(['gestionar ofertas', 'listar ofertas'], user.permisos) || isAdmin) {
-			setDisabledBtn(false);
-			setShowList(listOffers);
+			setShowList(true);
+			user.companie && setDisabledBtn(false);
 		}
 		if (user.companie !== null || isAdmin) {
-			setShowList(listOffers);
+			setShowList(true);
 		} else {
-			setShowList(msgCompanyNull);
+			setShowList(false);
 		}
 	}, [offers, user]);
 
-	const msgOffersNull = () => {
-		return (
-			<Box>
-				<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-					<Typography>No hay ninguna oferta publicada aun</Typography>
-					<Typography color="textSecondary">
-						Publique sus ofertas ahora pulsando en + Oferta
-					</Typography>
-				</Stack>
-			</Box>
-		);
-	};
-
 	const listOffers = () => {
+		console.log(isLoading);
 		return (
 			<Grid container spacing={2}>
-				{offers !== null
+				{offers
 					? offers.map(offer => (
-							<Grid item key={offer.id_beneficio} xs={6} sm={4} md={3} xl={3}>
+							<Grid item key={offer.id_offer} xs={6} sm={4} md={3} xl={3}>
 								<Offer offer={offer} />
 							</Grid>
 					  ))
@@ -85,30 +69,41 @@ function OffersPage() {
 			</Grid>
 		);
 	};
+
+	const msgOffersNull = () => {
+		return (
+			<Stack
+				// maxWidth="lg"
+				width={1}
+				spacing={2}
+				alignItems="center"
+				sx={{ mt: 2 }}>
+				<Typography>No hay ninguna oferta publicada aun</Typography>
+				<Typography color="textSecondary">
+					Publique sus ofertas ahora pulsando en + Oferta
+				</Typography>
+			</Stack>
+		);
+	};
+
 	const msgCompanyNull = () => {
 		return (
-			<Box>
-				<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-					<Typography>No ha registrado su empresa aun</Typography>
-					<Typography color="textSecondary">
-						registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas
-						con su empresa
-					</Typography>
-					<Button component={Link} to={`/main/registerCompanie`} variant="contained">
-						Registrar Empresa
-					</Button>
-				</Stack>
-			</Box>
+			<Stack maxWidth="lg" spacing={2} width={1} alignItems="center" sx={{ mt: 2 }}>
+				<Typography>No ha registrado su empresa aun</Typography>
+				<Typography color="textSecondary">
+					registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas con
+					su empresa
+				</Typography>
+				<Button component={Link} to={`/main/registerCompanie`} variant="contained">
+					Registrar Empresa
+				</Button>
+			</Stack>
 		);
 	};
 
 	return (
 		<Container maxWidth="lg">
-			{/* <Helmet>
-				<title>{title}</title>
-			</Helmet> */}
 			<ShowRoles />
-
 			<Box>
 				<Box>
 					<Typography
@@ -145,7 +140,10 @@ function OffersPage() {
 						no fue verificado!
 					</WarningVerified>
 				)}
-				{showList}
+
+				{showList && listOffers()}
+
+				{user.companie === null || isAdmin ? msgCompanyNull() : null}
 			</Box>
 		</Container>
 	);

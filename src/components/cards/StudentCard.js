@@ -1,7 +1,7 @@
 import { Card, CardMedia, Grid, Stack, Typography } from '@mui/material';
 import { green, grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function StudentCard(props) {
 	useEffect(() => {

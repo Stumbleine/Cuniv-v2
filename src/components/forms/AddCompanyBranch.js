@@ -49,8 +49,8 @@ function AddCompanyBranch({
 	};
 	const formik = useFormik({
 		initialValues: {
-			name: actionType === 'edit' ? editData?.nombre : '',
-			address: actionType === 'edit' ? editData?.direccion : '',
+			name: editData?.nombre || '',
+			address: editData?.direccion || '',
 			pos: '',
 		},
 
@@ -62,7 +62,7 @@ function AddCompanyBranch({
 				.required('Debe seleccionar la ubicacion en el mapa'), */
 		}),
 		validate: validateMap,
-		onSubmit: (valores, { resetForm }) => {
+		onSubmit: (valores, { resetForm, setSubmitting }) => {
 			const sucursal = {
 				nombre: valores.name,
 				direccion: valores.address,
@@ -70,12 +70,16 @@ function AddCompanyBranch({
 				longitud: position.lng.toString(),
 			};
 			if (actionType === 'edit') {
-				handleEditSucursal(sucursal);
-			} else {
+				handleEditSucursal(sucursal, editData.index);
+				resetForm();
+				setPosition(null);
+			} else if (actionType === 'add') {
 				handleAddSucursal(sucursal);
 				setPosition(null);
+				resetForm();
+			} else if (actionType === 'update-fetch') {
+				console.log(values);
 			}
-			resetForm();
 
 			handleClose();
 		},
@@ -91,7 +95,11 @@ function AddCompanyBranch({
 	} = formik;
 	return (
 		<>
-			{actionType === 'edit' ? (
+			{actionType === 'add' ? (
+				<Button onClick={handleClickOpen} startIcon={<Add></Add>}>
+					Sucursal
+				</Button>
+			) : (
 				<IconButton onClick={handleClickOpen}>
 					<Edit
 						sx={{
@@ -102,10 +110,6 @@ function AddCompanyBranch({
 						}}
 					/>
 				</IconButton>
-			) : (
-				<Button onClick={handleClickOpen} startIcon={<Add></Add>}>
-					Sucursal
-				</Button>
 			)}
 
 			<Dialog

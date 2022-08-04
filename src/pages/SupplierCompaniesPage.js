@@ -1,65 +1,75 @@
-import { Add, Check, Pending, TrendingUpRounded } from '@mui/icons-material';
+import { Add, Pending } from '@mui/icons-material';
 import { Container, Grid, Typography, Stack, Button, Chip } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Offer from '../components/cards/Offer';
 import ShowRoles from '../components/ShowRoles';
 import SupplierCompany from '../components/cards/SupplierCompany';
 import { hasPrivilege } from '../Utils/RBAC';
 import { compNotVerifiedAsync, getCompaniesAsync } from '../store/companiesSlice';
 import CompanieNV from '../components/cards/CompanieNV';
+import SkeletonCompanie from '../components/skeletons/SkeletonCompanie';
 
 function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
-	const { companies, companiesNotVerified } = useSelector(state => state.companies);
+	const { isLoading, companies, companiesNV } = useSelector(state => state.companies);
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const [showButton, setShowButton] = useState(false);
-	const [showNewCompanies, setSNCompanies] = useState(false);
-
+	const [showNVCompanies, setNVCompanies] = useState(false);
+	// const [companies, setCompanies] = useState(null);
+	// const [companiesNV, setcompaniesNV] = useState(null);
 	useEffect(() => {
-		dispatch(getCompaniesAsync(accessToken));
-		dispatch(compNotVerifiedAsync(accessToken));
 		document.title = 'cuniv | empresas';
 		if (hasPrivilege(['crear empresa', 'gestionar empresas'], user.permisos) || isAdmin) {
 			setShowButton(true);
 		}
+		dispatch(getCompaniesAsync(accessToken));
+		dispatch(compNotVerifiedAsync(accessToken));
 	}, []);
 
-	const handleClick = () => {
-		console.info('You clicked the Chip.', showNewCompanies);
-		setSNCompanies(!showNewCompanies);
-	};
+	const handleClick = () => setNVCompanies(!showNVCompanies);
+	// console.info('You clicked the Chip.', showNVCompanies);
+
 	const MsgCompaniesNull = props => {
 		return (
-			<Box>
-				<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-					<Typography>{props.children}</Typography>
-				</Stack>
-			</Box>
+			<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
+				<Typography>{props.children}</Typography>
+			</Stack>
 		);
 	};
 
 	const listCompaniesNV = () => {
-		return companiesNotVerified ? (
-			companiesNotVerified.map((companie, index) => (
+		return companiesNV ? (
+			companiesNV.map((companie, index) => (
 				<Grid item key={index} xs={6} sm={4} md={3}>
 					<CompanieNV companie={companie} />
+				</Grid>
+			))
+		) : isLoading ? (
+			[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
+				<Grid item key={index} xs={6} sm={4} md={3}>
+					<SkeletonCompanie />
 				</Grid>
 			))
 		) : (
 			<MsgCompaniesNull>No han llegado nuevas solicitudes de afiliacion</MsgCompaniesNull>
 		);
 	};
+
 	const listCompanies = () => {
 		return companies ? (
 			companies.map((companie, index) => (
 				<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
 					<SupplierCompany companie={companie} />
+				</Grid>
+			))
+		) : isLoading ? (
+			[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
+				<Grid item key={index} xs={6} sm={4} md={3}>
+					<SkeletonCompanie />
 				</Grid>
 			))
 		) : (
@@ -91,10 +101,10 @@ function SupplierCompaniesPage() {
 						<Chip
 							label={
 								<Typography variant="body2" component="span">
-									Solicitudes ({companiesNotVerified ? companiesNotVerified.length : '0'})
+									Solicitudes ({companiesNV ? companiesNV.length : '0'})
 								</Typography>
 							}
-							variant={showNewCompanies ? 'filled' : 'outlined'}
+							variant={showNVCompanies ? 'filled' : 'outlined'}
 							onClick={handleClick}
 							icon={<Pending></Pending>}
 						/>
@@ -110,7 +120,7 @@ function SupplierCompaniesPage() {
 					</Stack>
 				</Box>
 				<Grid container spacing={2}>
-					{showNewCompanies === true ? listCompaniesNV() : listCompanies()}
+					{showNVCompanies === true ? listCompaniesNV() : listCompanies()}
 				</Grid>
 			</Box>
 		</Container>

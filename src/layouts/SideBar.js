@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 function SideBar({ openSideBar, onCloseSideBar }) {
 	const theme = useTheme();
@@ -18,18 +19,7 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 	return (
 		<Drawer open={openSideBar} onClose={onCloseSideBar}>
 			<Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
-				<Link component={RouterLink} to="/" style={{ textDecoration: 'none' }}>
-					<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
-
-					{/* <Typography
-									variant="h5"
-									sx={{
-										fontWeight: 'bold',
-										color: 'white',
-									}}>
-									CUNIV
-								</Typography> */}
-				</Link>
+				<Logo />
 			</Box>
 			<Box sx={{ mb: 5, mx: 2 }}>
 				<Link underline="none" component={RouterLink} to="#">

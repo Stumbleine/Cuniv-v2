@@ -1,11 +1,4 @@
-import {
-	Card,
-	CardActions,
-	CardContent,
-	CardMedia,
-	IconButton,
-	Skeleton,
-} from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, Skeleton } from '@mui/material';
 import React from 'react';
 
 export default function SkeletonOffer() {

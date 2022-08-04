@@ -1,19 +1,16 @@
 import { Delete, Warning, WarningAmber } from '@mui/icons-material';
 import {
 	Button,
-	CardActionArea,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	IconButton,
 	Slide,
 	TextField,
 	Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';

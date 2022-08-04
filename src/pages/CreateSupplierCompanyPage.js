@@ -1,13 +1,17 @@
-import { Container, Typography } from '@mui/material';
+import { Button, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import ShowRoles from '../components/ShowRoles';
 import CompanieRegisterForm from '../components/forms/CompanieRegisterForm';
+import { amber } from '@mui/material/colors';
+import { ArrowBack, Warning } from '@mui/icons-material';
+import WarningVerified from '../components/WarningVerified';
+import { Link } from 'react-router-dom';
 
 function CreateSupplierCompanyPage() {
-	const { rule, user, rulepath } = useSelector(state => state.user);
+	const { user, isAdmin } = useSelector(state => state.user);
 	const [open, setOpen] = useState(false);
 
 	// useEffect(() => {
@@ -28,19 +32,6 @@ function CreateSupplierCompanyPage() {
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
-
-			{/* <Snackbar
-				open={open}
-				autoHideDuration={3000}
-				// sx={{ background: green[400] }}
-				onClose={handleClose}>
-				<Alert
-					onClose={handleClose}
-					severity="success"
-					sx={{ width: '100%', background: green[400], color: 'white' }}>
-					Empresa creado exitosamente
-				</Alert>
-			</Snackbar> */}
 			<Box>
 				<Box>
 					<Typography
@@ -51,10 +42,34 @@ function CreateSupplierCompanyPage() {
 							color: 'text.title',
 							fontStyle: 'italic',
 						}}>
-						{rule === 'PRV' ? 'Registrar empresa' : 'Añadir empresa proveedora'}
+						{isAdmin ? 'Añadir empresa proveedora' : 'Registrar empresa'}
 					</Typography>
 				</Box>
-				<CompanieRegisterForm />
+				{isAdmin || user.companie === null ? (
+					<CompanieRegisterForm />
+				) : (
+					<Stack spacing={2} alignItems="center">
+						<Typography>
+							Su empresa fue registrado, ahora puede crear ofertas y productos para
+							beneficiar estudiantes.
+						</Typography>
+						{(!user.companieVerified || !isAdmin) && (
+							<WarningVerified>
+								AVISO: Los administradores revisaran la solicitud de afiliacion de su
+								empresa a los beneficios estudiantiles, este proceso dura 48 Hrs. Nos
+								pondremos en contacto a su correo electronico una vez terminada la
+								revision.
+							</WarningVerified>
+						)}
+						<Button
+							component={Link}
+							variant="outlined"
+							to="/"
+							startIcon={<ArrowBack></ArrowBack>}>
+							Volver a Inicio
+						</Button>
+					</Stack>
+				)}
 			</Box>
 		</Container>
 	);

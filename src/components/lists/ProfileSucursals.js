@@ -1,6 +1,5 @@
 import { Business, Delete, Edit } from '@mui/icons-material';
 import {
-	Divider,
 	IconButton,
 	List,
 	ListItem,
@@ -9,7 +8,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import AddCompanyBranch from '../forms/AddCompanyBranch';
 
 export default function ProfileSucursals(props) {
 	const { sucursales } = props;
@@ -24,15 +23,13 @@ export default function ProfileSucursals(props) {
 					borderRadius: 2,
 				}}>
 				{sucursales?.map((sucursal, index) => (
-					<ListItem key={index} alignItems="flex-start" sx={{ py: 0, px: 2 }}>
-						<ListItemIcon sx={{ mt: 2 }}>
+					<ListItem key={index} alignItems="center" sx={{ py: 0, px: 2 }}>
+						<ListItemIcon>
 							<Business sx={{ color: 'text.icon' }} />
 						</ListItemIcon>
 						<ListItemText primary={sucursal.nombre} secondary={sucursal.direccion} />
-						<ListItemIcon sx={{ mt: 2 }}>
-							<IconButton>
-								<Edit sx={{ color: 'text.icon' }} />
-							</IconButton>
+						<ListItemIcon>
+							<AddCompanyBranch actionType="update-fetch" editData={sucursal} />
 							<IconButton disabled={index === 0}>
 								<Delete sx={{ color: index === 0 ? 'disabled' : 'text.icon' }} />
 							</IconButton>

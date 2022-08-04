@@ -16,6 +16,7 @@ import NightlightIcon from '@mui/icons-material/Nightlight';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountPopover from '../components/AccountPopover';
 import { screenSizes } from '../Utils/Breakpoints';
+import Logo from '../components/Logo';
 export default function NavBar({ onOpenSidebar }) {
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
 	const { rule } = useSelector(state => state.user);
@@ -34,8 +35,8 @@ export default function NavBar({ onOpenSidebar }) {
 	//	itemNav
 	const ItemNav = props => {
 		const router = useLocation();
-		const routeRole = rule === 'ADM' ? '/admin/' : rule === 'PRV' ? '/provider/' : null;
-		const active = props.href ? router.pathname === routeRole + props.href : false;
+		// const routeRole = rule === 'ADM' ? '/admin/' : rule === 'PRV' ? '/provider/' : null;
+		const active = props.href ? router.pathname === '/main/' + props.href : false;
 		return (
 			<>
 				<NavLink to={props.href} style={{ textDecoration: 'none' }}>
@@ -69,7 +70,6 @@ export default function NavBar({ onOpenSidebar }) {
 					<Toolbar disableGutters>
 						<Box
 							component="div"
-							noWrap
 							sx={{
 								mr: { xs: 0.5, md: 2 },
 								display: {
@@ -77,9 +77,7 @@ export default function NavBar({ onOpenSidebar }) {
 									md: 'flex',
 								},
 							}}>
-							<Link to="/" style={{ textDecoration: 'none' }}>
-								<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
-							</Link>
+							<Logo />
 						</Box>
 
 						{/* menu responsivo con items de pestañas */}
@@ -94,14 +92,12 @@ export default function NavBar({ onOpenSidebar }) {
 						</Box>
 						<Box
 							component="div"
-							noWrap
 							sx={{
 								flexGrow: 1,
 								p: 1,
 								display: { xs: 'flex', md: 'none' },
-								color: 'primary.main',
 							}}>
-							<img src="/svgs/logoCuniv.svg" style={{ width: 'auto', height: 50 }} />
+							<Logo />
 						</Box>
 
 						{/* Contenendor de pestañas/pagesLinks */}

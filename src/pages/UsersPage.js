@@ -11,11 +11,11 @@ import { usersAsync } from '../store/usersSlice';
 function UsersPage() {
 	const dispatch = useDispatch();
 	const { users, isLoading } = useSelector(state => state.users);
-	const { rulepath, user, rule } = useSelector(state => state.user);
+	const { accessToken } = useSelector(state => state.login);
 
 	useEffect(() => {
 		document.title = 'cuniv | usuarios';
-		dispatch(usersAsync());
+		dispatch(usersAsync(accessToken));
 	}, []);
 
 	return (
@@ -40,12 +40,12 @@ function UsersPage() {
 						justifyContent="flex-end"
 						spacing={2}
 						sx={{ mb: 3 }}>
-						<Link to={`/createRole`} style={{ textDecoration: 'none' }}>
+						<Link to={`/main/createRole`} style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Rol
 							</Button>
 						</Link>
-						<Link to={`/createUser`} style={{ textDecoration: 'none' }}>
+						<Link to={`/main/createUser`} style={{ textDecoration: 'none' }}>
 							<Button startIcon={<Add />} variant="contained">
 								Usuario
 							</Button>

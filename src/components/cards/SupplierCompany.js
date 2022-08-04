@@ -11,8 +11,6 @@ import {
 } from '@mui/material';
 import { blue, grey, orange, pink, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function SupplierCompany(props) {
@@ -80,9 +78,6 @@ function SupplierCompany(props) {
 							onClick={e => {
 								window.location = 'mailto:' + companie.email;
 								e.preventDefault();
-								// Linking.openURL(
-								// 	'mailto:support@example.com?subject=SendMail&body=Description'
-								// );
 							}}
 							title="support@example.com">
 							<Email
@@ -92,9 +87,6 @@ function SupplierCompany(props) {
 						</IconButton>
 					) : null}
 				</Box>
-				{/* <Typography gutterBottom component="div" variant="body2">
-					{companie.descripcion}
-				</Typography> */}
 			</CardContent>
 
 			<Divider />

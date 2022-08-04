@@ -13,7 +13,7 @@ const userSlice = createSlice({
 		setUser: (state, { payload }) => {
 			state.user = payload;
 
-			payload.roles.forEach(r => {
+			payload?.roles.forEach(r => {
 				r.isadmin === true && (state.isAdmin = true);
 			});
 		},

@@ -14,14 +14,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLogout } from '../store/loginSlice';
 import { GoogleLogout } from 'react-google-login';
 import { Logout, Person } from '@mui/icons-material';
+import { setUser } from '../store/userSlice';
+import { setNavlinks } from '../store/settingSlice';
 function AccountPopover() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const user = useSelector((state) => state.user.user);
+	const user = useSelector(state => state.user.user);
 
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-	const handleOpenUserMenu = (event) => {
+	const handleOpenUserMenu = event => {
 		setAnchorElUser(event.currentTarget);
 	};
 
@@ -29,11 +31,11 @@ function AccountPopover() {
 		setAnchorElUser(null);
 	};
 	const logOut = () => {
-		console.log('logg???');
-		// renderProps.onClick();
 		dispatch(setLogout());
+		dispatch(setUser(null));
+		dispatch(setNavlinks([]));
 		handleCloseUserMenu();
-		// if (!isAuth) navigate('/', { replace: true });
+		// renderProps.onClick();
 	};
 	return (
 		<Box sx={{ position: 'relative' }}>
@@ -74,10 +76,7 @@ function AccountPopover() {
 				open={Boolean(anchorElUser)}
 				onClose={handleCloseUserMenu}>
 				<Box sx={{ my: 1, px: 2.5 }}>
-					<Typography
-						variant="subtitle1"
-						noWrap
-						sx={{ textTransform: 'lowercase' }}>
+					<Typography variant="subtitle1" noWrap sx={{ textTransform: 'lowercase' }}>
 						{user.nombres} {user.apellidos}
 					</Typography>
 					<Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
@@ -107,7 +106,7 @@ function AccountPopover() {
 					onLogoutSuccess={() => {
 						console.log('logSucces');
 					}}
-					render={(renderProps) => (
+					render={renderProps => (
 						<MenuItem
 							sx={{ typography: 'body2', py: 1, px: 2.5 }}
 							// component={RouterLink}

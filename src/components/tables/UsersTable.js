@@ -12,6 +12,7 @@ import {
 	IconButton,
 	TableHead,
 	TablePagination,
+	Paper,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
@@ -26,7 +27,7 @@ function UsersTable() {
 		{ id: 'role', label: 'Roles', alignRight: false },
 		{ id: 'entidad', label: 'Entidad', alignRight: false },
 		{ id: 'fechaRegistro', label: 'Fecha Registro', alignRight: false },
-		{ id: 'verificado', label: 'Verificado', alignRight: false },
+		// { id: 'verificado', label: 'Verificado', alignRight: false },
 		{ id: 'estado', label: 'Estado', alignRight: false },
 		{ id: 'acciones', label: 'Acciones', alignRight: false },
 	];
@@ -42,99 +43,96 @@ function UsersTable() {
 		setPage(0);
 	};
 	return (
-		<Box>
-			<Card>
-				<TableContainer>
-					<Table>
-						<TableHead sx={{ bgcolor: 'primary.main' }}>
-							<TableRow>
-								{TABLE_HEAD.map(cell => (
-									<TableCell key={cell.id} sx={{ color: 'white' }}>
-										<Typography noWrap>{cell.label}</Typography>
+		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+			<Table>
+				<TableHead sx={{ bgcolor: 'primary.main' }}>
+					<TableRow>
+						{TABLE_HEAD.map(cell => (
+							<TableCell key={cell.id} sx={{ color: 'white' }}>
+								<Typography noWrap>{cell.label}</Typography>
+							</TableCell>
+						))}
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					{users ? (
+						users
+							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map((user, index = user.id) => (
+								<TableRow key={index} hover>
+									<TableCell component="th" scope="row">
+										<Stack direction="row" alignItems="center" spacing={2}>
+											<Avatar alt={user.nombres} src={user.picture} />
+											<Box>
+												<Typography variant="subtitle2">
+													{user.nombres + ' ' + user.apellidos}
+												</Typography>
+
+												<Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+													{user.email}
+												</Typography>
+											</Box>
+										</Stack>
 									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{users ? (
-								users
-									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-									.map((user, index = user.id) => (
-										<TableRow key={index} hover>
-											<TableCell component="th" scope="row">
-												<Stack direction="row" alignItems="center" spacing={2}>
-													<Avatar alt={user.nombres} src={user.picture} />
-													<Box>
-														<Typography variant="subtitle2" noWrap>
-															{user.nombres + ' ' + user.apellidos}
-														</Typography>
+									<TableCell align="left">
+										{user.roles?.map(e => (
+											<Typography key={e.name}>{e.label}</Typography>
+										))}
+									</TableCell>
+									<TableCell align="left">{user.empresa}</TableCell>
+									<TableCell align="center">{user.created_at}</TableCell>
 
-														<Typography
-															variant="subtitle2"
-															sx={{ color: 'text.secondary' }}
-															noWrap>
-															{user.email}
-														</Typography>
-													</Box>
-												</Stack>
-											</TableCell>
-											<TableCell align="left">
-												{user.rules?.find(e => e === 'PRV')
-													? 'Proveedor'
-													: user.rules?.find(e => e === 'ADM')
-													? 'Administrador'
-													: 'Cajero'}
-											</TableCell>
-											<TableCell align="left">{user?.empresa?.razon_social}</TableCell>
-											<TableCell align="center">{user.create_at}</TableCell>
-
-											<TableCell align="center">Si</TableCell>
-											<TableCell align="center">
-												<Box
-													sx={{
-														p: 0.5,
-														borderRadius: 2,
-														width: 'auto',
-														background: user.status === 'offline' ? red[400] : green[400],
-													}}>
-													<Typography
-														variant="body2"
-														sx={{ color: 'white', lineHeight: 1 }}>
-														{user.status}
-													</Typography>
-												</Box>
-											</TableCell>
-											<TableCell align="right">
-												<Box sx={{ display: 'flex' }}>
-													<IconButton>
-														<Edit></Edit>
-													</IconButton>
-													<IconButton>
-														<Delete></Delete>
-													</IconButton>
-												</Box>
-											</TableCell>
-										</TableRow>
-									))
-							) : isLoading ? (
-								<SkeletonTable head={TABLE_HEAD} />
-							) : null}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				{users && (
-					<TablePagination
-						rowsPerPageOptions={[5, 10]}
-						component="div"
-						count={users?.length}
-						rowsPerPage={rowsPerPage}
-						page={page}
-						onPageChange={handleChangePage}
-						onRowsPerPageChange={handleChangeRowsPerPage}
-					/>
-				)}
-			</Card>
-		</Box>
+									{/* <TableCell align="center">Si</TableCell> */}
+									<TableCell align="center">
+										<Box
+											sx={{
+												p: 0.5,
+												px: 1,
+												borderRadius: 2,
+												width: 'auto',
+												background: !user.sesion_status ? red[400] : green[500],
+											}}>
+											<Typography
+												variant="body2"
+												sx={{ color: 'white', lineHeight: 1, letterSpacing: 0.5 }}>
+												{user.sesion_status ? 'online' : 'offline'}
+											</Typography>
+										</Box>
+									</TableCell>
+									<TableCell align="right">
+										<Box sx={{ display: 'flex' }}>
+											<IconButton>
+												<Edit></Edit>
+											</IconButton>
+											<IconButton>
+												<Delete></Delete>
+											</IconButton>
+										</Box>
+									</TableCell>
+								</TableRow>
+							))
+					) : isLoading ? (
+						<SkeletonTable head={TABLE_HEAD} />
+					) : null}
+				</TableBody>
+			</Table>
+			{users && (
+				<TablePagination
+					sx={{
+						background: 'white',
+						// borderBottomLeftRadius: 2,
+						// borderBottomRightRadius: 2,
+					}}
+					rowsPerPageOptions={[5, 10]}
+					component="div"
+					count={users?.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					onPageChange={handleChangePage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+				/>
+			)}
+		</TableContainer>
 	);
 }
 

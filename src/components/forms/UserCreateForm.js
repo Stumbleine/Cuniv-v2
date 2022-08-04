@@ -10,6 +10,7 @@ import {
 	Select,
 	Stack,
 	TextField,
+	Typography,
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
@@ -21,7 +22,7 @@ import UploadImage from '../UploadImage';
 function UserCreateForm() {
 	const [fileImage, setFileImage] = useState(null);
 
-	const handleChangeFile = (file) => {
+	const handleChangeFile = file => {
 		console.log('file-add-success', file);
 		setFileImage(file);
 	};
@@ -47,18 +48,13 @@ function UserCreateForm() {
 		}),
 		onSubmit: (values, { resetForm }) => {},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
+	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<FormikProvider value={formik}>
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
 				<Card sx={{ p: 2 }}>
 					<Stack spacing={2}>
-						<UploadImage
-							label="foto"
-							type="Circle"
-							handleChangeFile={handleChangeFile}
-						/>
+						<UploadImage label="foto" type="Circle" handleChangeFile={handleChangeFile} />
 						<TextField
 							required
 							fullWidth
@@ -75,7 +71,7 @@ function UserCreateForm() {
 							fullWidth
 							variant="outlined"
 							size="small"
-							label="titulo"
+							label="Apellidos"
 							placeholder="Titulo de oferta"
 							{...getFieldProps('apellidos')}
 							error={Boolean(touched.apellidos && errors.apellidos)}
@@ -92,18 +88,8 @@ function UserCreateForm() {
 							error={Boolean(touched.email && errors.email)}
 							helperText={touched.email && errors.email}
 						/>
-						<TextField
-							required
-							fullWidth
-							variant="outlined"
-							size="small"
-							label="Contraseña"
-							placeholder="Contraseña"
-							{...getFieldProps('password')}
-							error={Boolean(touched.password && errors.password)}
-							helperText={touched.password && errors.password}
-						/>
-						<FormControl fullWidth>
+
+						<FormControl fullWidth size="small">
 							<InputLabel id="role-label">Rol</InputLabel>
 
 							<Select
@@ -114,20 +100,25 @@ function UserCreateForm() {
 								error={Boolean(touched.rule && errors.rule)}
 								size="small"
 								inputProps={{}}>
-								{rules.map((rule) => (
+								{rules.map(rule => (
 									<MenuItem key={rule.id_rule} value={rule.id_rule}>
 										{rule.label}
 									</MenuItem>
 								))}
 							</Select>
-							<FormHelperText>{touched.rule && errors.rule}</FormHelperText>
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{touched.rule && errors.rule}
+							</FormHelperText>
 						</FormControl>
-						<Box sx={{ position: 'relative', py: 1 }}>
+						<Typography variant="body2" color="textSecondary">
+							Nota: La contraseña se enviara al correo electronico
+						</Typography>
+						<Box sx={{ position: 'relative' }}>
 							<Button
 								color="primary"
 								/* 						disabled={formik.isSubmitting} */
 								fullWidth
-								size="large"
+								// size="small"
 								type="submit"
 								disabled={isSubmitting}
 								variant="contained">

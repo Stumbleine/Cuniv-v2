@@ -1,7 +1,6 @@
 import { LocalOffer } from '@mui/icons-material';
 import {
 	Button,
-	Divider,
 	List,
 	ListItem,
 	ListItemIcon,
@@ -9,12 +8,12 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function ProfileOffers(props) {
 	const { offers } = props;
 	useEffect(() => {
-		console.log('aqui products', offers);
+		console.log('aqui offers', offers);
 	}, []);
 
 	return (

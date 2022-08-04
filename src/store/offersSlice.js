@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
-import dataOffers from '../json/offers.json';
+import { convertToB64 } from '../Utils/Helper';
 const initialState = {
 	offers: null,
+	fetchFailed: false,
 	isLoading: false,
 };
 
@@ -16,9 +17,15 @@ const offersSlice = createSlice({
 		},
 		setLoading: state => {
 			state.isLoading = true;
+			state.fetchFailed = false;
+		},
+		setFetchFailed: state => {
+			state.fetchFailed = true;
+			state.isLoading = false;
 		},
 	},
 });
+
 export const getOffersAsync = token => async dispatch => {
 	dispatch(setLoading());
 	try {
@@ -26,15 +33,15 @@ export const getOffersAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setOffers(r.data));
-		console.log('ofertas->r:', r.data);
 	} catch (e) {
+		dispatch(setFetchFailed());
 		throw new Error(e);
 	}
 };
 
 export const createOfferAsync = (offer, image, products) => async dispatch => {
 	let succes = false;
-	const b64 = image ? await convertb64(image) : null;
+	const b64 = image ? await convertToB64(image) : null;
 	const p = products.map(s => {
 		console.log('pids', s.id_producto);
 		let array = [];
@@ -66,21 +73,5 @@ export const createOfferAsync = (offer, image, products) => async dispatch => {
 	return succes;
 };
 
-export const convertb64 = file => {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file[0]);
-		reader.onload = () => {
-			resolve(reader.result);
-		};
-
-		reader.onerror = error => {
-			reject(error);
-		};
-	});
-	// reader.onload = () => {
-	// 	return reader.result;
-	// };
-};
-export const { setOffers, setLoading } = offersSlice.actions;
+export const { setOffers, setLoading, setFetchFailed } = offersSlice.actions;
 export default offersSlice.reducer;

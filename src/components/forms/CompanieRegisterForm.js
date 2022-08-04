@@ -12,367 +12,271 @@ import {
 	InputLabel,
 	OutlinedInput,
 	FormControl,
-	Snackbar,
-	Alert,
+	CircularProgress,
 } from '@mui/material';
-import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { FastField, Form, FormikProvider, useFormik } from 'formik';
+import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react';
 import AddCompanyBranch from './AddCompanyBranch';
 import CompanyBranch from '../cards/CompanyBranch';
-import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCompanieAsync } from '../../store/companiesSlice';
-import { grey } from '@mui/material/colors';
+import { createCompanieAsync, getProveedores } from '../../store/companiesSlice';
+import { green, grey } from '@mui/material/colors';
 import UploadImage from '../UploadImage';
+import { useNavigate } from 'react-router-dom';
+import SnackCustom from '../SnackCustom';
+import API from '../../conection';
 
 function CompanieRegisterForm() {
 	const dispatch = useDispatch();
-	const { rule, user, rulepath } = useSelector(state => state.user);
+	const navigate = useNavigate();
+	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-	const [open, setOpen] = useState(false);
+	const { providers } = useSelector(state => state.companies);
+	const [rubros, setRubros] = useState(null);
 	const [fileLogo, setFileLogo] = useState(null);
-	const defaultSucursal = {
+
+	const defaultBranch = {
 		nombre: 'Sucursal central',
 		direccion: 's/n',
 		latitud: 's/n',
 		longitud: 's/n',
 	};
-	const [listSucursal, setListSucursal] = useState([defaultSucursal]);
+	const [branchs, setBranchs] = useState([defaultBranch]);
 
-	const PRVSchema = Yup.object().shape({
-		razon_social: Yup.string().required('nombre de la empresa es requerido'),
-		descripcion: Yup.string().required('Describa su empresa'),
-		rubro: Yup.string().required('Es necesario indicar su rubro'),
-		telefono: Yup.string().required('Es necesario el telefono de su empresa'),
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
 	});
-	const ADMSchema = Yup.object({
-		razon_social: Yup.string().required('nombre de la empresa es requerido'),
-		descripcion: Yup.string().required('Describa su empresa'),
-		rubro: Yup.string().required('Es necesario indicar su rubro'),
-		telefono: Yup.string().required('Es necesario el telefono de su empresa'),
-	});
-	const initialValuesPRV = {
-		razon_social: '',
-		descripcion: '',
-		rubro: '',
-		telefono: '',
-		nit: '',
-		facebook: '',
-		instagram: '',
-		sitio_web: '',
-		email: '',
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
 	};
-	const initialValuesADM = {
-		razon_social: '',
-		descripcion: '',
-		telefono: '',
-		rubro: '',
-		id_proveedor: null,
-		nit: '',
-		facebook: '',
-		instagram: '',
-		sitio_web: '',
-		email: '',
-		productos: [],
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
+	useEffect(() => {
+		const getRubros = async () => {
+			const r = await API.get('empresa/rubros', {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setRubros(r.data);
+		};
+		getRubros();
+
+		isAdmin && dispatch(getProveedores(accessToken));
+	}, []);
+
+	const handleChangeFile = file => {
+		setFileLogo(file);
+	};
+	const updateListBranchs = data => {
+		setBranchs(data);
 	};
 
 	const formik = useFormik({
-		initialValues: rule === 'PRV' ? initialValuesPRV : initialValuesADM,
-		validationSchema: rule === 'PRV' ? PRVSchema : ADMSchema,
+		initialValues: {
+			razon_social: '',
+			descripcion: '',
+			telefono: '',
+			rubro: '',
+			nit: '',
 
-		onSubmit: (valuesForm, { resetForm }) => {
-			let success = false;
+			id_proveedor: '',
+		},
+		validationSchema: Yup.object().shape({
+			razon_social: Yup.string().required('Es necesario el nombre'),
+			descripcion: Yup.string().required('Es necesario una descripcion'),
+			rubro: Yup.string().required('Es necesario indicar su rubro'),
+			telefono: Yup.string().required('Es necesario el telefono'),
+			id_proveedor:
+				isAdmin && Yup.number().required('Es necesario asingar el responsable'),
+		}),
+
+		onSubmit: (values, { resetForm, setSubmitting }) => {
 			async function post() {
-				success = await dispatch(
-					createCompanieAsync(valuesForm, listSucursal, fileLogo, accessToken)
+				return await dispatch(
+					createCompanieAsync(accessToken, values, fileLogo, branchs)
 				);
-				if (success === true) {
-					console.log('success_true', success);
-					setSetting({
-						...setting,
-						open: true,
-						severity: 'success',
-						message: 'La empresa se ha registrado con exito',
-					});
-				} else {
-					console.log('success_false', success);
-					setSetting({
-						...setting,
-						open: true,
-						severity: 'error',
-						message: 'Hubo un problema al registrar la empresa',
-					});
-				}
-				return success;
 			}
-			post();
-			resetForm();
+			post()
+				.then(() => {
+					handleSnack('Empresa registrado exitosamente', 'success');
+					resetForm();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-	const handleChangeFile = file => {
-		console.log('file-add-success', file);
-		setFileLogo(file);
-	};
-	const handleAddSucursal = sucursal => {
-		console.log('changeSucursal	');
-		setListSucursal([...listSucursal, sucursal]);
-	};
-	const edit = (data, index) => {
-		console.log('HELLOOOOO', data, index);
-		setListSucursal([
-			...listSucursal.slice(0, index),
-			data,
-			...listSucursal.slice(index + 1, listSucursal.length),
-		]);
-	};
-	const [setting, setSetting] = useState({
-		open: false,
-		message: '',
-		variant: '',
-	});
-	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setSetting({ ...setting, open: false });
-	};
+	const { values, isSubmitting, handleSubmit } = formik;
 
 	return (
-		<FormikProvider value={formik}>
-			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-				<Snackbar open={setting.open} autoHideDuration={3000} onClose={handleClose}>
-					<Alert
-						onClose={handleClose}
-						severity={setting.severity || 'success'}
-						sx={{ width: '100%' }}>
-						{setting.message}
-					</Alert>
-				</Snackbar>
-				<Grid container spacing={2} sx={{}}>
-					<Grid item xs={12} md={6}>
-						<Paper sx={{ p: 2, borderRadius: 2 }}>
-							<UploadImage
-								label="logo"
-								type="Circle"
-								handleChangeFile={handleChangeFile}
-							/>
-							<Box sx={{ mt: 2 }}>
-								<Typography sx={{ fontWeight: 'bold' }}>Informacion</Typography>
+		<>
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+			<FormikProvider value={formik}>
+				<Form onSubmit={handleSubmit}>
+					<Grid container spacing={2}>
+						<Grid item xs={12} md={6}>
+							<Paper sx={{ p: 2 }}>
+								<Stack spacing={2}>
+									<UploadImage
+										label="logo"
+										type="Circle"
+										handleChangeFile={handleChangeFile}
+										id="register-companie"
+									/>
+									<Typography sx={{ fontWeight: 'bold' }}>Informacion</Typography>
+									<FastField name="razon_social">
+										{({ field, form, meta }) => (
+											<TextField
+												fullWidth
+												variant="outlined"
+												size="small"
+												label="Razon social"
+												placeholder="nombre de la empresa"
+												{...field}
+												error={Boolean(meta.touched && meta.error)}
+												helperText={meta.touched && meta.error}
+											/>
+										)}
+									</FastField>
 
-								<TextField
-									required
-									variant="outlined"
-									size="small"
-									label="Razon social"
-									placeholder="nombre de la empresa"
-									sx={{ width: '100%', mt: 1 }}
-									{...getFieldProps('razon_social')}
-									error={Boolean(touched.razon_social && errors.razon_social)}
-									helperText={touched.razon_social && errors.razon_social}
-								/>
-								<TextField
-									required
-									variant="outlined"
-									label="Descripcion"
-									size="small"
-									multiline
-									placeholder="Descripcion"
-									sx={{ width: '100%', mt: 2 }}
-									{...getFieldProps('descripcion')}
-									error={Boolean(touched.descripcion && errors.descripcion)}
-									helperText={touched.descripcion && errors.descripcion}
-								/>
+									<FastField name="descripcion">
+										{({ field, form, meta }) => (
+											<TextField
+												fullWidth
+												variant="outlined"
+												label="Descripcion"
+												size="small"
+												multiline
+												placeholder="Descripcion"
+												{...field}
+												error={Boolean(meta.touched && meta.error)}
+												helperText={meta.touched && meta.error}
+											/>
+										)}
+									</FastField>
+									<FastField name="telefono">
+										{({ field, form, meta }) => (
+											<TextField
+												fullWidth
+												variant="outlined"
+												label="telefono"
+												size="small"
+												placeholder="telefono"
+												{...field}
+												error={Boolean(meta.touched && meta.error)}
+												helperText={meta.touched && meta.error}
+											/>
+										)}
+									</FastField>
+								</Stack>
+							</Paper>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							{/* segundo panel */}
+							<Paper
+								sx={{
+									p: 2,
+								}}>
+								<Stack spacing={2}>
+									<FormControl fullWidth size="small">
+										<InputLabel id="rubro-label">rubro</InputLabel>
+										<FastField name="rubro">
+											{({ field, form, meta }) => (
+												<Select
+													labelId="rubro-label"
+													id="select-rubro-c"
+													input={<OutlinedInput id="select-rubro-c" label="rubro" />}
+													{...field}
+													error={Boolean(meta.touched && meta.errors)}>
+													{rubros?.map(r => (
+														<MenuItem key={r.nombre} value={r.nombre}>
+															{r.nombre}
+														</MenuItem>
+													))}
+												</Select>
+											)}
+										</FastField>
+									</FormControl>
 
-								<TextField
-									required
-									variant="outlined"
-									label="telefono"
-									size="small"
-									placeholder="telefono"
-									sx={{ width: '100%', mt: 2 }}
-									{...getFieldProps('telefono')}
-									error={Boolean(touched.telefono && errors.telefono)}
-									helperText={touched.telefono && errors.telefono}
-								/>
-								<TextField
-									variant="outlined"
-									label="NIT (opcional)"
-									size="small"
-									placeholder="nit del negocio"
-									sx={{ width: '100%', mt: 2 }}
-									{...getFieldProps('nit')}
-								/>
-								{rule === 'ADM' ? (
-									<>
-										<Autocomplete
-											disablePortal
-											options={proveedores}
-											sx={{ width: '100%', mt: 2 }}
-											renderInput={params => (
-												<TextField
-													{...params}
-													required
-													label="Responsable"
-													size="small"
+									<FastField name="nit">
+										{({ field, form, meta }) => (
+											<TextField
+												fullWidth
+												variant="outlined"
+												label="NIT (opcional)"
+												size="small"
+												placeholder="nit del negocio"
+												{...field}
+											/>
+										)}
+									</FastField>
+									{isAdmin && providers && (
+										<FormControl fullWidth size="small">
+											<InputLabel id="resp-label">Responsable</InputLabel>
+											<FastField name="id_proveedor">
+												{({ field, form, meta }) => (
+													<Select
+														{...field}
+														labelId="resp-label"
+														id="select-resp-c"
+														input={
+															<OutlinedInput id="select-resp-c" label="Responsable" />
+														}
+														error={Boolean(meta.touched && meta.errors)}>
+														{providers.map(r => (
+															<MenuItem key={r.id} value={r.id}>
+																{r.nombres} {r.apellidos}
+															</MenuItem>
+														))}
+													</Select>
+												)}
+											</FastField>
+										</FormControl>
+									)}
+									{/* Agregar sucurusales */}
+
+									<CompanyBranch updateListBranchs={updateListBranchs} />
+
+									<Stack direction="row" spacing={2} justifyContent="end">
+										<Button
+											onClick={() => {
+												navigate(-1);
+
+												// console.log(values, branchs);
+											}}>
+											Cancelar
+										</Button>
+										<Box sx={{ position: 'relative' }}>
+											<Button disabled={isSubmitting} type="submit" variant="contained">
+												Guardar
+											</Button>
+											{isSubmitting && (
+												<CircularProgress
+													size={24}
+													sx={{
+														color: green[500],
+														position: 'absolute',
+														top: '50%',
+														left: '50%',
+														marginTop: '-12px',
+														marginLeft: '-12px',
+													}}
 												/>
 											)}
-										/>
-									</>
-								) : null}
-								<Box sx={{ mt: 2 }}>
-									{/* <Typography sx={{ fontWeight: 'bold' }}>Rubro</Typography> */}
-									<FormControl fullWidth>
-										<InputLabel id="rubro-label">rubro</InputLabel>
-										<Select
-											labelId="rubro-label"
-											fullWidth
-											id="select-multiple-chip"
-											input={<OutlinedInput id="select-multiple-chip" label="rubro" />}
-											{...getFieldProps('rubro')}
-											error={Boolean(touched.rubro && errors.rubro)}
-											// helperText={touched.rubro && errors.rubro}
-										>
-											<MenuItem value="Restaurant">Restaurant</MenuItem>
-											<MenuItem value="Tecnologia">Tecnologia</MenuItem>
-											<MenuItem value="Belleza">Belleza</MenuItem>
-											<MenuItem value="Entretenimiento">Entretenimiento</MenuItem>
-											<MenuItem value="Deporte">Deporte</MenuItem>
-										</Select>
-									</FormControl>
-								</Box>
-							</Box>
-						</Paper>
-					</Grid>
-					<Grid item xs={12} md={6}>
-						{/* segundo panel */}
-						<Paper
-							sx={{
-								p: 2,
-								borderRadius: 2,
-								background: 'white',
-							}}>
-							<Box sx={{}}>
-								{/* Agregar sucurusales */}
-
-								<Box>
-									<Box>
-										<Typography sx={{ fontWeight: 'bold' }}>Sucursales</Typography>
-										<Typography variant="body2" color="textSecondary">
-											Se creo una sucursal por defecto, modifique sus datos (direccion,
-											geolocalización) *
-										</Typography>
-									</Box>
-									<Stack
-										direction="column"
-										spacing={1}
-										sx={{
-											alignItems: 'center',
-											mt: 1,
-											p: 1,
-											py: 2,
-											borderRadius: 2,
-											maxHeight: 250,
-											background: grey[100],
-											overflowY: 'scroll',
-										}}>
-										{listSucursal.map((sucursal, index) => (
-											<CompanyBranch
-												sucursal={sucursal}
-												key={sucursal.nombre}
-												edit={edit}
-												index={index}
-											/>
-										))}
-									</Stack>
-									<Box
-										sx={{
-											width: '100%',
-											textAlign: 'end',
-											mt: 1,
-										}}>
-										<AddCompanyBranch handleAddSucursal={handleAddSucursal} />
-									</Box>
-								</Box>
-								{/* <Box sx={{ mt: 2 }}>
-										<Typography sx={{ fontWeight: 'bold' }}>
-											Productos
-										</Typography>
-										<Typography variant="body2">
-											Agregue los productos/servicios que ofrece,
-										</Typography>
-										<TextField
-											required
-											variant="outlined"
-											label="productos"
-											autoFocus
-											InputProps={{
-												style: {
-													color: grey[900],
-												},
-											}}
-											sx={{ width: '100%', mt: 2 }}
-											{...getFieldProps('descrip_productos')}
-											
-										/>
-									</Box> */}
-
-								<Box sx={{ width: '100%', mt: 1 }}>
-									<Box sx={{}}>
-										<Box sx={{ display: 'flex' }}>
-											<Typography sx={{ fontWeight: 'bold' }}>Social</Typography>
-											<Typography sx={{ fontWeight: 'none', ml: 1 }}>
-												(opcional)
-											</Typography>
 										</Box>
-										<TextField
-											size="small"
-											variant="outlined"
-											label="facebook"
-											sx={{ width: '100%', mt: 1 }}
-											{...getFieldProps('facebook')}
-										/>
-										<TextField
-											size="small"
-											variant="outlined"
-											label="instagram"
-											sx={{ width: '100%', mt: 2 }}
-											{...getFieldProps('instagram')}
-										/>
-										<TextField
-											size="small"
-											variant="outlined"
-											label="sitio web"
-											sx={{ width: '100%', mt: 2 }}
-											{...getFieldProps('sitio_web')}
-										/>
-										<TextField
-											size="small"
-											variant="outlined"
-											label="email"
-											sx={{ width: '100%', mt: 2 }}
-											{...getFieldProps('email')}
-										/>
-									</Box>
-								</Box>
-							</Box>
-							<Box
-								sx={{
-									display: 'flex',
-									width: '100%',
-									justifyContent: 'end',
-									mt: 3,
-								}}>
-								<Button>Cancelar</Button>
-								<Button sx={{ ml: 2 }} type="submit" variant="contained">
-									Crear Empresa
-								</Button>
-							</Box>
-						</Paper>
+									</Stack>
+								</Stack>
+							</Paper>
+						</Grid>
 					</Grid>
-				</Grid>
-			</Form>
-		</FormikProvider>
+				</Form>
+			</FormikProvider>
+		</>
 	);
 }
 export const proveedores = [

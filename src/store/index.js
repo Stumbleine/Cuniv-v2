@@ -1,9 +1,4 @@
-import {
-	combineReducers,
-	configureStore,
-	getDefaultMiddleware,
-	isImmutableDefault,
-} from '@reduxjs/toolkit';
+import { combineReducers, configureStore, isImmutableDefault } from '@reduxjs/toolkit';
 import offersReducer from './offersSlice';
 import usersReducer from './usersSlice';
 import userReducer from './userSlice';
@@ -19,29 +14,26 @@ import umssSlice from './umssSlice';
 const localStorageMiddleware = ({ getState }) => {
 	return next => action => {
 		const result = next(action);
-		localStorage.setItem('applicationState', JSON.stringify(getState()));
+		const st = getState();
+		// console.log('getState=>', st);
+		const appState = {
+			login: st.login,
+			user: st.user,
+			setting: st.setting,
+		};
+		// console.log('appState=>', appState);
+		localStorage.setItem('appState', JSON.stringify(appState));
 		return result;
 	};
 };
 
 const reHydrateStore = () => {
-	// const statss = getState();
-	// console.log(statss);
-	if (localStorage.getItem('applicationState') !== null) {
-		return JSON.parse(localStorage.getItem('applicationState')); // re-hydrate the store
+	// console.log('Rehydrate=>', localStorage.getItem('appState'));
+	if (localStorage.getItem('appState') !== null) {
+		return JSON.parse(localStorage.getItem('appState')); // re-hydrate the store
 	}
 };
-// const rootReducer = combineReducers({ loginReducer });
-// const rootReducer = (state, action) => {
-//   if (action.type === 'example/clearResults') {
 
-//     // this applies to all keys defined in persistConfig(s)
-//     storage.removeItem('persist:root')
-
-//     state = {}
-//   }
-//   return appReducer(state, action)
-// }
 export default configureStore({
 	reducer: {
 		setting: settingReducer,
@@ -61,3 +53,15 @@ export default configureStore({
 		curryGetDefaultMiddleware().concat(localStorageMiddleware),
 	preloadedState: reHydrateStore(),
 });
+
+// const rootReducer = combineReducers({ loginReducer });
+// const rootReducer = (state, action) => {
+//   if (action.type === 'example/clearResults') {
+
+//     // this applies to all keys defined in persistConfig(s)
+//     storage.removeItem('persist:root')
+
+//     state = {}
+//   }
+//   return appReducer(state, action)
+// }

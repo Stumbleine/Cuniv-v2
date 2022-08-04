@@ -45,6 +45,7 @@ export default function AddLocationForm() {
 		initialValues: {
 			name: '',
 			type: 'Biblioteca',
+			description: '',
 			pos: '',
 		},
 		validationSchema: Yup.object().shape({
@@ -91,6 +92,14 @@ export default function AddLocationForm() {
 							{...getFieldProps('name')}
 							error={Boolean(touched.name && errors.name)}
 							helperText={touched.name && errors.name}
+						/>
+						<TextField
+							variant="outlined"
+							size="small"
+							label="Descripcion (opcional)"
+							{...getFieldProps('description')}
+							// error={Boolean(touched.description && errors.description)}
+							// helperText={touched.description && errors.description}
 						/>
 
 						<Box>

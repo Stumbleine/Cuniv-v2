@@ -57,6 +57,7 @@ export default function EditLink({ link }) {
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
+
 	const formik = useFormik({
 		initialValues: {
 			title: link.title,

@@ -2,7 +2,6 @@ import { CheckCircle } from '@mui/icons-material';
 import {
 	Box,
 	Button,
-	Divider,
 	List,
 	ListItem,
 	ListItemIcon,
@@ -12,10 +11,10 @@ import {
 import React, { useEffect } from 'react';
 
 function ProfileProducts(props) {
-	const { products } = props;
-	useEffect(() => {
-		console.log('aqui products', products);
-	}, []);
+	const { products } = props || [];
+	// useEffect(() => {
+	// 	console.log('aqui products', products);
+	// });
 
 	return (
 		<Box>
@@ -30,25 +29,24 @@ function ProfileProducts(props) {
 					borderRadius: 2,
 				}}
 				disablePadding>
-				{products.length !== 0 ? (
+				{products ? (
 					products?.map((p, index) => (
 						<ListItem key={index} alignItems="flex-start" sx={{ py: 0, px: 2 }}>
 							<ListItemIcon sx={{ mt: 3 }}>
 								<CheckCircle sx={{ color: 'text.icon' }} />
 							</ListItemIcon>
 							<ListItemText
-								primary={p.nombre}
+								primary={p.name}
 								secondary={
 									<React.Fragment>
 										<Typography
 											sx={{ display: 'block' }}
 											component="span"
 											variant="body2"
-											noWrap
-											color="text.primary">
-											{p.descripcion}
+											noWrap>
+											{'Bs. ' + p.price}
 										</Typography>
-										{'Bs. ' + p.precio}
+										{/* {'Bs. ' + p.precio} */}
 									</React.Fragment>
 								}
 							/>
@@ -60,9 +58,9 @@ function ProfileProducts(props) {
 					</Typography>
 				)}
 			</List>
-			{products.length !== 0 && (
+			{products && (
 				<Box sx={{ textAlign: 'end', width: '100%' }}>
-					<Button>Ver mas productos nada</Button>
+					<Button>Ver mas productos</Button>
 				</Box>
 			)}
 		</Box>
