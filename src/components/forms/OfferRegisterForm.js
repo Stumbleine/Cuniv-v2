@@ -57,7 +57,7 @@ function OfferRegisterForm() {
 			});
 			setCompanies(r.data);
 		}
-		fetch();
+		isAdmin && fetch();
 	}, []);
 	useEffect(() => {
 		console.log('productos Seleccionados', prdInclude);
@@ -129,27 +129,31 @@ function OfferRegisterForm() {
 			descuento: '',
 			condiciones: '',
 			sucursales_disp: { ids: ids },
-			id_empresa: 'none',
+			// id_empresa: 'none',
 		},
 		validationSchema: Yup.object().shape({
 			titulo: Yup.string().required('Titulo de oferta es necesario'),
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
-			id_empresa: isAdmin
-				? Yup.number().typeError('Debe elegir la empresa').required()
-				: '',
+			// id_empresa: isAdmin
+			// 	? Yup.number().typeError('Debe elegir la empresa').required()
+			// 	: '',
 		}),
-		onSubmit: (values, { resetForm }) => {
+		onSubmit: (values, { resetForm, setSubmitting }) => {
 			console.log(values);
 			const register = async () => {
-				const r = await dispatch(createOfferAsync(values, fileImage, prdInclude));
-				r
-					? handleSnack('Producto agregado exitosamente', 'success')
-					: handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				return await dispatch(createOfferAsync(values, fileImage, prdInclude));
 			};
-			register();
-			// resetForm();
+			register()
+				.then(() => {
+					handleSnack('Link agregado exitosamente', 'success');
+					resetForm();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -157,7 +161,7 @@ function OfferRegisterForm() {
 	return (
 		<FormikProvider value={formik}>
 			<SnackCustom data={snack} closeSnack={closeSnack} />
-			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit}>
 				<Grid container spacing={2} sx={{}}>
 					{/* primer panel(image y titulos) */}
 					<Grid item xs={12} md={6} lg={6} sx={{}}>
@@ -300,7 +304,7 @@ function OfferRegisterForm() {
 								<Box>
 									<Typography fontWeight="bold">Sucursales</Typography>
 									<Typography color="textSecondary" sx={{ mb: 1 }}>
-										Seleccione las sucursales donde se encuentra disponible la oferta
+										Seleccione sucursales donde aplica la oferta
 									</Typography>
 									<Stack
 										direction="column"
@@ -313,13 +317,25 @@ function OfferRegisterForm() {
 											overflowY: 'scroll',
 											height: 200,
 										}}>
-										{sucursales?.map(n => (
+										{[
+											{
+												id_sucursal: 1,
+												nombre: 'Sucursal central',
+												direccion: 'Av. Junin y Ayaroa',
+											},
+											{
+												id_sucursal: 2,
+												nombre: 'Sucursal Km4',
+												direccion: 'Av. Blanco Galindo',
+											},
+										]?.map(n => (
 											<Paper
 												key={n.id_sucursal}
 												sx={{
 													display: 'flex',
 													alignItems: 'center',
 													width: '90%',
+													borderRadius: 1,
 													minWidth: 200,
 													minHeight: 60,
 													p: 1,
@@ -328,11 +344,11 @@ function OfferRegisterForm() {
 												{/* <CheckBox chec sx={{ ml: 1 }} /> */}
 												<FormControlLabel
 													control={<Checkbox value={n} />}
-													sx={{ ml: 1 }}
+													sx={{ ml: 0.5 }}
 												/>
-												<Box sx={{ ml: 1 }}>
+												<Box>
 													<Typography variant="body1">{n.nombre}</Typography>
-													<Typography variant="body2">
+													<Typography variant="body2" color="textSecondary">
 														direccion: {n.direccion}
 													</Typography>
 												</Box>

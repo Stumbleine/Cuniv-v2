@@ -1,5 +1,5 @@
 import { BrowserRouter, Outlet } from 'react-router-dom';
-import Router from './routes2';
+import Router from './routes';
 
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';

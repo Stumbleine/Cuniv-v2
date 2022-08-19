@@ -5,6 +5,7 @@ const initialState = {
 	offers: null,
 	fetchFailed: false,
 	isLoading: false,
+	filterLoading: false,
 };
 
 const offersSlice = createSlice({
@@ -12,8 +13,11 @@ const offersSlice = createSlice({
 	initialState,
 	reducers: {
 		setOffers: (state, { payload }) => {
+			state.offers = [];
+
 			state.offers = payload;
 			state.isLoading = false;
+			state.filterLoading = false;
 		},
 		setLoading: state => {
 			state.isLoading = true;
@@ -22,6 +26,12 @@ const offersSlice = createSlice({
 		setFetchFailed: state => {
 			state.fetchFailed = true;
 			state.isLoading = false;
+			state.filterLoading = false;
+		},
+		setFilterLoading: state => {
+			state.filterLoading = true;
+
+			state.fetchFailed = false;
 		},
 	},
 });
@@ -32,6 +42,21 @@ export const getOffersAsync = token => async dispatch => {
 		const r = await API.get('beneficio/list', {
 			headers: { Authorization: `Bearer ${token}` },
 		});
+		dispatch(setOffers(r.data));
+	} catch (e) {
+		dispatch(setFetchFailed());
+		throw new Error(e);
+	}
+};
+export const filterOffersAsync = (token, search, idc, status) => async dispatch => {
+	dispatch(setFilterLoading());
+	try {
+		const r = await API.get(
+			`beneficio/list?search${search}&idc=${idc}&status=${status}`,
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
 		dispatch(setOffers(r.data));
 	} catch (e) {
 		dispatch(setFetchFailed());
@@ -73,5 +98,6 @@ export const createOfferAsync = (offer, image, products) => async dispatch => {
 	return succes;
 };
 
-export const { setOffers, setLoading, setFetchFailed } = offersSlice.actions;
+export const { setOffers, setLoading, setFetchFailed, setFilterLoading } =
+	offersSlice.actions;
 export default offersSlice.reducer;

@@ -1,4 +1,4 @@
-import { Edit, Language } from '@mui/icons-material';
+import { Edit, FilterBAndW, Language } from '@mui/icons-material';
 import {
 	Avatar,
 	Container,
@@ -18,6 +18,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteDialog from '../../components/dialogs/DeleteDialog';
 import EditLink from '../../components/dialogs/EditLink';
+import FilterBar from '../../components/FilterBar';
 import AddLinkForm from '../../components/forms/AddLinkForm';
 import ListLinks from '../../components/lists/ListLinks';
 import ShowRoles from '../../components/ShowRoles';
@@ -28,9 +29,11 @@ import { deleteSiteAsync, getSitesAsync } from '../../store/umssSlice';
 export default function WebLinksPage() {
 	const { accessToken } = useSelector(state => state.login);
 	const { webSites, isLoading } = useSelector(state => state.umss);
+	const [search, setSearch] = useState('All');
+
 	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch(getSitesAsync(accessToken));
+		dispatch(getSitesAsync(accessToken, search));
 	}, []);
 	const [snack, setSnack] = useState({
 		open: false,
@@ -60,7 +63,10 @@ export default function WebLinksPage() {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
-
+	const handleSearch = values => {
+		setSearch(values.search);
+		dispatch(getSitesAsync(accessToken, values.search));
+	};
 	return (
 		<Container maxWidth="xl">
 			<ShowRoles />
@@ -80,6 +86,7 @@ export default function WebLinksPage() {
 				</Box>
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={6}>
+						<FilterBar handleSearch={handleSearch} />
 						<Paper
 							sx={{ p: 2, maxHeight: 600, overflow: 'scroll', overflowX: 'hidden' }}
 							className="container">

@@ -25,9 +25,11 @@ function CompanieProfile() {
 	const { profile, isLoading, fetchFailed } = useSelector(state => state.companies);
 	useEffect(() => {
 		document.title = 'cuniv | perfil empresa';
+		console.log(idCompanie, user?.companie, isAdmin);
+
 		if (idCompanie) {
 			dispatch(profileCompanieAsync(idCompanie, accessToken));
-		} else if (user.companie) {
+		} else if (user.companie && !isAdmin) {
 			dispatch(profileCompanieAsync(user.companie, accessToken));
 		} else {
 			dispatch(setCompanieProfile(null));

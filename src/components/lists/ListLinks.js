@@ -1,4 +1,4 @@
-import { Edit, Language } from '@mui/icons-material';
+import { Edit, Language, Warning } from '@mui/icons-material';
 import {
 	Avatar,
 	Divider,
@@ -9,6 +9,7 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSiteAsync, getSitesAsync } from '../../store/umssSlice';
@@ -18,7 +19,9 @@ import SkeletonList from '../skeletons/SkeletonList';
 
 export default function ListLinks() {
 	const { accessToken } = useSelector(state => state.login);
-	const { webSites, isLoading } = useSelector(state => state.umss);
+	const { webSites, isLoadingL, filterLoadingL, fetchFailedL } = useSelector(
+		state => state.umss
+	);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getSitesAsync(accessToken));
@@ -29,7 +32,9 @@ export default function ListLinks() {
 	};
 	return (
 		<List>
-			{webSites ? (
+			{filterLoadingL ? (
+				<SkeletonList iteration={6} />
+			) : webSites ? (
 				webSites.map((ws, index) => (
 					<React.Fragment key={index}>
 						<ListItem>
@@ -72,10 +77,22 @@ export default function ListLinks() {
 						)}
 					</React.Fragment>
 				))
-			) : isLoading ? (
-				<SkeletonList iteration={6} />
 			) : (
-				<Typography align="center">No existen links registrados</Typography>
+				isLoadingL && <SkeletonList iteration={6} />
+			)}
+			{!webSites && !isLoadingL && !fetchFailedL && (
+				<Typography align="center">No se econtraron links</Typography>
+			)}
+			{fetchFailedL && (
+				<Box
+					width={1}
+					sx={{ py: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+					<Warning color="error" sx={{ mr: 2 }} />
+
+					<Typography textAlign="center" color="error">
+						Error del servidor
+					</Typography>
+				</Box>
 			)}
 		</List>
 	);

@@ -1,20 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
+
 const initialState = {
-	rubros: null,
+	complaints: null,
+	fetchFailed: false,
 	isLoading: false,
 	filterLoading: false,
-	fetchFailed: false,
 };
 
-const rubrosSlice = createSlice({
-	name: 'rubros',
+const complaintSlice = createSlice({
+	name: 'complaint',
 	initialState,
 	reducers: {
-		setRubros: (state, { payload }) => {
+		setComplaints: (state, { payload }) => {
 			state.isLoading = false;
 			state.filterLoading = false;
-			state.rubros = payload;
+			state.complaints = payload;
 		},
 		setLoading: state => {
 			state.isLoading = true;
@@ -31,32 +32,32 @@ const rubrosSlice = createSlice({
 		},
 	},
 });
+export const { setComplaints, setLoading, setFetchFailed, setFilterLoading } =
+	complaintSlice.actions;
+export default complaintSlice.reducer;
 
-export const { setRubros, setLoading, setFetchFailed, setFilterLoading } =
-	rubrosSlice.actions;
-export default rubrosSlice.reducer;
-export const rubrosAsync = token => async dispatch => {
-	dispatch(setLoading(true));
+export const complaintsAsync = token => async dispatch => {
+	dispatch(setLoading());
 	try {
-		const r = await API.get(`rubro/list`, {
+		const r = await API.get(`reclamo/list`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		dispatch(setRubros(r.data));
-		console.log('RubrosData->r:', r.data);
+		dispatch(setComplaints(r.data));
+		console.log('ComplaintsData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
 	}
 };
 
-export const filterRubrosAsync = (token, search, idc) => async dispatch => {
+export const complaintsFilterAsync = (token, search, type) => async dispatch => {
 	dispatch(setFilterLoading());
 	try {
-		const r = await API.get(`rubro/list?search=${search}`, {
+		const r = await API.get(`reclamo/list?search=${search}&type=${type}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		dispatch(setRubros(r.data));
-		console.log('filterData->r:', r.data);
+		dispatch(setComplaints(r.data));
+		console.log('ComplaintsFilterData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);

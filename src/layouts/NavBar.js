@@ -62,6 +62,7 @@ export default function NavBar({ onOpenSidebar }) {
 		<>
 			<AppBar
 				position="static"
+				elevation={1}
 				sx={{
 					background: 'white',
 					zIndex: 'tooltip',
@@ -74,14 +75,24 @@ export default function NavBar({ onOpenSidebar }) {
 								mr: { xs: 0.5, md: 2 },
 								display: {
 									xs: 'none',
-									md: 'flex',
+									md: navlinks.length > 8 ? 'none' : 'flex',
+									lg: navlinks.length > 8 && 'flex',
 								},
 							}}>
 							<Logo />
 						</Box>
 
 						{/* menu responsivo con items de pestañas */}
-						<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+						<Box
+							sx={{
+								flexGrow: 1,
+								display: {
+									xs: 'flex',
+									// md: 'none',
+									md: navlinks.length > 8 ? 'flex' : 'none',
+									lg: navlinks.length > 8 && 'none',
+								},
+							}}>
 							<IconButton
 								aria-controls="menu-appbar"
 								size="large"
@@ -95,13 +106,27 @@ export default function NavBar({ onOpenSidebar }) {
 							sx={{
 								flexGrow: 1,
 								p: 1,
-								display: { xs: 'flex', md: 'none' },
+								display: {
+									xs: 'flex',
+									// md: 'none',
+									md: navlinks.length > 8 ? 'flex' : 'none',
+									lg: navlinks.length > 8 && 'none',
+								},
 							}}>
 							<Logo />
 						</Box>
 
 						{/* Contenendor de pestañas/pagesLinks */}
-						<Box sx={{ display: { xs: 'none', md: 'flex' }, flexGrow: 1 }}>
+						<Box
+							sx={{
+								display: {
+									xs: 'none',
+									// md: 'flex',
+									md: navlinks.length > 8 ? 'none' : 'flex',
+									lg: navlinks.length > 8 && 'flex',
+								},
+								flexGrow: 1,
+							}}>
 							{navlinks?.map((item, index) => (
 								<ItemNav
 									href={item.path}

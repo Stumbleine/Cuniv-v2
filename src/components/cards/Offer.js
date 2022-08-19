@@ -60,7 +60,7 @@ export default function Offer(props) {
 						variant="body2"
 						noWrap
 						sx={{ overflow: 'hidden', color: 'text.secondary' }}>
-						{offer.discount} asdasdasdasdasdas
+						{offer.discount}
 						{offer.discount_type === 'Porcentual' ? '%' : 'Bs.'} de descuento
 					</Typography>
 				</CardContent>

@@ -24,24 +24,22 @@ import { loginAsync } from '../../store/loginSlice';
 function srcset(image, width, height, rows = 1, cols = 1) {
 	return {
 		src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
-		srcSet: `${image}?w=${width * cols}&h=${
-			height * rows
-		}&fit=crop&auto=format&dpr=2 2x`,
+		srcSet: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format&dpr=2 2x`,
 	};
 }
 function LandingPage() {
 	const theme = useTheme();
 	const [muestra, setMuestra] = useState(Data.slice(0, 5));
-	const { isLoading } = useSelector((state) => state.login);
+	const { isLoading } = useSelector(state => state.login);
 	const dispatch = useDispatch();
 	const clientId =
 		'147363332194-u205vroo6c09j366f56qc6d7pbkob6q2.apps.googleusercontent.com';
-	const onLoginSuccess = (res) => {
+	const onLoginSuccess = res => {
 		console.log('Login Success:', res.profileObj);
 		dispatch(loginAsync(res.profileObj));
 	};
 
-	const onLoginFailure = (res) => {
+	const onLoginFailure = res => {
 		console.log('Login Failed:', res);
 	};
 
@@ -58,7 +56,7 @@ function LandingPage() {
 						<Box sx={{ p: 2 }}>
 							<Stack spacing={2}>
 								<Typography
-									variant="h4"
+									variant="h5"
 									color="textSecondary"
 									sx={{
 										fontWeight: 'bold',
@@ -76,9 +74,8 @@ function LandingPage() {
 									BENEFICIA ESTUDIANTES
 								</Typography>
 								<Typography variant="h6" color="textSecondary">
-									Se parte de una de las empresas afiliadas, obten una cuenta,
-									comienza a compartir tus promociones y productos con los
-									estudiantes de la UMSS.
+									Se parte de una de las empresas afiliadas, obten una cuenta, comienza a
+									compartir tus promociones y productos con los estudiantes de la UMSS.
 								</Typography>
 							</Stack>
 							<Stack
@@ -95,7 +92,7 @@ function LandingPage() {
 									onFailure={onLoginFailure}
 									cookiePolicy={'single_host_origin'}
 									// isSignedIn={false}
-									render={(renderProps) => (
+									render={renderProps => (
 										<Button
 											onClick={renderProps.onClick}
 											disabled={renderProps.disabled}
@@ -135,7 +132,7 @@ function LandingPage() {
 							direction={'row'}
 							spacing={{ xs: 1, md: 2, lg: 2 }}
 							sx={{ justifyContent: 'center' }}>
-							{pasos.map((paso) => (
+							{pasos.map(paso => (
 								<Paper
 									key={paso.paso}
 									sx={{
@@ -175,12 +172,12 @@ function LandingPage() {
 					<ImageList
 						sx={{
 							// width: 500,
-							height: 800,
+							height: 720,
 							// Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
 							// transform: 'translateZ(0)',
 							overflowY: 'hidden',
 						}}>
-						{Data.map((item) => {
+						{Data.map(item => {
 							const cols = item.featured ? 2 : 1;
 							const rows = item.featured ? 2 : 1;
 							return (
@@ -190,7 +187,7 @@ function LandingPage() {
 									rows={1}
 									style={{ borderRadius: 10 }}>
 									<img
-										{...srcset(item.img, 250, 200, rows, cols)}
+										{...srcset(item.img, 250, 150, rows, cols)}
 										alt={item.title}
 										loading="lazy"
 										style={{ borderRadius: 10 }}

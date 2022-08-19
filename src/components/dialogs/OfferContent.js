@@ -15,6 +15,7 @@ import {
 	Divider,
 	ListItemIcon,
 	Chip,
+	Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
@@ -50,7 +51,6 @@ function OfferContent(props) {
 				TransitionComponent={Transition}
 				keepMounted
 				onClose={handleClose}
-				maxWidth="xs"
 				aria-describedby="alert-dialog-slide-description">
 				<Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
 					<Avatar
@@ -68,16 +68,15 @@ function OfferContent(props) {
 					<StatusLabel status={offer?.status} />
 				</Box>
 
-				<Box sx={{ width: 420 }}>
-					{' '}
-					<CardMedia
-						height="200"
-						component="img"
-						alt="green iguana"
-						image={offer?.image}
-					/>
-					<DialogContent sx={{ p: 2 }}>
-						<Box>
+				<CardMedia
+					height="200"
+					component="img"
+					alt={offer.companie}
+					image={offer?.image}
+				/>
+				<DialogContent sx={{ px: 2, py: 1, minWidth: 420, maxWidth: 450 }}>
+					<Stack spacing={1}>
+						<Box sx={{}}>
 							<Typography
 								component="div"
 								variant="subtitle1"
@@ -85,24 +84,20 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold', flexGrow: 1 }}>
 								{offer?.title}
 							</Typography>
-
-							<Typography gutterBottom sx={{ ml: 1 }} variant="body2">
+							<Typography color="textSecondary" variant="body2">
 								{offer?.discount} {offer?.discount_type === 'Porcentual' ? '%' : 'Bs.'} de
-								descuento
 							</Typography>
 						</Box>
-						<Box>
-							<Typography
-								gutterBottom
-								component="div"
-								variant="subtitle2"
-								sx={{ fontWeight: 'bold' }}>
-								Duracion
-							</Typography>
-							<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
-								{offer?.start_date + ' / ' + offer?.end_date}
-							</Typography>
-						</Box>
+						<Typography
+							gutterBottom
+							component="div"
+							variant="subtitle2"
+							sx={{ fontWeight: 'bold' }}>
+							Duracion
+						</Typography>
+						<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
+							{offer?.start_date + ' / ' + offer?.end_date}
+						</Typography>
 						{offer?.conditions ? (
 							<Box>
 								<Typography gutterBottom variant="subtitle2" sx={{ fontWeight: 'bold' }}>
@@ -114,56 +109,57 @@ function OfferContent(props) {
 								</Typography>
 							</Box>
 						) : null}
+						<Typography
+							gutterBottom
+							component="div"
+							variant="subtitle2"
+							noWrap
+							sx={{ fontWeight: 'bold' }}>
+							Productos incluidos
+						</Typography>
 						<Box>
-							<Typography
-								gutterBottom
-								component="div"
-								variant="subtitle2"
-								noWrap
-								sx={{ fontWeight: 'bold' }}>
-								Productos incluidos
-							</Typography>
 							{offer.products?.map((p, index) => (
 								<Chip key={index} label={p.name} sx={{ ml: 1 }} />
 							))}
 						</Box>
-						<Box>
-							<Typography
-								gutterBottom
-								component="div"
-								variant="subtitle2"
-								noWrap
-								sx={{ fontWeight: 'bold' }}>
-								Disponible en:
-							</Typography>
-							<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>
-								{offer.branch_offices?.map((branch, index) => (
-									<Box key={index}>
-										<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
-											<ListItemIcon
-												sx={{
-													mt: 2,
-												}}>
-												<Check />
-											</ListItemIcon>
-											<ListItemText
-												primary={<Typography variant="body1">{branch?.name}</Typography>}
-												secondary={
-													<Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-														{branch?.address}
-													</Typography>
-												}
-											/>
-										</ListItem>
-										{index !== offer.branch_offices?.length - 1 && (
-											<Divider variant="inset" />
-										)}
-									</Box>
-								))}
-							</List>
-						</Box>
-					</DialogContent>
-				</Box>
+						<Typography
+							gutterBottom
+							component="div"
+							variant="subtitle2"
+							noWrap
+							sx={{ fontWeight: 'bold' }}>
+							Disponible en:{' '}
+							{!offer?.branch_offices && (
+								<Typography color="textSecondary">Todos</Typography>
+							)}
+						</Typography>
+						<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>
+							{offer.branch_offices?.map((branch, index) => (
+								<Box key={index}>
+									<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
+										<ListItemIcon
+											sx={{
+												mt: 2,
+											}}>
+											<Check />
+										</ListItemIcon>
+										<ListItemText
+											primary={<Typography variant="body1">{branch?.name}</Typography>}
+											secondary={
+												<Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+													{branch?.address}
+												</Typography>
+											}
+										/>
+									</ListItem>
+									{index !== offer.branch_offices?.length - 1 && (
+										<Divider variant="inset" />
+									)}
+								</Box>
+							))}
+						</List>
+					</Stack>
+				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cerrar</Button>
 				</DialogActions>

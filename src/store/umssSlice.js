@@ -6,8 +6,11 @@ const initialState = {
 	locations: null,
 	webSites: null,
 	isLoading: false,
-	successFetch: false,
-	errorFetch: false,
+	fetchFailed: false,
+	filterLoading: false,
+	isLoadingL: false,
+	fetchFailedL: false,
+	filterLoadingL: false,
 };
 
 const umssSlice = createSlice({
@@ -17,39 +20,64 @@ const umssSlice = createSlice({
 		setLocations: (state, { payload }) => {
 			state.locations = payload;
 			state.isLoading = false;
-			// state.errorFetch = false;
+			state.filterLoading = false;
 		},
-		setWebSites: (state, { payload }) => {
-			state.webSites = payload;
+		setLoading: state => {
+			state.isLoading = true;
+			state.fetchFailed = false;
+		},
+		setFilterLoading: state => {
+			state.filterLoading = true;
+			state.fetchFailed = false;
+		},
+		setFetchFailed: state => {
+			state.fetchFailed = true;
+			state.filterLoading = false;
 			state.isLoading = false;
 		},
-		setLoading: (state, { payload }) => {
-			state.isLoading = payload;
+
+		setWebSites: (state, { payload }) => {
+			state.webSites = payload;
+			state.isLoadingL = false;
+			state.filterLoadingL = false;
 		},
-		// setErrorFetch: state => {
-		// 	state.errorFetch = true;
-		// 	state.successFetch = false;
-		// 	console.log('true');
-		// },
-		// setSuccessFetch: state => {
-		// 	state.errorFetch = false;
-		// 	state.successFetch = true;
-		// },
+		setLoadingLink: (state, { payload }) => {
+			state.isLoadingL = payload;
+			state.fetchFailedL = false;
+		},
+		setFilterLoadingLink: state => {
+			state.filterLoadingL = true;
+			state.fetchFailedL = false;
+		},
+		setFetchFailedLink: state => {
+			state.fetchFailedL = true;
+			state.filterLoadingL = false;
+			state.isLoadingL = false;
+		},
 	},
 });
 
-export const { setLocations, setWebSites, setLoading } = umssSlice.actions;
+export const {
+	setLocations,
+	setWebSites,
+	setLoading,
+	setLoadingLink,
+	setFetchFailed,
+	setFetchFailedLink,
+	setFilterLoading,
+	setFilterLoadingLink,
+} = umssSlice.actions;
 export default umssSlice.reducer;
 
-export const getLocationsAsync = token => async dispatch => {
-	dispatch(setLoading(true));
+export const getLocationsAsync = (token, search) => async dispatch => {
+	dispatch(setLoading());
 	try {
-		const r = await API.get(`location/list`, {
+		const r = await API.get(`location/list?search=${search}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setLocations(r.data));
 	} catch (e) {
-		dispatch(setLoading(false));
+		dispatch(setFetchFailed());
 		throw new Error(e);
 	}
 };
@@ -103,15 +131,15 @@ export const deleteLocationAsync = (token, id) => async dispatch => {
 	}
 };
 
-export const getSitesAsync = token => async dispatch => {
-	dispatch(setLoading(true));
+export const getSitesAsync = (token, search) => async dispatch => {
+	dispatch(setLoadingLink());
 	try {
-		const r = await API.get(`link/list`, {
+		const r = await API.get(`link/list?search=${search}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setWebSites(r.data));
 	} catch (e) {
-		dispatch(setLoading(false));
+		dispatch(setFetchFailedLink());
 		throw new Error(e);
 	}
 };
@@ -152,8 +180,6 @@ export const editLinkAsync = (token, values, id, image, editedFile) => async dis
 	} else {
 		data = values;
 	}
-	console.log(data, editedFile);
-
 	try {
 		const r = await API.post(`link/update?id=${id}`, data, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -163,3 +189,4 @@ export const editLinkAsync = (token, values, id, image, editedFile) => async dis
 		throw new Error(e);
 	}
 };
+// filters

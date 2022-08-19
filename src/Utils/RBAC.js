@@ -12,7 +12,13 @@ export const hasPrivilege = (pArray, userPermissions) => {
 };
 
 export const getNavlinks = userPermissions => {
-	const navlinks = [{ name: 'Inicio', path: 'home', icon: 'home' }];
+	const navlinks = [
+		{ name: 'Inicio', path: 'home', icon: 'home' },
+		{ name: 'Locaciones', path: 'locations', icon: 'home' },
+		{ name: 'Links', path: 'links', icon: 'home' },
+		{ name: 'Estadisticas', path: 'statics', icon: 'home' },
+		{ name: 'Cajero', path: 'redeem', icon: 'home' },
+	];
 	hasPrivilege(['listar ofertas', 'gestionar ofertas'], userPermissions) &&
 		navlinks.push(getLink('Ofertas'));
 	hasPrivilege(['listar productos', 'gestionar productos'], userPermissions) &&

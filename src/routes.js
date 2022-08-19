@@ -1,164 +1,210 @@
-import { useRoutes, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useRoutes } from 'react-router-dom';
 import AuthLayout from './layouts/AuthLayout';
 import DashboardLayout from './layouts/DashboardLayout';
+import LogoOnlyLayout from './layouts/LogoOnlyLayout';
+import AccountProfile from './pages/AccountProfile';
+import ComplaintPage from './pages/admin/ComplaintPage';
+import CreateRolepage from './pages/admin/CreateRolepage';
+import CreateUserpage from './pages/admin/CreateUserpage';
+import LocationsPage from './pages/admin/LocationsPage';
+import WebLinksPage from './pages/admin/WebLinksPage';
+import CompanieProfile from './pages/CompanieProfile';
 import CreateOfferPage from './pages/CreateOfferPage';
 import CreateSupplierCompanyPage from './pages/CreateSupplierCompanyPage';
-import CreateUserpage from './pages/admin/CreateUserpage';
+import EditCompaniePage from './pages/EditCompaniePage';
 import HomePage from './pages/HomePage';
 import OffersPage from './pages/OffersPage';
 import ProductsPage from './pages/ProductsPage';
-import SupplierCompaniesPage from './pages/SupplierCompaniesPage';
-import LoginPage from './pages/public/LoginPage';
-import RegisterPage from './pages/public/RegisterPage';
-import StaticsPage from './pages/StaticsPage';
-import UsersPage from './pages/UsersPage';
-import LogoOnlyLayout from './layouts/LogoOnlyLayout';
-import NotFoundPage from './pages/public/NotFoundPage';
-import { useSelector } from 'react-redux';
-import RedeemPage from './pages/RedeemPage';
-import CompanieProfile from './pages/CompanieProfile';
 import LandingPage from './pages/public/LandingPage';
-import CreateRolepage from './pages/admin/CreateRolepage';
+import LoginPage from './pages/public/LoginPage';
+import NotFoundPage from './pages/public/NotFoundPage';
+import RegisterPage from './pages/public/RegisterPage';
+import RedeemPage from './pages/RedeemPage';
 import RubrosPage from './pages/RubrosPage';
+import Security from './pages/Security';
+import StaticsPage from './pages/StaticsPage';
+import SupplierCompaniesPage from './pages/SupplierCompaniesPage';
+import UsersPage from './pages/UsersPage';
+import { construct, hasPrivilege } from './Utils/RBAC';
+
 export default function Router() {
 	const isAuth = useSelector(state => state.login.isAuth);
-	const rule = useSelector(state => state.user.rule);
-	// useEffect(() => {
-	// 	console.log('isAuth=>', isAuth);
-	// }, [isAuth]);
-	function rbac() {
-		console.log('rbac', isAuth, rule);
+	const { user } = useSelector(state => state.user);
 
-		if (isAuth === false) {
-			return <Navigate to="/index" replace />;
-		} else if (isAuth === true && rule === 'ADM') {
-			return <Navigate to="/admin/home" replace />;
-		} else if (isAuth === true && rule === 'PRV') {
-			return <Navigate to="/provider/home" replace />;
-		} else if (isAuth === true && rule === 'CJR') {
-			return <Navigate to="/cashier/redeem" replace />;
-		}
-	}
-	function rbacLogin() {
-		// console.log('rbac', rule);
-		if (isAuth === true && rule === 'ADM') {
-			return <Navigate to="/admin/home" replace />;
-		} else if (isAuth === true && rule === 'PRV') {
-			return <Navigate to="/provider/home" replace />;
-		} else if (isAuth === true && rule === 'CJR') {
-			return <Navigate to="/cashier/redeem" replace />;
-		}
-		return null;
-	}
-	const aunthenticated = rol => {
-		// console.log(isAuth, rol, rule);
-		if (isAuth === true && rule === rol) return true;
-	};
+	const permissions = user?.permisos || [];
 	return useRoutes([
+		// public routes
 		{
 			path: '/',
 			element: <AuthLayout />,
 			children: [
 				{
 					path: '/',
-					element: rbac(),
+					element: isAuth ? (
+						<Navigate to="/main/home" replace />
+					) : (
+						<Navigate to="/index" replace />
+					),
 				},
 				{
 					path: 'index',
-					element: isAuth === false ? <LandingPage /> : rbacLogin(),
+					element:
+						isAuth === false ? <LandingPage /> : <Navigate to="/main/home" replace />,
 				},
 				{
 					path: 'login',
-					element: isAuth === false ? <LoginPage /> : rbacLogin(),
+					element:
+						isAuth === false ? <LoginPage /> : <Navigate to="/main/home" replace />,
 				},
 				{
 					path: 'register',
-					element: isAuth === false ? <RegisterPage /> : rbacLogin(),
+					element:
+						isAuth === false ? <RegisterPage /> : <Navigate to="/main/home" replace />,
 				},
 			],
 		},
-
+		// private routes
 		{
-			path: 'admin',
-			element: aunthenticated('ADM') ? (
-				<DashboardLayout />
-			) : isAuth ? (
-				<Navigate to="/error/404" replace />
-			) : (
-				<Navigate to="/" replace />
-			),
+			path: 'main',
+			element: isAuth ? <DashboardLayout /> : <Navigate to="/" replace />,
 			children: [
-				{ path: 'home', element: <HomePage /> },
+				{
+					path: 'home',
+					element: isAuth ? <HomePage /> : <Navigate to="/" replace />,
+				},
 				{
 					path: 'offers',
-					element: <OffersPage />,
+					element: construct(
+						['listar ofertas', 'gestionar ofertas'],
+						<OffersPage />,
+						permissions
+					),
 				},
-				{ path: 'createOffer', element: <CreateOfferPage /> },
-				{ path: 'products', element: <ProductsPage /> },
+				{
+					path: 'createOffer',
+					element: construct(
+						['crear oferta', 'gestionar ofertas'],
+						<CreateOfferPage />,
+						permissions
+					),
+				},
+				{
+					path: 'products',
+					element: construct(
+						['gestionar productos', 'listar productos', 'crear producto'],
+						<ProductsPage />,
+						permissions
+					),
+				},
 				{
 					path: 'supplierCompanies',
-					element: <SupplierCompaniesPage />,
+					element: construct(
+						['gestionar empresas', 'listar empresas'],
+						<SupplierCompaniesPage />,
+						permissions
+					),
 				},
 				{
-					path: 'supplierCompanies/:idEmpresa',
-					element: <CompanieProfile />,
+					path: 'supplierCompanies/:idCompanie',
+					element: construct(
+						['gestionar empresas', 'perfil de empresa'],
+						<CompanieProfile />,
+						permissions
+					),
 				},
 				{
-					path: 'createSupplierCompanie',
-					element: <CreateSupplierCompanyPage />,
+					path: 'profileCompanie',
+					element: !hasPrivilege(['gestionar empresas'], permissions) ? (
+						construct(['perfil de empresa'], <CompanieProfile />, permissions)
+					) : (
+						<Navigate to="/error/404" replace />
+					),
+				},
+				{
+					path: 'registerCompanie',
+					element: construct(
+						['gestionar empresas', 'crear empresa'],
+						<CreateSupplierCompanyPage />,
+						permissions
+					),
+				},
+				{
+					path: 'updateCompanie',
+					element: <EditCompaniePage />,
 				},
 				{
 					path: 'rubros',
-					element: <RubrosPage />,
+					element: construct(
+						['gestionar rubros', 'listar rubros'],
+						<RubrosPage />,
+						permissions
+					),
 				},
 				{
 					path: 'users',
-					element: <UsersPage />,
+					element: construct(
+						['gestionar usuarios', 'listar usuarios'],
+						<UsersPage />,
+						permissions
+					),
 				},
-				{ path: 'createUser', element: <CreateUserpage /> },
-				{ path: 'createRole', element: <CreateRolepage /> },
-
-				{ path: 'statics', element: <StaticsPage /> },
-			],
-		},
-		{
-			path: 'provider',
-			element: aunthenticated('PRV') ? (
-				<DashboardLayout />
-			) : isAuth ? (
-				<Navigate to="/error/404" replace />
-			) : (
-				<Navigate to="/" replace />
-			),
-			children: [
-				{ path: 'home', element: <HomePage /> },
 				{
-					path: 'offers',
-					element: <OffersPage />,
+					path: 'createUser',
+					element: construct(
+						['crear usuario', 'gestionar usuarios'],
+						<CreateUserpage />,
+						permissions
+					),
 				},
-				{ path: 'createOffer', element: <CreateOfferPage /> },
-				{ path: 'products', element: <ProductsPage /> },
-				{ path: 'profileCompanie', element: <CompanieProfile /> },
-				{ path: 'registerCompanie', element: <CreateSupplierCompanyPage /> },
-				{ path: 'statics', element: <StaticsPage /> },
+				{
+					path: 'createRole',
+					element: construct(['gestionar roles'], <CreateRolepage />, permissions),
+				},
+				{
+					path: 'statics',
+					element: construct(['estadisticas'], <StaticsPage />, permissions),
+				},
+				{
+					path: 'redeem',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <RedeemPage />,
+				},
+				{
+					path: 'locations',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <LocationsPage />,
+				},
+				{
+					path: 'links',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <WebLinksPage />,
+				},
+				{
+					path: 'complaints',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <ComplaintPage />,
+				},
+				{
+					path: 'security',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <Security />,
+				},
+				{
+					path: 'profile',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <AccountProfile />,
+				},
 			],
 		},
-		{
-			path: 'cashier',
-			element: aunthenticated('CJR') ? (
-				<DashboardLayout />
-			) : isAuth ? (
-				<Navigate to="/error/404" replace />
-			) : (
-				<Navigate to="/" replace />
-			),
-			children: [{ path: 'redeem', element: <RedeemPage /> }],
-		},
+		// not found
 		{
 			path: '/error',
 			element: <LogoOnlyLayout />,
 			children: [
 				{ path: '404', element: <NotFoundPage /> },
+				{ path: 'unauthorized', element: <NotFoundPage /> },
 				{ path: '*', element: <Navigate to="/error/404" replace /> },
 			],
 		},

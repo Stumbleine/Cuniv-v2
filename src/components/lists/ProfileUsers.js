@@ -35,7 +35,7 @@ export default function ProfileUsers(props) {
 							<Avatar alt={user.nombres} src={user.picture} />
 						</ListItemAvatar>
 						<ListItemText
-							primary={user.nombres + user.apellidos}
+							primary={user.nombres + ' ' + user.apellidos}
 							secondary="responsable"
 						/>
 						{isAdmin && (

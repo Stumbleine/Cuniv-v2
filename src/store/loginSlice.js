@@ -36,7 +36,6 @@ const loginSlice = createSlice({
 		},
 		setLogout: state => {
 			state.accessToken = null;
-
 			state.isAuth = false;
 		},
 		setRegister: state => {

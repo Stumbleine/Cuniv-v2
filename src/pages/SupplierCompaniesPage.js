@@ -1,5 +1,17 @@
 import { Add, Pending } from '@mui/icons-material';
-import { Container, Grid, Typography, Stack, Button, Chip } from '@mui/material';
+import {
+	Container,
+	Grid,
+	Typography,
+	Stack,
+	Button,
+	Chip,
+	FormControl,
+	InputLabel,
+	Select,
+	OutlinedInput,
+	MenuItem,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +23,7 @@ import { hasPrivilege } from '../Utils/RBAC';
 import { compNotVerifiedAsync, getCompaniesAsync } from '../store/companiesSlice';
 import CompanieNV from '../components/cards/CompanieNV';
 import SkeletonCompanie from '../components/skeletons/SkeletonCompanie';
+import FilterBar from '../components/FilterBar';
 
 function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
@@ -92,24 +105,41 @@ function SupplierCompaniesPage() {
 						Empresas
 					</Typography>
 					<Stack
-						direction="row"
-						flexWrap="wrap-reverse"
+						direction={{ xs: 'column', md: 'row' }}
 						alignItems="center"
-						justifyContent="flex-end"
+						// justifyContent="flex-end"
 						sx={{ mb: 3 }}
 						spacing={2}>
-						<Chip
-							label={
-								<Typography variant="body2" component="span">
-									Solicitudes ({companiesNV ? companiesNV.length : '0'})
-								</Typography>
-							}
-							variant={showNVCompanies ? 'filled' : 'outlined'}
-							onClick={handleClick}
-							icon={<Pending></Pending>}
-						/>
+						<FilterBar>
+							<FormControl sx={{ minWidth: 200 }} size="small">
+								<InputLabel id="rubrof-label">Rubro</InputLabel>
+								<Select
+									labelId="rubrof-label"
+									id="rubro-filter"
+									defaultValue={'All'}
+									input={<OutlinedInput id="rubro-filter" label="Rubro" />}>
+									<MenuItem value="All">Todos</MenuItem>
+									<MenuItem value="PRV">Restaurante</MenuItem>
+									<MenuItem value="ADM">Salud</MenuItem>
+									<MenuItem value="SADM">Parque</MenuItem>
+									<MenuItem value="EST">Electricidad</MenuItem>
+								</Select>
+							</FormControl>
+							<Chip
+								label={
+									<Typography variant="body2" component="span">
+										Solicitudes ({companiesNV ? companiesNV.length : '0'})
+									</Typography>
+								}
+								variant={showNVCompanies ? 'filled' : 'outlined'}
+								onClick={handleClick}
+								icon={<Pending></Pending>}
+							/>
+						</FilterBar>
+
 						{showButton && (
 							<Button
+								sx={{ width: { xs: '100%', md: 'auto' } }}
 								component={Link}
 								to="/main/registerCompanie"
 								startIcon={<Add />}

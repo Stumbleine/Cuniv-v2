@@ -10,6 +10,7 @@ import publicReducer from './publicSlice';
 import settingReducer from './settingSlice';
 import rubrosReducer from './rubrosSlice';
 import umssSlice from './umssSlice';
+import complaintSlice from './complaintSlice';
 // MIDDLEWARE
 const localStorageMiddleware = ({ getState }) => {
 	return next => action => {
@@ -37,7 +38,6 @@ const reHydrateStore = () => {
 export default configureStore({
 	reducer: {
 		setting: settingReducer,
-		// public: publicReducer,
 		user: userReducer,
 		login: loginReducer,
 		users: usersReducer,
@@ -45,8 +45,10 @@ export default configureStore({
 		offers: offersReducer,
 		products: productsReducer,
 		rubros: rubrosReducer,
-		// statics: statisticsReducer,
+		complaint: complaintSlice,
 		umss: umssSlice,
+		// public: publicReducer,
+		// statics: statisticsReducer,
 	},
 
 	middleware: curryGetDefaultMiddleware =>

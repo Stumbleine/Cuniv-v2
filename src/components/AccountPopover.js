@@ -13,8 +13,8 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLogout } from '../store/loginSlice';
 import { GoogleLogout } from 'react-google-login';
-import { Logout, Person } from '@mui/icons-material';
-import { setUser } from '../store/userSlice';
+import { Lock, Logout, Person } from '@mui/icons-material';
+import { setIsAdmin, setUser } from '../store/userSlice';
 import { setNavlinks } from '../store/settingSlice';
 function AccountPopover() {
 	const dispatch = useDispatch();
@@ -34,6 +34,7 @@ function AccountPopover() {
 		dispatch(setLogout());
 		dispatch(setUser(null));
 		dispatch(setNavlinks([]));
+		dispatch(setIsAdmin(false));
 		handleCloseUserMenu();
 		// renderProps.onClick();
 	};
@@ -59,9 +60,12 @@ function AccountPopover() {
 
 			<Menu
 				sx={{
-					mt: '45px',
+					mt: '40px',
 					minWidth: 250,
+					// borderRadius: 10,
+					// background: 'pink',
 				}}
+				PaperProps={{ style: { borderRadius: 7 } }}
 				id="menu-appbar"
 				anchorEl={anchorElUser}
 				anchorOrigin={{
@@ -84,13 +88,12 @@ function AccountPopover() {
 					</Typography>
 				</Box>
 				<Divider sx={{ my: 1 }} />
-				{/* Items */}
-				{/* <Divider sx={{ my: 1 }} /> */}
+
 				<MenuItem
 					sx={{ typography: 'body2', py: 1, px: 2.5 }}
 					component={RouterLink}
 					onClick={handleCloseUserMenu}
-					to="home">
+					to="profile">
 					<Person
 						sx={{
 							mr: 2,
@@ -101,6 +104,21 @@ function AccountPopover() {
 					/>{' '}
 					Perfil
 				</MenuItem>
+				<MenuItem
+					sx={{ typography: 'body2', py: 1, px: 2.5 }}
+					component={RouterLink}
+					onClick={handleCloseUserMenu}
+					to="security">
+					<Lock
+						sx={{
+							mr: 2,
+							width: 24,
+							height: 24,
+							color: 'text.secondary',
+						}}
+					/>{' '}
+					Seguridad
+				</MenuItem>
 				<GoogleLogout
 					clientId={clientId}
 					onLogoutSuccess={() => {
@@ -109,7 +127,6 @@ function AccountPopover() {
 					render={renderProps => (
 						<MenuItem
 							sx={{ typography: 'body2', py: 1, px: 2.5 }}
-							// component={RouterLink}
 							onClick={() => logOut()}>
 							<Logout
 								sx={{

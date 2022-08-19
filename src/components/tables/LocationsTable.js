@@ -1,15 +1,6 @@
-import {
-	Book,
-	Delete,
-	Edit,
-	HelpCenter,
-	QuestionMark,
-	School,
-} from '@mui/icons-material';
+import { Book, HelpCenter, School, Warning } from '@mui/icons-material';
 import {
 	Box,
-	Card,
-	IconButton,
 	Paper,
 	Stack,
 	Table,
@@ -33,7 +24,9 @@ export default function LocationsTable() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 
-	const { locations, isLoading } = useSelector(state => state.umss);
+	const { locations, isLoading, filterLoading, fetchFailed } = useSelector(
+		state => state.umss
+	);
 	const [rowsPerPage, setRowsPerPage] = useState(7);
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
@@ -70,7 +63,9 @@ export default function LocationsTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{locations ? (
+					{filterLoading ? (
+						<SkeletonTable head={TABLE_HEAD} />
+					) : locations ? (
 						locations
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map(location => (
@@ -112,20 +107,33 @@ export default function LocationsTable() {
 									</TableCell>
 								</TableRow>
 							))
-					) : isLoading ? (
-						<SkeletonTable head={TABLE_HEAD} />
 					) : (
-						<TableRow sx={{ textAlign: 'center', p: 2 }}>
-							<TableCell>
-								<Typography color="textSecondary">
-									No tiene locaciones registrados aun
-								</Typography>
-							</TableCell>
-						</TableRow>
+						isLoading && <SkeletonTable head={TABLE_HEAD} />
 					)}
 				</TableBody>
 			</Table>
-
+			{!locations && !isLoading && !fetchFailed && (
+				<Box width={1} sx={{ py: 2 }}>
+					<Typography textAlign="center" color="textSecondary">
+						No se encontraron ubicaciones
+					</Typography>
+				</Box>
+			)}
+			{fetchFailed && (
+				<Box
+					width={1}
+					sx={{
+						py: 2,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<Warning color="error" sx={{ mr: 2 }} />
+					<Typography textAlign="center" color="error">
+						Error del servidor
+					</Typography>
+				</Box>
+			)}
 			{locations && (
 				<TablePagination
 					rowsPerPageOptions={[7]}

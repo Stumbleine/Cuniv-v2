@@ -4,6 +4,8 @@ import { convertToB64 } from '../Utils/Helper';
 const initialState = {
 	products: null,
 	isLoading: false,
+	filterLoading: false,
+	fetchFailed: false,
 	// companiesToAsing:null
 };
 
@@ -14,15 +16,30 @@ const productsSlice = createSlice({
 		setProducts: (state, { payload }) => {
 			state.products = payload;
 			state.isLoading = false;
+			state.filterLoading = false;
 		},
 		setLoading: (state, { payload }) => {
 			state.isLoading = payload;
+			state.fetchFailed = false;
+		},
+		setFilterLoading: state => {
+			state.filterLoading = true;
+			state.fetchFailed = false;
+		},
+		setFetchFailed: state => {
+			state.fetchFailed = true;
+			state.filterLoading = false;
+			state.isLoading = false;
 		},
 		// setCompanies:(state,{payload}) =>{
 		// 	state.companiesToAsing = payload;
 		// }
 	},
 });
+
+export const { setProducts, setLoading, setFilterLoading, setFetchFailed } =
+	productsSlice.actions;
+export default productsSlice.reducer;
 
 export const productsAsync = token => async dispatch => {
 	dispatch(setLoading(true));
@@ -33,6 +50,21 @@ export const productsAsync = token => async dispatch => {
 		dispatch(setProducts(r.data));
 		console.log('productsData->r:', r.data);
 	} catch (e) {
+		dispatch(setFetchFailed());
+		throw new Error(e);
+	}
+};
+
+export const filterProductsAsync = (token, search, idc) => async dispatch => {
+	dispatch(setFilterLoading());
+	try {
+		const r = await API.get(`producto/list?search=${search}&idc=${idc}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setProducts(r.data));
+		console.log('filterData->r:', r.data);
+	} catch (e) {
+		dispatch(setFetchFailed());
 		throw new Error(e);
 	}
 };
@@ -70,5 +102,3 @@ export const companiesAsignAsync = token => async () => {
 	}
 	return r;
 };
-export const { setProducts, setLoading } = productsSlice.actions;
-export default productsSlice.reducer;

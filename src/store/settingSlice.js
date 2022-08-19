@@ -17,7 +17,7 @@ const settingSlice = createSlice({
 			console.log('payload', payload);
 			state.navlinks = getNavlinks(payload);
 		},
-
+		// para futuros temas
 		setThemeMode: state => {
 			let m = state.theme.mode === 'light' ? 'dark' : 'light';
 			state.theme.mode = m;

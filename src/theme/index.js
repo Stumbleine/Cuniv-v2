@@ -42,6 +42,12 @@ export const lightTheme = createTheme({
 	shape: {
 		borderRadius: 8,
 	},
+	// breakpoints:{
+	// 	values:{
+
+	// 	},
+	// 	keys:['xxs','xs','sm','md','lg','xl']
+	// }
 });
 export const darkTheme = createTheme({
 	mode: 'dark',
@@ -82,5 +88,6 @@ export const darkTheme = createTheme({
 		borderRadius: 8,
 	},
 });
+
 lightTheme.components = componentsOverride(lightTheme);
 darkTheme.components = componentsOverride(darkTheme);
