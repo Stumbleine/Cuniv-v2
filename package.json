@@ -14,6 +14,7 @@
 		"axios": "^0.26.1",
 		"formik": "^2.2.9",
 		"leaflet": "^1.8.0",
+		"moment": "^2.29.4",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-google-login": "^5.2.2",

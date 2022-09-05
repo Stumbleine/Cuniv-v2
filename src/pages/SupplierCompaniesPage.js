@@ -35,7 +35,7 @@ function SupplierCompaniesPage() {
 	// const [companies, setCompanies] = useState(null);
 	// const [companiesNV, setcompaniesNV] = useState(null);
 	useEffect(() => {
-		document.title = 'cuniv | empresas';
+		document.title = 'ssansi | empresas';
 		if (hasPrivilege(['crear empresa', 'gestionar empresas'], user.permisos) || isAdmin) {
 			setShowButton(true);
 		}
@@ -111,7 +111,7 @@ function SupplierCompaniesPage() {
 						sx={{ mb: 3 }}
 						spacing={2}>
 						<FilterBar>
-							<FormControl sx={{ minWidth: 200 }} size="small">
+							<FormControl sx={{ minWidth: { xs: 1, sm: 160 } }} size="small">
 								<InputLabel id="rubrof-label">Rubro</InputLabel>
 								<Select
 									labelId="rubrof-label"

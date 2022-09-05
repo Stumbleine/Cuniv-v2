@@ -43,7 +43,7 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 								{user.nombres + ' ' + user.apellidos}
 							</Typography>
 							<Typography variant="body2" sx={{ color: 'text.secondary' }}>
-								Administrador
+								{user?.email}
 							</Typography>
 						</Box>
 					</Box>

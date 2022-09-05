@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
+import moment from 'moment';
 import React from 'react';
 import StatusLabel from '../StatusLabel';
 
@@ -39,7 +40,7 @@ export default function Complaint({ complaint }) {
 								{complaint?.student.names}
 							</Typography>
 							<Typography color="textSecondary" variant="body2">
-								{complaint?.date}
+								{moment(complaint?.date).format('LL')}
 							</Typography>
 						</Box>
 					</Box>

@@ -1,5 +1,6 @@
 import { Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { borderRadius, style } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,18 +19,20 @@ export default function SnackCustom({ data, closeSnack, father }) {
 		data.redirectPath && navigate(data?.redirectPath);
 	};
 	useEffect(() => {
-		console.log('SI ejecuta', father);
 		setOpen(data.open);
 	}, [data]);
 
 	return (
 		<Snackbar
-			// sx={{ zIndex: 1, position: 'absolute' }}
+			sx={{ borderRadius: 5 }}
 			open={open}
 			autoHideDuration={3000}
 			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
 			onClose={handleClose}>
-			<Alert onClose={handleClose} severity={data.severity || 'success'}>
+			<Alert
+				sx={{ borderRadius: 1 }}
+				onClose={handleClose}
+				severity={data.severity || 'success'}>
 				{data.msg}
 			</Alert>
 		</Snackbar>

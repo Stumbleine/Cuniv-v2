@@ -51,7 +51,7 @@ export default function LocationsTable() {
 	};
 
 	return (
-		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+		<TableContainer component={Paper} sx={{ borderRadius: 2, mt: 2 }}>
 			<Table>
 				<TableHead sx={{ bgcolor: 'primary.main' }}>
 					<TableRow>

@@ -136,7 +136,7 @@ function LoginPage() {
 							helperText={touched.password && errors.password}
 						/>
 
-						<Box sx={{ py: 1, position: 'relative' }}>
+						<Box sx={{ py: 2, position: 'relative' }}>
 							<Button
 								color="primary"
 								/* 						disabled={formik.isSubmitting} */
@@ -160,6 +160,16 @@ function LoginPage() {
 									}}
 								/>
 							)}
+							<Stack direction="row" justifyContent="flex-end">
+								<Typography
+									component={Link}
+									to="/forgot-password"
+									variant="caption"
+									color="textSecondary"
+									sx={{ textDecorationLine: 'underline' }}>
+									¿olvido su contraseña?
+								</Typography>
+							</Stack>
 						</Box>
 						{isAuthFailed && (
 							<Typography color="error" variant="caption" textAlign="center">

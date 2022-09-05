@@ -57,7 +57,6 @@ export default function AddLinkForm() {
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm }) => {
-			console.log('asda');
 			const add = async () => {
 				return await dispatch(addSiteASync(accessToken, values, fileImage));
 			};

@@ -88,7 +88,13 @@ export default function WebLinksPage() {
 					<Grid item xs={12} md={6}>
 						<FilterBar handleSearch={handleSearch} />
 						<Paper
-							sx={{ p: 2, maxHeight: 600, overflow: 'scroll', overflowX: 'hidden' }}
+							sx={{
+								p: 2,
+								mt: 2,
+								maxHeight: 600,
+								overflow: 'scroll',
+								overflowX: 'hidden',
+							}}
 							className="container">
 							<ListLinks />
 						</Paper>

@@ -31,38 +31,43 @@ import { createOfferAsync } from '../../store/offersSlice';
 import * as Yup from 'yup';
 import SnackCustom from '../SnackCustom';
 import API from '../../conection';
-import { green } from '@mui/material/colors';
+import { amber, green } from '@mui/material/colors';
 import CheckFrequency from './CheckFrequency';
 
 function OfferRegisterForm() {
 	const dispatch = useDispatch();
-	const products = useSelector(state => state.products.products);
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-	const { sucursales } = useSelector(state => state.companies);
 	const [fileImage, setFileImage] = useState(null);
 	const [prdInclude, setPrdInclude] = useState([]);
-	const [checkSucursal, setCheckSucursal] = useState([]);
+	const [branchSelected, setBranchSelected] = useState([]);
+	const [products, setProducts] = useState(null);
 	const [companies, setCompanies] = useState(null);
+	const [branchOffices, setBranchOffices] = useState(null);
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
 		severity: 'success',
 		redirectPath: null,
 	});
+
 	useEffect(() => {
 		async function fetch() {
-			const r = await API.get('producto/companies', {
+			const r = await API.get('select/companies', {
 				headers: { Authorization: `Bearer ${accessToken}` },
 			});
 			setCompanies(r.data);
+			setBranchOffices(null);
+			setProducts(null);
 		}
+
 		isAdmin && fetch();
 	}, []);
-	useEffect(() => {
-		console.log('productos Seleccionados', prdInclude);
-		console.log('sucursal Seleccionados', checkSucursal);
-	}, [prdInclude, checkSucursal]);
+
+	// useEffect(() => {
+	// 	console.log('productos Seleccionados', prdInclude);
+	// 	console.log('sucursal Seleccionados', branchSelected);
+	// }, [prdInclude, branchSelected]);
 
 	const theme = useTheme();
 	const ITEM_HEIGHT = 48;
@@ -77,7 +82,6 @@ function OfferRegisterForm() {
 	};
 
 	const handleChangeFile = file => {
-		console.log('file-add-success', file);
 		setFileImage(file);
 	};
 
@@ -85,17 +89,14 @@ function OfferRegisterForm() {
 		const {
 			target: { value },
 		} = event;
-		setPrdInclude(
-			// On autofill we get a stringified value.
-			typeof value === 'string' ? value.split(',') : value
-		);
+		setPrdInclude(typeof value === 'string' ? value.split(',') : value);
 	};
 
-	const handleCheckSucursal = event => {
+	const handleSelectBranch = event => {
 		const {
 			target: { value },
 		} = event;
-		setCheckSucursal(typeof value === 'string' ? value.split(',') : value);
+		setBranchSelected(typeof value === 'string' ? value.split(',') : value);
 	};
 
 	function getStyles(name, personName, theme) {
@@ -106,12 +107,11 @@ function OfferRegisterForm() {
 					: theme.typography.fontWeightMedium,
 		};
 	}
+	const [frequency, setFrequency] = useState('unlimited');
 
-	const ids = sucursales.map(s => {
-		let array = [];
-		array.push(s.id_sucursal.toString());
-		return array;
-	});
+	const handleFrequency = event => {
+		setFrequency(event.target.value);
+	};
 
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
@@ -128,27 +128,35 @@ function OfferRegisterForm() {
 			tipo_descuento: 'Porcentual',
 			descuento: '',
 			condiciones: '',
-			sucursales_disp: { ids: ids },
-			// id_empresa: 'none',
+			id_empresa: 0,
 		},
 		validationSchema: Yup.object().shape({
 			titulo: Yup.string().required('Titulo de oferta es necesario'),
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
-			// id_empresa: isAdmin
-			// 	? Yup.number().typeError('Debe elegir la empresa').required()
-			// 	: '',
+			id_empresa: isAdmin
+				? Yup.number().typeError('Debe elegir la empresa').required()
+				: '',
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			console.log(values);
 			const register = async () => {
-				return await dispatch(createOfferAsync(values, fileImage, prdInclude));
+				return await dispatch(
+					createOfferAsync(
+						accessToken,
+						values,
+						fileImage,
+						prdInclude,
+						branchSelected,
+						frequency
+					)
+				);
 			};
 			register()
 				.then(() => {
-					handleSnack('Link agregado exitosamente', 'success');
-					resetForm();
+					handleSnack('Oferta agregado exitosamente', 'success');
+					setSubmitting(false);
+					// resetForm();
 				})
 				.catch(() => {
 					handleSnack('Algo salio, vuelva a intentarlo', 'error');
@@ -157,7 +165,34 @@ function OfferRegisterForm() {
 		},
 	});
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+	const [loadingProd, setLoadingProd] = useState(false);
+	useEffect(() => {
+		console.log('cambios valor');
+		async function fetchProducts() {
+			setLoadingProd(true);
 
+			const id = isAdmin ? values.id_empresa : user.companie;
+			const r = await API.get('select/products?empresa=' + id, {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setProducts(r.data);
+		}
+		async function fetchBranchs() {
+			const id = isAdmin ? values.id_empresa : user.companie;
+
+			const r = await API.get('select/sucursales?empresa=' + id, {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setBranchOffices(r.data);
+		}
+		if (!isAdmin) {
+			fetchBranchs();
+			fetchProducts();
+		} else if (isAdmin && values.id_empresa !== 0) {
+			fetchBranchs();
+			fetchProducts();
+		}
+	}, [values.id_empresa]);
 	return (
 		<FormikProvider value={formik}>
 			<SnackCustom data={snack} closeSnack={closeSnack} />
@@ -172,7 +207,9 @@ function OfferRegisterForm() {
 								handleChangeFile={handleChangeFile}
 							/>
 							{/* datos de la oferta */}
-							<Typography sx={{ fontWeight: 'bold', mb: 1 }}>Información</Typography>
+							<Typography sx={{ fontWeight: 'bold', mb: 1, mt: 1 }}>
+								Información
+							</Typography>
 							<Stack spacing={2}>
 								<TextField
 									required
@@ -222,7 +259,7 @@ function OfferRegisterForm() {
 									</Box>
 								</Stack>
 								<Stack spacing={1}>
-									<InputLabel>Tipo de descuento *</InputLabel>
+									<InputLabel>Descuento *</InputLabel>
 									<Box
 										sx={{
 											display: 'flex',
@@ -288,13 +325,16 @@ function OfferRegisterForm() {
 											fullWidth
 											size="small"
 											{...getFieldProps('id_empresa')}
+											placeholder="sas"
+											defaultValue={0}
+											disabled={!companies}
 											error={Boolean(touched.id_empresa && errors.id_empresa)}>
 											{companies?.map(item => (
 												<MenuItem key={item.id_empresa} value={item.id_empresa}>
 													{item.razon_social}
 												</MenuItem>
 											))}
-											<MenuItem value="none">None</MenuItem>
+											{!companies && <MenuItem value={0}>cargando.. </MenuItem>}
 										</Select>
 										<Typography sx={{ ml: 2 }} variant="caption" color="error">
 											{errors.id_empresa}
@@ -303,65 +343,56 @@ function OfferRegisterForm() {
 								)}
 								<Box>
 									<Typography fontWeight="bold">Sucursales</Typography>
-									<Typography color="textSecondary" sx={{ mb: 1 }}>
+									<Typography color="textSecondary">
 										Seleccione sucursales donde aplica la oferta
 									</Typography>
-									<Stack
-										direction="column"
-										spacing={1}
-										sx={{
-											alignItems: 'center',
-											bgcolor: 'grey.100',
-											py: 2,
-											borderRadius: 2,
-											overflowY: 'scroll',
-											height: 200,
-										}}>
-										{[
-											{
-												id_sucursal: 1,
-												nombre: 'Sucursal central',
-												direccion: 'Av. Junin y Ayaroa',
-											},
-											{
-												id_sucursal: 2,
-												nombre: 'Sucursal Km4',
-												direccion: 'Av. Blanco Galindo',
-											},
-										]?.map(n => (
-											<Paper
-												key={n.id_sucursal}
-												sx={{
-													display: 'flex',
-													alignItems: 'center',
-													width: '90%',
-													borderRadius: 1,
-													minWidth: 200,
-													minHeight: 60,
-													p: 1,
-													bgcolor: 'background.paper',
-												}}>
-												{/* <CheckBox chec sx={{ ml: 1 }} /> */}
-												<FormControlLabel
-													control={<Checkbox value={n} />}
-													sx={{ ml: 0.5 }}
-												/>
-												<Box>
-													<Typography variant="body1">{n.nombre}</Typography>
-													<Typography variant="body2" color="textSecondary">
-														direccion: {n.direccion}
-													</Typography>
-												</Box>
-											</Paper>
+									<Typography sx={{ color: 'warning.main', mb: 1 }}>
+										Por defecto se mostrara en todas las sucursales
+									</Typography>
+									{/* Aqui checks de sucursales */}
+
+									<Select
+										labelId="branch-select-label"
+										multiple
+										defaultValue={{ id: 0, name: 'Todas' }}
+										fullWidth
+										size="small"
+										value={branchSelected}
+										onChange={handleSelectBranch}
+										disabled={!branchOffices}
+										input={<OutlinedInput />}
+										renderValue={s => (
+											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+												{s?.map(value => (
+													<Chip key={value.id_sucursal} label={value.nombre} />
+												))}
+											</Box>
+										)}
+										MenuProps={MenuProps}>
+										{branchOffices?.map(branch => (
+											<MenuItem
+												key={branch.id_sucursal}
+												value={branch}
+												style={getStyles(branch.nombre, branchSelected, theme)}>
+												{branch.nombre}
+											</MenuItem>
 										))}
-									</Stack>
+									</Select>
+									{!branchOffices && (
+										<Typography color="textSecondary" variant="caption">
+											cargando..
+										</Typography>
+									)}
 								</Box>
 
 								<Box sx={{ width: '100%' }}>
 									<Typography sx={{ fontWeight: 'bold' }}>Productos</Typography>
-									<InputLabel sx={{ mb: 1 }}>
+									<InputLabel>
 										Seleccione los productos que incluye la oferta (opcional)
 									</InputLabel>
+									<Typography sx={{ color: 'warning.main', mb: 1 }}>
+										Por defecto se incluiran todos
+									</Typography>
 									<Select
 										labelId="prd-select-label"
 										multiple
@@ -369,6 +400,7 @@ function OfferRegisterForm() {
 										size="small"
 										value={prdInclude}
 										onChange={handleChange}
+										disabled={!products}
 										input={<OutlinedInput />}
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -387,9 +419,14 @@ function OfferRegisterForm() {
 											</MenuItem>
 										))}
 									</Select>
+									{!products && (
+										<Typography color="textSecondary" variant="caption">
+											cargando.. o puede no tener registros.
+										</Typography>
+									)}
 								</Box>
 
-								<CheckFrequency />
+								<CheckFrequency handleFrequency={handleFrequency} />
 								<CardActions sx={{ justifyContent: 'end', p: 0 }}>
 									<Button onClick={() => console.log(values)}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>
@@ -424,11 +461,75 @@ function OfferRegisterForm() {
 		</FormikProvider>
 	);
 }
-export const S = [
-	{
-		nombre: 'Sucursal plaza lyncoln',
-		direccion: 'Calle Illapa casi Parque Lyncoln 591, Cbba - Bolivia ',
-	},
-	{ nombre: 'Sucursal central', direccion: 'Plaza Lyncoln ' },
-];
 export default OfferRegisterForm;
+
+export const list = [
+	{
+		id: 1,
+		name: 'Sucursal central',
+		address: 'Av. Junin y Ayaroa',
+	},
+	{
+		id: 2,
+		name: 'Sucursal Km4',
+		address: 'Av. Blanco Galindo',
+	},
+	{
+		id: 3,
+		name: 'Sucursal Sur',
+		address: 'Av. Junin y Ayaroa',
+	},
+	{
+		id: 4,
+		name: 'Sucursal Sacaba',
+		address: 'Av. Blanco Galindo',
+	},
+];
+/* <Stack
+										direction="column"
+										spacing={1}
+										sx={{
+											alignItems: 'center',
+											bgcolor: 'grey.100',
+											py: 2,
+											borderRadius: 2,
+											overflowY: 'scroll',
+											height: 200,
+										}}>
+										{[
+											{
+												id_sucursal: 1,
+												nombre: 'Sucursal central',
+												direccion: 'Av. Junin y Ayaroa',
+											},
+											{
+												id_sucursal: 2,
+												nombre: 'Sucursal Km4',
+												direccion: 'Av. Blanco Galindo',
+											},
+										]?.map(n => (
+											<Paper
+												key={n.id_sucursal}
+												sx={{
+													display: 'flex',
+													alignItems: 'center',
+													width: '90%',
+													borderRadius: 1,
+													minWidth: 200,
+													minHeight: 60,
+													p: 1,
+													bgcolor: 'background.paper',
+												}}>
+												<FormControlLabel
+													control={<Checkbox value={n} />}
+													sx={{ ml: 0.5 }}
+												/>
+												<Box>
+													<Typography variant="body1">{n.nombre}</Typography>
+													<Typography variant="body2" color="textSecondary">
+														direccion: {n.direccion}
+													</Typography>
+												</Box>
+											</Paper>
+										))}
+									</Stack> */

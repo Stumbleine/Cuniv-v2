@@ -23,7 +23,7 @@ function RedeemPage() {
 	const [redeemError, setRedeemError] = useState(false);
 	const [redeemSuccess, setRedeemSuccess] = useState(false);
 	useEffect(() => {
-		document.title = 'cuniv | cajero';
+		document.title = 'ssansi | cajero';
 	}, []);
 
 	const formik = useFormik({

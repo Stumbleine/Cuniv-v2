@@ -70,7 +70,6 @@ export default function EditLink({ link }) {
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm }) => {
-			console.log('asda');
 			const add = async () => {
 				return await dispatch(
 					editLinkAsync(accessToken, values, link.id, fileImage, editFile)

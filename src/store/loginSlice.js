@@ -51,6 +51,7 @@ const loginSlice = createSlice({
 	},
 });
 export const loginAsync = user => async dispatch => {
+	console.log(user);
 	dispatch(setLoading());
 	try {
 		const r = await API.post('auth/login', user);
@@ -74,10 +75,10 @@ export const loginGoogleAsync = user => async dispatch => {
 		apellidos: user.familyName,
 	};
 	try {
-		const r = await API.post('auth/login', data);
+		const r = await API.post('auth/auth-google', data);
 		console.log('login->r :', r);
-		dispatch(setToken(r.data.idUser));
-		await dispatch(getUserAsync());
+		dispatch(setToken(r.data.token));
+		await dispatch(getUserAsync(r.data.token));
 		dispatch(setAuth());
 	} catch (e) {
 		throw new Error(e);
@@ -96,8 +97,8 @@ export const logoutAsync = () => async dispatch => {
 		throw new Error(e);
 	}
 };
+
 export const registerAsync = user => async dispatch => {
-	// const { registerSuccess } = useSelector(state => state.login);
 	let succes = false;
 	dispatch(setLoading());
 	try {
@@ -109,6 +110,16 @@ export const registerAsync = user => async dispatch => {
 		throw new Error(e);
 	}
 	return succes;
+};
+
+export const forgotPassword = values => async dispatch => {
+	dispatch(setLoading());
+	try {
+		const r = await API.post('auth/forgot-password', values);
+		dispatch(setRegister());
+	} catch (e) {
+		throw new Error(e);
+	}
 };
 
 export const {

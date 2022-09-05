@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 function StaticsPage() {
 	useEffect(() => {
-		document.title = 'cuniv | estadisticas';
+		document.title = 'ssansi | estadisticas';
 	}, []);
 	return <div>StaticsPage</div>;
 }

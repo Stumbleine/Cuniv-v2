@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Complaint from '../../components/cards/Complaint';
 import FilterBar from '../../components/FilterBar';
 import ShowRoles from '../../components/ShowRoles';
-import { complaintsAsync } from '../../store/complaintSlice';
+import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSlice';
 
 export default function ComplaintPage() {
 	const dispatch = useDispatch();
@@ -28,24 +28,24 @@ export default function ComplaintPage() {
 	const [type, setType] = useState('All');
 
 	useEffect(() => {
-		document.title = 'ssansi | relcamos';
+		document.title = 'ssansi | reclamos';
 
 		dispatch(complaintsAsync(accessToken));
 	}, []);
 
 	const handleType = event => {
 		setType(event.target.value);
-		// dispatch(filterUsersAsync(accessToken, search, rol, event.target.value));
+		dispatch(complaintsFilterAsync(accessToken, search, event.target.value));
 	};
 	const handleSearch = values => {
 		setSearch(values.search);
-		// dispatch(filterUsersAsync(accessToken, values.search, rol, Type));
+		dispatch(complaintsFilterAsync(accessToken, values.search, type));
 	};
 	const types = [
-		{ name: 'Tiempo de atencion' },
+		{ name: 'Tiempo de atención' },
 		{ name: 'Higiene' },
-		{ name: 'No acepta cupon' },
-		{ name: 'Otros' },
+		{ name: 'No acepta codigo de canje' },
+		{ name: 'Otro' },
 	];
 
 	const compRow1 = complaints?.slice(0, 2);

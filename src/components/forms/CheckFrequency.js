@@ -6,23 +6,22 @@ import {
 	Stack,
 	Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-export default function CheckFrequency({ handleF }) {
+export default function CheckFrequency({ handleFrequency }) {
 	const frequencies = [
-		{ id: 2, time: 'unlimited', label: 'ilimitado' },
-		{ id: 1, time: 'one', label: 'una vez' },
-		{ id: 3, time: 'every_day', label: 'una vez por dia' },
+		{ id: 1, time: 'unlimited', label: 'ilimitado' },
+		{ id: 2, time: 'one', label: 'una vez' },
+		{ id: 3, time: 'without', label: 'sin canje' },
 	];
-	const [isChecked, setIsChecked] = React.useState(frequencies.slice().fill(false));
+	// const [isChecked, setIsChecked] = React.useState(frequencies.slice().fill(false));
+	const [isChecked, setIsChecked] = React.useState([true, false]);
+
 	const toggleCheckboxValue = (index, e) => {
+		console.log(isChecked);
 		setIsChecked(isChecked.map((v, i) => (i === index ? !v : false)));
 	};
-	const [frequency, setFrequency] = React.useState({});
-	const handleFrequency = event => {
-		setFrequency(event.target.value);
-		console.log(event.target.value);
-	};
+
 	return (
 		<Box sx={{ width: '100%' }}>
 			<Typography sx={{ fontWeight: 'bold' }}>Frecuencia de canje</Typography>

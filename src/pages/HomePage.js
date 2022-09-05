@@ -30,7 +30,7 @@ function HomePage() {
 		}
 
 		console.log('Total = ' + (_lsTotal / 1024).toFixed(2) + ' KB');
-		document.title = 'cuniv | inicio';
+		document.title = 'ssansi | inicio';
 	}, []);
 
 	return (

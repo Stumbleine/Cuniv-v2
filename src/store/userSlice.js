@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
+import { convertToB64 } from '../Utils/Helper';
 import { setNavlinks } from './settingSlice';
 const initialState = {
 	user: {},
@@ -39,5 +40,30 @@ export const getUserAsync = token => async dispatch => {
 	}
 };
 
+export const changePasswordAsync = (token, values) => async dispatch => {
+	try {
+		await API.post(`user/change-password`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const updateAccountAsync = (token, values, imageFile) => async dispatch => {
+	const b64 = imageFile ? await convertToB64(imageFile) : null;
+	if (b64 !== null) {
+		values = { ...values, picture: b64 };
+	}
+	console.log(values);
+	try {
+		await API.post(`user/update`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(getUserAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 export const { setUser, setCompanie, setIsAdmin } = userSlice.actions;
 export default userSlice.reducer;

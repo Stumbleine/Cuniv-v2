@@ -64,39 +64,37 @@ export const filterOffersAsync = (token, search, idc, status) => async dispatch 
 	}
 };
 
-export const createOfferAsync = (offer, image, products) => async dispatch => {
-	let succes = false;
-	const b64 = image ? await convertToB64(image) : null;
-	const p = products.map(s => {
-		console.log('pids', s.id_producto);
-		let array = [];
-		array.push(s.id_producto.toString());
-		return array;
-	});
-	// const p = async () => {
-	// 	let array = [];
-	// 	for (let i = 0; i < products.lenght; i++) {
-	// 		await array.push(products[i].id_producto.toString());
-	// 	}
-	// 	return array;
-	// };
-	console.log(p);
-	const data = {
-		...offer,
-		image: b64,
-		descrip_productos: { productos: p },
+export const createOfferAsync =
+	(token, offer, image, products, branchs, fredeem) => async dispatch => {
+		const b64 = image ? await convertToB64(image) : null;
+		const branchsArray = [];
+		const productsArray = [];
+
+		branchs?.forEach(e => {
+			branchsArray.push(e.id);
+		});
+		products?.forEach(e => {
+			productsArray.push(e.id);
+		});
+
+		const data = {
+			...offer,
+			image: b64,
+			productos: products.length !== 0 ? { idp: productsArray } : null,
+			sucursales_disp: branchs.length !== 0 ? { ids: branchsArray } : null,
+			frequency_redeem: fredeem,
+		};
+		// console.log('data armado=>', data);
+		try {
+			const r = await API.post(`/beneficio/create`, data, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			console.log('offerCreate->', r.data);
+			dispatch(getOffersAsync(token));
+		} catch (e) {
+			throw new Error(e);
+		}
 	};
-	console.log('data armado=>', data);
-	// try {
-	// 	const r = await API.post(`/beneficio/create`, data);
-	// 	console.log('offerCreate->', r.data);
-	// 	dispatch(getOffersAsync()));
-	// 	succes = true;
-	// } catch (e) {
-	// 	throw new Error(e);
-	// }
-	return succes;
-};
 
 export const { setOffers, setLoading, setFetchFailed, setFilterLoading } =
 	offersSlice.actions;

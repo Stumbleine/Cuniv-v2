@@ -21,7 +21,7 @@ function ProductsPage() {
 
 	useEffect(() => {
 		dispatch(productsAsync(accessToken));
-		document.title = 'cuniv | productos';
+		document.title = 'ssansi | productos';
 	}, []);
 	return (
 		<Container maxWidth="lg">

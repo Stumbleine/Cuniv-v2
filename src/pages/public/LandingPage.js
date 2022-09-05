@@ -20,7 +20,7 @@ import React, { useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { loginAsync } from '../../store/loginSlice';
+import { loginAsync, loginGoogleAsync } from '../../store/loginSlice';
 function srcset(image, width, height, rows = 1, cols = 1) {
 	return {
 		src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
@@ -36,7 +36,7 @@ function LandingPage() {
 		'147363332194-u205vroo6c09j366f56qc6d7pbkob6q2.apps.googleusercontent.com';
 	const onLoginSuccess = res => {
 		console.log('Login Success:', res.profileObj);
-		dispatch(loginAsync(res.profileObj));
+		dispatch(loginGoogleAsync(res.profileObj));
 	};
 
 	const onLoginFailure = res => {

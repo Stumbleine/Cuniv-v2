@@ -12,23 +12,37 @@ import {
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ShowRoles from '../components/ShowRoles';
 import * as Yup from 'yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
+import { changePasswordAsync } from '../store/userSlice';
+import SnackCustom from '../components/SnackCustom';
 
 export default function Security() {
+	const { accessToken } = useSelector(state => state.login);
+	const { isLoading } = useSelector(state => state.user);
+
 	const [showPassword, setShowPassword] = useState(false);
+	const [reset, setReset] = useState(false);
 	const dispatch = useDispatch();
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
 
 	const schema = Yup.object().shape({
-		password: Yup.string()
-			.required('Contraseña es requerido')
-			.matches(
-				/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
-				'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
-			),
+		password: Yup.string().required('Contraseña es requerido'),
+
 		new_password: Yup.string()
 			.required('Nueva contraseña es requerido')
 			.matches(
@@ -46,14 +60,19 @@ export default function Security() {
 			confirm: '',
 		},
 		validationSchema: schema,
-		onSubmit: async (values, { resetForm }) => {
-			const register = async () => {};
-			register()
+		onSubmit: async (values, { resetForm, setSubmitting }) => {
+			const fetch = async () => {
+				return await dispatch(changePasswordAsync(accessToken, values));
+			};
+			fetch()
 				.then(() => {
-					console.log('success');
+					setReset(true);
+					handleSnack('Contraseña actualziado exitosamente', 'success');
+					resetForm();
 				})
 				.catch(() => {
-					console.log('error');
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
 				});
 		},
 	});
@@ -61,7 +80,9 @@ export default function Security() {
 
 	return (
 		<Container maxWidth="lg">
-			<ShowRoles />
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
+			{/* <ShowRoles /> */}
 			<Box>
 				<Typography
 					variant="h5"
@@ -109,7 +130,9 @@ export default function Security() {
 									error={Boolean(touched.password && errors.password)}
 									helperText={touched.password && errors.password}
 								/>
-
+								<Typography color="textSecondary" variant="body2">
+									Ingrese su nueva contraseña
+								</Typography>
 								<TextField
 									fullWidth
 									size="small"

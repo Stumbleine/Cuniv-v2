@@ -8,11 +8,12 @@ function StatusLabel(props) {
 		<Box
 			sx={{
 				p: 0.5,
-				background: status === 'expirado' ? red[400] : green[500],
+				background: status === 'EXPIRADO' ? red[400] : green[500],
 				borderRadius: 2,
 			}}>
 			<Typography
 				sx={{
+					fontWeight: 'bold',
 					textTransform: 'uppercase',
 					fontSize: 11,
 					color: 'white',

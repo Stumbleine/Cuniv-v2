@@ -154,6 +154,7 @@ export const approveCompanieAsync = (token, id) => async dispatch => {
 	const data = {
 		id_empresa: id,
 		verified: true,
+		rejected: false,
 	};
 	try {
 		await API.post('empresa/approve', data, {

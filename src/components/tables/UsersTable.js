@@ -17,9 +17,11 @@ import {
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
+import moment from 'moment';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import SkeletonTable from '../skeletons/SkeletonTable';
+import 'moment/locale/es';
 function UsersTable() {
 	const { users, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.users
@@ -94,7 +96,9 @@ function UsersTable() {
 											))}
 										</TableCell>
 										<TableCell align="left">{user.empresa}</TableCell>
-										<TableCell align="center">{user.created_at}</TableCell>
+										<TableCell align="center">
+											{moment(user.created_at).format('LL')}
+										</TableCell>
 
 										{/* <TableCell align="center">Si</TableCell> */}
 										<TableCell align="center">
@@ -104,12 +108,13 @@ function UsersTable() {
 													px: 1,
 													borderRadius: 2,
 													width: 'auto',
-													background: !user.sesion_status ? red[400] : green[500],
+													background:
+														user.sesion_status === 'offline' ? red[400] : green[500],
 												}}>
 												<Typography
 													variant="body2"
 													sx={{ color: 'white', lineHeight: 1, letterSpacing: 0.5 }}>
-													{user.sesion_status ? 'online' : 'offline'}
+													{user.sesion_status}
 												</Typography>
 											</Box>
 										</TableCell>

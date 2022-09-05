@@ -22,7 +22,6 @@ import { filterUsersAsync, usersAsync } from '../store/usersSlice';
 
 function UsersPage() {
 	const dispatch = useDispatch();
-	const { users, isLoading } = useSelector(state => state.users);
 	const { accessToken } = useSelector(state => state.login);
 	const [roles, setRoles] = useState([
 		{ name: 'PRV', label: 'Proveedor' },
@@ -37,7 +36,7 @@ function UsersPage() {
 	const [sesion, setSesion] = useState('All');
 
 	useEffect(() => {
-		document.title = 'cuniv | usuarios';
+		document.title = 'ssansi | usuarios';
 		dispatch(usersAsync(accessToken));
 		const getRoles = async () => {
 			const r = await API.get('select/roles', {
@@ -80,7 +79,7 @@ function UsersPage() {
 						Usuarios
 					</Typography>
 					<Stack
-						direction="row"
+						direction={{ xs: 'column', md: 'row' }}
 						// flexWrap="wrap-reverse"
 						alignItems="center"
 						// justifyContent="space-between"
@@ -89,7 +88,7 @@ function UsersPage() {
 						}}
 						spacing={2}>
 						<FilterBar handleSearch={handleSearch}>
-							<FormControl sx={{ minWidth: 200 }} size="small">
+							<FormControl sx={{ minWidth: { xs: 1, sm: 160 } }} size="small">
 								<InputLabel id="role-label">Rol</InputLabel>
 								<Select
 									labelId="role-label"
@@ -105,7 +104,7 @@ function UsersPage() {
 									))}
 								</Select>
 							</FormControl>
-							<FormControl sx={{ minWidth: 200 }} size="small">
+							<FormControl sx={{ minWidth: { xs: 1, sm: 160 } }} size="small">
 								<InputLabel id="sesion-label">Estado</InputLabel>
 								<Select
 									labelId="sesion-label"
@@ -120,16 +119,14 @@ function UsersPage() {
 							</FormControl>
 						</FilterBar>
 
-						<Link to={`/main/createRole`} style={{ textDecoration: 'none' }}>
-							<Button startIcon={<Add />} variant="contained">
-								Rol
-							</Button>
-						</Link>
-						<Link to={`/main/createUser`} style={{ textDecoration: 'none' }}>
-							<Button startIcon={<Add />} variant="contained">
-								Usuario
-							</Button>
-						</Link>
+						<Button
+							to={`/main/createUser`}
+							component={Link}
+							sx={{ textDecoration: 'none', width: { xs: '100%', md: 'auto' } }}
+							startIcon={<Add />}
+							variant="contained">
+							Usuario
+						</Button>
 					</Stack>
 				</Box>
 				<UsersTable></UsersTable>

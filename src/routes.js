@@ -17,6 +17,7 @@ import EditCompaniePage from './pages/EditCompaniePage';
 import HomePage from './pages/HomePage';
 import OffersPage from './pages/OffersPage';
 import ProductsPage from './pages/ProductsPage';
+import ForgotPassword from './pages/public/ForgotPassword';
 import LandingPage from './pages/public/LandingPage';
 import LoginPage from './pages/public/LoginPage';
 import NotFoundPage from './pages/public/NotFoundPage';
@@ -62,6 +63,16 @@ export default function Router() {
 					path: 'register',
 					element:
 						isAuth === false ? <RegisterPage /> : <Navigate to="/main/home" replace />,
+				},
+				{
+					path: 'forgot-password',
+					element:
+						isAuth === false ? <ForgotPassword /> : <Navigate to="/main/home" replace />,
+				},
+				{
+					path: 'security',
+					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
+					element: <Security />,
 				},
 			],
 		},

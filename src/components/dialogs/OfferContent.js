@@ -18,6 +18,7 @@ import {
 	Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import StatusLabel from '../StatusLabel';
@@ -27,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function OfferContent(props) {
+	moment.locale('es');
 	const [open, setOpen] = React.useState(false);
 
 	const [offer, setOffer] = useState(props.offer);
@@ -96,7 +98,9 @@ function OfferContent(props) {
 							Duracion
 						</Typography>
 						<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
-							{offer?.start_date + ' / ' + offer?.end_date}
+							{moment(offer?.start_date).format('LL') +
+								' hasta ' +
+								moment(offer?.end_date).format('LL')}
 						</Typography>
 						{offer?.conditions ? (
 							<Box>

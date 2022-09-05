@@ -24,7 +24,7 @@ function CompanieProfile() {
 	const { accessToken } = useSelector(state => state.login);
 	const { profile, isLoading, fetchFailed } = useSelector(state => state.companies);
 	useEffect(() => {
-		document.title = 'cuniv | perfil empresa';
+		document.title = 'ssansi | empresa';
 		console.log(idCompanie, user?.companie, isAdmin);
 
 		if (idCompanie) {
@@ -38,7 +38,7 @@ function CompanieProfile() {
 
 	useEffect(() => {
 		if (profile) {
-			document.title = 'cuniv | ' + profile?.companie?.razon_social;
+			document.title = 'ssansi | ' + profile?.companie?.razon_social;
 		}
 	}, [profile]);
 
