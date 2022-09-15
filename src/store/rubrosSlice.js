@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
+import { convertToB64 } from '../Utils/Helper';
 const initialState = {
 	rubros: null,
 	isLoading: false,
@@ -59,6 +60,32 @@ export const filterRubrosAsync = (token, search, idc) => async dispatch => {
 		console.log('filterData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
+		throw new Error(e);
+	}
+};
+export const deleteRubroAsync = (token, id) => async dispatch => {
+	console.log(id);
+	try {
+		await API.delete(`rubro/delete?id=${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(rubrosAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+export const updateRubroAsync = (token, values, icon) => async dispatch => {
+	const b64 = icon ? await convertToB64(icon) : null;
+	if (b64 !== null) {
+		values = { ...values, icono: b64 };
+	}
+	console.log(values);
+	try {
+		await API.post(`user/update?id=${values.id}`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(rubrosAsync(token));
+	} catch (e) {
 		throw new Error(e);
 	}
 };

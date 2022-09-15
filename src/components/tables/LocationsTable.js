@@ -100,9 +100,6 @@ export default function LocationsTable() {
 												id={location.id}
 												itemName="Locacion"
 											/>
-											{/* <IconButton>
-													<Delete sx={{ color: 'text.icon' }}></Delete>
-												</IconButton> */}
 										</Box>
 									</TableCell>
 								</TableRow>

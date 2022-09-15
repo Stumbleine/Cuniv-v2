@@ -81,8 +81,7 @@ export default function Security() {
 	return (
 		<Container maxWidth="lg">
 			<SnackCustom data={snack} closeSnack={closeSnack} />
-
-			{/* <ShowRoles /> */}
+			<ShowRoles />
 			<Box>
 				<Typography
 					variant="h5"

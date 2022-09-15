@@ -1,6 +1,6 @@
 import { Container, Grid, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductAddForm from '../components/forms/ProductAddForm';
 import ProductsTable from '../components/tables/ProductsTable';
@@ -8,6 +8,7 @@ import ShowRoles from '../components/ShowRoles';
 import { productsAsync } from '../store/productsSlice';
 import { hasPrivilege } from '../Utils/RBAC';
 import WarningVerified from '../components/WarningVerified';
+import SnackCustom from '../components/SnackCustom';
 function ProductsPage() {
 	const { user } = useSelector(state => state.user);
 	const { products, isLoading } = useSelector(state => state.user);
@@ -23,8 +24,23 @@ function ProductsPage() {
 		dispatch(productsAsync(accessToken));
 		document.title = 'ssansi | productos';
 	}, []);
+
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
 	return (
 		<Container maxWidth="lg">
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
 			<ShowRoles />
 			<Box>
 				<Box>
@@ -48,11 +64,11 @@ function ProductsPage() {
 
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={privilegeCreate ? 7 : 12}>
-						<ProductsTable />
+						<ProductsTable handleSnack={handleSnack} />
 					</Grid>
 					{privilegeCreate && (
 						<Grid item xs={12} md={5}>
-							<ProductAddForm />
+							<ProductAddForm handleSnack={handleSnack} />
 						</Grid>
 					)}
 				</Grid>

@@ -4,7 +4,6 @@ import {
 	CircularProgress,
 	FormControl,
 	FormHelperText,
-	Grid,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -55,12 +54,6 @@ function UserCreateForm() {
 			nombres: Yup.string().required('Los nombres son requeridos.'),
 			apellidos: Yup.string().required('Los apellidos son requeridos.'),
 			email: Yup.string().email().required('Correo electronico es requerido.'),
-			// password: Yup.string()
-			// 	.required('Contraseña es requerido.')
-			// 	.matches(
-			// 		/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
-			// 		'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
-			// 	),
 			rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -70,9 +63,8 @@ function UserCreateForm() {
 			create()
 				.then(() => {
 					handleSnack('Link agregado exitosamente', 'success');
-					// resetForm();
-					// setFileImage(null);
-					setSubmitting(false);
+					resetForm();
+					setFileImage(null);
 				})
 				.catch(() => {
 					handleSnack('Algo salio, vuelva a intentarlo', 'error');

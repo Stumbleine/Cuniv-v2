@@ -21,37 +21,15 @@ import SocialForm from './dialogs/SocialForm';
 import SnackCustom from './SnackCustom';
 import WarningVerified from './WarningVerified';
 
-export default function ProfileInfo(props) {
-	const { companie } = props;
+export default function ProfileInfo({ companie, handleSnack }) {
 	const navigate = useNavigate();
 
-	const editProfile = () => {
-		navigate('/main/updateCompanie', {
-			state: {
-				data: companie,
-			},
-		});
-	};
 	const noSocial =
 		companie?.facebook || companie?.instagram || companie?.sitio_web || companie?.email;
-
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
 
 	const SocialList = () => {
 		return (
 			<>
-				<SnackCustom data={snack} closeSnack={closeSnack} father="profileInfo" />
 				<Box sx={{ display: 'flex', alignItems: 'center', pl: 2 }}>
 					<Facebook
 						sx={{
@@ -183,12 +161,6 @@ export default function ProfileInfo(props) {
 				<Typography sx={{ ml: 1 }} variant="body1">
 					{companie?.rubro}
 				</Typography>
-				<EditCompanieField
-					handleSnack={handleSnack}
-					fieldName="rubro"
-					tooltip="editar rubro"
-					data={companie?.rubro}
-				/>
 			</Typography>
 
 			<Box sx={{ display: 'flex', alignItems: 'center' }}>

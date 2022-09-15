@@ -19,13 +19,20 @@ import { green, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import moment from 'moment';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import 'moment/locale/es';
+import { deleteUserAsync, updateUserAsync } from '../../store/usersSlice';
+import SnackCustom from '../SnackCustom';
+import { Link } from 'react-router-dom';
+import Edituser from '../dialogs/EditUser';
+import DeleteItem from '../dialogs/DeleteItem';
 function UsersTable() {
+	const dispatch = useDispatch();
 	const { users, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.users
 	);
+	const { accessToken } = useSelector(state => state.login);
 
 	const TABLE_HEAD = [
 		{ id: 'nombres', label: 'Nombres', alignRight: false },
@@ -46,8 +53,47 @@ function UsersTable() {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteUserAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Usuario eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+	const updateAsync = (values, file) => {
+		const update = async () => {
+			return await dispatch(updateUserAsync(accessToken, values, file));
+		};
+		update()
+			.then(r => {
+				handleSnack('Usuario actualizado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
 			<Table>
 				<TableHead sx={{ bgcolor: 'primary.main' }}>
 					<TableRow>
@@ -120,12 +166,12 @@ function UsersTable() {
 										</TableCell>
 										<TableCell align="right">
 											<Box sx={{ display: 'flex' }}>
-												<IconButton>
-													<Edit></Edit>
-												</IconButton>
-												<IconButton>
-													<Delete></Delete>
-												</IconButton>
+												<Edituser user={user} updateAsync={updateAsync} />
+												<DeleteItem
+													deleteAsync={deleteAsync}
+													id={user.id}
+													itemName={user.nombres}
+												/>
 											</Box>
 										</TableCell>
 									</TableRow>

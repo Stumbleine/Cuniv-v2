@@ -115,7 +115,7 @@ export default function EditLink({ link }) {
 									handleChangeFile={handleChangeFile}
 									id="update-link"
 									preload={link.image}
-									label="update"
+									label="imagen"
 									type="Circle"
 								/>
 								{/* <UpdateImage label="update" type="Circle" /> */}

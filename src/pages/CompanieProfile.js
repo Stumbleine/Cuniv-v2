@@ -9,6 +9,8 @@ import ProfileProducts from '../components/lists/ProfileProducts';
 import ProfileUsers from '../components/lists/ProfileUsers';
 import {
 	approveCompanieAsync,
+	getProveedores,
+	getRubros,
 	profileCompanieAsync,
 	setCompanieProfile,
 } from '../store/companiesSlice';
@@ -16,6 +18,7 @@ import SkeletonProfile from '../components/skeletons/SkeletonProfile';
 import ProfileInfo from '../components/ProfileInfo';
 import WarningVerified from '../components/WarningVerified';
 import RejectCompanie from '../components/dialogs/RejectCompanie';
+import SnackCustom from '../components/SnackCustom';
 
 function CompanieProfile() {
 	const dispatch = useDispatch();
@@ -34,6 +37,8 @@ function CompanieProfile() {
 		} else {
 			dispatch(setCompanieProfile(null));
 		}
+		dispatch(getProveedores(accessToken));
+		dispatch(getRubros(accessToken));
 	}, []);
 
 	useEffect(() => {
@@ -85,6 +90,8 @@ function CompanieProfile() {
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
 			<Box>
 				<Typography
 					variant="h5"
@@ -104,18 +111,21 @@ function CompanieProfile() {
 				) : profile ? (
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={12} md={6} lg={6}>
-							<Paper sx={{ p: 2 }}>
+							<Paper sx={{ p: 2, borderRadius: 2 }}>
 								<Stack spacing={1}>
-									<ProfileInfo companie={profile?.companie} />
-									<ProfileSucursals sucursales={profile?.branch_offices} />
+									<ProfileInfo companie={profile?.companie} handleSnack={handleSnack} />
+									<ProfileSucursals
+										sucursales={profile?.branch_offices}
+										handleSnack={handleSnack}
+									/>
 								</Stack>
 							</Paper>
 						</Grid>
 
 						<Grid item xs={12} sm={12} md={6} lg={6}>
-							<Paper sx={{ p: 2 }}>
+							<Paper sx={{ p: 2, borderRadius: 2 }}>
 								<Stack spacing={1}>
-									<ProfileUsers users={profile?.users} />
+									<ProfileUsers users={profile?.users} handleSnack={handleSnack} />
 									{/* lista de productos */}
 									<ProfileProducts products={profile?.products} />
 									{/* lista de ofertas */}

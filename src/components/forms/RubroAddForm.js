@@ -17,11 +17,11 @@ import UploadImage from '../UploadImage';
 function RubroAddForm() {
 	const [fileImage, setFileImage] = useState(null);
 
-	const handleChangeFile = (file) => {
+	const handleChangeFile = file => {
 		console.log('file-add-success', file);
 		setFileImage(file);
 	};
-	const validateIcon = (values) => {
+	const validateIcon = values => {
 		let errors = {};
 		if (fileImage === null) {
 			errors.icon = 'Es necesario subir un icono que identifique al rubro.';
@@ -33,7 +33,6 @@ function RubroAddForm() {
 		initialValues: {
 			nombre: '',
 			descripcion: '',
-			icon: '',
 		},
 		validationSchema: Yup.object().shape({
 			nombre: Yup.string().required('Nombre de rubro es requerido.'),
@@ -43,17 +42,13 @@ function RubroAddForm() {
 			console.log(values);
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
+	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<Card sx={{ p: 2 }}>
 			<FormikProvider value={formik}>
 				<Form onSubmit={handleSubmit}>
 					<Stack spacing={2}>
-						<UploadImage
-							label="icono"
-							handleChangeFile={handleChangeFile}
-							type="Circle">
+						<UploadImage label="icono" handleChangeFile={handleChangeFile} type="Circle">
 							{errors.icon && (
 								<Typography
 									textAlign="center"

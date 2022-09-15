@@ -91,14 +91,29 @@ export const addProductAsync = (token, producto, image) => async dispatch => {
 	return succes;
 };
 
-export const companiesAsignAsync = token => async () => {
-	let r = [];
+export const updateProductAsync = (token, values, fileImage) => async dispatch => {
+	const b64 = fileImage ? await convertToB64(fileImage) : null;
+	if (b64 !== null) {
+		values = { ...values, image: b64 };
+	}
 	try {
-		r = await API.get('producto/companies', {
+		await API.post('producto/update', values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
+		dispatch(productsAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
-	return r;
+};
+
+export const deleteProductAsync = (token, id) => async dispatch => {
+	console.log(id);
+	// try {
+	// 	await API.delete(`producto/delete?id=${id}`, {
+	// 		headers: { Authorization: `Bearer ${token}` },
+	// 	});
+	// 	dispatch(productsAsync(token));
+	// } catch (e) {
+	// 	throw new Error(e);
+	// }
 };

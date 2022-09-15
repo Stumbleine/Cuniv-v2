@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import OfferRegisterForm from '../components/forms/OfferRegisterForm';
+import ShowRoles from '../components/ShowRoles';
 import { getSucursales } from '../store/companiesSlice';
 
 function CreateOfferPage() {
@@ -12,6 +13,7 @@ function CreateOfferPage() {
 
 	return (
 		<Container maxWidth="lg">
+			<ShowRoles />
 			<Box>
 				<Box>
 					<Typography

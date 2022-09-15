@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import {
 	Card,
@@ -12,9 +12,12 @@ import {
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import OfferContent from '../dialogs/OfferContent';
+import EditOffer from '../dialogs/EditOffer';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteOfferAsync, updateOfferAsync } from '../../store/offersSlice';
+import DeleteItem from '../dialogs/DeleteItem';
 
-export default function Offer(props) {
-	const offer = props.offer;
+export default function Offer({ offer, handleSnack }) {
 	const AvatarCustom = styled(Avatar)(({ theme }) => ({
 		zIndex: 9,
 		width: 37,
@@ -34,6 +37,34 @@ export default function Offer(props) {
 		borderRadius: '50%',
 		background: theme.palette.primary.main,
 	}));
+	const dispatch = useDispatch();
+	const { accessToken } = useSelector(state => state.login);
+
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteOfferAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Oferta eliminada exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+	const updateAsync = (values, file) => {
+		const update = async () => {
+			return await dispatch(updateOfferAsync(accessToken, values, file));
+		};
+		update()
+			.then(r => {
+				handleSnack('Oferta actualizada exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+
 	return (
 		<Card
 			sx={{
@@ -66,25 +97,12 @@ export default function Offer(props) {
 				</CardContent>
 			</OfferContent>
 			<CardActions sx={{ justifyContent: 'end' }}>
-				<IconButton size="small">
-					<Edit
-						sx={{
-							color: 'text.icon',
-							'&:hover': {
-								color: 'warning.light',
-							},
-						}}></Edit>
-				</IconButton>
-				<IconButton size="small">
-					<Delete
-						sx={{
-							color: 'text.icon',
-							'&:hover': {
-								color: 'error.light',
-							},
-						}}
-					/>
-				</IconButton>
+				<EditOffer offer={offer} updateAsync={updateAsync} />
+				<DeleteItem
+					deleteAsync={deleteAsync}
+					id={offer.id_offer}
+					itemName={offer.title}
+				/>
 			</CardActions>
 		</Card>
 	);

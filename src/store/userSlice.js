@@ -40,6 +40,18 @@ export const getUserAsync = token => async dispatch => {
 	}
 };
 
+export const logoutAsync = token => async dispatch => {
+	try {
+		const r = await API.get('user/logout', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setUser(null));
+		dispatch(setIsAdmin(false));
+		console.log('logOut->r :', r);
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 export const changePasswordAsync = (token, values) => async dispatch => {
 	try {
 		await API.post(`user/change-password`, values, {

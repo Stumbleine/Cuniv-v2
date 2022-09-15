@@ -128,16 +128,14 @@ function OfferRegisterForm() {
 			tipo_descuento: 'Porcentual',
 			descuento: '',
 			condiciones: '',
-			id_empresa: 0,
+			id_empresa: '',
 		},
 		validationSchema: Yup.object().shape({
 			titulo: Yup.string().required('Titulo de oferta es necesario'),
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
-			id_empresa: isAdmin
-				? Yup.number().typeError('Debe elegir la empresa').required()
-				: '',
+			id_empresa: isAdmin ? Yup.number().required('Es necesario asignar la empresa') : '',
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			const register = async () => {
@@ -212,7 +210,6 @@ function OfferRegisterForm() {
 							</Typography>
 							<Stack spacing={2}>
 								<TextField
-									required
 									variant="outlined"
 									size="small"
 									label="titulo"
@@ -233,7 +230,6 @@ function OfferRegisterForm() {
 									<Box sx={{ width: '50%' }}>
 										<InputLabel>Fecha inicio *</InputLabel>
 										<TextField
-											required
 											size="small"
 											variant="outlined"
 											type="date"
@@ -247,7 +243,6 @@ function OfferRegisterForm() {
 									<Box sx={{ width: '50%' }}>
 										<InputLabel>Fecha fin *</InputLabel>
 										<TextField
-											required
 											size="small"
 											variant="outlined"
 											type="date"
@@ -279,7 +274,6 @@ function OfferRegisterForm() {
 											</Select>
 										</FormControl>
 										<TextField
-											required
 											size="small"
 											variant="outlined"
 											{...getFieldProps('descuento')}

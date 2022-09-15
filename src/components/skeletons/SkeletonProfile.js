@@ -4,7 +4,7 @@ export default function SkeletonProfile() {
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={12} sm={12} md={5} lg={5}>
-				<Paper sx={{ p: 2 }}>
+				<Paper sx={{ p: 2, borderRadius: 2 }}>
 					<Stack spacing={1}>
 						<Stack alignItems="center" spacing={1}>
 							<Skeleton animation="wave" variant="circular" width={150} height={150} />
@@ -24,7 +24,7 @@ export default function SkeletonProfile() {
 			</Grid>
 
 			<Grid item xs={12} sm={12} md={7} lg={7}>
-				<Paper sx={{ p: 2 }}>
+				<Paper sx={{ p: 2, borderRadius: 2 }}>
 					{/* lista de sucursales */}
 					<Stack spacing={2}>
 						{/* lista de productos */}

@@ -24,12 +24,18 @@ import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import API from '../../conection';
-import { filterProductsAsync } from '../../store/productsSlice';
+import {
+	deleteProductAsync,
+	filterProductsAsync,
+	updateProductAsync,
+} from '../../store/productsSlice';
 import { hasPrivilege } from '../../Utils/RBAC';
+import DeleteItem from '../dialogs/DeleteItem';
+import EditProduct from '../dialogs/EditProduct';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
 
-export default function ProductsTable(props) {
+export default function ProductsTable({ handleSnack }) {
 	const dispatch = useDispatch();
 	const { products, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.products
@@ -53,12 +59,12 @@ export default function ProductsTable(props) {
 	}, []);
 
 	const privilegeEdit = hasPrivilege(
-		['gestionar producto', 'editar producto'],
+		['gestionar productos', 'editar producto'],
 		user.permisos
 	);
 
 	const privilegeDelete = hasPrivilege(
-		['gestionar producto', 'eliminar producto'],
+		['gestionar productos', 'eliminar producto'],
 		user.permisos
 	);
 
@@ -94,6 +100,31 @@ export default function ProductsTable(props) {
 		dispatch(filterProductsAsync(accessToken, values.search, companieFilter));
 	};
 
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteProductAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Usuario eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+
+	const updateAsync = (values, file) => {
+		const update = async () => {
+			return await dispatch(updateProductAsync(accessToken, values, file));
+		};
+		update()
+			.then(r => {
+				handleSnack('Usuario actualizado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
 	return (
 		<>
 			<FilterBar handleSearch={handleSearch}>
@@ -173,14 +204,14 @@ export default function ProductsTable(props) {
 												<TableCell align="right">
 													<Box sx={{ display: 'flex' }}>
 														{privilegeEdit && (
-															<IconButton>
-																<Edit sx={{ color: 'text.icon' }}></Edit>
-															</IconButton>
+															<EditProduct product={product} updateAsync={updateAsync} />
 														)}
 														{privilegeDelete && (
-															<IconButton>
-																<Delete sx={{ color: 'text.icon' }}></Delete>
-															</IconButton>
+															<DeleteItem
+																deleteAsync={deleteAsync}
+																id={product.id_product}
+																itemName={product.name}
+															/>
 														)}
 													</Box>
 												</TableCell>

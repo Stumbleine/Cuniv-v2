@@ -22,6 +22,7 @@ import Offer from '../components/cards/Offer';
 import FilterBar from '../components/FilterBar';
 import ShowRoles from '../components/ShowRoles';
 import SkeletonOffer from '../components/skeletons/SkeletonOffer';
+import SnackCustom from '../components/SnackCustom';
 import WarningVerified from '../components/WarningVerified';
 import { filterOffersAsync, getOffersAsync } from '../store/offersSlice';
 import { hasPrivilege } from '../Utils/RBAC';
@@ -39,6 +40,19 @@ function OffersPage() {
 	const [search, setSearch] = useState('All');
 	const [idc, setIDC] = useState('All');
 	const [status, setStatus] = useState('All');
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
+
 	useEffect(() => {
 		document.title = 'ssansi | ofertas';
 		dispatch(getOffersAsync(accessToken));
@@ -82,13 +96,12 @@ function OffersPage() {
 	};
 
 	const listOffers = () => {
-		console.log(isLoading);
 		return (
 			<Grid container spacing={2}>
 				{offers
 					? offers.map(offer => (
 							<Grid item key={offer.id_offer} xs={6} sm={4} md={3} xl={3}>
-								<Offer offer={offer} />
+								<Offer offer={offer} handleSnack={handleSnack} />
 							</Grid>
 					  ))
 					: isLoading
@@ -136,6 +149,8 @@ function OffersPage() {
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
 			<Box>
 				<Box>
 					<Typography

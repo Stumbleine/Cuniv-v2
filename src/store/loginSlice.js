@@ -85,19 +85,6 @@ export const loginGoogleAsync = user => async dispatch => {
 	}
 };
 
-export const logoutAsync = () => async dispatch => {
-	try {
-		const r = await API.post('auth/logout');
-
-		// await dispatch(setUser(null));
-		// await dispatch(setNavlinks([]));
-		dispatch(setLogout());
-		console.log('logOut->r :', r);
-	} catch (e) {
-		throw new Error(e);
-	}
-};
-
 export const registerAsync = user => async dispatch => {
 	let succes = false;
 	dispatch(setLoading());

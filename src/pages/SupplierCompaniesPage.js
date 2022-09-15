@@ -20,10 +20,15 @@ import { Link } from 'react-router-dom';
 import ShowRoles from '../components/ShowRoles';
 import SupplierCompany from '../components/cards/SupplierCompany';
 import { hasPrivilege } from '../Utils/RBAC';
-import { compNotVerifiedAsync, getCompaniesAsync } from '../store/companiesSlice';
+import {
+	compNotVerifiedAsync,
+	getCompaniesAsync,
+	getRubros,
+} from '../store/companiesSlice';
 import CompanieNV from '../components/cards/CompanieNV';
 import SkeletonCompanie from '../components/skeletons/SkeletonCompanie';
 import FilterBar from '../components/FilterBar';
+import SnackCustom from '../components/SnackCustom';
 
 function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
@@ -41,8 +46,20 @@ function SupplierCompaniesPage() {
 		}
 		dispatch(getCompaniesAsync(accessToken));
 		dispatch(compNotVerifiedAsync(accessToken));
+		dispatch(getRubros(accessToken));
 	}, []);
-
+	const [snack, setSnack] = useState({
+		open: false,
+		msg: '',
+		severity: 'success',
+		redirectPath: null,
+	});
+	const closeSnack = () => {
+		setSnack({ ...snack, open: false });
+	};
+	const handleSnack = (msg, sv, path) => {
+		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
+	};
 	const handleClick = () => setNVCompanies(!showNVCompanies);
 	// console.info('You clicked the Chip.', showNVCompanies);
 
@@ -76,7 +93,7 @@ function SupplierCompaniesPage() {
 		return companies ? (
 			companies.map((companie, index) => (
 				<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
-					<SupplierCompany companie={companie} />
+					<SupplierCompany handleSnack={handleSnack} companie={companie} />
 				</Grid>
 			))
 		) : isLoading ? (
@@ -92,6 +109,8 @@ function SupplierCompaniesPage() {
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
+			<SnackCustom data={snack} closeSnack={closeSnack} />
+
 			<Box>
 				<Box>
 					<Typography

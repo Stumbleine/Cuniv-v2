@@ -1,6 +1,7 @@
 import { Delete, Edit, Warning } from '@mui/icons-material';
 import {
 	Avatar,
+	CardMedia,
 	CircularProgress,
 	IconButton,
 	Paper,
@@ -18,11 +19,17 @@ import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterRubrosAsync } from '../../store/rubrosSlice';
+import {
+	deleteRubroAsync,
+	filterRubrosAsync,
+	updateRubroAsync,
+} from '../../store/rubrosSlice';
+import DeleteItem from '../dialogs/DeleteItem';
+import EditRubro from '../dialogs/EditRubro';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
 
-function RubrosTable() {
+function RubrosTable({ handleSnack }) {
 	const dispatch = useDispatch();
 
 	const { rubros, isLoading, filterLoading, fetchFailed } = useSelector(
@@ -54,10 +61,37 @@ function RubrosTable() {
 		setSearch(values.search);
 		dispatch(filterRubrosAsync(accessToken, values.search));
 	};
+
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteRubroAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Usuario eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+
+	const updateAsync = (values, file) => {
+		const update = async () => {
+			return await dispatch(updateRubroAsync(accessToken, values, file));
+		};
+		update()
+			.then(r => {
+				handleSnack('Usuario actualizado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+
 	return (
 		<>
 			<FilterBar handleSearch={handleSearch} />
-			<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+			<TableContainer component={Paper} sx={{ borderRadius: 2, mt: 2 }}>
 				<Table>
 					<TableHead sx={{ bgcolor: 'primary.main' }}>
 						<TableRow>
@@ -84,7 +118,12 @@ function RubrosTable() {
 										<TableRow key={rubro.nombre} hover>
 											<TableCell component="th" scope="row">
 												<Stack alignItems="center" direction="row" spacing={1}>
-													<Avatar alt={rubro.nombre} src={rubro.picture} />
+													<CardMedia
+														component="img"
+														sx={{ width: 40 }}
+														alt={rubro.nombre}
+														image={rubro.icono}
+													/>
 
 													<Typography noWrap>{rubro.nombre}</Typography>
 												</Stack>
@@ -92,12 +131,12 @@ function RubrosTable() {
 											<TableCell>{rubro.descripcion}</TableCell>
 											<TableCell align="right">
 												<Box sx={{ display: 'flex' }}>
-													<IconButton>
-														<Edit></Edit>
-													</IconButton>
-													<IconButton>
-														<Delete></Delete>
-													</IconButton>
+													<EditRubro rubro={rubro} updateAsync={updateAsync} />
+													<DeleteItem
+														deleteAsync={deleteAsync}
+														id={rubro.nombre}
+														itemName={rubro.nombre}
+													/>
 												</Box>
 											</TableCell>
 										</TableRow>

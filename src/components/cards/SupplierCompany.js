@@ -7,14 +7,50 @@ import {
 	CardMedia,
 	Divider,
 	IconButton,
+	Tooltip,
 	Typography,
 } from '@mui/material';
 import { blue, grey, orange, pink, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {
+	deleteCompanieAsync,
+	getCompaniesAsync,
+	updateInfoAsync,
+} from '../../store/companiesSlice';
+import DeleteItem from '../dialogs/DeleteItem';
+import EditCompanie from '../dialogs/EditCompanie';
 
-function SupplierCompany(props) {
-	const companie = props.companie;
+function SupplierCompany({ companie, handleSnack }) {
+	const dispatch = useDispatch();
+	const { accessToken } = useSelector(state => state.login);
+
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteCompanieAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Usuario eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
+	const updateAsync = (values, file) => {
+		const update = async () => {
+			return await dispatch(updateInfoAsync(accessToken, values, file));
+		};
+		update()
+			.then(r => {
+				handleSnack('Usuario actualizado exitosamente', 'success');
+				dispatch(getCompaniesAsync(accessToken));
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
+	};
 	return (
 		<Card
 			sx={{
@@ -91,25 +127,28 @@ function SupplierCompany(props) {
 
 			<Divider />
 			<CardActions sx={{ justifyContent: 'end' }}>
-				<IconButton size="small">
-					<Edit
-						sx={{
-							color: 'text.icon',
-							'&:hover': {
-								color: orange[400],
-							},
-						}}></Edit>
-				</IconButton>
-				<IconButton size="small">
-					<Delete
-						sx={{
-							color: 'text.icon',
-							'&:hover': {
-								color: red[400],
-							},
-						}}
-					/>
-				</IconButton>
+				<Tooltip title="Editar informacion">
+					<IconButton
+						component={Link}
+						size="small"
+						to={`/main/supplierCompanies/${companie.id_empresa}`}>
+						<Edit
+							sx={{
+								// fontSize: 22,
+								color: 'text.icon',
+								'&:hover': {
+									color: 'warning.light',
+								},
+							}}
+						/>
+					</IconButton>
+				</Tooltip>
+				{/* <EditCompanie companie={companie} updateAsync={updateAsync} /> */}
+				<DeleteItem
+					deleteAsync={deleteAsync}
+					id={companie.id_empresa}
+					itemName={companie.razon_social}
+				/>
 			</CardActions>
 		</Card>
 	);

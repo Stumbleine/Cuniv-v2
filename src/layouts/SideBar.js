@@ -54,20 +54,25 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 				{navlinks.map(item => (
 					<MenuItem
 						key={item.name}
-						sx={{ typography: 'body2', py: 2, px: 2, borderRadius: 2 }}
+						sx={{
+							// typography: 'body2',
+							py: 2,
+							px: 2,
+							borderRadius: 2,
+							color: 'text.secondary',
+						}}
 						component={RouterLink}
 						to={item.path}>
-						<img
+						<Box
+							component="img"
 							src={`/svgs/icons/nav/${item.icon}.svg`}
-							alr="icon"
 							style={{
 								marginRight: '20px',
 								width: 24,
 								height: 24,
-								color: 'text.primary',
+								color: 'text.secondary',
 							}}
 						/>
-						<img src=""></img>
 						{item.name}
 					</MenuItem>
 				))}

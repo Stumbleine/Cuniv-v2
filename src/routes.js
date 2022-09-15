@@ -36,7 +36,6 @@ export default function Router() {
 
 	const permissions = user?.permisos || [];
 	return useRoutes([
-		// public routes
 		{
 			path: '/',
 			element: <AuthLayout />,
@@ -54,6 +53,7 @@ export default function Router() {
 					element:
 						isAuth === false ? <LandingPage /> : <Navigate to="/main/home" replace />,
 				},
+
 				{
 					path: 'login',
 					element:
@@ -61,18 +61,13 @@ export default function Router() {
 				},
 				{
 					path: 'register',
-					element:
+					elhement:
 						isAuth === false ? <RegisterPage /> : <Navigate to="/main/home" replace />,
 				},
 				{
 					path: 'forgot-password',
 					element:
 						isAuth === false ? <ForgotPassword /> : <Navigate to="/main/home" replace />,
-				},
-				{
-					path: 'security',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <Security />,
 				},
 			],
 		},
@@ -179,33 +174,27 @@ export default function Router() {
 				},
 				{
 					path: 'redeem',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <RedeemPage />,
+					element: construct(['cajero'], <RedeemPage />, permissions),
 				},
 				{
 					path: 'locations',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <LocationsPage />,
+					element: construct(['gestionar locaciones'], <LocationsPage />, permissions),
 				},
 				{
 					path: 'links',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <WebLinksPage />,
+					element: construct(['gestionar links'], <WebLinksPage />, permissions),
 				},
 				{
 					path: 'complaints',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <ComplaintPage />,
+					element: construct(['gestionar reclamos'], <ComplaintPage />, permissions),
 				},
 				{
 					path: 'security',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <Security />,
+					element: construct(['cuenta'], <Security />, permissions),
 				},
 				{
 					path: 'profile',
-					// element: construct(['verificar codigo'], <RedeemPage />, permissions),
-					element: <AccountProfile />,
+					element: construct(['cuenta'], <AccountProfile />, permissions),
 				},
 			],
 		},

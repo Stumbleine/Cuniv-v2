@@ -8,6 +8,7 @@ import {
 	Container,
 	Button,
 	Divider,
+	Stack,
 } from '@mui/material';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,7 +18,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import AccountPopover from '../components/AccountPopover';
 import { screenSizes } from '../Utils/Breakpoints';
 import Logo from '../components/Logo';
-export default function NavBar({ onOpenSidebar }) {
+import Notifications from '../components/menus/Notifications';
+export default function NavBar({ onOpenSidebar, handleSnack }) {
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
 	const { rule } = useSelector(state => state.user);
 	const dispatch = useDispatch();
@@ -34,16 +36,16 @@ export default function NavBar({ onOpenSidebar }) {
 
 	//	itemNav
 	const ItemNav = props => {
-		const router = useLocation();
+		// const router = useLocation();
 		// const routeRole = rule === 'ADM' ? '/admin/' : rule === 'PRV' ? '/provider/' : null;
-		const active = props.href ? router.pathname === '/main/' + props.href : false;
+		// const active = props.href ? router.pathname === '/main/' + props.href : false;
 		return (
 			<>
 				<NavLink to={props.href} style={{ textDecoration: 'none' }}>
 					<Button
 						// size="small"
 						sx={{
-							color: active ? 'primary.main' : 'text.disabled',
+							// color: active ? 'primary.main' : 'text.disabled',
 							fontWeight: 'bold',
 							fontStyle: 'italic',
 							px: 1,
@@ -135,8 +137,8 @@ export default function NavBar({ onOpenSidebar }) {
 									index={index}
 								/>
 							))}
+							{screenSizes()}
 						</Box>
-						{screenSizes()}
 						{/* <Box>
 							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
 								{mode === 'dark' ? (
@@ -146,7 +148,10 @@ export default function NavBar({ onOpenSidebar }) {
 								)}
 							</IconButton>
 						</Box> */}
-						<AccountPopover />
+						<Stack spacing={2} direction="row" alignItems="center">
+							<Notifications />
+							<AccountPopover />
+						</Stack>
 					</Toolbar>
 				</Container>
 			</AppBar>

@@ -6,7 +6,12 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControl,
 	IconButton,
+	InputLabel,
+	MenuItem,
+	OutlinedInput,
+	Select,
 	Slide,
 	Stack,
 	TextField,
@@ -14,7 +19,7 @@ import {
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { FastField, Form, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import UploadImage from '../UploadImage';
 import * as Yup from 'yup';
@@ -25,9 +30,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditCompanie({ companie, handleSnack }) {
+export default function EditCompanie({ companie, updateAsync }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
+	const { selectRubros } = useSelector(state => state.companies);
 
 	const [open, setOpen] = useState(false);
 	const [editFile, setEditFile] = useState(false);
@@ -58,22 +64,31 @@ export default function EditCompanie({ companie, handleSnack }) {
 			telefono: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const add = async () => {
-				return await dispatch(
-					updateInfoAsync(accessToken, values, fileImage, editFile, companie.id_empresa)
-				);
+			// const add = async () => {
+			// 	return await dispatch(
+			// 		updateInfoAsync(accessToken, values, fileImage, editFile, companie.id_empresa)
+			// 	);
+			// };
+			// add()
+			// 	.then(() => {
+			// 		updateAsync
+			// 		handleSnack('Link actualizado exitosamente', 'success');
+			// 		handleClose();
+			// 		resetForm();
+			// 	})
+			// 	.catch(() => {
+			// 		handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			// 		handleClose();
+			// 		setSubmitting(false);
+			// 	});
+			const sub = async () => {
+				updateAsync(values, fileImage);
 			};
-			add()
-				.then(() => {
-					handleSnack('Link actualizado exitosamente', 'success');
-					handleClose();
-					resetForm();
-				})
-				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
-					handleClose();
-					setSubmitting(false);
-				});
+			sub().then(r => {
+				setSubmitting(false);
+				handleClose();
+				resetForm();
+			});
 		},
 	});
 	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
@@ -141,6 +156,25 @@ export default function EditCompanie({ companie, handleSnack }) {
 									error={Boolean(touched.nit && errors.nit)}
 									helperText={touched.nit && errors.nit}
 								/>
+								<FormControl fullWidth size="small">
+									<InputLabel id="rubro-label-e">rubro</InputLabel>
+									<FastField name="rubro">
+										{({ field, form, meta }) => (
+											<Select
+												labelId="rubro-label-e"
+												id="select-rubro-e"
+												input={<OutlinedInput id="select-rubro-e" label="rubro" />}
+												{...field}
+												error={Boolean(meta.touched && meta.errors)}>
+												{selectRubros?.map(r => (
+													<MenuItem key={r.nombre} value={r.nombre}>
+														{r.nombre}
+													</MenuItem>
+												))}
+											</Select>
+										)}
+									</FastField>
+								</FormControl>
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>

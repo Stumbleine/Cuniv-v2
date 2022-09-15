@@ -44,33 +44,13 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 	const dispatch = useDispatch();
 
 	const { providers } = useSelector(state => state.companies);
-	const [rubros, setRubros] = useState(null);
-	useEffect(() => {
-		const getRubros = async () => {
-			const r = await API.get('empresa/rubros', {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			setRubros(r.data);
-		};
-		getRubros();
-
-		isAdmin && dispatch(getProveedores(accessToken));
-	}, []);
-
-	const irubroial =
-		fieldName === 'rubro'
-			? { rubro: data }
-			: fieldName === 'responsable' && { id_proveedor: data };
 
 	const formik = useFormik({
-		irubroialValues: irubroial,
+		irubroialValues: {
+			id_proveedor: data,
+		},
 		validationSchema: Yup.object().shape({
-			rubro:
-				fieldName === 'rubro' &&
-				Yup.string().required('El titulo del sitio es necesario'),
-			id_proveedor:
-				fieldName === 'responsable' &&
-				Yup.number().required('Es necesario asingar el responsable'),
+			id_proveedor: Yup.number().required('Es necesario asingar el responsable'),
 		}),
 		onSubmit: (values, { resetForm }) => {
 			console.log(values);
@@ -98,42 +78,21 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 				<FormikProvider value={formik}>
 					<Form onSubmit={handleSubmit}>
 						<DialogContent sx={{ minWidth: 400, pt: 1 }}>
-							{fieldName === 'rubro' && (
-								<FormControl fullWidth size="small">
-									<InputLabel id="rubro-label">rubro</InputLabel>
-									<Select
-										labelId="rubro-label"
-										id="select-rubro-c"
-										input={<OutlinedInput id="select-rubro-c" label="rubro" />}
-										{...getFieldProps('rubro')}
-										error={Boolean(touched.rubro && errors.rubro)}
-										// helperText={touched.rubro && errors.rubro}
-									>
-										{rubros?.map(r => (
-											<MenuItem key={r.nombre} value={r.nombre}>
-												{r.nombre}
-											</MenuItem>
-										))}
-									</Select>
-								</FormControl>
-							)}
-							{fieldName === 'responsable' && (
-								<FormControl fullWidth size="small">
-									<InputLabel id="prv-label">Responsable *</InputLabel>
-									<Select
-										labelId="prv-label"
-										id="select-prv"
-										input={<OutlinedInput id="select-prv" label="Responsable *" />}
-										{...getFieldProps('id_proveedor')}
-										error={Boolean(touched.id_proveedor && errors.id_proveedor)}>
-										{providers?.map(r => (
-											<MenuItem key={r.id} value={r.id}>
-												{r.nombres} {r.apellidos}
-											</MenuItem>
-										))}
-									</Select>
-								</FormControl>
-							)}
+							<FormControl fullWidth size="small">
+								<InputLabel id="prv-label">Responsable *</InputLabel>
+								<Select
+									labelId="prv-label"
+									id="select-prv"
+									input={<OutlinedInput id="select-prv" label="Responsable *" />}
+									{...getFieldProps('id_proveedor')}
+									error={Boolean(touched.id_proveedor && errors.id_proveedor)}>
+									{providers?.map(r => (
+										<MenuItem key={r.id} value={r.id}>
+											{r.nombres} {r.apellidos}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
 
 							<DialogActions sx={{ mt: 2, p: 0 }}>
 								<Button onClick={handleClose}>Cancelar</Button>

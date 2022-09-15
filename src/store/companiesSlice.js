@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { convertToB64 } from '../Utils/Helper';
-import { getUserAsync, setCompanie } from './userSlice';
+import { getUserAsync } from './userSlice';
 const initialState = {
+	profile: null,
 	companies: null,
 	companiesNV: null,
 	sucursales: [],
 	providers: null,
-	profile: null,
+	selectRubros: null,
 	isLoading: false,
 	fetchFailed: false,
 };
@@ -42,6 +43,9 @@ const companiesSlice = createSlice({
 			state.fetchFailed = true;
 			state.isLoading = false;
 		},
+		setRubros: (state, { payload }) => {
+			state.selectRubros = payload;
+		},
 	},
 });
 
@@ -53,6 +57,7 @@ export const {
 	setCompaniesNV,
 	setFetchFailed,
 	setProviders,
+	setRubros,
 } = companiesSlice.actions;
 export default companiesSlice.reducer;
 
@@ -92,16 +97,6 @@ export const profileCompanieAsync = (idCompanie, token) => async dispatch => {
 		dispatch(setCompanieProfile(r.data));
 	} catch (e) {
 		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
-export const getProveedores = token => async dispatch => {
-	try {
-		const r = await API.get('empresa/proveedores', {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setProviders(r.data));
-	} catch (e) {
 		throw new Error(e);
 	}
 };
@@ -168,7 +163,17 @@ export const approveCompanieAsync = (token, id) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+export const deleteCompanieAsync = (token, id) => async dispatch => {
+	console.log(id);
+	try {
+		await API.delete(`empresa/delete?id=${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(getCompaniesAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 export const updateInfoAsync =
 	(token, values, image, editedFile, idEmpresa) => async dispatch => {
 		let data = null;
@@ -184,7 +189,7 @@ export const updateInfoAsync =
 			await API.post(`empresa/update?id=${idEmpresa}`, data, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
-			dispatch(profileCompanieAsync(token));
+			// dispatch(profileCompanieAsync(token));
 		} catch (e) {
 			throw new Error(e);
 		}
@@ -206,6 +211,27 @@ export const changeResponsableAsync = (token, values, idEmpresa) => async dispat
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(profileCompanieAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const getProveedores = token => async dispatch => {
+	try {
+		const r = await API.get('select/providers', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setProviders(r.data));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+export const getRubros = token => async dispatch => {
+	try {
+		const r = await API.get('select/rubros', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setRubros(r.data));
 	} catch (e) {
 		throw new Error(e);
 	}

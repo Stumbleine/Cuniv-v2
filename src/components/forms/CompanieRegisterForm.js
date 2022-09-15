@@ -20,7 +20,11 @@ import React, { useEffect, useState } from 'react';
 import AddCompanyBranch from './AddCompanyBranch';
 import CompanyBranch from '../cards/CompanyBranch';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCompanieAsync, getProveedores } from '../../store/companiesSlice';
+import {
+	createCompanieAsync,
+	getProveedores,
+	getRubros,
+} from '../../store/companiesSlice';
 import { green, grey } from '@mui/material/colors';
 import UploadImage from '../UploadImage';
 import { useNavigate } from 'react-router-dom';
@@ -32,8 +36,7 @@ function CompanieRegisterForm() {
 	const navigate = useNavigate();
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-	const { providers } = useSelector(state => state.companies);
-	const [rubros, setRubros] = useState(null);
+	const { providers, selectRubros } = useSelector(state => state.companies);
 	const [fileLogo, setFileLogo] = useState(null);
 
 	const defaultBranch = {
@@ -57,15 +60,16 @@ function CompanieRegisterForm() {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 	useEffect(() => {
-		const getRubros = async () => {
-			const r = await API.get('empresa/rubros', {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			setRubros(r.data);
-		};
-		getRubros();
+		// const getRubros = async () => {
+		// 	const r = await API.get('select/rubros', {
+		// 		headers: { Authorization: `Bearer ${accessToken}` },
+		// 	});
+		// 	setRubros(r.data);
+		// };
+		// getRubros();
 
 		isAdmin && dispatch(getProveedores(accessToken));
+		dispatch(getRubros(accessToken));
 	}, []);
 
 	const handleChangeFile = file => {
@@ -193,7 +197,7 @@ function CompanieRegisterForm() {
 													input={<OutlinedInput id="select-rubro-c" label="rubro" />}
 													{...field}
 													error={Boolean(meta.touched && meta.errors)}>
-													{rubros?.map(r => (
+													{selectRubros?.map(r => (
 														<MenuItem key={r.nombre} value={r.nombre}>
 															{r.nombre}
 														</MenuItem>

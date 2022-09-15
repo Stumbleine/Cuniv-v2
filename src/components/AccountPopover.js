@@ -14,12 +14,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLogout } from '../store/loginSlice';
 import { GoogleLogout } from 'react-google-login';
 import { Lock, Logout, Person } from '@mui/icons-material';
-import { setIsAdmin, setUser } from '../store/userSlice';
-import { setNavlinks } from '../store/settingSlice';
+import { logoutAsync } from '../store/userSlice';
+import { setNavlinks, setNotifications } from '../store/settingSlice';
 function AccountPopover() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector(state => state.user.user);
+	const { accessToken } = useSelector(state => state.login);
 
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -32,9 +33,9 @@ function AccountPopover() {
 	};
 	const logOut = () => {
 		dispatch(setLogout());
-		dispatch(setUser(null));
 		dispatch(setNavlinks([]));
-		dispatch(setIsAdmin(false));
+		dispatch(setNotifications([]));
+		dispatch(logoutAsync(accessToken));
 		handleCloseUserMenu();
 		// renderProps.onClick();
 	};

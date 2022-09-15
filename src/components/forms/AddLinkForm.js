@@ -25,7 +25,6 @@ export default function AddLinkForm() {
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		console.log('cassd');
 		setFileImage(file);
 	};
 	const dispatch = useDispatch();
