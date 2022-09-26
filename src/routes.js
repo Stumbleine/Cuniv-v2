@@ -173,7 +173,7 @@ export default function Router() {
 					element: construct(['estadisticas'], <StaticsPage />, permissions),
 				},
 				{
-					path: 'redeem',
+					path: 'cashier',
 					element: construct(['cajero'], <RedeemPage />, permissions),
 				},
 				{

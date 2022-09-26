@@ -104,6 +104,16 @@ export const createUserAsync = (token, values, imageFile) => async dispatch => {
 		throw new Error(e);
 	}
 };
+export const createCashierAsync = (token, values) => async dispatch => {
+	try {
+		await API.post(`user/create`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(usersAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 
 export const { setUsers, setLoading, setFetchFailed, setFilterLoading } =
 	usersSlice.actions;

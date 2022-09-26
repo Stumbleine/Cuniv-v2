@@ -8,6 +8,7 @@ import {
 	IconButton,
 	Typography,
 	Avatar,
+	Tooltip,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';

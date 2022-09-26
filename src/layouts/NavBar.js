@@ -137,7 +137,7 @@ export default function NavBar({ onOpenSidebar, handleSnack }) {
 									index={index}
 								/>
 							))}
-							{screenSizes()}
+							{/* {screenSizes()} */}
 						</Box>
 						{/* <Box>
 							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
