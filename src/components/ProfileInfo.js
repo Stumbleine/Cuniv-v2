@@ -14,7 +14,9 @@ import {
 import { Box, Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { blue, grey, pink } from '@mui/material/colors';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, Link, useNavigate } from 'react-router-dom';
+import { updateInfoAsync } from '../store/companiesSlice';
 import EditCompanie from './dialogs/EditCompanie';
 import EditCompanieField from './dialogs/EditCompanieField';
 import SocialForm from './dialogs/SocialForm';
@@ -22,8 +24,6 @@ import SnackCustom from './SnackCustom';
 import WarningVerified from './WarningVerified';
 
 export default function ProfileInfo({ companie, handleSnack }) {
-	const navigate = useNavigate();
-
 	const noSocial =
 		companie?.facebook || companie?.instagram || companie?.sitio_web || companie?.email;
 
@@ -115,7 +115,7 @@ export default function ProfileInfo({ companie, handleSnack }) {
 					src={companie?.logo}
 					onError={({ target }) => {
 						target.onError = null;
-						target.src = '/imgs/default_image.png';
+						target.src = '/imgs/defaultImg.svg';
 					}}
 					style={{
 						width: 150,

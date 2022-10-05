@@ -1,4 +1,9 @@
-import { Delete, Warning, WarningAmber } from '@mui/icons-material';
+import {
+	Delete,
+	FamilyRestroomRounded,
+	Warning,
+	WarningAmber,
+} from '@mui/icons-material';
 import {
 	Button,
 	CardActionArea,
@@ -19,7 +24,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DeleteItem({ deleteAsync, id, itemName }) {
+export default function DeleteItem({ deleteAsync, id, itemName, disabled }) {
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
@@ -32,24 +37,13 @@ export default function DeleteItem({ deleteAsync, id, itemName }) {
 	const submit = async () => {
 		await deleteAsync(id);
 	};
-	// const [snack, setSnack] = useState({
-	// 	open: false,
-	// 	msg: '',
-	// 	severity: 'success',
-	// 	redirectPath: null,
-	// });
-	// const closeSnack = () => {
-	// 	setSnack({ ...snack, open: false });
-	// };
-	// const handleSnack = (msg, sv, path) => {
-	// 	setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	// };
+
 	return (
 		<>
-			<IconButton size="small" onClick={handleClickOpen}>
+			<IconButton disabled={disabled || false} size="small" onClick={handleClickOpen}>
 				<Delete
 					sx={{
-						color: 'text.icon',
+						color: disabled ? 'disabled' : 'text.icon',
 						'&:hover': {
 							color: 'error.light',
 						},

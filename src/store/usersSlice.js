@@ -40,7 +40,7 @@ export const usersAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setUsers(r.data));
-		console.log('usersData->r:', r.data);
+		// console.log('usersData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -48,13 +48,12 @@ export const usersAsync = token => async dispatch => {
 };
 export const filterUsersAsync = (token, search, rol, sesion) => async dispatch => {
 	dispatch(setFilterLoading());
-	console.log(localStorage.getItem('accessToken'));
 	try {
 		const r = await API.get(`/user/list?search=${search}&rol=${rol}&sesion=${sesion}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setUsers(r.data));
-		console.log('usersData->r:', r.data);
+		// console.log('usersData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -62,13 +61,11 @@ export const filterUsersAsync = (token, search, rol, sesion) => async dispatch =
 };
 
 export const updateUserAsync = (token, values, imageFile) => async dispatch => {
-	// console.log(imageFile);
-
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };
 	}
-	console.log(values);
+	// console.log(values);
 	try {
 		await API.post(`user/update?id=${values.id}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -79,7 +76,6 @@ export const updateUserAsync = (token, values, imageFile) => async dispatch => {
 	}
 };
 export const deleteUserAsync = (token, id) => async dispatch => {
-	console.log(id);
 	try {
 		await API.delete(`user/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -94,17 +90,7 @@ export const createUserAsync = (token, values, imageFile) => async dispatch => {
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };
 	}
-	console.log(values);
-	try {
-		await API.post(`user/create`, values, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(usersAsync(token));
-	} catch (e) {
-		throw new Error(e);
-	}
-};
-export const createCashierAsync = (token, values) => async dispatch => {
+	// console.log(values);
 	try {
 		await API.post(`user/create`, values, {
 			headers: { Authorization: `Bearer ${token}` },

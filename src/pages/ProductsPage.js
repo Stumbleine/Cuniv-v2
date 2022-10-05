@@ -10,8 +10,9 @@ import { hasPrivilege } from '../Utils/RBAC';
 import WarningVerified from '../components/WarningVerified';
 import SnackCustom from '../components/SnackCustom';
 function ProductsPage() {
-	const { user } = useSelector(state => state.user);
-	const { products, isLoading } = useSelector(state => state.user);
+	const { user, isAdmin } = useSelector(state => state.user);
+
+	const { profile } = useSelector(state => state.companies);
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const privilegeCreate = hasPrivilege(
@@ -55,12 +56,13 @@ function ProductsPage() {
 						Productos
 					</Typography>
 				</Box>
-				{user?.companieVerified === false && (
-					<WarningVerified>
-						¡Sus productos no son visibles para estudiantes, debido a que su empresa a un
-						no fue verificado!
-					</WarningVerified>
-				)}
+				{!isAdmin &&
+					(user?.companieVerified === false || profile?.companie?.verified === false) && (
+						<WarningVerified>
+							¡Sus productos no son visibles para estudiantes, debido a que su empresa a
+							un no fue verificado!
+						</WarningVerified>
+					)}
 
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={privilegeCreate ? 7 : 12}>

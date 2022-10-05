@@ -122,9 +122,6 @@ function AccountPopover() {
 				</MenuItem>
 				<GoogleLogout
 					clientId={clientId}
-					onLogoutSuccess={() => {
-						console.log('logSucces');
-					}}
 					render={renderProps => (
 						<MenuItem
 							sx={{ typography: 'body2', py: 1, px: 2.5 }}

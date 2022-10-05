@@ -43,7 +43,7 @@ function LoginPage() {
 	};
 
 	const onLoginFailure = res => {
-		console.log('Login Failed:', res);
+		// console.log('Login Failed:', res);
 	};
 
 	const LoginSchema = Yup.object().shape({

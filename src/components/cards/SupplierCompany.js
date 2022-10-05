@@ -65,8 +65,12 @@ function SupplierCompany({ companie, handleSnack }) {
 					alt={companie.razon_social}
 					height="140"
 					width="140"
-					sx={{ backgroundRepeat: 'no-repeat' }}
-					image={companie.logo}
+					sx={{ backgroundRepeat: 'no-repeat', objectFit: !companie.logo && 'fill' }}
+					onError={({ target }) => {
+						target.onError = null;
+						target.src = '/imgs/defaultImg.svg';
+					}}
+					image={companie?.logo || '/imgs/defaultImg.svg'}
 				/>
 			</CardActionArea>
 			<CardContent sx={{ textAlign: 'center' }}>

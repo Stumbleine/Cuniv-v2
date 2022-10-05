@@ -4,10 +4,6 @@ import { Box } from '@mui/system';
 import { useEffect } from 'react';
 
 export default function StudentCard(props) {
-	useEffect(() => {
-		console.log(props);
-	});
-
 	const { offer } = props.data;
 	const { student } = props.data;
 	const { code } = props.data;

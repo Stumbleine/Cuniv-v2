@@ -79,7 +79,6 @@ export default function DeleteDialog({ deleteAsync, id, itemName }) {
 								.catch(() => {
 									handleSnack('Algo salio, vuelva a intentarlo', 'error');
 									setTimeout(() => {
-										console.log('Delayed for 1 second.');
 										handleClose();
 									}, 2000);
 								});

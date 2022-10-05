@@ -196,6 +196,11 @@ export default function Router() {
 					path: 'profile',
 					element: construct(['cuenta'], <AccountProfile />, permissions),
 				},
+				{
+					path: 'est',
+					element: <StaticsPage />,
+					//  construct(['cuenta'], <AccountProfile />, permissions),
+				},
 			],
 		},
 		// not found

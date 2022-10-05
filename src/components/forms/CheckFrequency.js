@@ -8,17 +8,26 @@ import {
 } from '@mui/material';
 import React, { useEffect } from 'react';
 
-export default function CheckFrequency({ handleFrequency }) {
+export default function CheckFrequency({ handleFrequency, fr }) {
+	let frDefault = [true, false, false];
+	if (fr !== null) {
+		if (fr === 'no-redeem') {
+			frDefault = [false, false, true];
+		}
+		if (fr === 'one') {
+			frDefault = [false, true, false];
+		}
+	}
 	const frequencies = [
 		{ id: 1, time: 'unlimited', label: 'ilimitado' },
 		{ id: 2, time: 'one', label: 'una vez' },
-		{ id: 3, time: 'without', label: 'sin canje' },
+		{ id: 3, time: 'no-redeem', label: 'sin canje' },
 	];
 	// const [isChecked, setIsChecked] = React.useState(frequencies.slice().fill(false));
-	const [isChecked, setIsChecked] = React.useState([true, false]);
+
+	const [isChecked, setIsChecked] = React.useState(frDefault);
 
 	const toggleCheckboxValue = (index, e) => {
-		console.log(isChecked);
 		setIsChecked(isChecked.map((v, i) => (i === index ? !v : false)));
 	};
 

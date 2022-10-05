@@ -17,7 +17,6 @@ const settingSlice = createSlice({
 	initialState,
 	reducers: {
 		setNavlinks: (state, { payload }) => {
-			console.log('payload', payload);
 			state.navlinks = getNavlinks(payload);
 		},
 		// para futuros temas

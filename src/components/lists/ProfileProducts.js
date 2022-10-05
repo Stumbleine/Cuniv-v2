@@ -9,12 +9,10 @@ import {
 	Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function ProfileProducts(props) {
 	const { products } = props || [];
-	// useEffect(() => {
-	// 	console.log('aqui products', products);
-	// });
 
 	return (
 		<Box>
@@ -60,7 +58,9 @@ function ProfileProducts(props) {
 			</List>
 			{products && (
 				<Box sx={{ textAlign: 'end', width: '100%' }}>
-					<Button>Ver mas productos</Button>
+					<Button component={Link} to="/main/products">
+						Ver mas productos
+					</Button>
 				</Box>
 			)}
 		</Box>

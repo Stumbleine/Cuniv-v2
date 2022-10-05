@@ -32,7 +32,6 @@ const loginSlice = createSlice({
 		},
 		setToken: (state, { payload }) => {
 			state.accessToken = payload;
-			console.log('token->r :', payload);
 		},
 		setLogout: state => {
 			state.accessToken = null;
@@ -51,11 +50,10 @@ const loginSlice = createSlice({
 	},
 });
 export const loginAsync = user => async dispatch => {
-	console.log(user);
 	dispatch(setLoading());
 	try {
 		const r = await API.post('auth/login', user);
-		console.log('loginManual->r :', r);
+		// console.log('loginManual->r :', r);
 		dispatch(setToken(r.data.token));
 		// dispatch(setAuth());
 		await dispatch(getUserAsync(r.data.token));
@@ -76,7 +74,7 @@ export const loginGoogleAsync = user => async dispatch => {
 	};
 	try {
 		const r = await API.post('auth/auth-google', data);
-		console.log('login->r :', r);
+		// console.log('login->r :', r);
 		dispatch(setToken(r.data.token));
 		await dispatch(getUserAsync(r.data.token));
 		dispatch(setAuth());

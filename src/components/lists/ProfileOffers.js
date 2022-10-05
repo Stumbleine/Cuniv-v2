@@ -9,12 +9,10 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ProfileOffers(props) {
 	const { offers } = props;
-	useEffect(() => {
-		console.log('aqui offers', offers);
-	}, []);
 
 	return (
 		<Box>
@@ -53,7 +51,9 @@ export default function ProfileOffers(props) {
 				)}
 				{offers && (
 					<Box sx={{ textAlign: 'end', width: '100%' }}>
-						<Button>Ver mas ofertas</Button>
+						<Button component={Link} to="/main/offers">
+							Ver mas ofertas
+						</Button>
 					</Box>
 				)}
 			</List>

@@ -48,7 +48,7 @@ export const productsAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setProducts(r.data));
-		console.log('productsData->r:', r.data);
+		// console.log('productsData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -62,7 +62,7 @@ export const filterProductsAsync = (token, search, idc) => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setProducts(r.data));
-		console.log('filterData->r:', r.data);
+		// console.log('filterData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -74,7 +74,7 @@ export const addProductAsync = (token, producto, image) => async dispatch => {
 	dispatch(setLoading(true));
 	const b64 = image ? await convertToB64(image) : null;
 	const data = { ...producto, image: b64 };
-	console.log('productFORM', data);
+	// console.log('productFORM', data);
 	try {
 		const r = await API.post('producto/create', data, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -87,7 +87,6 @@ export const addProductAsync = (token, producto, image) => async dispatch => {
 		succes = e;
 		throw new Error(e);
 	}
-	console.log(succes);
 	return succes;
 };
 
@@ -97,7 +96,7 @@ export const updateProductAsync = (token, values, fileImage) => async dispatch =
 		values = { ...values, image: b64 };
 	}
 	try {
-		await API.post('producto/update', values, {
+		await API.post('producto/update?id=' + values.id_producto, values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(productsAsync(token));
@@ -107,13 +106,12 @@ export const updateProductAsync = (token, values, fileImage) => async dispatch =
 };
 
 export const deleteProductAsync = (token, id) => async dispatch => {
-	console.log(id);
-	// try {
-	// 	await API.delete(`producto/delete?id=${id}`, {
-	// 		headers: { Authorization: `Bearer ${token}` },
-	// 	});
-	// 	dispatch(productsAsync(token));
-	// } catch (e) {
-	// 	throw new Error(e);
-	// }
+	try {
+		await API.delete(`producto/delete?id=${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(productsAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
 };

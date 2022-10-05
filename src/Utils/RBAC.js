@@ -7,7 +7,6 @@ export const hasPrivilege = (pArray, userPermissions) => {
 			res = true;
 		}
 	}
-	// console.log(pArray, res);
 	return res;
 };
 

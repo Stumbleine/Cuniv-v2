@@ -57,9 +57,12 @@ export default function CompanieNV(props) {
 				<CardMedia
 					component="img"
 					height={140}
-					alt={companie.razon_social}
-					sx={{ backgroundRepeat: 'no-repeat' }}
-					image={companie.logo}
+					sx={{ backgroundRepeat: 'no-repeat', objectFit: !companie.logo && 'fill' }}
+					onError={({ target }) => {
+						target.onError = null;
+						target.src = '/imgs/defaultImg.svg';
+					}}
+					image={companie?.logo || '/imgs/defaultImg.svg'}
 				/>
 			</CardActionArea>
 			<CardContent sx={{ textAlign: 'start' }}>

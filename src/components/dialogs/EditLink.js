@@ -146,13 +146,7 @@ export default function EditLink({ link }) {
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>
-										<Button
-											fullWidth
-											type="submit"
-											disabled={isSubmitting}
-											onClick={() => {
-												console.log(values);
-											}}>
+										<Button fullWidth type="submit" disabled={isSubmitting}>
 											Guardar
 										</Button>
 										{isSubmitting && (

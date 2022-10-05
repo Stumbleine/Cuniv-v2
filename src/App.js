@@ -10,13 +10,6 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 function App() {
 	moment.locale('es');
-	// const mode = useSelector(state => state.setting.theme.mode);
-	// useEffect(() => {
-	// 	socket.on("web",(data)=>{
-	// 		console.log(data)
-	// 	})
-	// }, [])
-
 	return (
 		<BrowserRouter>
 			<ThemeProvider theme={lightTheme}>

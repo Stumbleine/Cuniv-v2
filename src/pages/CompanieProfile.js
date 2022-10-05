@@ -9,6 +9,7 @@ import ProfileProducts from '../components/lists/ProfileProducts';
 import ProfileUsers from '../components/lists/ProfileUsers';
 import {
 	approveCompanieAsync,
+	getCompaniesAsync,
 	getProveedores,
 	getRubros,
 	profileCompanieAsync,
@@ -19,6 +20,7 @@ import ProfileInfo from '../components/ProfileInfo';
 import WarningVerified from '../components/WarningVerified';
 import RejectCompanie from '../components/dialogs/RejectCompanie';
 import SnackCustom from '../components/SnackCustom';
+import { getUserAsync } from '../store/userSlice';
 
 function CompanieProfile() {
 	const dispatch = useDispatch();
@@ -26,20 +28,21 @@ function CompanieProfile() {
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const { profile, isLoading, fetchFailed } = useSelector(state => state.companies);
+	const [reload, setReload] = useState(false);
 	useEffect(() => {
 		document.title = 'ssansi | empresa';
 		console.log(idCompanie, user?.companie, isAdmin);
 
 		if (idCompanie) {
-			dispatch(profileCompanieAsync(idCompanie, accessToken));
+			dispatch(profileCompanieAsync(accessToken, idCompanie));
 		} else if (user.companie && !isAdmin) {
-			dispatch(profileCompanieAsync(user.companie, accessToken));
+			dispatch(profileCompanieAsync(accessToken, user.companie));
 		} else {
 			dispatch(setCompanieProfile(null));
 		}
 		dispatch(getProveedores(accessToken));
 		dispatch(getRubros(accessToken));
-	}, []);
+	}, [reload]);
 
 	useEffect(() => {
 		if (profile) {
@@ -103,9 +106,10 @@ function CompanieProfile() {
 					}}>
 					Perfil
 				</Typography>
-				{user?.companieVerified === false && !isAdmin && (
-					<WarningVerified>En proceso de verificacion.</WarningVerified>
-				)}
+				{!isAdmin &&
+					(user?.companieVerified === false || profile?.companie?.verified === false) && (
+						<WarningVerified>En proceso de verificacion.</WarningVerified>
+					)}
 				{isLoading && isAdmin ? (
 					<SkeletonProfile />
 				) : profile ? (
@@ -148,7 +152,22 @@ function CompanieProfile() {
 				) : isLoading ? (
 					<SkeletonProfile />
 				) : fetchFailed ? (
-					<Typography align="center">Error al cargar informacion</Typography>
+					<>
+						<Box
+							sx={{
+								textAlign: 'center',
+							}}>
+							<Typography align="center">Error al cargar informacion</Typography>
+							<Button
+								sx={{ mt: 2 }}
+								variant="outlined"
+								onClick={() => {
+									setReload(true);
+								}}>
+								Recargar
+							</Button>
+						</Box>
+					</>
 				) : (
 					msgCompanieNull()
 				)}

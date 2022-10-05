@@ -52,7 +52,6 @@ function RubrosTable({ handleSnack }) {
 		setPage(newPage);
 	};
 	const handleChangeRowsPerPage = event => {
-		console.log('CantPerpage', event.target.value);
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};

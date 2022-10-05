@@ -64,11 +64,6 @@ function OfferRegisterForm() {
 		isAdmin && fetch();
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log('productos Seleccionados', prdInclude);
-	// 	console.log('sucursal Seleccionados', branchSelected);
-	// }, [prdInclude, branchSelected]);
-
 	const theme = useTheme();
 	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
@@ -93,16 +88,17 @@ function OfferRegisterForm() {
 	};
 
 	const handleSelectBranch = event => {
+		console.log(branchSelected, branchOffices);
 		const {
 			target: { value },
 		} = event;
 		setBranchSelected(typeof value === 'string' ? value.split(',') : value);
 	};
 
-	function getStyles(name, personName, theme) {
+	function getStyles(name, itemName, theme) {
 		return {
 			fontWeight:
-				personName.indexOf(name) === -1
+				itemName.indexOf(name) === -1
 					? theme.typography.fontWeightRegular
 					: theme.typography.fontWeightMedium,
 		};
@@ -165,7 +161,6 @@ function OfferRegisterForm() {
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
 	const [loadingProd, setLoadingProd] = useState(false);
 	useEffect(() => {
-		console.log('cambios valor');
 		async function fetchProducts() {
 			setLoadingProd(true);
 
@@ -212,7 +207,7 @@ function OfferRegisterForm() {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="titulo"
+									label="titulo *"
 									placeholder="Titulo de oferta"
 									{...getFieldProps('titulo')}
 									error={Boolean(touched.titulo && errors.titulo)}
@@ -221,7 +216,7 @@ function OfferRegisterForm() {
 								<TextField
 									fullWidth
 									variant="outlined"
-									label="Condiciones de canje (opcional)"
+									label="Descripcion/Condiciones"
 									multiline
 									{...getFieldProps('condiciones')}
 									size="small"
@@ -358,17 +353,17 @@ function OfferRegisterForm() {
 										renderValue={s => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{s?.map(value => (
-													<Chip key={value.id_sucursal} label={value.nombre} />
+													<Chip key={value.id_branch} label={value.name} />
 												))}
 											</Box>
 										)}
 										MenuProps={MenuProps}>
 										{branchOffices?.map(branch => (
 											<MenuItem
-												key={branch.id_sucursal}
+												key={branch.id_branch}
 												value={branch}
-												style={getStyles(branch.nombre, branchSelected, theme)}>
-												{branch.nombre}
+												style={getStyles(branch.name, branchSelected, theme)}>
+												{branch.name}
 											</MenuItem>
 										))}
 									</Select>
@@ -381,9 +376,7 @@ function OfferRegisterForm() {
 
 								<Box sx={{ width: '100%' }}>
 									<Typography sx={{ fontWeight: 'bold' }}>Productos</Typography>
-									<InputLabel>
-										Seleccione los productos que incluye la oferta (opcional)
-									</InputLabel>
+									<InputLabel>Seleccione los productos que incluye la oferta</InputLabel>
 									<Typography sx={{ color: 'warning.main', mb: 1 }}>
 										Por defecto se incluiran todos
 									</Typography>
@@ -399,17 +392,17 @@ function OfferRegisterForm() {
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
 												{selected?.map(value => (
-													<Chip key={value.id_producto} label={value.nombre} />
+													<Chip key={value.id_product} label={value.name} />
 												))}
 											</Box>
 										)}
 										MenuProps={MenuProps}>
 										{products?.map(p => (
 											<MenuItem
-												key={p.id_producto}
+												key={p.id_product}
 												value={p}
-												style={getStyles(p.nombre, prdInclude, theme)}>
-												{p.nombre}
+												style={getStyles(p.name, prdInclude, theme)}>
+												{p.name}
 											</MenuItem>
 										))}
 									</Select>
@@ -422,7 +415,7 @@ function OfferRegisterForm() {
 
 								<CheckFrequency handleFrequency={handleFrequency} />
 								<CardActions sx={{ justifyContent: 'end', p: 0 }}>
-									<Button onClick={() => console.log(values)}>Cancelar</Button>
+									<Button>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>
 										<Button
 											color="primary"
@@ -457,28 +450,6 @@ function OfferRegisterForm() {
 }
 export default OfferRegisterForm;
 
-export const list = [
-	{
-		id: 1,
-		name: 'Sucursal central',
-		address: 'Av. Junin y Ayaroa',
-	},
-	{
-		id: 2,
-		name: 'Sucursal Km4',
-		address: 'Av. Blanco Galindo',
-	},
-	{
-		id: 3,
-		name: 'Sucursal Sur',
-		address: 'Av. Junin y Ayaroa',
-	},
-	{
-		id: 4,
-		name: 'Sucursal Sacaba',
-		address: 'Av. Blanco Galindo',
-	},
-];
 /* <Stack
 										direction="column"
 										spacing={1}

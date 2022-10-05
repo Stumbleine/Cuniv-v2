@@ -250,8 +250,6 @@ function CompanieRegisterForm() {
 										<Button
 											onClick={() => {
 												navigate(-1);
-
-												// console.log(values, branchs);
 											}}>
 											Cancelar
 										</Button>

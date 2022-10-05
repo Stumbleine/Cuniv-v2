@@ -34,7 +34,7 @@ export const getUserAsync = token => async dispatch => {
 		const r = await API.get(`user`, { headers: { Authorization: `Bearer ${token}` } });
 		dispatch(setNavlinks(r.data.permisos));
 		dispatch(setUser(r.data));
-		console.log('usersFilter->r:', r.data);
+		// console.log('usersFilter->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -47,7 +47,7 @@ export const logoutAsync = token => async dispatch => {
 		});
 		dispatch(setUser(null));
 		dispatch(setIsAdmin(false));
-		console.log('logOut->r :', r);
+		// console.log('logOut->r :', r);
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -67,7 +67,7 @@ export const updateAccountAsync = (token, values, imageFile) => async dispatch =
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };
 	}
-	console.log(values);
+	// console.log(values);
 	try {
 		await API.post(`user/update`, values, {
 			headers: { Authorization: `Bearer ${token}` },

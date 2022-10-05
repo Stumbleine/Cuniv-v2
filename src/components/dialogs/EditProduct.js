@@ -27,13 +27,13 @@ import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import SnackCustom from '../SnackCustom';
+import { updateProductAsync } from '../../store/productsSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditProduct({ product, companies, updateAsync }) {
-	// console.log(user)
+export default function EditProduct({ product, companies, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { isAdmin } = useSelector(state => state.user);
@@ -57,10 +57,11 @@ export default function EditProduct({ product, companies, updateAsync }) {
 	const formik = useFormik({
 		initialValues: {
 			id_producto: product?.id_product || '',
+			descripcion: product?.description || '',
 			nombre: product?.name || '',
 			precio: product?.price || '',
-			id_empresa: product?.id_empresa || '',
-			// rol: '',
+			tipo: product.type || '',
+			id_empresa: product?.id_companie || '',
 		},
 		validationSchema: Yup.object().shape({
 			nombre: Yup.string().required('El nombre es necesario'),
@@ -72,14 +73,20 @@ export default function EditProduct({ product, companies, updateAsync }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const sub = async () => {
-				updateAsync(values, fileImage);
+			const update = async () => {
+				return await dispatch(updateProductAsync(accessToken, values, fileImage));
 			};
-			sub().then(r => {
-				resetForm();
-				handleClose();
-				setSubmitting(false);
-			});
+			update()
+				.then(r => {
+					handleSnack('Usuario actualizado exitosamente', 'success');
+					resetForm();
+					handleClose();
+				})
+				.catch(e => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleClose();
+					setSubmitting(false);
+				});
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;

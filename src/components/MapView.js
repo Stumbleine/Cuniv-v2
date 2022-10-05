@@ -45,7 +45,6 @@ function MapView({ sendPosition }) {
 							const { lat, lng } = e.latlng;
 							setPosition([lat, lng]);
 							sendPosition(e.latlng);
-							console.log(position);
 						},
 					});
 

@@ -9,13 +9,16 @@ import {
 	TextField,
 	Typography,
 	IconButton,
+	CircularProgress,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { grey } from '@mui/material/colors';
+import { green, grey } from '@mui/material/colors';
 import { useEffect, useState, forwardRef } from 'react';
 import MapView from '../MapView';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBranchAsync, updateBranchAsync } from '../../store/companiesSlice';
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -24,10 +27,15 @@ function AddCompanyBranch({
 	actionType,
 	handleEditSucursal,
 	editData,
+	handleSnack,
+	idEmpresa,
 }) {
 	const [open, setOpen] = useState(false);
+	const dispatch = useDispatch();
+	const { accessToken } = useSelector(state => state.login);
+
 	const [position, setPosition] = useState(
-		actionType === 'edit' ? { lat: editData?.latitud, lng: editData?.longitud } : null
+		actionType !== 'add' ? { lat: editData?.latitud, lng: editData?.longitud } : null
 	);
 
 	const handleClickOpen = () => {
@@ -38,9 +46,8 @@ function AddCompanyBranch({
 	};
 	const sendPosition = pos => {
 		setPosition(pos);
-		console.log(typeof pos.lat);
 	};
-	const validateMap = valores => {
+	const validateMap = () => {
 		let errores = {};
 		if (position === null) {
 			errores.pos = 'No se ha elegido la ubicacion';
@@ -53,13 +60,10 @@ function AddCompanyBranch({
 			address: editData?.direccion || '',
 			pos: '',
 		},
-
+		enableReinitialize: true,
 		validationSchema: Yup.object().shape({
 			name: Yup.string().required('nombre de sucursal es requerido'),
 			address: Yup.string().required('direccion es requerido'),
-			/* 			pos: Yup.number()
-				.min(2)
-				.required('Debe seleccionar la ubicacion en el mapa'), */
 		}),
 		validate: validateMap,
 		onSubmit: (valores, { resetForm, setSubmitting }) => {
@@ -73,29 +77,56 @@ function AddCompanyBranch({
 				handleEditSucursal(sucursal, editData.index);
 				resetForm();
 				setPosition(null);
+				handleClose();
 			} else if (actionType === 'add') {
 				handleAddSucursal(sucursal);
 				setPosition(null);
 				resetForm();
+				handleClose();
 			} else if (actionType === 'update-fetch') {
-				console.log(values);
+				const editAsync = async () => {
+					return await dispatch(
+						updateBranchAsync(
+							accessToken,
+							sucursal,
+							editData.id_sucursal,
+							editData.id_empresa
+						)
+					);
+				};
+				editAsync()
+					.then(() => {
+						handleSnack('Sucursal actualizado exitosamente', 'success');
+						resetForm();
+						handleClose();
+					})
+					.catch(() => {
+						handleSnack('Algo salio, vuelva a intentarlo', 'error');
+						setSubmitting(false);
+						handleClose();
+					});
+			} else if (actionType === 'add-fetch') {
+				const addAsync = async () => {
+					return await dispatch(addBranchAsync(accessToken, sucursal, idEmpresa));
+				};
+				addAsync()
+					.then(() => {
+						handleSnack('Sucursal añadido exitosamente', 'success');
+						resetForm();
+						handleClose();
+					})
+					.catch(() => {
+						handleSnack('Algo salio, vuelva a intentarlo', 'error');
+						setSubmitting(false);
+						handleClose();
+					});
 			}
-
-			handleClose();
 		},
 	});
-	const {
-		errors,
-		touched,
-		values,
-		isSubmitting,
-		handleSubmit,
-		getFieldProps,
-		handleChange,
-	} = formik;
+	const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<>
-			{actionType === 'add' ? (
+			{actionType === 'add' || actionType === 'add-fetch' ? (
 				<Button onClick={handleClickOpen} startIcon={<Add></Add>}>
 					Sucursal
 				</Button>
@@ -198,9 +229,26 @@ function AddCompanyBranch({
 									sx={{ width: '50%', mt: 2 }}
 								/>
 							</Box>
-							<DialogActions sx={{ background: grey[100], p: 0, mt: 1 }}>
+							<DialogActions sx={{ p: 0, mt: 1 }}>
 								<Button onClick={handleClose}>Cancelar</Button>
-								<Button type="submit">Guardar</Button>
+								<Box sx={{ position: 'relative' }}>
+									<Button fullWidth type="submit" disabled={isSubmitting}>
+										Guardar
+									</Button>
+									{isSubmitting && (
+										<CircularProgress
+											size={24}
+											sx={{
+												color: green[500],
+												position: 'absolute',
+												top: '50%',
+												left: '50%',
+												marginTop: '-12px',
+												marginLeft: '-12px',
+											}}
+										/>
+									)}
+								</Box>
 							</DialogActions>
 						</Form>
 					</FormikProvider>

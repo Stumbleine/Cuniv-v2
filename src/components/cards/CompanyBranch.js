@@ -9,9 +9,9 @@ function CompanyBranch({ updateListBranchs }) {
 	// const sucursaL = sucursal;
 	const defaultBranch = {
 		nombre: 'Sucursal central',
-		direccion: 's/n',
-		latitud: 's/n',
-		longitud: 's/n',
+		direccion: '-',
+		latitud: '-',
+		longitud: '-',
 	};
 	const [branchs, setBranchs] = useState([defaultBranch]);
 	useEffect(() => {
@@ -36,10 +36,9 @@ function CompanyBranch({ updateListBranchs }) {
 	return (
 		<>
 			<Box>
-				<Typography sx={{ fontWeight: 'bold' }}>Sucursales</Typography>
+				<Typography sx={{ fontWeight: 'bold' }}>Sucursales*</Typography>
 				<Typography variant="body2" color="textSecondary">
-					Se creo una sucursal por defecto, modifique sus datos (direccion,
-					geolocalización) *
+					Modifique los datos de la sucursal principal (direccion, geolocalización)
 				</Typography>
 			</Box>
 			<Stack
@@ -60,8 +59,9 @@ function CompanyBranch({ updateListBranchs }) {
 						sx={{
 							display: 'flex',
 							alignItems: 'center',
-							width: '80%',
+							width: '85%',
 							minWidth: 300,
+							borderRadius: 2,
 							maxWidth: 600,
 							minHeight: 60,
 							background: orange[50],

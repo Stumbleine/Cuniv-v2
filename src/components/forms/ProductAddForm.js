@@ -37,12 +37,12 @@ function ProductAddForm() {
 	});
 	useEffect(() => {
 		async function fetch() {
-			const r = await API.get('producto/companies', {
+			const r = await API.get('select/companies', {
 				headers: { Authorization: `Bearer ${accessToken}` },
 			});
 			setCompanies(r.data);
 		}
-		fetch();
+		isAdmin && fetch();
 	}, []);
 
 	const handleChangeFile = file => {

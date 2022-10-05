@@ -14,14 +14,11 @@ function CreateSupplierCompanyPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
 	const [open, setOpen] = useState(false);
 
-	// useEffect(() => {
-	// 	document.title = 'cuniv | registro empresa';
-	// 	console.log('title');
-	// }, []);
+	useEffect(() => {
+		document.title = 'ssansi | registro empresa';
+	}, []);
 
 	const handleClose = (event, reason) => {
-		console.log('close');
-
 		if (reason === 'clickaway') {
 			return;
 		}

@@ -18,6 +18,7 @@ import {
 	Slide,
 	Stack,
 	TextField,
+	Tooltip,
 	Typography,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
@@ -29,25 +30,22 @@ import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import SnackCustom from '../SnackCustom';
 import API from '../../conection';
+import { updateOfferAsync } from '../../store/offersSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditOffer({ offer, updateAsync }) {
-	const sdate = offer.start_date.split(' ')[0];
-	const edate = offer.start_date.split(' ')[0];
-	// console.log(sdate, edate);
+export default function EditOffer({ offer, handleSnack }) {
+	const sdate = offer.start_date?.split(' ')[0];
+	const edate = offer.end_date?.split(' ')[0];
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
 	const [changeCompanie, setCCompanie] = useState(false);
-	const [editPB, setEditPB] = useState(false);
 
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-	const [products, setProducts] = useState(null);
-	const [branchOffices, setBranchOffices] = useState(null);
 
 	const handleChangeFile = file => {
 		setFileImage(file);
@@ -79,7 +77,7 @@ export default function EditOffer({ offer, updateAsync }) {
 			tipo_descuento: offer.discount_type || 'Porcentual',
 			descuento: offer.discount || '',
 			condiciones: offer.conditions || '',
-			id_empresa: offer.id_empresa || '',
+			id_empresa: offer.companie.id_empresa || '',
 		},
 		validationSchema: Yup.object().shape({
 			titulo: Yup.string().required('Titulo de oferta es necesario'),
@@ -90,35 +88,43 @@ export default function EditOffer({ offer, updateAsync }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const sub = async () => {
-				updateAsync(values, fileImage);
+			const update = async () => {
+				return await dispatch(updateOfferAsync(accessToken, values, fileImage));
 			};
-			sub().then(r => {
-				resetForm();
-				handleClose();
-				setSubmitting(false);
-			});
+			update()
+				.then(r => {
+					handleSnack('Oferta actualizada exitosamente', 'success');
+					resetForm();
+					handleClose();
+				})
+				.catch(e => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+					handleClose();
+				});
 		},
 	});
 	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
-			<IconButton size="small" onClick={handleClickOpen}>
-				<Edit
-					sx={{
-						color: 'text.icon',
-						'&:hover': {
-							color: 'warning.light',
-						},
-					}}
-				/>
-			</IconButton>
+			<Tooltip title="Editar informacion">
+				<IconButton size="small" onClick={handleClickOpen}>
+					<Edit
+						sx={{
+							color: 'text.icon',
+							'&:hover': {
+								color: 'warning.light',
+							},
+						}}
+					/>
+				</IconButton>
+			</Tooltip>
 
 			<Dialog
 				PaperProps={{ style: { borderRadius: 2 } }}
 				open={open}
-				disableEscapeKeyDown={true}
+				onClose={handleClose}
 				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + offer?.title}</DialogTitle>
 
@@ -254,20 +260,8 @@ export default function EditOffer({ offer, updateAsync }) {
 											Asignar a otra empresa
 										</Button>
 									)}
-
-									<Button
-										size="small"
-										variant="contained"
-										onClick={() => {
-											setEditPB(!editPB);
-											console.log(values);
-										}}>
-										Editar productos y sucursales
-									</Button>
 								</Stack>
-								{editPB && (
-									<Typography variant="caption">Opcion en desarrollo</Typography>
-								)}
+
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>

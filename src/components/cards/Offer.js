@@ -17,26 +17,25 @@ import EditOffer from '../dialogs/EditOffer';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteOfferAsync, updateOfferAsync } from '../../store/offersSlice';
 import DeleteItem from '../dialogs/DeleteItem';
+import EditOfferPB from '../dialogs/EditOfferPB';
 
 export default function Offer({ offer, handleSnack }) {
 	const AvatarCustom = styled(Avatar)(({ theme }) => ({
-		zIndex: 9,
 		width: 37,
 		height: 37,
-		position: 'absolute',
-		left: theme.spacing(3),
-		bottom: theme.spacing(7.7),
-		// bottom: theme.spacing(21),
 	}));
 	const BorderAvatar = styled(Box)(({ theme }) => ({
-		width: 41,
-		height: 41,
+		width: 45,
+		height: 45,
 		zIndex: 9,
 		position: 'absolute',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 		left: theme.spacing(2.8),
 		bottom: theme.spacing(7.4),
 		borderRadius: '50%',
-		background: theme.palette.primary.main,
+		background: theme.palette.text.secondary,
 	}));
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
@@ -53,18 +52,6 @@ export default function Offer({ offer, handleSnack }) {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
-	const updateAsync = (values, file) => {
-		const update = async () => {
-			return await dispatch(updateOfferAsync(accessToken, values, file));
-		};
-		update()
-			.then(r => {
-				handleSnack('Oferta actualizada exitosamente', 'success');
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
 
 	return (
 		<Card
@@ -76,9 +63,16 @@ export default function Offer({ offer, handleSnack }) {
 					component="img"
 					alt={offer.title}
 					height="140"
-					image={offer.image}></CardMedia>
-				<BorderAvatar />
-				<AvatarCustom alt={offer.companie.name} src={offer.companie.logo} />
+					sx={{ objectFit: !offer.image && 'fill' }}
+					onError={({ target }) => {
+						target.onError = null;
+						target.src = '/imgs/defaultImg.svg';
+					}}
+					image={offer?.image || '/imgs/defaultImg.svg'}
+				/>
+				<BorderAvatar>
+					<AvatarCustom src={offer.companie.logo} />
+				</BorderAvatar>
 				<CardContent sx={{ mt: 2 }}>
 					<Typography
 						gutterBottom
@@ -98,7 +92,8 @@ export default function Offer({ offer, handleSnack }) {
 				</CardContent>
 			</OfferContent>
 			<CardActions sx={{ justifyContent: 'end' }}>
-				<EditOffer offer={offer} updateAsync={updateAsync} />
+				<EditOfferPB offer={offer} handleSnack={handleSnack} />
+				<EditOffer offer={offer} handleSnack={handleSnack} />
 				<DeleteItem
 					deleteAsync={deleteAsync}
 					id={offer.id_offer}

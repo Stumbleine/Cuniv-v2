@@ -26,13 +26,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
+import { createCashierAsync } from '../../store/cashierSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddCashier({ addCashierAsync }) {
-	// console.log(user)
+export default function AddCashier({ handleSnack, setReload, reload }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { user } = useSelector(state => state.user);
@@ -51,7 +51,6 @@ export default function AddCashier({ addCashierAsync }) {
 			nombres: '',
 			apellidos: '',
 			email: '',
-			rol: 'CJRO',
 			cajero_de: user?.companie || null,
 		},
 		validationSchema: Yup.object().shape({
@@ -61,14 +60,21 @@ export default function AddCashier({ addCashierAsync }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const sub = async () => {
-				addCashierAsync(values);
+			const add = async () => {
+				await dispatch(createCashierAsync(accessToken, values));
 			};
-			sub().then(r => {
-				resetForm();
-				setSubmitting(false);
-				handleClose();
-			});
+			add()
+				.then(r => {
+					handleSnack('Cajero creado exitosamente', 'success');
+					setReload(!reload);
+
+					resetForm();
+					handleClose();
+				})
+				.catch(e => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
@@ -76,10 +82,10 @@ export default function AddCashier({ addCashierAsync }) {
 	return (
 		<>
 			<Button
-				sx={{ width: { xs: '100%', md: 'auto' } }}
+				sx={{ width: { xs: '100%', sm: 'auto' } }}
 				startIcon={<Add />}
 				onClick={handleClickOpen}
-				variant="contained">
+				variant="outlined">
 				Cuenta de cajero
 			</Button>
 
@@ -93,7 +99,7 @@ export default function AddCashier({ addCashierAsync }) {
 				<DialogContent sx={{ minWidth: 400 }}>
 					<FormikProvider value={formik}>
 						<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-							<Stack spacing={2}>
+							<Stack spacing={2} sx={{ mt: 1 }}>
 								<TextField
 									fullWidth
 									variant="outlined"
@@ -122,8 +128,12 @@ export default function AddCashier({ addCashierAsync }) {
 									placeholder="Correo electronico"
 									{...getFieldProps('email')}
 									error={Boolean(touched.email && errors.email)}
-									helperText={touched.email && errors.email}
+									helperText={
+										(touched.email && errors.email) ||
+										'Asegurese de que el correo sea real y valido'
+									}
 								/>
+
 								<Typography variant="body2" color="textSecondary">
 									Nota: La contraseña se enviara al correo electronico
 								</Typography>

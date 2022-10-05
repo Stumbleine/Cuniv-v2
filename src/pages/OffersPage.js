@@ -29,6 +29,8 @@ import { hasPrivilege } from '../Utils/RBAC';
 
 function OffersPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
+	const { profile } = useSelector(state => state.companies);
+
 	const { accessToken } = useSelector(state => state.login);
 	const { isLoading, filterLoading, offers } = useSelector(state => state.offers);
 	const dispatch = useDispatch();
@@ -91,8 +93,6 @@ function OffersPage() {
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterOffersAsync(accessToken, values.search, idc, status));
-		// const leter = 'HOLALA';
-		// console.log(leter.toLocaleLowerCase());
 	};
 
 	const listOffers = () => {
@@ -224,12 +224,13 @@ function OffersPage() {
 						)}
 					</Stack>
 				</Box>
-				{user?.companieVerified === false && (
-					<WarningVerified>
-						¡Sus productos no son visibles para estudiantes, debido a que su empresa a un
-						no fue verificado!
-					</WarningVerified>
-				)}
+				{!isAdmin &&
+					(user?.companieVerified === false || profile?.companie?.verified === false) && (
+						<WarningVerified>
+							¡Sus ofertas no son visibles para estudiantes, debido a que su empresa a un
+							no fue verificado!
+						</WarningVerified>
+					)}
 				{filterLoading && (
 					<Box sx={{ display: 'flex', justifyContent: 'center', width: 1 }}>
 						<CircularProgress size={24} sx={{ color: green[500] }} />

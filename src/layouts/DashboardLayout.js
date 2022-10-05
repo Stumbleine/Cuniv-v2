@@ -54,7 +54,6 @@ function DashboardLayout() {
 	useEffect(() => {
 		if (user !== null && isAdmin) {
 			socket.on('web', data => {
-				console.log(data);
 				handleSnack(data);
 			});
 		}

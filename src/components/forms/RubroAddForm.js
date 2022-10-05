@@ -18,7 +18,6 @@ function RubroAddForm() {
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		console.log('file-add-success', file);
 		setFileImage(file);
 	};
 	const validateIcon = values => {

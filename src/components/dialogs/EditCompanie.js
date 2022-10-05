@@ -30,17 +30,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditCompanie({ companie, updateAsync }) {
+export default function EditCompanie({ companie, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { selectRubros } = useSelector(state => state.companies);
 
 	const [open, setOpen] = useState(false);
-	const [editFile, setEditFile] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		setEditFile(true);
 		setFileImage(file);
 	};
 
@@ -57,38 +55,37 @@ export default function EditCompanie({ companie, updateAsync }) {
 			telefono: companie?.telefono,
 			rubro: companie?.rubro,
 			nit: companie?.nit,
+			id_empresa: companie.id_empresa,
 		},
 		validationSchema: Yup.object().shape({
-			title: Yup.string().required('El titulo del sitio es necesario'),
-			descripcion: Yup.string().required('Especifique el descripcion'),
-			telefono: Yup.number().required('Debe introducir una prioridad'),
+			razon_social: Yup.string().required('El titulo del sitio es necesario'),
+			descripcion: Yup.string().required('Especifique la descripcion'),
+			telefono: Yup.string().required('Debe introducir una prioridad'),
 		}),
+		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			// const add = async () => {
-			// 	return await dispatch(
-			// 		updateInfoAsync(accessToken, values, fileImage, editFile, companie.id_empresa)
-			// 	);
-			// };
-			// add()
-			// 	.then(() => {
-			// 		updateAsync
-			// 		handleSnack('Link actualizado exitosamente', 'success');
-			// 		handleClose();
-			// 		resetForm();
-			// 	})
-			// 	.catch(() => {
-			// 		handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			// 		handleClose();
-			// 		setSubmitting(false);
-			// 	});
-			const sub = async () => {
-				updateAsync(values, fileImage);
+			const edit = async () => {
+				return await dispatch(updateInfoAsync(accessToken, values, fileImage));
 			};
-			sub().then(r => {
-				setSubmitting(false);
-				handleClose();
-				resetForm();
-			});
+			edit()
+				.then(() => {
+					handleSnack('Empresa actualizada exitosamente', 'success');
+					resetForm();
+					handleClose();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+					handleClose();
+				});
+			// const sub = async () => {
+			// 	updateAsync(values, fileImage);
+			// };
+			// sub().then(r => {
+			// 	setSubmitting(false);
+			// 	handleClose();
+			// 	resetForm();
+			// });
 		},
 	});
 	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
@@ -178,13 +175,7 @@ export default function EditCompanie({ companie, updateAsync }) {
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>
-										<Button
-											fullWidth
-											type="submit"
-											disabled={isSubmitting}
-											onClick={() => {
-												console.log(values);
-											}}>
+										<Button fullWidth type="submit" disabled={isSubmitting}>
 											Guardar
 										</Button>
 										{isSubmitting && (

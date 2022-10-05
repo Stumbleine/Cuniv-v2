@@ -34,38 +34,23 @@ import SkeletonList from '../components/skeletons/SkeletonList';
 import EditLink from '../components/dialogs/EditLink';
 import DeleteItem from '../components/dialogs/DeleteItem';
 import { hasPrivilege } from '../Utils/RBAC';
+import { cashiersAsync, redeemAsync } from '../store/cashierSlice';
 
 function RedeemPage() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
-	const [response, setResponse] = useState(null);
+	const { cashiers, isLoading, fetchFailed, redeemResponse } = useSelector(
+		state => state.cashier
+	);
+	const { user, isAdmin } = useSelector(state => state.user);
+	const [reload, setReload] = useState(false);
 	const [redeemError, setRedeemError] = useState(false);
 	const [redeemSuccess, setRedeemSuccess] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [cashiers, setCashiers] = useState(null);
 
-	const [errorFetch, setErrorFetch] = useState(false);
-	const { user, isAdmin } = useSelector(state => state.user);
-
-	const getCashiers = async () => {
-		return await API.get('user/cashiers', {
-			headers: { Authorization: `Bearer ${accessToken}` },
-		});
-	};
 	useEffect(() => {
 		document.title = 'ssansi | cajero';
-		!isAdmin &&
-			getCashiers()
-				.then(r => {
-					setLoading(false);
-					setCashiers(r.data);
-				})
-				.catch(r => {
-					setLoading(false);
-					setErrorFetch(true);
-				});
-	}, []);
+		!isAdmin && dispatch(cashiersAsync(accessToken));
+	}, [reload]);
 
 	const formik = useFormik({
 		initialValues: {
@@ -73,24 +58,22 @@ function RedeemPage() {
 		},
 		validationSchema: Yup.object().shape({
 			code: Yup.string().required('Es necesario introducirse un codigo'),
-			// frequencyRedeem: Yup.number().required('Es necesario marcar'),
 		}),
-		onSubmit: (values, { resetForm }) => {
+		onSubmit: (values, { resetForm, setSubmitting }) => {
 			const redeem = async () => {
-				try {
-					const r = await API.post('codigo/redeem', values);
-					setResponse(r.data);
+				return await dispatch(redeemAsync(accessToken, values));
+			};
+			redeem()
+				.then(r => {
 					setRedeemSuccess(true);
-					setRedeemError(false);
 					resetForm();
-				} catch (e) {
+					setRedeemError(false);
+				})
+				.catch(e => {
 					setRedeemError(true);
 					setRedeemSuccess(false);
-					resetForm();
-					throw new Error(e);
-				}
-			};
-			redeem();
+					setSubmitting(false);
+				});
 		},
 	});
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -107,18 +90,7 @@ function RedeemPage() {
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
-	const addCashierAsync = () => {
-		const update = async () => {
-			return await dispatch(createUserAsync(accessToken, values));
-		};
-		update()
-			.then(r => {
-				handleSnack('Cajero creado exitosamente', 'success');
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
+
 	const deleteAsync = id => {
 		const delet = async () => {
 			await dispatch(deleteUserAsync(accessToken, id));
@@ -126,6 +98,7 @@ function RedeemPage() {
 		delet()
 			.then(r => {
 				handleSnack('Usuario eliminado exitosamente', 'success');
+				setReload(!reload);
 			})
 			.catch(e => {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
@@ -148,14 +121,14 @@ function RedeemPage() {
 				</Typography>
 				<Typography color="warning" textAlign="center">
 					por el estudiante:{' '}
-					{response?.student.nombres + ' ' + response?.student.apellidos}
+					{redeemResponse?.student.nombres + ' ' + redeemResponse?.student.apellidos}
 				</Typography>
 			</Box>
 		);
 	};
 	return (
 		<Container maxWidth="lg">
-			<ShowRoles addCashierAsync={addCashierAsync} />
+			<ShowRoles handleSnack={handleSnack} />
 			<SnackCustom data={snack} closeSnack={closeSnack} />
 
 			<Box>
@@ -170,14 +143,20 @@ function RedeemPage() {
 						}}>
 						Cajero
 					</Typography>
-					<Stack
-						direction={{ xs: 'column', md: 'row' }}
-						alignItems="center"
-						spacing={2}
-						justifyContent="flex-end"
-						sx={{ mb: 3 }}>
-						<AddCashier />
-					</Stack>
+					{!isAdmin && hasPrivilege(['gestionar cajeros'], user.permisos) && (
+						<Stack
+							direction={{ xs: 'column', sm: 'row' }}
+							alignItems="center"
+							spacing={2}
+							justifyContent="flex-end"
+							sx={{ mb: 3 }}>
+							<AddCashier
+								handleSnack={handleSnack}
+								setReload={setReload}
+								reload={reload}
+							/>
+						</Stack>
+					)}{' '}
 				</Box>
 				<Grid container spacing={2} justifyContent="center">
 					<Grid item xs={12} md={8}>
@@ -225,18 +204,18 @@ function RedeemPage() {
 								</Card>
 								{redeemError
 									? codeError()
-									: response?.redeemed
-									? codeErrorRedeemed(response?.redeemed)
+									: redeemResponse?.redeemed
+									? codeErrorRedeemed(redeemResponse?.redeemed)
 									: redeemSuccess && (
 											<Paper sx={{ p: 2, mt: 2 }}>
-												<StudentCard data={response} />
+												<StudentCard data={redeemResponse} />
 											</Paper>
 									  )}
 							</Form>
 						</FormikProvider>
 					</Grid>
 
-					{!isAdmin && hasPrivilege(['listar cajeros'], user.permisos) && (
+					{!isAdmin && hasPrivilege(['gestionar cajeros'], user.permisos) && (
 						<Grid item xs={12} md={4}>
 							<List component={Card} sx={{ p: 2 }}>
 								<Typography
@@ -249,12 +228,12 @@ function RedeemPage() {
 									}}>
 									Cajeros
 								</Typography>
-								{loading ? (
+								{isLoading ? (
 									<SkeletonList iteration={3} />
 								) : (
-									cajeros?.map((cashier, index) => (
+									cashiers?.map((cashier, index) => (
 										<React.Fragment key={index}>
-											<ListItem>
+											<ListItem sx={{ px: 0 }}>
 												<ListItemAvatar>
 													<Avatar src={cashier.picture} />
 												</ListItemAvatar>
@@ -264,10 +243,13 @@ function RedeemPage() {
 														textOverflow: 'ellipsis',
 														whiteSpace: 'nowrap',
 													}}
-													primary={cashier.nombres + cashier.apellidos}
+													primary={cashier.nombres + ' ' + cashier.apellidos}
 													secondary={
 														<React.Fragment>
-															<Typography display={'block'} color="textSecondary">
+															<Typography
+																component="span"
+																display={'block'}
+																color="textSecondary">
 																{cashier.email}
 															</Typography>
 														</React.Fragment>
@@ -277,7 +259,7 @@ function RedeemPage() {
 													<DeleteItem
 														deleteAsync={deleteAsync}
 														id={cashier.id}
-														itemName="Link"
+														itemName="Cajero"
 													/>
 												</ListItemIcon>
 											</ListItem>
@@ -287,10 +269,10 @@ function RedeemPage() {
 										</React.Fragment>
 									))
 								)}
-								{!cashiers && !loading && !errorFetch && (
+								{!cashiers && !isLoading && !fetchFailed && (
 									<Typography align="center">No se econtraron cajeros</Typography>
 								)}
-								{errorFetch && (
+								{fetchFailed && (
 									<Box
 										width={1}
 										sx={{

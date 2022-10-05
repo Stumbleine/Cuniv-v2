@@ -87,7 +87,7 @@ export const compNotVerifiedAsync = token => async dispatch => {
 	}
 };
 
-export const profileCompanieAsync = (idCompanie, token) => async dispatch => {
+export const profileCompanieAsync = (token, idCompanie) => async dispatch => {
 	dispatch(setLoading());
 	try {
 		const r = await API.get(`empresa/profile?id=${idCompanie}`, {
@@ -174,33 +174,29 @@ export const deleteCompanieAsync = (token, id) => async dispatch => {
 		throw new Error(e);
 	}
 };
-export const updateInfoAsync =
-	(token, values, image, editedFile, idEmpresa) => async dispatch => {
-		let data = null;
-		if (editedFile) {
-			const b64 = image ? await convertToB64(image) : null;
-			data = { ...values, image: b64 };
-		} else {
-			data = values;
-		}
-		console.log(data, editedFile);
+export const updateInfoAsync = (token, values, image) => async dispatch => {
+	const b64 = image ? await convertToB64(image) : null;
 
-		try {
-			await API.post(`empresa/update?id=${idEmpresa}`, data, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
-			// dispatch(profileCompanieAsync(token));
-		} catch (e) {
-			throw new Error(e);
-		}
-	};
+	if (b64) {
+		values = { ...values, image: b64 };
+	}
+	console.log(values);
+	try {
+		await API.post(`empresa/update?id=${values.id_empresa}`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(profileCompanieAsync(token, values.id_empresa));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 
 export const updateSocialAsync = (token, values, idEmpresa) => async dispatch => {
 	try {
 		await API.post(`empresa/update?id=${idEmpresa}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		dispatch(profileCompanieAsync(token));
+		dispatch(profileCompanieAsync(token, idEmpresa));
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -210,12 +206,48 @@ export const changeResponsableAsync = (token, values, idEmpresa) => async dispat
 		await API.post(`empresa/update?id=${idEmpresa}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		dispatch(profileCompanieAsync(token));
+		dispatch(profileCompanieAsync(token, idEmpresa));
 	} catch (e) {
 		throw new Error(e);
 	}
 };
 
+// gestion de sucursales
+export const addBranchAsync = (token, values, idEmpresa) => async dispatch => {
+	values = { ...values, id_empresa: idEmpresa };
+	try {
+		await API.post(`sucursal/create`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(profileCompanieAsync(token, idEmpresa));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+export const deleteBranchAsync = (token, id, idEmpresa) => async dispatch => {
+	console.log('hello');
+	try {
+		await API.delete(`sucursal/delete?id=${id}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(profileCompanieAsync(token, idEmpresa));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const updateBranchAsync = (token, values, id, idEmpresa) => async dispatch => {
+	try {
+		await API.post(`sucursal/update?id=${id}`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(profileCompanieAsync(token, idEmpresa));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+// extra fetch
 export const getProveedores = token => async dispatch => {
 	try {
 		const r = await API.get('select/providers', {
@@ -226,6 +258,7 @@ export const getProveedores = token => async dispatch => {
 		throw new Error(e);
 	}
 };
+
 export const getRubros = token => async dispatch => {
 	try {
 		const r = await API.get('select/rubros', {

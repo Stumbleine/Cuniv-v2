@@ -45,8 +45,6 @@ export default function LocationsTable() {
 	};
 
 	const deleteAsync = async id => {
-		console.log('delete', id);
-
 		return await dispatch(deleteLocationAsync(accessToken, id));
 	};
 

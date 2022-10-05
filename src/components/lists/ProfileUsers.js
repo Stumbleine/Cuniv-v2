@@ -14,8 +14,8 @@ import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import EditCompanieField from '../dialogs/EditCompanieField';
 
-export default function ProfileUsers(props) {
-	const { users } = props;
+export default function ProfileUsers({ users }) {
+	const { provider, cashiers } = users;
 	const { isAdmin } = useSelector(state => state.user);
 
 	return (
@@ -29,24 +29,34 @@ export default function ProfileUsers(props) {
 					width: '100%',
 					borderRadius: 2,
 				}}>
-				{users?.map(user => (
-					<ListItem key={user.id} alignItems="center" sx={{ py: 0, px: 2 }}>
+				<ListItem key={provider.id} alignItems="center" sx={{ py: 0, px: 2 }}>
+					<ListItemAvatar>
+						<Avatar alt={provider.nombres} src={provider.picture} />
+					</ListItemAvatar>
+					<ListItemText
+						primary={provider.nombres + ' ' + provider.apellidos}
+						secondary="responsable"
+					/>
+					{isAdmin && (
+						<ListItemIcon>
+							<EditCompanieField
+								tooltip="Cambiar responsable"
+								fieldName="responsable"
+								data={provider.id}
+							/>
+						</ListItemIcon>
+					)}
+				</ListItem>
+
+				{cashiers?.map(cashier => (
+					<ListItem key={cashier.id} alignItems="center" sx={{ py: 0, px: 2 }}>
 						<ListItemAvatar>
-							<Avatar alt={user.nombres} src={user.picture} />
+							<Avatar alt={cashier.nombres} src={cashier.picture} />
 						</ListItemAvatar>
 						<ListItemText
-							primary={user.nombres + ' ' + user.apellidos}
-							secondary="responsable"
+							primary={cashier.nombres + ' ' + cashier.apellidos}
+							secondary="cajero"
 						/>
-						{isAdmin && (
-							<ListItemIcon>
-								<EditCompanieField
-									tooltip="Cambiar responsable"
-									fieldName="responsable"
-									data={user.id}
-								/>
-							</ListItemIcon>
-						)}
 					</ListItem>
 				))}
 			</List>

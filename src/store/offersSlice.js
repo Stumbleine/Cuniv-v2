@@ -42,6 +42,7 @@ export const getOffersAsync = token => async dispatch => {
 		const r = await API.get('beneficio/list', {
 			headers: { Authorization: `Bearer ${token}` },
 		});
+		// console.log(r.data);
 		dispatch(setOffers(r.data));
 	} catch (e) {
 		dispatch(setFetchFailed());
@@ -71,25 +72,26 @@ export const createOfferAsync =
 		const productsArray = [];
 
 		branchs?.forEach(e => {
-			branchsArray.push(e.id_sucursal);
+			branchsArray.push(e.id_branch);
 		});
 		products?.forEach(e => {
-			productsArray.push(e.id_producto);
+			productsArray.push(e.id_product);
 		});
 
 		const data = {
 			...offer,
 			image: b64,
-			productos: products.length !== 0 ? { productos: productsArray } : null,
-			sucursales_disp: branchs.length !== 0 ? { ids: branchsArray } : null,
+			productos:
+				products.length !== 0 ? { productos: productsArray } : { productos: null },
+			sucursales_disp: branchs.length !== 0 ? { ids: branchsArray } : { ids: null },
 			frequency_redeem: fredeem,
 		};
-		console.log('data armado=>', data);
+		// console.log('data armado=>', data);
 		try {
 			const r = await API.post(`/beneficio/create`, data, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
-			console.log('offerCreate->', r.data);
+			// console.log('offerCreate->', r.data);
 			dispatch(getOffersAsync(token));
 		} catch (e) {
 			throw new Error(e);
@@ -103,7 +105,7 @@ export const updateOfferAsync = (token, values, imageFile) => async dispatch => 
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };
 	}
-	console.log(values);
+	// console.log(values);
 	try {
 		await API.post(`beneficio/update?id=${values.id_beneficio}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -114,7 +116,6 @@ export const updateOfferAsync = (token, values, imageFile) => async dispatch => 
 	}
 };
 export const deleteOfferAsync = (token, id) => async dispatch => {
-	console.log(id);
 	try {
 		await API.delete(`beneficio/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },

@@ -33,7 +33,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function EditRubro({ rubro, updateAsync }) {
-	// console.log(user)
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { isAdmin } = useSelector(state => state.user);

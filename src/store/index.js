@@ -6,11 +6,11 @@ import loginReducer from './loginSlice';
 import productsReducer from './productsSlice';
 import companiesReducer from './companiesSlice';
 import statisticsReducer from './statisticsSlice';
-import publicReducer from './publicSlice';
 import settingReducer from './settingSlice';
 import rubrosReducer from './rubrosSlice';
 import umssSlice from './umssSlice';
 import complaintSlice from './complaintSlice';
+import cashierSlice from './cashierSlice';
 // MIDDLEWARE
 const localStorageMiddleware = ({ getState }) => {
 	return next => action => {
@@ -47,7 +47,7 @@ export default configureStore({
 		rubros: rubrosReducer,
 		complaint: complaintSlice,
 		umss: umssSlice,
-		// public: publicReducer,
+		cashier: cashierSlice,
 		// statics: statisticsReducer,
 	},
 

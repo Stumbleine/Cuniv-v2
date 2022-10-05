@@ -7,8 +7,9 @@ import SnackCustom from '../components/SnackCustom';
 import WarningVerified from '../components/WarningVerified';
 
 export default function OfferPage() {
-	const { user } = useSelector(state => state.user);
+	const { user, isAdmin } = useSelector(state => state.user);
 
+	const { profile } = useSelector(state => state.companies);
 	return (
 		<Container maxWidth="lg">
 			{/* <SnackCustom data={snack} closeSnack={closeSnack} /> */}
@@ -27,12 +28,13 @@ export default function OfferPage() {
 						Oferta
 					</Typography>
 				</Box>
-				{user?.companieVerified === false && (
-					<WarningVerified>
-						¡Su oferta no es visible para estudiantes, debido a que su empresa a un no fue
-						verificado!
-					</WarningVerified>
-				)}
+				{!isAdmin &&
+					(user?.companieVerified === false || profile.companie.verified === false) && (
+						<WarningVerified>
+							¡Su oferta no es visible para estudiantes, debido a que su empresa a un no
+							fue verificado!
+						</WarningVerified>
+					)}
 
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={6}>

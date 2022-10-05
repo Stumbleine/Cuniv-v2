@@ -33,7 +33,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Edituser({ user, updateAsync }) {
-	// console.log(user)
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);

@@ -35,14 +35,7 @@ export default function FilterBar({ handleSearch, children, w }) {
 						placerholder="Buscar usuario"
 						InputProps={{
 							startAdornment: (
-								<IconButton
-									type="submit"
-									edge="end"
-									sx={{ mr: 0.5 }}
-									// onClick={() => {
-									// 	console.log(formik.values);
-									// }}
-								>
+								<IconButton type="submit" edge="end" sx={{ mr: 0.5 }}>
 									<SearchRounded />
 								</IconButton>
 							),

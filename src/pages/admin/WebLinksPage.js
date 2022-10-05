@@ -50,7 +50,6 @@ export default function WebLinksPage() {
 
 	const closeDialog = useRef(null);
 	const deleteAsync = id => {
-		console.log('delete', id);
 		const del = async () => {
 			return await dispatch(deleteSiteAsync(accessToken, id));
 		};

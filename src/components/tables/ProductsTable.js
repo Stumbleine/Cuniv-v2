@@ -78,7 +78,6 @@ export default function ProductsTable({ handleSnack }) {
 	if (privilegeEdit || privilegeDelete) {
 		TABLE_HEAD.push({ id: 'acciones', label: 'Acciones', alignRight: false });
 	}
-	console.log(TABLE_HEAD);
 	const [rowsPerPage, setRowsPerPage] = useState(7);
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
@@ -113,18 +112,6 @@ export default function ProductsTable({ handleSnack }) {
 			});
 	};
 
-	const updateAsync = (values, file) => {
-		const update = async () => {
-			return await dispatch(updateProductAsync(accessToken, values, file));
-		};
-		update()
-			.then(r => {
-				handleSnack('Usuario actualizado exitosamente', 'success');
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
 	return (
 		<>
 			<FilterBar handleSearch={handleSearch}>
@@ -176,13 +163,19 @@ export default function ProductsTable({ handleSnack }) {
 										<TableRow key={product.id_product} hover>
 											<TableCell component="th" scope="row">
 												<Stack alignItems="center" direction="row" spacing={1}>
-													<img
-														src={product.image}
+													<Box
+														component="img"
 														alt={product.name}
-														style={{
+														onError={({ target }) => {
+															target.onError = null;
+															target.src = '/imgs/defaultImg.svg';
+														}}
+														src={product?.image || '/imgs/defaultImg.svg'}
+														sx={{
 															maxWidth: 80,
 															maxHeight: 70,
-															borderRadius: 10,
+															borderRadius: 2,
+															objectFit: !product.image && 'fill',
 														}}
 													/>
 													<Box>
@@ -204,7 +197,7 @@ export default function ProductsTable({ handleSnack }) {
 												<TableCell align="right">
 													<Box sx={{ display: 'flex' }}>
 														{privilegeEdit && (
-															<EditProduct product={product} updateAsync={updateAsync} />
+															<EditProduct product={product} handleSnack={handleSnack} />
 														)}
 														{privilegeDelete && (
 															<DeleteItem

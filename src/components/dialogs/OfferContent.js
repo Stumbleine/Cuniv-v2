@@ -27,17 +27,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function OfferContent(props) {
+function OfferContent({ offer, children }) {
 	moment.locale('es');
 	const [open, setOpen] = React.useState(false);
 
-	const [offer, setOffer] = useState(props.offer);
 	const dispatch = useDispatch();
-	// useEffect(() => {
-	// }, []);
-	// useEffect(() => {
-	// 	console.log('offerContetn', offer);
-	// }, [offer]);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -47,13 +41,8 @@ function OfferContent(props) {
 	};
 	return (
 		<>
-			<CardActionArea onClick={handleClickOpen}>{props.children}</CardActionArea>
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={handleClose}
-				aria-describedby="alert-dialog-slide-description">
+			<CardActionArea onClick={handleClickOpen}>{children}</CardActionArea>
+			<Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
 				<Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
 					<Avatar
 						alt="logo"
@@ -61,10 +50,7 @@ function OfferContent(props) {
 						src={offer.companie?.logo}
 						sx={{ width: 32, height: 32 }}
 					/>
-					<Typography
-						component="div"
-						variant="subtitle1"
-						sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
+					<Typography component="div" sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
 						{offer.companie?.razon_social}
 					</Typography>
 					<StatusLabel status={offer?.status} />
@@ -73,11 +59,15 @@ function OfferContent(props) {
 				<CardMedia
 					height="200"
 					component="img"
-					alt={offer.companie}
-					image={offer?.image}
+					sx={{ objectFit: !offer.image && 'fill' }}
+					onError={({ target }) => {
+						target.onError = null;
+						target.src = '/imgs/defaultImg.svg';
+					}}
+					image={offer?.image || '/imgs/defaultImg.svg'}
 				/>
 				<DialogContent sx={{ px: 2, py: 1, minWidth: 420, maxWidth: 450 }}>
-					<Stack spacing={1}>
+					<Stack spacing={0.5}>
 						<Box sx={{}}>
 							<Typography
 								component="div"
@@ -86,50 +76,50 @@ function OfferContent(props) {
 								sx={{ fontWeight: 'bold', flexGrow: 1 }}>
 								{offer?.title}
 							</Typography>
-							<Typography color="textSecondary" variant="body2">
-								{offer?.discount} {offer?.discount_type === 'Porcentual' ? '%' : 'Bs.'} de
+							<Typography color="textSecondary">
+								{offer?.discount}{' '}
+								{offer?.discount_type === 'Porcentual'
+									? '% de descuento'
+									: 'Bs. de descuento'}
 							</Typography>
 						</Box>
-						<Typography
-							gutterBottom
-							component="div"
-							variant="subtitle2"
-							sx={{ fontWeight: 'bold' }}>
-							Duracion
-						</Typography>
-						<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
-							{moment(offer?.start_date).format('LL') +
-								' hasta ' +
-								moment(offer?.end_date).format('LL')}
-						</Typography>
+						<Box>
+							<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+								Duracion
+							</Typography>
+							<Typography component="div" color="textSecondary">
+								{moment(offer?.start_date).format('LL') +
+									' hasta ' +
+									moment(offer?.end_date).format('LL')}
+							</Typography>
+						</Box>
 						{offer?.conditions ? (
 							<Box>
-								<Typography gutterBottom variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-									Condiciones de reclamo
+								<Typography sx={{ fontWeight: 'bold' }}>
+									Condiciones/Descripcion
 								</Typography>
 
-								<Typography sx={{ ml: 1 }} gutterBottom component="div" variant="body2">
+								<Typography color="textSecondary" component="div">
 									{offer?.conditions}
 								</Typography>
 							</Box>
 						) : null}
 						<Typography
-							gutterBottom
 							component="div"
-							variant="subtitle2"
+							variant="subtitle1"
 							noWrap
 							sx={{ fontWeight: 'bold' }}>
-							Productos incluidos
+							Productos incluidos:
+							{!offer?.products && <Typography color="textSecondary">Todos</Typography>}
 						</Typography>
 						<Box>
 							{offer.products?.map((p, index) => (
-								<Chip key={index} label={p.name} sx={{ ml: 1 }} />
+								<Chip key={index} label={p.name} sx={{ mr: 1 }} />
 							))}
 						</Box>
 						<Typography
-							gutterBottom
 							component="div"
-							variant="subtitle2"
+							variant="subtitle1"
 							noWrap
 							sx={{ fontWeight: 'bold' }}>
 							Disponible en:{' '}
@@ -140,17 +130,21 @@ function OfferContent(props) {
 						<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>
 							{offer.branch_offices?.map((branch, index) => (
 								<Box key={index}>
-									<ListItem alignItems="flex-start" sx={{ py: 0, px: 2 }}>
+									<ListItem
+										alignItems="flex-start"
+										sx={{ alignItems: 'center', py: 0, px: 1 }}>
 										<ListItemIcon
-											sx={{
-												mt: 2,
-											}}>
+											sx={
+												{
+													// mt: 2,
+												}
+											}>
 											<Check />
 										</ListItemIcon>
 										<ListItemText
 											primary={<Typography variant="body1">{branch?.name}</Typography>}
 											secondary={
-												<Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+												<Typography color="textSecondary" variant="body2">
 													{branch?.address}
 												</Typography>
 											}
@@ -162,6 +156,14 @@ function OfferContent(props) {
 								</Box>
 							))}
 						</List>
+						<Box>
+							<Typography sx={{ fontWeight: 'bold' }}>Frecuencia de canje</Typography>
+							<Typography color="textSecondary">
+								{offer?.frequency_redeem === 'no-redeem' && 'Sin canje'}
+								{offer?.frequency_redeem === 'unlimited' && 'Ilimitado'}
+								{offer?.frequency_redeem === 'one' && 'Una vez'}
+							</Typography>
+						</Box>
 					</Stack>
 				</DialogContent>
 				<DialogActions>

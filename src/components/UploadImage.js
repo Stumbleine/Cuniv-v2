@@ -7,7 +7,6 @@ function UploadImage({ handleChangeFile, id, type, label, preload, children }) {
 	const [uploadHover, setUploadHover] = useState(false);
 	const [logo, setLogo] = useState(preload !== undefined ? preload : null);
 	const handleChangeLogo = e => {
-		// console.log(e.target.files);
 		handleChangeFile(e.target.files);
 		setLogo(URL.createObjectURL(e.target?.files[0]));
 	};

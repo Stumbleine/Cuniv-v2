@@ -43,7 +43,7 @@ export const complaintsAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setComplaints(r.data));
-		console.log('ComplaintsData->r:', r.data);
+		// console.log('ComplaintsData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -57,7 +57,7 @@ export const complaintsFilterAsync = (token, search, type) => async dispatch => 
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setComplaints(r.data));
-		console.log('ComplaintsFilterData->r:', r.data);
+		// console.log('ComplaintsFilterData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);

@@ -103,6 +103,7 @@ export default function NavBar({ onOpenSidebar, handleSnack }) {
 								<MenuIcon></MenuIcon>
 							</IconButton>
 						</Box>
+						{screenSizes()}
 						<Box
 							component="div"
 							sx={{
@@ -137,7 +138,6 @@ export default function NavBar({ onOpenSidebar, handleSnack }) {
 									index={index}
 								/>
 							))}
-							{/* {screenSizes()} */}
 						</Box>
 						{/* <Box>
 							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
