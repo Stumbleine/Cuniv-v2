@@ -48,7 +48,7 @@ export default configureStore({
 		complaint: complaintSlice,
 		umss: umssSlice,
 		cashier: cashierSlice,
-		// statics: statisticsReducer,
+		statics: statisticsReducer,
 	},
 
 	middleware: curryGetDefaultMiddleware =>
