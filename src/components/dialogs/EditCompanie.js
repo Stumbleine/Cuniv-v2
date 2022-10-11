@@ -78,17 +78,9 @@ export default function EditCompanie({ companie, handleSnack }) {
 					setSubmitting(false);
 					handleClose();
 				});
-			// const sub = async () => {
-			// 	updateAsync(values, fileImage);
-			// };
-			// sub().then(r => {
-			// 	setSubmitting(false);
-			// 	handleClose();
-			// 	resetForm();
-			// });
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
@@ -105,7 +97,11 @@ export default function EditCompanie({ companie, handleSnack }) {
 					/>
 				</IconButton>
 			</Tooltip>
-			<Dialog open={open} disableEscapeKeyDown={true} TransitionComponent={Transition}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				onClose={handleClose}
+				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + companie?.razon_social}</DialogTitle>
 
 				<DialogContent sx={{ minWidth: 400 }}>
@@ -119,7 +115,6 @@ export default function EditCompanie({ companie, handleSnack }) {
 									label="logo"
 									type="Circle"
 								/>
-								{/* <UpdateImage label="update" type="Circle" /> */}
 								<TextField
 									variant="outlined"
 									size="small"

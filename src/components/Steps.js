@@ -1,11 +1,10 @@
-import { Button, Container, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Steps() {
-	const { rulepath, rule, user } = useSelector(state => state.user);
+	const { user } = useSelector(state => state.user);
 	return (
 		<Stack spacing={2} maxWidth="md">
 			<Typography variant="h4">Primero lo primero</Typography>

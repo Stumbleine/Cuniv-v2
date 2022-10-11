@@ -6,15 +6,10 @@ import {
 	Select,
 	MenuItem,
 	InputAdornment,
-	Paper,
 	Stack,
 	Button,
 	Card,
 	Grid,
-	Snackbar,
-	Alert,
-	FormControlLabel,
-	Checkbox,
 	OutlinedInput,
 	Chip,
 	CardActions,
@@ -31,7 +26,7 @@ import { createOfferAsync } from '../../store/offersSlice';
 import * as Yup from 'yup';
 import SnackCustom from '../SnackCustom';
 import API from '../../conection';
-import { amber, green } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 import CheckFrequency from './CheckFrequency';
 
 function OfferRegisterForm() {
@@ -88,7 +83,6 @@ function OfferRegisterForm() {
 	};
 
 	const handleSelectBranch = event => {
-		console.log(branchSelected, branchOffices);
 		const {
 			target: { value },
 		} = event;
@@ -150,7 +144,7 @@ function OfferRegisterForm() {
 				.then(() => {
 					handleSnack('Oferta agregado exitosamente', 'success');
 					setSubmitting(false);
-					// resetForm();
+					resetForm();
 				})
 				.catch(() => {
 					handleSnack('Algo salio, vuelva a intentarlo', 'error');
@@ -159,11 +153,8 @@ function OfferRegisterForm() {
 		},
 	});
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
-	const [loadingProd, setLoadingProd] = useState(false);
 	useEffect(() => {
 		async function fetchProducts() {
-			setLoadingProd(true);
-
 			const id = isAdmin ? values.id_empresa : user.companie;
 			const r = await API.get('select/products?empresa=' + id, {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -449,52 +440,3 @@ function OfferRegisterForm() {
 	);
 }
 export default OfferRegisterForm;
-
-/* <Stack
-										direction="column"
-										spacing={1}
-										sx={{
-											alignItems: 'center',
-											bgcolor: 'grey.100',
-											py: 2,
-											borderRadius: 2,
-											overflowY: 'scroll',
-											height: 200,
-										}}>
-										{[
-											{
-												id_sucursal: 1,
-												nombre: 'Sucursal central',
-												direccion: 'Av. Junin y Ayaroa',
-											},
-											{
-												id_sucursal: 2,
-												nombre: 'Sucursal Km4',
-												direccion: 'Av. Blanco Galindo',
-											},
-										]?.map(n => (
-											<Paper
-												key={n.id_sucursal}
-												sx={{
-													display: 'flex',
-													alignItems: 'center',
-													width: '90%',
-													borderRadius: 1,
-													minWidth: 200,
-													minHeight: 60,
-													p: 1,
-													bgcolor: 'background.paper',
-												}}>
-												<FormControlLabel
-													control={<Checkbox value={n} />}
-													sx={{ ml: 0.5 }}
-												/>
-												<Box>
-													<Typography variant="body1">{n.nombre}</Typography>
-													<Typography variant="body2" color="textSecondary">
-														direccion: {n.direccion}
-													</Typography>
-												</Box>
-											</Paper>
-										))}
-									</Stack> */

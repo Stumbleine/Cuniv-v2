@@ -14,7 +14,7 @@ import {
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { createUserAsync } from '../../store/usersSlice';
@@ -62,7 +62,7 @@ function UserCreateForm() {
 			};
 			create()
 				.then(() => {
-					handleSnack('Link agregado exitosamente', 'success');
+					handleSnack('Usuario creado exitosamente', 'success');
 					resetForm();
 					setFileImage(null);
 				})
@@ -72,7 +72,7 @@ function UserCreateForm() {
 				});
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+	const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<FormikProvider value={formik}>
 			<SnackCustom data={snack} closeSnack={closeSnack} />
@@ -147,9 +147,7 @@ function UserCreateForm() {
 						<Box sx={{ position: 'relative' }}>
 							<Button
 								color="primary"
-								/* 						disabled={formik.isSubmitting} */
 								fullWidth
-								// size="small"
 								type="submit"
 								disabled={isSubmitting}
 								variant="contained">
@@ -180,7 +178,7 @@ export const rols = [
 	{ id_rol: 2, rol: 'ADM', label: 'Administrador' },
 	{ id_rol: 1, rol: 'PRV', label: 'Proveedor' },
 	{ id_rol: 4, rol: 'EST', label: 'Estudiante' },
-	{ id_rol: 5, rol: 'CJRO', label: 'Cajero' },
+	// { id_rol: 5, rol: 'CJRO', label: 'Cajero' },
 ];
 
 export default UserCreateForm;

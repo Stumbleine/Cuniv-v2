@@ -53,7 +53,7 @@ export const filterOffersAsync = (token, search, idc, status) => async dispatch 
 	dispatch(setFilterLoading());
 	try {
 		const r = await API.get(
-			`beneficio/list?search${search}&idc=${idc}&status=${status}`,
+			`beneficio/list?search=${search}&idc=${idc}&status=${status}`,
 			{
 				headers: { Authorization: `Bearer ${token}` },
 			}
@@ -86,9 +86,8 @@ export const createOfferAsync =
 			sucursales_disp: branchs.length !== 0 ? { ids: branchsArray } : { ids: null },
 			frequency_redeem: fredeem,
 		};
-		// console.log('data armado=>', data);
 		try {
-			const r = await API.post(`/beneficio/create`, data, {
+			await API.post(`/beneficio/create`, data, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			// console.log('offerCreate->', r.data);
@@ -99,8 +98,6 @@ export const createOfferAsync =
 	};
 
 export const updateOfferAsync = (token, values, imageFile) => async dispatch => {
-	// console.log(imageFile);
-
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };

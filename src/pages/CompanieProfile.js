@@ -1,4 +1,13 @@
-import { Box, Button, Container, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+	Box,
+	Button,
+	CircularProgress,
+	Container,
+	Grid,
+	Paper,
+	Stack,
+	Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +18,6 @@ import ProfileProducts from '../components/lists/ProfileProducts';
 import ProfileUsers from '../components/lists/ProfileUsers';
 import {
 	approveCompanieAsync,
-	getCompaniesAsync,
 	getProveedores,
 	getRubros,
 	profileCompanieAsync,
@@ -20,19 +28,20 @@ import ProfileInfo from '../components/ProfileInfo';
 import WarningVerified from '../components/WarningVerified';
 import RejectCompanie from '../components/dialogs/RejectCompanie';
 import SnackCustom from '../components/SnackCustom';
-import { getUserAsync } from '../store/userSlice';
+import { green } from '@mui/material/colors';
 
 function CompanieProfile() {
 	const dispatch = useDispatch();
 	const { idCompanie } = useParams();
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-	const { profile, isLoading, fetchFailed } = useSelector(state => state.companies);
+	const [isSubmitting, setSubmitting] = useState(false);
+	const { profile, isLoadingProfile, profileFailed } = useSelector(
+		state => state.companies
+	);
 	const [reload, setReload] = useState(false);
 	useEffect(() => {
 		document.title = 'ssansi | empresa';
-		console.log(idCompanie, user?.companie, isAdmin);
-
 		if (idCompanie) {
 			dispatch(profileCompanieAsync(accessToken, idCompanie));
 		} else if (user.companie && !isAdmin) {
@@ -79,15 +88,19 @@ function CompanieProfile() {
 	};
 
 	const submitApprove = () => {
+		setSubmitting(true);
 		const approve = async () => {
 			await dispatch(approveCompanieAsync(accessToken, profile?.companie.id_empresa));
 		};
 		approve()
 			.then(() => {
-				handleSnack('Item eliminado exitosamente', 'success');
+				handleSnack('Se aprobó la empresa exitosamente', 'success');
+				setSubmitting(false);
+				setReload(!reload);
 			})
 			.catch(() => {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				setSubmitting(false);
 			});
 	};
 	return (
@@ -110,7 +123,7 @@ function CompanieProfile() {
 					(user?.companieVerified === false || profile?.companie?.verified === false) && (
 						<WarningVerified>En proceso de verificacion.</WarningVerified>
 					)}
-				{isLoading && isAdmin ? (
+				{isLoadingProfile && isAdmin ? (
 					<SkeletonProfile />
 				) : profile ? (
 					<Grid container spacing={2}>
@@ -134,14 +147,39 @@ function CompanieProfile() {
 									<ProfileProducts products={profile?.products} />
 									{/* lista de ofertas */}
 									<ProfileOffers offers={profile?.offers} />
-									{isAdmin && !profile?.companie.verified && (
+									{isAdmin && !profile?.companie.verified && !profile?.companie.rejected && (
 										<>
 											<Typography sx={{ fontWeight: 'bold' }}>
 												Responder a solicitud
 											</Typography>
 											<Box sx={{ display: 'flex', justifyContent: 'end' }}>
-												<Button onClick={submitApprove}>Aprobar</Button>
-												<RejectCompanie companie={profile?.companie} />
+												<Box sx={{ position: 'relative' }}>
+													<Button
+														onClick={submitApprove}
+														fullWidth
+														disabled={isSubmitting}>
+														Aprobar
+													</Button>
+													{isSubmitting && (
+														<CircularProgress
+															size={24}
+															sx={{
+																color: green[500],
+																position: 'absolute',
+																top: '50%',
+																left: '50%',
+																marginTop: '-12px',
+																marginLeft: '-12px',
+															}}
+														/>
+													)}
+												</Box>
+												<RejectCompanie
+													companie={profile?.companie}
+													handleSnack={handleSnack}
+													setReload={setReload}
+													reaload={reload}
+												/>
 											</Box>
 										</>
 									)}
@@ -149,9 +187,9 @@ function CompanieProfile() {
 							</Paper>
 						</Grid>
 					</Grid>
-				) : isLoading ? (
+				) : isLoadingProfile ? (
 					<SkeletonProfile />
-				) : fetchFailed ? (
+				) : profileFailed ? (
 					<>
 						<Box
 							sx={{

@@ -1,12 +1,10 @@
 import { Card, CardMedia, Grid, Stack, Typography } from '@mui/material';
 import { green, grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
 
 export default function StudentCard(props) {
 	const { offer } = props.data;
 	const { student } = props.data;
-	const { code } = props.data;
 
 	return (
 		<Grid container justifyContent="center">

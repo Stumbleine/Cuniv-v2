@@ -6,41 +6,31 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
-	FormControl,
-	FormHelperText,
 	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
 	Slide,
 	Stack,
 	TextField,
-	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
+import { updateUserAsync } from '../../store/usersSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Edituser({ user, updateAsync }) {
+export default function Edituser({ user, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
-	const [editFile, setEditFile] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		setEditFile(true);
 		setFileImage(file);
 	};
 
@@ -67,14 +57,19 @@ export default function Edituser({ user, updateAsync }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const sub = async () => {
-				updateAsync(values, fileImage);
+			const update = async () => {
+				return await dispatch(updateUserAsync(accessToken, values, fileImage));
 			};
-			sub().then(r => {
-				resetForm();
-				setSubmitting(false);
-				handleClose();
-			});
+			update()
+				.then(r => {
+					handleSnack('Usuario actualizado exitosamente', 'success');
+					handleClose();
+					resetForm();
+				})
+				.catch(e => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
@@ -93,8 +88,9 @@ export default function Edituser({ user, updateAsync }) {
 			</IconButton>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
+				onClose={handleClose}
 				disableEscapeKeyDown={true}
 				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + user?.nombres}</DialogTitle>

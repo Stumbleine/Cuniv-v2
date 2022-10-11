@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, isImmutableDefault } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import offersReducer from './offersSlice';
 import usersReducer from './usersSlice';
 import userReducer from './userSlice';
@@ -16,7 +16,6 @@ const localStorageMiddleware = ({ getState }) => {
 	return next => action => {
 		const result = next(action);
 		const st = getState();
-		// console.log('getState=>', st);
 		const appState = {
 			login: st.login,
 			user: st.user,
@@ -55,15 +54,3 @@ export default configureStore({
 		curryGetDefaultMiddleware().concat(localStorageMiddleware),
 	preloadedState: reHydrateStore(),
 });
-
-// const rootReducer = combineReducers({ loginReducer });
-// const rootReducer = (state, action) => {
-//   if (action.type === 'example/clearResults') {
-
-//     // this applies to all keys defined in persistConfig(s)
-//     storage.removeItem('persist:root')
-
-//     state = {}
-//   }
-//   return appReducer(state, action)
-// }

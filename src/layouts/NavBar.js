@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
 	AppBar,
 	Box,
@@ -10,42 +8,26 @@ import {
 	Divider,
 	Stack,
 } from '@mui/material';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import NightlightIcon from '@mui/icons-material/Nightlight';
-import { useSelector, useDispatch } from 'react-redux';
+
+import { useSelector } from 'react-redux';
 import AccountPopover from '../components/AccountPopover';
 import { screenSizes } from '../Utils/Breakpoints';
 import Logo from '../components/Logo';
 import Notifications from '../components/menus/Notifications';
 export default function NavBar({ onOpenSidebar, handleSnack }) {
-	const [anchorElNav, setAnchorElNav] = React.useState(null);
-	const { rule } = useSelector(state => state.user);
-	const dispatch = useDispatch();
 	const navlinks = useSelector(state => state.setting.navlinks);
-	//	functions
 
-	const handleOpenNavMenu = event => {
-		setAnchorElNav(event.currentTarget);
-	};
-
-	const handleCloseNavMenu = () => {
-		setAnchorElNav(null);
-	};
-
-	//	itemNav
 	const ItemNav = props => {
-		// const router = useLocation();
-		// const routeRole = rule === 'ADM' ? '/admin/' : rule === 'PRV' ? '/provider/' : null;
-		// const active = props.href ? router.pathname === '/main/' + props.href : false;
+		const router = useLocation();
+		const active = props.href ? router.pathname === '/main/' + props.href : false;
 		return (
 			<>
 				<NavLink to={props.href} style={{ textDecoration: 'none' }}>
 					<Button
-						// size="small"
 						sx={{
-							// color: active ? 'primary.main' : 'text.disabled',
+							color: active ? 'primary.main' : 'text.disabled',
 							fontWeight: 'bold',
 							fontStyle: 'italic',
 							px: 1,
@@ -103,7 +85,6 @@ export default function NavBar({ onOpenSidebar, handleSnack }) {
 								<MenuIcon></MenuIcon>
 							</IconButton>
 						</Box>
-						{screenSizes()}
 						<Box
 							component="div"
 							sx={{
@@ -139,15 +120,7 @@ export default function NavBar({ onOpenSidebar, handleSnack }) {
 								/>
 							))}
 						</Box>
-						{/* <Box>
-							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
-								{mode === 'dark' ? (
-									<LightModeIcon sx={{ color: 'text.icon' }}></LightModeIcon>
-								) : (
-									<NightlightIcon sx={{ color: 'text.icon' }}></NightlightIcon>
-								)}
-							</IconButton>
-						</Box> */}
+
 						<Stack spacing={2} direction="row" alignItems="center">
 							<Notifications />
 							<AccountPopover />

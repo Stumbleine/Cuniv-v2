@@ -1,4 +1,4 @@
-import { Add, Edit } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import {
 	Box,
 	Button,
@@ -6,25 +6,16 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
-	FormControl,
-	FormHelperText,
-	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
 	Slide,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAsync } from '../../store/umssSlice';
-import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { createCashierAsync } from '../../store/cashierSlice';
 
@@ -90,9 +81,9 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 			</Button>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
-				disableEscapeKeyDown={true}
+				onClose={handleClose}
 				TransitionComponent={Transition}>
 				<DialogTitle>Añadir cajero</DialogTitle>
 

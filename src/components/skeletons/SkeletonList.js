@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemIcon, ListItemText, Skeleton } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SkeletonList(props) {
 	const [cant, setCant] = useState([]);

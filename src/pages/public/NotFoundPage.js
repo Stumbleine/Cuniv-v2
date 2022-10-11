@@ -1,7 +1,6 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 function NotFoundPage() {
@@ -19,22 +18,21 @@ function NotFoundPage() {
 					<img
 						src="/svgs/404.svg"
 						alt="404-image"
-						style={{ width: '50%', height: 'auto' }}
+						style={{ width: '45%', height: 'auto' }}
 					/>
 					<Box sx={{ textAlign: 'center', maxWidth: 450 }}>
 						<Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
 							Pagina no encontrada
 						</Typography>
 						<Typography color="textSecondary">
-							Lo sentimos, no pudimos encontrar la página que está buscando.
-							¿Quizás has escrito mal el URL? Asegúrese de revisar su
-							ortografía.
+							Lo sentimos, no pudimos encontrar la página que está buscando. ¿Quizás has
+							escrito mal el URL? Asegúrese de revisar su ortografía.
 						</Typography>
 					</Box>
 					<img
 						src="/svgs/resource404.svg"
 						alt="resource"
-						style={{ width: '100%', height: 'auto' }}
+						style={{ width: '90%', height: 'auto' }}
 					/>
 				</Stack>
 			</Box>

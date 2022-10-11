@@ -24,6 +24,7 @@ import ShowRoles from '../components/ShowRoles';
 import SkeletonOffer from '../components/skeletons/SkeletonOffer';
 import SnackCustom from '../components/SnackCustom';
 import WarningVerified from '../components/WarningVerified';
+import API from '../conection';
 import { filterOffersAsync, getOffersAsync } from '../store/offersSlice';
 import { hasPrivilege } from '../Utils/RBAC';
 
@@ -35,7 +36,6 @@ function OffersPage() {
 	const { isLoading, filterLoading, offers } = useSelector(state => state.offers);
 	const dispatch = useDispatch();
 
-	// const [offers, setOffers] = useState(null);
 	const [showButton, setShowButton] = useState(false);
 	const [disabledBtn, setDisabledBtn] = useState(false);
 	const [showList, setShowList] = useState(false);
@@ -95,17 +95,32 @@ function OffersPage() {
 		dispatch(filterOffersAsync(accessToken, values.search, idc, status));
 	};
 
+	const [companies, setCompanies] = useState(null);
+	useEffect(() => {
+		const getCompanies = async () => {
+			const r = await API.get('select/companies', {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setCompanies(r.data);
+		};
+		isAdmin && getCompanies();
+	}, []);
 	const listOffers = () => {
 		return (
 			<Grid container spacing={2}>
+				{filterLoading && (
+					<Box sx={{ display: 'flex', justifyContent: 'center', width: 1, py: 2 }}>
+						<CircularProgress size={24} sx={{ color: green[500] }} />
+					</Box>
+				)}
 				{offers
 					? offers.map(offer => (
 							<Grid item key={offer.id_offer} xs={6} sm={4} md={3} xl={3}>
-								<Offer offer={offer} handleSnack={handleSnack} />
+								<Offer offer={offer} handleSnack={handleSnack} companies={companies} />
 							</Grid>
 					  ))
 					: isLoading
-					? [1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
+					? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]?.map((sk, index) => (
 							<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
 								<SkeletonOffer />
 							</Grid>
@@ -117,15 +132,10 @@ function OffersPage() {
 
 	const msgOffersNull = () => {
 		return (
-			<Stack
-				// maxWidth="lg"
-				width={1}
-				spacing={2}
-				alignItems="center"
-				sx={{ mt: 2 }}>
-				<Typography>No hay ninguna oferta publicada aun</Typography>
+			<Stack width={1} spacing={2} alignItems="center" sx={{ mt: 2 }}>
+				<Typography>No se encontraron ofertas</Typography>
 				<Typography color="textSecondary">
-					Publique sus ofertas ahora pulsando en + Oferta
+					Publique ofertas ahora pulsando en + Oferta
 				</Typography>
 			</Stack>
 		);
@@ -167,9 +177,7 @@ function OffersPage() {
 						direction={{ xs: 'column', md: 'row' }}
 						alignItems="center"
 						spacing={2}
-						// justifyContent="flex-end"
 						sx={{ mb: 3 }}>
-						{/* {offers && ( */}
 						<FilterBar handleSearch={handleSearch}>
 							{isAdmin && (
 								<FormControl sx={{ minWidth: { xs: 1, sm: 160 } }} size="small">
@@ -198,18 +206,12 @@ function OffersPage() {
 									defaultValue={'All'}
 									onChange={handleStatus}
 									input={<OutlinedInput id="offerStatus-filter" label="Estado" />}>
-									{/* {providers.map(r => (
-										<MenuItem key={r.id} value={r.id}>
-											{r.nombres} {r.apellidos}
-										</MenuItem>
-									))} */}
 									<MenuItem value="All">Todos</MenuItem>
-									<MenuItem value="vigente">Vigente</MenuItem>
-									<MenuItem value="expirado">Expirado</MenuItem>
+									<MenuItem value="VIGENTE">Vigente</MenuItem>
+									<MenuItem value="EXPIRADO">Expirado</MenuItem>
 								</Select>
 							</FormControl>
 						</FilterBar>
-						{/* )} */}
 
 						{showButton && (
 							<Button
@@ -231,11 +233,7 @@ function OffersPage() {
 							no fue verificado!
 						</WarningVerified>
 					)}
-				{filterLoading && (
-					<Box sx={{ display: 'flex', justifyContent: 'center', width: 1 }}>
-						<CircularProgress size={24} sx={{ color: green[500] }} />
-					</Box>
-				)}
+
 				{showList && listOffers()}
 
 				{user.companie === null && !isAdmin ? msgCompanyNull() : null}

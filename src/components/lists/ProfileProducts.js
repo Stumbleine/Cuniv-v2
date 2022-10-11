@@ -8,7 +8,7 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 function ProfileProducts(props) {
@@ -44,7 +44,6 @@ function ProfileProducts(props) {
 											noWrap>
 											{'Bs. ' + p.price}
 										</Typography>
-										{/* {'Bs. ' + p.precio} */}
 									</React.Fragment>
 								}
 							/>

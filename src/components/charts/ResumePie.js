@@ -1,6 +1,5 @@
 import { Card, CardHeader, Stack } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 export default function ResumePie() {
@@ -30,8 +29,6 @@ export default function ResumePie() {
 			<CardHeader
 				title="Visualizacion de ofertas por estudiantes"
 				titleTypographyProps={{ fontSize: 16, fontWeight: 'bold ' }}
-
-				// subheader="(+43%) than last year"
 			/>
 			<Box sx={{ p: 1 }} dir="ltr">
 				<ReactApexChart type="pie" series={data} options={options} height={400} />

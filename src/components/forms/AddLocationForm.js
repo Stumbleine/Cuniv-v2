@@ -9,7 +9,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { Box } from '@mui/system';
@@ -21,7 +21,6 @@ import { addLocationAsync } from '../../store/umssSlice';
 export default function AddLocationForm() {
 	const [position, setPosition] = useState(null);
 	const { accessToken } = useSelector(state => state.login);
-	const { errorFetch, successFetch } = useSelector(state => state.umss);
 	const dispatch = useDispatch();
 
 	const [snack, setSnack] = useState({
@@ -98,8 +97,6 @@ export default function AddLocationForm() {
 							size="small"
 							label="Descripcion (opcional)"
 							{...getFieldProps('description')}
-							// error={Boolean(touched.description && errors.description)}
-							// helperText={touched.description && errors.description}
 						/>
 
 						<Box>

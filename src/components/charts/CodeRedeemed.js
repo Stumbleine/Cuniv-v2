@@ -1,10 +1,4 @@
-import {
-	CalendarMonth,
-	CalendarViewMonth,
-	Refresh,
-	Today,
-	Warning,
-} from '@mui/icons-material';
+import { CalendarMonth, Refresh, Today, Warning } from '@mui/icons-material';
 import {
 	Box,
 	Button,
@@ -17,11 +11,11 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import { cyan, green, grey, orange } from '@mui/material/colors';
-import React, { useEffect, useState } from 'react';
+import { green, grey, orange } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
-import { offersViewChartAsync, redeemedChartAsync } from '../../store/statisticsSlice';
+import { redeemedChartAsync } from '../../store/statisticsSlice';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment';
@@ -30,7 +24,6 @@ export default function CodeRedeemed() {
 	const dispatch = useDispatch();
 
 	const { accessToken } = useSelector(state => state.login);
-	const { user, isAdmin } = useSelector(state => state.user);
 	const { codeRedeemed } = useSelector(state => state.statics);
 	const [chartMode, setChartMode] = useState('daily');
 	const [reload, setReload] = useState(false);
@@ -63,7 +56,6 @@ export default function CodeRedeemed() {
 		{
 			name: 'Codigos Canjeados',
 			type: 'area',
-			// data: [50, 10, 35, 51, 70, 30, 69, 91, 50],
 			data: codeRedeemed
 				? chartMode === 'daily'
 					? codeRedeemed?.daily.data
@@ -142,7 +134,7 @@ export default function CodeRedeemed() {
 		},
 	});
 
-	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 	return (
 		<Stack component={Card}>
@@ -191,7 +183,36 @@ export default function CodeRedeemed() {
 					<Refresh />
 				</IconButton>
 			</Stack>
-
+			{showRangeComponent && (
+				<FormikProvider value={formik}>
+					<Form onSubmit={handleSubmit}>
+						<Stack
+							spacing={1}
+							direction="row"
+							sx={{ mx: 3, mt: 1, background: grey[100], borderRadius: 1, p: 1 }}>
+							<TextField
+								size="small"
+								type="date"
+								{...getFieldProps('startDate')}
+								error={Boolean(touched.startDate && errors.startDate)}
+							/>
+							<TextField
+								size="small"
+								type="date"
+								{...getFieldProps('endDate')}
+								error={Boolean(touched.endDate && errors.endDate)}
+							/>
+							<Button
+								size="small"
+								type="submit"
+								disabled={isSubmitting}
+								variant="contained">
+								Consultar
+							</Button>
+						</Stack>
+					</Form>
+				</FormikProvider>
+			)}
 			<Box
 				sx={{
 					p: 1,

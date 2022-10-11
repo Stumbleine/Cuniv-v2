@@ -1,5 +1,4 @@
-import { Skeleton, TableBody, TableCell, TableRow } from '@mui/material';
-import React from 'react';
+import { Skeleton, TableCell, TableRow } from '@mui/material';
 
 function SkeletonTable(props) {
 	const { head } = props;

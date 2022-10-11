@@ -69,18 +69,20 @@ export const {
 } = umssSlice.actions;
 export default umssSlice.reducer;
 
-export const getLocationsAsync = (token, search) => async dispatch => {
-	dispatch(setLoading());
-	try {
-		const r = await API.get(`location/list?search=${search}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setLocations(r.data));
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const getLocationsAsync =
+	(token, search = 'All') =>
+	async dispatch => {
+		dispatch(setLoading());
+		try {
+			const r = await API.get(`location/list?search=${search}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setLocations(r.data));
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 
 export const addLocationAsync = (token, values, position) => async dispatch => {
 	const data = {
@@ -107,12 +109,10 @@ export const editLocationAsync = (token, values, position, id) => async dispatch
 		lng: position.lng.toString(),
 	};
 	try {
-		const r = await API.post(`location/update?id=${id}`, data, {
+		await API.post(`location/update?id=${id}`, data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(getLocationsAsync(token));
-		}, 2000);
+		dispatch(getLocationsAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -120,40 +120,38 @@ export const editLocationAsync = (token, values, position, id) => async dispatch
 
 export const deleteLocationAsync = (token, id) => async dispatch => {
 	try {
-		const r = await API.delete(`location/delete?id=${id}`, {
+		await API.delete(`location/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(getLocationsAsync(token));
-		}, 2000);
+		dispatch(getLocationsAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
 };
 
-export const getSitesAsync = (token, search) => async dispatch => {
-	dispatch(setLoadingLink());
-	try {
-		const r = await API.get(`link/list?search=${search}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setWebSites(r.data));
-	} catch (e) {
-		dispatch(setFetchFailedLink());
-		throw new Error(e);
-	}
-};
+export const getSitesAsync =
+	(token, search = 'All') =>
+	async dispatch => {
+		dispatch(setLoadingLink());
+		try {
+			const r = await API.get(`link/list?search=${search}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setWebSites(r.data));
+		} catch (e) {
+			dispatch(setFetchFailedLink());
+			throw new Error(e);
+		}
+	};
 
 export const addSiteASync = (token, values, image) => async dispatch => {
 	const b64 = image ? await convertToB64(image) : null;
 	const data = { ...values, image: b64 };
 	try {
-		const r = await API.post(`link/create`, data, {
+		await API.post(`link/create`, data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(getSitesAsync(token));
-		}, 2000);
+		dispatch(getSitesAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -161,12 +159,10 @@ export const addSiteASync = (token, values, image) => async dispatch => {
 
 export const deleteSiteAsync = (token, id) => async dispatch => {
 	try {
-		const r = await API.delete(`link/delete?id=${id}`, {
+		await API.delete(`link/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(getSitesAsync(token));
-		}, 2000);
+		dispatch(getSitesAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -181,7 +177,7 @@ export const editLinkAsync = (token, values, id, image, editedFile) => async dis
 		data = values;
 	}
 	try {
-		const r = await API.post(`link/update?id=${id}`, data, {
+		await API.post(`link/update?id=${id}`, data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(getSitesAsync(token));
@@ -189,4 +185,3 @@ export const editLinkAsync = (token, values, id, image, editedFile) => async dis
 		throw new Error(e);
 	}
 };
-// filters

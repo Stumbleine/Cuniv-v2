@@ -4,13 +4,11 @@ import {
 	Container,
 	IconButton,
 	InputAdornment,
-	Link,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import AuthLayout from '../../layouts/AuthLayout';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box } from '@mui/system';
 import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -21,11 +19,9 @@ import { registerAsync } from '../../store/loginSlice';
 import { green } from '@mui/material/colors';
 import SnackCustom from '../../components/SnackCustom';
 
-function RegisterPage() {
+export default function RegisterPage() {
 	const [showPassword, setShowPassword] = useState(false);
-	const { isLoading, registerSuccess, registerFailed } = useSelector(
-		state => state.login
-	);
+	const { isLoading } = useSelector(state => state.login);
 	const dispatch = useDispatch();
 	const schema = Yup.object().shape({
 		nombres: Yup.string().required('Nombres son requeridos'),
@@ -51,7 +47,7 @@ function RegisterPage() {
 			email: '',
 			password: '',
 			confirm: '',
-			rol: 'prv',
+			rol: 'proveedor',
 		},
 		validationSchema: schema,
 		onSubmit: async (values, { resetForm }) => {
@@ -198,5 +194,3 @@ function RegisterPage() {
 		</Container>
 	);
 }
-
-export default RegisterPage;

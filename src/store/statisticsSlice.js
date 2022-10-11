@@ -45,7 +45,7 @@ export const summaryAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setSummary(r.data));
-		console.log('summary->r:', r.data);
+		// console.log('summary->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -57,7 +57,7 @@ export const offersViewAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setOffersView(r.data));
-		console.log('offersDisplay->r:', r.data);
+		// console.log('offersDisplay->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -73,7 +73,7 @@ export const offersViewChartAsync =
 				}
 			);
 			dispatch(setOffersChart(r.data));
-			console.log('offersDisplayChart->r:', r.data);
+			// console.log('offersDisplayChart->r:', r.data);
 		} catch (e) {
 			throw new Error(e);
 		}
@@ -89,7 +89,7 @@ export const generatedChartAsync =
 				}
 			);
 			dispatch(setCodeGenerated(r.data));
-			console.log('genChart->r:', r.data);
+			// console.log('genChart->r:', r.data);
 		} catch (e) {
 			throw new Error(e);
 		}
@@ -104,7 +104,7 @@ export const redeemedChartAsync =
 				}
 			);
 			dispatch(setCodeRedeemed(r.data));
-			console.log('redeemedChart->r:', r.data);
+			// console.log('redeemedChart->r:', r.data);
 		} catch (e) {
 			throw new Error(e);
 		}

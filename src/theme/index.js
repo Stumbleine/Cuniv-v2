@@ -1,4 +1,4 @@
-import { createTheme, alpha } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { grey, orange, red, blue } from '@mui/material/colors';
 import componentsOverride from './overrides';
 
@@ -33,53 +33,6 @@ export const lightTheme = createTheme({
 			light: red[400],
 			delete: red[200],
 		},
-		// grey: GREY,
-		// divider: 'rgba(30,30,30,0.30)',
-	},
-	typography: {
-		fontFamily: "'Open Sans', sans-serif",
-	},
-	shape: {
-		borderRadius: 8,
-	},
-	// breakpoints:{
-	// 	values:{
-
-	// 	},
-	// 	keys:['xxs','xs','sm','md','lg','xl']
-	// }
-});
-export const darkTheme = createTheme({
-	mode: 'dark',
-	palette: {
-		primary: {
-			main: grey[900],
-			light: grey[800],
-		},
-		secondary: {
-			main: grey[300],
-		},
-		background: {
-			paper: grey[200],
-			default: grey[800],
-		},
-		text: {
-			primary: grey[100],
-			secondary: grey[500],
-			disabled: grey[200],
-			icon: grey[400],
-		},
-		warning: {
-			main: orange[800],
-			light: orange[500],
-		},
-		error: {
-			main: red[700],
-			light: red[400],
-			delete: red[200],
-		},
-		// grey: GREY,
-		divider: 'rgba(30,30,30,0.30)',
 	},
 	typography: {
 		fontFamily: "'Open Sans', sans-serif",
@@ -90,4 +43,3 @@ export const darkTheme = createTheme({
 });
 
 lightTheme.components = componentsOverride(lightTheme);
-darkTheme.components = componentsOverride(darkTheme);

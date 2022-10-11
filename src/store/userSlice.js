@@ -42,7 +42,7 @@ export const getUserAsync = token => async dispatch => {
 
 export const logoutAsync = token => async dispatch => {
 	try {
-		const r = await API.get('user/logout', {
+		await API.get('user/logout', {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setUser(null));
@@ -67,7 +67,6 @@ export const updateAccountAsync = (token, values, imageFile) => async dispatch =
 	if (b64 !== null) {
 		values = { ...values, picture: b64 };
 	}
-	// console.log(values);
 	try {
 		await API.post(`user/update`, values, {
 			headers: { Authorization: `Bearer ${token}` },

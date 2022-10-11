@@ -1,5 +1,4 @@
-import '../styles/scroll.css';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import NavBar from './NavBar';
@@ -8,23 +7,20 @@ import NotificationSnack from '../components/NotificationSnack';
 import socket from '../socket';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBadge, setNewNoti } from '../store/settingSlice';
-import Tuturu from '../assets/tuturuuu.mp3';
 import Waterdrop from '../assets/water-drop.mp3';
+import Footer from '../components/Footer';
 
-const ContainerStyle = styled('div')(({ theme }) => ({
-	overflow: 'auto',
-	// minHeight: '92vh',
+const Page = styled('div')(({ theme }) => ({
+	minHeight: '100vh',
 	display: 'flex',
-	alignItems: 'center',
 	justifyContent: 'center',
-
+	position: 'relative',
 	paddingTop: theme.spacing(2),
-	paddingBottom: theme.spacing(2),
+	paddingBottom: theme.spacing(10),
 }));
 function DashboardLayout() {
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
-	const { accessToken } = useSelector(state => state.login);
 	const [openSB, setOpenSB] = useState(false);
 	const [snack, setSnack] = useState({
 		open: false,
@@ -63,11 +59,12 @@ function DashboardLayout() {
 		<>
 			<NavBar onOpenSidebar={() => setOpenSB(true)} />
 			<SideBar openSideBar={openSB} onCloseSideBar={() => setOpenSB(false)} />
-			<ContainerStyle className="container">
+			<Page>
 				<NotificationSnack data={snack} closeSnack={closeSnack} />
 				<audio ref={audioPlayer} src={Waterdrop} />
 				<Outlet />
-			</ContainerStyle>
+				<Footer />
+			</Page>
 		</>
 	);
 }

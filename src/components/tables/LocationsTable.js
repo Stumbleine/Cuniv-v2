@@ -12,15 +12,14 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteLocationAsync } from '../../store/umssSlice';
-import DeleteDialog from '../dialogs/DeleteDialog';
+import DeleteItem from '../dialogs/DeleteItem';
 import EditLocation from '../dialogs/EditLocation';
 import SkeletonTable from '../skeletons/SkeletonTable';
-import SnackCustom from '../SnackCustom';
 
-export default function LocationsTable() {
+export default function LocationsTable({ handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 
@@ -28,11 +27,9 @@ export default function LocationsTable() {
 		state => state.umss
 	);
 	const [rowsPerPage, setRowsPerPage] = useState(7);
-	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const TABLE_HEAD = [
 		{ id: 'location', label: 'Locacion' },
-		// { id: 'type', label: 'Tipo' },
 		{ id: 'cor', label: 'Coordenadas' },
 		{ id: 'actions', label: 'Acciones' },
 	];
@@ -44,17 +41,26 @@ export default function LocationsTable() {
 		setPage(0);
 	};
 
-	const deleteAsync = async id => {
-		return await dispatch(deleteLocationAsync(accessToken, id));
+	const deleteAsync = id => {
+		const delet = async () => {
+			return await dispatch(deleteLocationAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Locacion eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
 	};
 
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2, mt: 2 }}>
-			<Table>
+			<Table size="small">
 				<TableHead sx={{ bgcolor: 'primary.main' }}>
 					<TableRow>
 						{TABLE_HEAD.map(cell => (
-							<TableCell key={cell.id} sx={{ color: 'white' }}>
+							<TableCell key={cell.id} sx={{ color: 'white', py: 1 }}>
 								<Typography noWrap>{cell.label}</Typography>
 							</TableCell>
 						))}
@@ -74,7 +80,15 @@ export default function LocationsTable() {
 											{location.type === 'Aula' && <School />}
 											{location.type === 'Otro' && <HelpCenter />}
 											<Box>
-												<Typography noWrap>{location.name}</Typography>
+												<Typography
+													style={{
+														maxWidth: 220,
+														whiteSpace: 'nowrap',
+														textOverflow: 'ellipsis',
+														overflow: 'hidden',
+													}}>
+													{location.name}
+												</Typography>
 
 												<Typography
 													variant="body2"
@@ -89,11 +103,10 @@ export default function LocationsTable() {
 										<Typography variant="body2">{location.lat}</Typography>
 										<Typography variant="body2">{location.lng}</Typography>
 									</TableCell>
-									{/* <TableCell></TableCell> */}
 									<TableCell align="right">
 										<Box sx={{ display: 'flex' }}>
-											<EditLocation location={location} />
-											<DeleteDialog
+											<EditLocation location={location} handleSnack={handleSnack} />
+											<DeleteItem
 												deleteAsync={deleteAsync}
 												id={location.id}
 												itemName="Locacion"

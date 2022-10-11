@@ -1,4 +1,4 @@
 import { io } from 'socket.io-client';
 
-const socket = io('ws://192.168.88.205:4000');
+const socket = io(process.env.REACT_APP_API_NOTI);
 export default socket;

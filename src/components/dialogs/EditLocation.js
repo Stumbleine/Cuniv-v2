@@ -15,7 +15,6 @@ import {
 import { Form, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { editLocationAsync } from '../../store/umssSlice';
 import { green } from '@mui/material/colors';
@@ -24,7 +23,7 @@ import MapView from '../MapView';
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function EditLocation({ location }) {
+export default function EditLocation({ location, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
@@ -38,18 +37,6 @@ export default function EditLocation({ location }) {
 	};
 	const handleClose = () => {
 		setOpen(false);
-	};
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 
 	const formik = useFormik({
@@ -88,7 +75,7 @@ export default function EditLocation({ location }) {
 				});
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
@@ -102,16 +89,18 @@ export default function EditLocation({ location }) {
 					}}
 				/>
 			</IconButton>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 
-			<Dialog open={open} TransitionComponent={Transition}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				onClose={handleClose}
+				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + location.name}</DialogTitle>
 
 				<DialogContent sx={{ minWidth: 400 }}>
 					<FormikProvider value={formik}>
 						<Form onSubmit={handleSubmit}>
 							<Stack spacing={2} sx={{ mt: 2 }}>
-								{/* <UpdateImage label="update" type="Circle" /> */}
 								<TextField
 									variant="outlined"
 									size="small"
@@ -142,22 +131,6 @@ export default function EditLocation({ location }) {
 									error={Boolean(position ? false : errors.pos)}
 									helperText={position ? '' : errors.pos}
 								/>
-								{/* <TextField
-									variant="outlined"
-									size="small"
-									label="Latitud"
-									{...getFieldProps('lat')}
-									error={Boolean(touched.lat && errors.lat)}
-									helperText={touched.lat && errors.lat}
-								/>
-								<TextField
-									variant="outlined"
-									size="small"
-									label="lng"
-									{...getFieldProps('lng')}
-									error={Boolean(touched.lng && errors.lng)}
-									helperText={touched.lng && errors.lng}
-								/> */}
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>
 									<Box sx={{ position: 'relative' }}>

@@ -1,5 +1,4 @@
 import {
-	Avatar,
 	Badge,
 	Divider,
 	IconButton,
@@ -10,10 +9,9 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Lock, Logout, Person } from '@mui/icons-material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { notificationsAsync, setBadge } from '../../store/settingSlice';
 export default function Notifications() {
@@ -22,7 +20,7 @@ export default function Notifications() {
 
 	const { accessToken } = useSelector(state => state.login);
 	const [anchorNoti, setAnchorNoti] = useState(null);
-	const { user, isAdmin } = useSelector(state => state.user);
+	const { isAdmin } = useSelector(state => state.user);
 
 	const handleOpenUserMenu = event => {
 		setAnchorNoti(event.currentTarget);
@@ -61,7 +59,7 @@ export default function Notifications() {
 					mt: '40px',
 					// borderRadius: 10,
 				}}
-				PaperProps={{ style: { borderRadius: 7, minWidth: 250 } }}
+				PaperProps={{ style: { borderRadius: 10, minWidth: 250 } }}
 				id="menu-appbar"
 				anchorEl={anchorNoti}
 				anchorOrigin={{
@@ -85,15 +83,16 @@ export default function Notifications() {
 					notilist?.map((noti, index) => (
 						<MenuItem
 							sx={{ px: 2.5 }}
-							// component={RouterLink}
+							component={RouterLink}
 							onClick={handleCloseUserMenu}
 							key={index}
-							// to={
-							// 	noti.id_empresa
-							// 		? `supplierCompanies/${noti.id_empresa}`
-							// 		: noti.id_beneficio && `offers`
-							// }
-						>
+							to={
+								noti?.id_empresa
+									? `supplierCompanies/${noti.id_empresa}`
+									: noti?.id_beneficio
+									? `offers`
+									: '/'
+							}>
 							<ListItemText
 								primary={noti.title}
 								secondary={

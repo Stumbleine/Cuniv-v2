@@ -5,8 +5,7 @@ const initialState = {
 	cashiers: null,
 	isLoading: false,
 	fetchFailed: false,
-	// redeemSuccess: false,
-	// redeemError: false,
+
 	redeemResponse: null,
 };
 
@@ -28,18 +27,8 @@ const cashierSlice = createSlice({
 			state.isLoading = false;
 		},
 		setRedeem: (state, { payload }) => {
-			// state.redeemError = false;
-			// state.redeemSuccess = true;
 			state.redeemResponse = payload;
 		},
-		// setRedeemError: (state, { payload }) => {
-		// 	state.redeemError = true;
-		// 	state.redeemSuccess = false;
-		// },
-		// setLoadingReedem: state => {
-		// 	state.redeemError = false;
-		// 	state.redeemSuccess = false;
-		// },
 	},
 });
 export const { setCashiers, setRedeem, setFetchFailed, setLoading } =

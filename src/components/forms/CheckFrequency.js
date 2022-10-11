@@ -6,7 +6,7 @@ import {
 	Stack,
 	Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export default function CheckFrequency({ handleFrequency, fr }) {
 	let frDefault = [true, false, false];
@@ -23,7 +23,6 @@ export default function CheckFrequency({ handleFrequency, fr }) {
 		{ id: 2, time: 'one', label: 'una vez' },
 		{ id: 3, time: 'no-redeem', label: 'sin canje' },
 	];
-	// const [isChecked, setIsChecked] = React.useState(frequencies.slice().fill(false));
 
 	const [isChecked, setIsChecked] = React.useState(frDefault);
 

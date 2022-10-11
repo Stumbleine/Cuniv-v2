@@ -11,6 +11,7 @@ import {
 	Select,
 	OutlinedInput,
 	MenuItem,
+	CircularProgress,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ import SupplierCompany from '../components/cards/SupplierCompany';
 import { hasPrivilege } from '../Utils/RBAC';
 import {
 	compNotVerifiedAsync,
+	filterCompaniesAsync,
 	getCompaniesAsync,
 	getRubros,
 } from '../store/companiesSlice';
@@ -29,16 +31,19 @@ import CompanieNV from '../components/cards/CompanieNV';
 import SkeletonCompanie from '../components/skeletons/SkeletonCompanie';
 import FilterBar from '../components/FilterBar';
 import SnackCustom from '../components/SnackCustom';
+import { green } from '@mui/material/colors';
 
 function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
-	const { isLoading, companies, companiesNV } = useSelector(state => state.companies);
+	const { isLoading, companies, companiesNV, selectRubros, filterLoading } = useSelector(
+		state => state.companies
+	);
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const [showButton, setShowButton] = useState(false);
 	const [showNVCompanies, setNVCompanies] = useState(false);
-	// const [companies, setCompanies] = useState(null);
-	// const [companiesNV, setcompaniesNV] = useState(null);
+	const [search, setSearch] = useState('All');
+	const [rubro, setRubro] = useState('All');
 	useEffect(() => {
 		document.title = 'ssansi | empresas';
 		if (hasPrivilege(['crear empresa', 'gestionar empresas'], user.permisos) || isAdmin) {
@@ -61,31 +66,51 @@ function SupplierCompaniesPage() {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 	const handleClick = () => setNVCompanies(!showNVCompanies);
-	// console.info('You clicked the Chip.', showNVCompanies);
+
+	const handleRubro = event => {
+		setRubro(event.target.value);
+		dispatch(filterCompaniesAsync(accessToken, search, event.target.value));
+	};
+
+	const handleSearch = values => {
+		setSearch(values.search);
+		dispatch(filterCompaniesAsync(accessToken, values.search, rubro));
+	};
 
 	const MsgCompaniesNull = props => {
 		return (
-			<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-				<Typography>{props.children}</Typography>
+			<Stack spacing={2} justifyContent="center" sx={{ mt: 2, width: 1 }}>
+				<Typography align="center">{props.children}</Typography>
 			</Stack>
 		);
 	};
 
 	const listCompaniesNV = () => {
-		return companiesNV ? (
-			companiesNV.map((companie, index) => (
-				<Grid item key={index} xs={6} sm={4} md={3}>
-					<CompanieNV companie={companie} />
-				</Grid>
-			))
-		) : isLoading ? (
-			[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
-				<Grid item key={index} xs={6} sm={4} md={3}>
-					<SkeletonCompanie />
-				</Grid>
-			))
-		) : (
-			<MsgCompaniesNull>No han llegado nuevas solicitudes de afiliacion</MsgCompaniesNull>
+		return (
+			<>
+				{companiesNV ? (
+					companiesNV?.pending.map((companie, index) => (
+						<Grid item key={index} xs={6} sm={4} md={3}>
+							<CompanieNV companie={companie} handleSnack={handleSnack} />
+						</Grid>
+					))
+				) : isLoading ? (
+					[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
+						<Grid item key={index} xs={6} sm={4} md={3}>
+							<SkeletonCompanie />
+						</Grid>
+					))
+				) : (
+					<MsgCompaniesNull>
+						No han llegado nuevas solicitudes de afiliacion
+					</MsgCompaniesNull>
+				)}
+				{companiesNV?.rejected.map((companie, index) => (
+					<Grid item key={index} xs={6} sm={4} md={3}>
+						<CompanieNV companie={companie} handleSnack={handleSnack} />
+					</Grid>
+				))}
+			</>
 		);
 	};
 
@@ -126,28 +151,29 @@ function SupplierCompaniesPage() {
 					<Stack
 						direction={{ xs: 'column', md: 'row' }}
 						alignItems="center"
-						// justifyContent="flex-end"
 						sx={{ mb: 3 }}
 						spacing={2}>
-						<FilterBar>
+						<FilterBar handleSearch={handleSearch}>
 							<FormControl sx={{ minWidth: { xs: 1, sm: 160 } }} size="small">
 								<InputLabel id="rubrof-label">Rubro</InputLabel>
 								<Select
 									labelId="rubrof-label"
 									id="rubro-filter"
 									defaultValue={'All'}
+									onChange={handleRubro}
 									input={<OutlinedInput id="rubro-filter" label="Rubro" />}>
 									<MenuItem value="All">Todos</MenuItem>
-									<MenuItem value="PRV">Restaurante</MenuItem>
-									<MenuItem value="ADM">Salud</MenuItem>
-									<MenuItem value="SADM">Parque</MenuItem>
-									<MenuItem value="EST">Electricidad</MenuItem>
+									{selectRubros?.map(r => (
+										<MenuItem key={r.nombre} value={r.nombre}>
+											{r.nombre}
+										</MenuItem>
+									))}
 								</Select>
 							</FormControl>
 							<Chip
 								label={
 									<Typography variant="body2" component="span">
-										Solicitudes ({companiesNV ? companiesNV.length : '0'})
+										Pendientes ({companiesNV ? companiesNV.pending?.length : '0'})
 									</Typography>
 								}
 								variant={showNVCompanies ? 'filled' : 'outlined'}
@@ -169,6 +195,11 @@ function SupplierCompaniesPage() {
 					</Stack>
 				</Box>
 				<Grid container spacing={2}>
+					{filterLoading && (
+						<Box sx={{ display: 'flex', justifyContent: 'center', width: 1, py: 2 }}>
+							<CircularProgress size={24} sx={{ color: green[500] }} />
+						</Box>
+					)}
 					{showNVCompanies === true ? listCompaniesNV() : listCompanies()}
 				</Grid>
 			</Box>

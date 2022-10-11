@@ -1,7 +1,6 @@
 import { SearchRounded } from '@mui/icons-material';
-import { Box, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { IconButton, Stack, TextField } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React from 'react';
 import * as Yup from 'yup';
 
 export default function FilterBar({ handleSearch, children, w }) {

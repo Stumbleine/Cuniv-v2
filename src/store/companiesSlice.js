@@ -6,11 +6,13 @@ const initialState = {
 	profile: null,
 	companies: null,
 	companiesNV: null,
-	sucursales: [],
 	providers: null,
 	selectRubros: null,
 	isLoading: false,
+	isLoadingProfile: false,
 	fetchFailed: false,
+	filterLoading: false,
+	profileFailed: false,
 };
 
 const companiesSlice = createSlice({
@@ -20,20 +22,19 @@ const companiesSlice = createSlice({
 		setCompanies: (state, { payload }) => {
 			state.companies = payload;
 			state.isLoading = false;
+			state.filterLoading = false;
 		},
 		setCompaniesNV: (state, { payload }) => {
 			state.companiesNV = payload;
 			state.isLoading = false;
 		},
-		setSucursales: (state, { payload }) => {
-			state.sucursales = payload;
-		},
+
 		setProviders: (state, { payload }) => {
 			state.providers = payload;
 		},
 		setCompanieProfile: (state, { payload }) => {
 			state.profile = payload;
-			state.isLoading = false;
+			state.isLoadingProfile = false;
 		},
 		setLoading: state => {
 			state.isLoading = true;
@@ -41,23 +42,38 @@ const companiesSlice = createSlice({
 		},
 		setFetchFailed: state => {
 			state.fetchFailed = true;
+			state.filterLoading = false;
 			state.isLoading = false;
 		},
 		setRubros: (state, { payload }) => {
 			state.selectRubros = payload;
+		},
+		setFilterLoading: state => {
+			state.filterLoading = true;
+			state.fetchFailed = false;
+		},
+		setLoadingProfile: state => {
+			state.isLoadingProfile = true;
+			state.fetchFailed = false;
+		},
+		setProfileFailed: state => {
+			state.profileFailed = true;
+			state.isLoadingProfile = false;
 		},
 	},
 });
 
 export const {
 	setCompanies,
-	setSucursales,
 	setLoading,
 	setCompanieProfile,
 	setCompaniesNV,
 	setFetchFailed,
 	setProviders,
 	setRubros,
+	setFilterLoading,
+	setProfileFailed,
+	setLoadingProfile,
 } = companiesSlice.actions;
 export default companiesSlice.reducer;
 
@@ -65,6 +81,18 @@ export const getCompaniesAsync = token => async dispatch => {
 	dispatch(setLoading());
 	try {
 		const r = await API.get('empresa/list', {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(setCompanies(r.data));
+	} catch (e) {
+		dispatch(setFetchFailed());
+		throw new Error(e);
+	}
+};
+export const filterCompaniesAsync = (token, search, rubro) => async dispatch => {
+	dispatch(setFilterLoading());
+	try {
+		const r = await API.get(`empresa/list?search=${search}&rubro=${rubro}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setCompanies(r.data));
@@ -88,15 +116,15 @@ export const compNotVerifiedAsync = token => async dispatch => {
 };
 
 export const profileCompanieAsync = (token, idCompanie) => async dispatch => {
-	dispatch(setLoading());
+	dispatch(setLoadingProfile());
 	try {
 		const r = await API.get(`empresa/profile?id=${idCompanie}`, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		console.log('perfilEmpresa->r:', r.data);
+		// console.log('perfilEmpresa->r:', r.data);
 		dispatch(setCompanieProfile(r.data));
 	} catch (e) {
-		dispatch(setFetchFailed());
+		dispatch(setProfileFailed());
 		throw new Error(e);
 	}
 };
@@ -107,25 +135,13 @@ export const createCompanieAsync = (token, values, logo, branchs) => async dispa
 		empresa: { ...values, logo: b64 },
 		sucursales: branchs,
 	};
-	console.log('data armado', data);
 	try {
-		const r = await API.post('empresa/create', data, {
+		await API.post('empresa/create', data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 
-		// dispatch(getCompaniesAsync(token));
 		dispatch(getUserAsync(token));
-		console.log('createEmpresa->r:', r.data);
-	} catch (e) {
-		throw new Error(e);
-	}
-};
-
-export const getSucursales = idEmpresa => async dispatch => {
-	try {
-		const r = await API.get('empresa/sucursales?id_e=' + idEmpresa);
-		dispatch(setSucursales(r.data));
-		console.log('sucursales->r:', r.data);
+		// console.log('createEmpresa->r:', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}
@@ -136,15 +152,26 @@ export const rejectCompanieAsync = (token, values) => async dispatch => {
 		await API.post('empresa/reject', values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(compNotVerifiedAsync(token));
-			dispatch(getCompaniesAsync(token));
-		}, 2000);
+		dispatch(compNotVerifiedAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
 };
 
+export const reconsiderCompanieAsync = (token, id) => async dispatch => {
+	const data = {
+		id_empresa: id,
+	};
+	try {
+		await API.post('empresa/re', data, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(compNotVerifiedAsync(token));
+		dispatch(getCompaniesAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 export const approveCompanieAsync = (token, id) => async dispatch => {
 	const data = {
 		id_empresa: id,
@@ -155,16 +182,13 @@ export const approveCompanieAsync = (token, id) => async dispatch => {
 		await API.post('empresa/approve', data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-		setTimeout(() => {
-			dispatch(compNotVerifiedAsync(token));
-			dispatch(getCompaniesAsync(token));
-		}, 2000);
+		dispatch(compNotVerifiedAsync(token));
+		dispatch(getCompaniesAsync(token));
 	} catch (e) {
 		throw new Error(e);
 	}
 };
 export const deleteCompanieAsync = (token, id) => async dispatch => {
-	console.log(id);
 	try {
 		await API.delete(`empresa/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -176,11 +200,9 @@ export const deleteCompanieAsync = (token, id) => async dispatch => {
 };
 export const updateInfoAsync = (token, values, image) => async dispatch => {
 	const b64 = image ? await convertToB64(image) : null;
-
 	if (b64) {
 		values = { ...values, image: b64 };
 	}
-	console.log(values);
 	try {
 		await API.post(`empresa/update?id=${values.id_empresa}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -225,7 +247,6 @@ export const addBranchAsync = (token, values, idEmpresa) => async dispatch => {
 	}
 };
 export const deleteBranchAsync = (token, id, idEmpresa) => async dispatch => {
-	console.log('hello');
 	try {
 		await API.delete(`sucursal/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import AuthLayout from '../../layouts/AuthLayout';
-import { Link, Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
 	Button,
 	CircularProgress,
@@ -15,36 +14,14 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-	ArrowBack,
-	Google,
-	Logout,
-	Visibility,
-	VisibilityOff,
-} from '@mui/icons-material';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { cyan, green } from '@mui/material/colors';
+import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
+import { green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading, setAuth, setAuthFailed, loginAsync } from '../../store/loginSlice';
-import { setUser } from '../../store/userSlice';
+import { loginAsync } from '../../store/loginSlice';
 function LoginPage() {
 	const dispatch = useDispatch();
-	const users = useSelector(state => state.users.users);
 	const { isLoading, isAuthFailed } = useSelector(state => state.login);
 	const [showPassword, setShowPassword] = useState(false);
-	const [showlogoutButton, setShowlogoutButton] = useState(false);
-	const [showloginButton, setShowloginButton] = useState(true);
-	const clientId =
-		'147363332194-u205vroo6c09j366f56qc6d7pbkob6q2.apps.googleusercontent.com';
-	const onLoginSuccess = res => {
-		// console.log('Login Success:', res.profileObj);
-		setShowloginButton(false);
-		setShowlogoutButton(true);
-	};
-
-	const onLoginFailure = res => {
-		// console.log('Login Failed:', res);
-	};
 
 	const LoginSchema = Yup.object().shape({
 		email: Yup.string()
@@ -63,7 +40,7 @@ function LoginPage() {
 			dispatch(loginAsync(values));
 		},
 	});
-	const { errors, touched, values, handleSubmit, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, getFieldProps } = formik;
 	const handleShowPassword = () => {
 		setShowPassword(show => !show);
 	};
@@ -74,36 +51,11 @@ function LoginPage() {
 					<Button component={Link} to="/" startIcon={<ArrowBack></ArrowBack>}>
 						Inicio
 					</Button>
-					<Box sx={{ my: 3 }}>
+					<Box sx={{ my: 2 }}>
 						<Typography variant="h4">Iniciar Sesion</Typography>
 						<Typography>Ingrese sus datos</Typography>
 					</Box>
 					<Stack spacing={3}>
-						<GoogleLogin
-							clientId={clientId}
-							buttonText="Sign In"
-							onSuccess={onLoginSuccess}
-							onFailure={onLoginFailure}
-							cookiePolicy={'single_host_origin'}
-							isSignedIn={true}
-							render={renderProps => (
-								<Button
-									onClick={renderProps.onClick}
-									disabled={renderProps.disabled}
-									fullWidth
-									color="error"
-									startIcon={<Google />}
-									size="large"
-									variant="contained">
-									Iniciar Sesion con Google
-								</Button>
-							)}
-						/>
-						<Box sx={{}}>
-							<Typography align="center" color="textSecondary" variant="body1">
-								o
-							</Typography>
-						</Box>
 						<TextField
 							fullWidth
 							autoComplete="username"
@@ -139,7 +91,6 @@ function LoginPage() {
 						<Box sx={{ pt: 1, position: 'relative' }}>
 							<Button
 								color="primary"
-								/* 						disabled={formik.isSubmitting} */
 								fullWidth
 								size="large"
 								type="submit"

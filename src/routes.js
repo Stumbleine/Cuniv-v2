@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useRoutes } from 'react-router-dom';
 import AuthLayout from './layouts/AuthLayout';
@@ -13,7 +12,6 @@ import WebLinksPage from './pages/admin/WebLinksPage';
 import CompanieProfile from './pages/CompanieProfile';
 import CreateOfferPage from './pages/CreateOfferPage';
 import CreateSupplierCompanyPage from './pages/CreateSupplierCompanyPage';
-import EditCompaniePage from './pages/EditCompaniePage';
 import HomePage from './pages/HomePage';
 import OffersPage from './pages/OffersPage';
 import ProductsPage from './pages/ProductsPage';
@@ -50,19 +48,16 @@ export default function Router() {
 				},
 				{
 					path: 'index',
-					element:
-						isAuth === false ? <LandingPage /> : <Navigate to="/main/home" replace />,
+					element: !isAuth ? <LandingPage /> : <Navigate to="/main/home" replace />,
 				},
-
 				{
 					path: 'login',
-					element:
-						isAuth === false ? <LoginPage /> : <Navigate to="/main/home" replace />,
+					element: !isAuth ? <LoginPage /> : <Navigate to="/main/home" replace />,
 				},
 				{
 					path: 'register',
-					elhement:
-						isAuth === false ? <RegisterPage /> : <Navigate to="/main/home" replace />,
+
+					element: !isAuth ? <RegisterPage /> : <Navigate to="/main/home" replace />,
 				},
 				{
 					path: 'forgot-password',
@@ -136,10 +131,7 @@ export default function Router() {
 						permissions
 					),
 				},
-				{
-					path: 'updateCompanie',
-					element: <EditCompaniePage />,
-				},
+
 				{
 					path: 'rubros',
 					element: construct(
@@ -195,11 +187,6 @@ export default function Router() {
 				{
 					path: 'profile',
 					element: construct(['cuenta'], <AccountProfile />, permissions),
-				},
-				{
-					path: 'est',
-					element: <StaticsPage />,
-					//  construct(['cuenta'], <AccountProfile />, permissions),
 				},
 			],
 		},

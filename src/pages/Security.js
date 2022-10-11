@@ -11,7 +11,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ShowRoles from '../components/ShowRoles';
 import * as Yup from 'yup';
@@ -22,10 +22,8 @@ import SnackCustom from '../components/SnackCustom';
 
 export default function Security() {
 	const { accessToken } = useSelector(state => state.login);
-	const { isLoading } = useSelector(state => state.user);
 
 	const [showPassword, setShowPassword] = useState(false);
-	const [reset, setReset] = useState(false);
 	const dispatch = useDispatch();
 	const [snack, setSnack] = useState({
 		open: false,
@@ -66,7 +64,6 @@ export default function Security() {
 			};
 			fetch()
 				.then(() => {
-					setReset(true);
 					handleSnack('Contraseña actualziado exitosamente', 'success');
 					resetForm();
 				})

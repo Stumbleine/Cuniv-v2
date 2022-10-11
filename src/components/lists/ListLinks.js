@@ -1,4 +1,4 @@
-import { Edit, Language, Warning } from '@mui/icons-material';
+import { Language, Warning } from '@mui/icons-material';
 import {
 	Avatar,
 	Divider,
@@ -10,25 +10,31 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSiteAsync, getSitesAsync } from '../../store/umssSlice';
-import DeleteDialog from '../dialogs/DeleteDialog';
+import { deleteSiteAsync } from '../../store/umssSlice';
+import DeleteItem from '../dialogs/DeleteItem';
 import EditLink from '../dialogs/EditLink';
 import SkeletonList from '../skeletons/SkeletonList';
 
-export default function ListLinks() {
+export default function ListLinks({ handleSnack }) {
 	const { accessToken } = useSelector(state => state.login);
 	const { webSites, isLoadingL, filterLoadingL, fetchFailedL } = useSelector(
 		state => state.umss
 	);
 	const dispatch = useDispatch();
-	useEffect(() => {
-		dispatch(getSitesAsync(accessToken));
-	}, []);
 
-	const deleteAsync = async id => {
-		return await dispatch(deleteSiteAsync(accessToken, id));
+	const deleteAsync = id => {
+		const delet = async () => {
+			await dispatch(deleteSiteAsync(accessToken, id));
+		};
+		delet()
+			.then(r => {
+				handleSnack('Link eliminado exitosamente', 'success');
+			})
+			.catch(e => {
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+			});
 	};
 	return (
 		<List>
@@ -68,8 +74,8 @@ export default function ListLinks() {
 								}
 							/>
 							<ListItemIcon>
-								<EditLink link={ws} />
-								<DeleteDialog deleteAsync={deleteAsync} id={ws.id} itemName="Link" />
+								<EditLink link={ws} handleSnack={handleSnack} />
+								<DeleteItem deleteAsync={deleteAsync} id={ws.id} itemName="Link" />
 							</ListItemIcon>
 						</ListItem>
 						{index !== webSites.length - 1 && (

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Paper, Typography, IconButton, Divider, Stack } from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { Paper, Typography, IconButton, Stack } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { grey, orange } from '@mui/material/colors';
 import AddCompanyBranch from '../forms/AddCompanyBranch';
 
 function CompanyBranch({ updateListBranchs }) {
-	// const sucursaL = sucursal;
 	const defaultBranch = {
 		nombre: 'Sucursal central',
 		direccion: '-',
@@ -82,7 +81,6 @@ function CompanyBranch({ updateListBranchs }) {
 								handleEditSucursal={handleEditBranch}
 							/>
 
-							{/* {key === 1 ? ( */}
 							<IconButton
 								disabled={index === 0}
 								onClick={() => {
@@ -97,7 +95,6 @@ function CompanyBranch({ updateListBranchs }) {
 									}}
 								/>
 							</IconButton>
-							{/* ) : null} */}
 						</Box>
 					</Paper>
 				))}

@@ -1,12 +1,5 @@
-import { Business, Delete, Edit } from '@mui/icons-material';
-import {
-	IconButton,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Typography,
-} from '@mui/material';
+import { Business } from '@mui/icons-material';
+import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBranchAsync } from '../../store/companiesSlice';
@@ -24,7 +17,7 @@ export default function ProfileSucursals(props) {
 		};
 		delet()
 			.then(r => {
-				props.handleSnack('Usuario eliminado exitosamente', 'success');
+				props.handleSnack('Sucursal eliminado exitosamente', 'success');
 			})
 			.catch(e => {
 				props.handleSnack('Algo salio, vuelva a intentarlo', 'error');

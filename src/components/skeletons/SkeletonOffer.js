@@ -1,5 +1,4 @@
 import { Card, CardActions, CardContent, CardMedia, Skeleton } from '@mui/material';
-import React from 'react';
 
 export default function SkeletonOffer() {
 	return (

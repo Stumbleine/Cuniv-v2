@@ -3,19 +3,22 @@ import {
 	Button,
 	Card,
 	CircularProgress,
-	FormHelperText,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { createRubroAsync } from '../../store/rubrosSlice';
 import UploadImage from '../UploadImage';
 
-function RubroAddForm() {
+function RubroAddForm({ handleSnack }) {
 	const [fileImage, setFileImage] = useState(null);
+	const dispatch = useDispatch();
+	const { accessToken } = useSelector(state => state.login);
 
 	const handleChangeFile = file => {
 		setFileImage(file);
@@ -37,16 +40,30 @@ function RubroAddForm() {
 			nombre: Yup.string().required('Nombre de rubro es requerido.'),
 		}),
 		validate: validateIcon,
-		onSubmit: (values, { resetForm }) => {
-			console.log(values);
+		onSubmit: (values, { resetForm, setSubmitting }) => {
+			const add = async () => {
+				return await dispatch(createRubroAsync(accessToken, values, fileImage));
+			};
+			add()
+				.then(() => {
+					handleSnack('Rubro agregado exitosamente', 'success');
+					resetForm();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+	const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<Card sx={{ p: 2 }}>
 			<FormikProvider value={formik}>
 				<Form onSubmit={handleSubmit}>
 					<Stack spacing={2}>
+						<Typography align="center" sx={{ fontWeight: 'bold' }}>
+							Registro de rubro
+						</Typography>
 						<UploadImage label="icono" handleChangeFile={handleChangeFile} type="Circle">
 							{errors.icon && (
 								<Typography
@@ -78,19 +95,15 @@ function RubroAddForm() {
 							label="Descripcion"
 							placeholder="Descripcion (opcional)"
 							{...getFieldProps('descripcion')}
-							// error={Boolean(touched.nombre && errors.nombre)}
-							// helperText={touched.nombre && errors.nombre}
 						/>
 						<Box sx={{ position: 'relative', py: 1 }}>
 							<Button
 								color="primary"
-								/* 						disabled={formik.isSubmitting} */
 								fullWidth
-								size="large"
 								type="submit"
 								disabled={isSubmitting}
 								variant="contained">
-								Crear Rol
+								Añadir
 							</Button>
 							{isSubmitting && (
 								<CircularProgress

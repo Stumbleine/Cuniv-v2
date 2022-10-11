@@ -1,16 +1,10 @@
 import { Container, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import OfferRegisterForm from '../components/forms/OfferRegisterForm';
 import ShowRoles from '../components/ShowRoles';
-import { getSucursales } from '../store/companiesSlice';
 
 function CreateOfferPage() {
-	const dispatch = useDispatch();
-	const { user } = useSelector(state => state.user);
-
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
@@ -28,7 +22,6 @@ function CreateOfferPage() {
 					</Typography>
 				</Box>
 
-				{/* <Box sx={{ display: 'flex', width: 1, background: pink[600] }}> */}
 				<OfferRegisterForm />
 			</Box>
 		</Container>

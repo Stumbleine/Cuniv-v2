@@ -1,10 +1,4 @@
-import {
-	CalendarMonth,
-	CalendarViewMonth,
-	Refresh,
-	Today,
-	Warning,
-} from '@mui/icons-material';
+import { CalendarMonth, Refresh, Today, Warning } from '@mui/icons-material';
 import {
 	Box,
 	Button,
@@ -18,7 +12,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { green, grey } from '@mui/material/colors';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { offersViewChartAsync } from '../../store/statisticsSlice';
@@ -30,7 +24,6 @@ export default function OfferVisits() {
 	const dispatch = useDispatch();
 
 	const { accessToken } = useSelector(state => state.login);
-	const { user, isAdmin } = useSelector(state => state.user);
 	const { offersViewChart } = useSelector(state => state.statics);
 	const [chartMode, setChartMode] = useState('daily');
 	const [showRangeComponent, setShowRangeComponent] = useState(false);
@@ -141,7 +134,7 @@ export default function OfferVisits() {
 		},
 	});
 
-	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 	return (
 		<Stack component={Card}>

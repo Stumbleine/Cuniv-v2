@@ -1,58 +1,30 @@
 import {
-	Alert,
 	Button,
 	Card,
 	CircularProgress,
 	MenuItem,
 	Select,
-	Slide,
-	Snackbar,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UploadImage from '../UploadImage';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProductAsync, companiesAsignAsync } from '../../store/productsSlice';
-import API from '../../conection';
-import SnackCustom from '../SnackCustom';
+import { addProductAsync } from '../../store/productsSlice';
 import { green } from '@mui/material/colors';
 
-function ProductAddForm() {
+function ProductAddForm({ handleSnack, companies }) {
 	const [fileImage, setFileImage] = useState(null);
 	const dispatch = useDispatch();
-	const { user, isAdmin } = useSelector(state => state.user);
+	const { isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-	const { isLoading } = useSelector(state => state.products);
-	const [companies, setCompanies] = useState(null);
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	useEffect(() => {
-		async function fetch() {
-			const r = await API.get('select/companies', {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			setCompanies(r.data);
-		}
-		isAdmin && fetch();
-	}, []);
 
 	const handleChangeFile = file => {
 		setFileImage(file);
-	};
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 
 	const ProductFormSchema = Yup.object().shape({
@@ -72,24 +44,27 @@ function ProductAddForm() {
 			id_empresa: 'none',
 		},
 		validationSchema: ProductFormSchema,
-		onSubmit: (values, { resetForm }) => {
+		onSubmit: (values, { resetForm, setSubmitting }) => {
+			console.log(values);
 			const add = async () => {
-				const r = await dispatch(addProductAsync(accessToken, values, fileImage));
-				console.log('Hola aqui R->Submit', r);
-
-				r
-					? handleSnack('Producto agregado exitosamente', 'success')
-					: handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				return await dispatch(addProductAsync(accessToken, values, fileImage));
 			};
-			add();
+			add()
+				.then(() => {
+					handleSnack('Producto agregado exitosamente', 'success');
+					resetForm();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+				});
 		},
 	});
 
-	const { errors, touched, handleSubmit, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<Card sx={{ p: 2 }}>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 			<UploadImage label="imagen" handleChangeFile={handleChangeFile} type="Rectangle" />
 			<FormikProvider value={formik}>
 				<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -134,8 +109,8 @@ function ProductAddForm() {
 								inputProps={{ 'aria-label': 'Without label' }}
 								{...getFieldProps('tipo')}
 								error={Boolean(touched.tipo && errors.tipo)}>
-								<MenuItem value="Producto">producto</MenuItem>
-								<MenuItem value="Servicio">servicio</MenuItem>
+								<MenuItem value="producto">producto</MenuItem>
+								<MenuItem value="servicio">servicio</MenuItem>
 							</Select>
 						</Box>
 						{isAdmin && (
@@ -167,11 +142,11 @@ function ProductAddForm() {
 								color="primary"
 								fullWidth
 								type="submit"
-								disabled={isLoading}
+								disabled={isSubmitting}
 								variant="contained">
 								Añadir
 							</Button>
-							{isLoading && (
+							{isSubmitting && (
 								<CircularProgress
 									size={24}
 									sx={{

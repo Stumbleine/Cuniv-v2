@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
-import { Delete, Edit } from '@mui/icons-material';
+import { Business } from '@mui/icons-material';
 import {
 	Card,
 	CardActions,
 	CardContent,
 	CardMedia,
-	IconButton,
 	Typography,
 	Avatar,
-	Tooltip,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import OfferContent from '../dialogs/OfferContent';
 import EditOffer from '../dialogs/EditOffer';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteOfferAsync, updateOfferAsync } from '../../store/offersSlice';
+import { deleteOfferAsync } from '../../store/offersSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditOfferPB from '../dialogs/EditOfferPB';
+import StatusLabel from '../StatusLabel';
 
-export default function Offer({ offer, handleSnack }) {
+export default function Offer({ offer, handleSnack, companies }) {
 	const AvatarCustom = styled(Avatar)(({ theme }) => ({
 		width: 37,
 		height: 37,
@@ -68,10 +66,12 @@ export default function Offer({ offer, handleSnack }) {
 						target.onError = null;
 						target.src = '/imgs/defaultImg.svg';
 					}}
-					image={offer?.image || '/imgs/defaultImg.svg'}
-				/>
+					image={offer?.image || '/imgs/defaultImg.svg'}></CardMedia>
+				<StatusLabel elevated={true} status={offer?.status} />
 				<BorderAvatar>
-					<AvatarCustom src={offer.companie.logo} />
+					<AvatarCustom src={offer.companie.logo}>
+						<Business />
+					</AvatarCustom>
 				</BorderAvatar>
 				<CardContent sx={{ mt: 2 }}>
 					<Typography
@@ -93,7 +93,7 @@ export default function Offer({ offer, handleSnack }) {
 			</OfferContent>
 			<CardActions sx={{ justifyContent: 'end' }}>
 				<EditOfferPB offer={offer} handleSnack={handleSnack} />
-				<EditOffer offer={offer} handleSnack={handleSnack} />
+				<EditOffer companies={companies} offer={offer} handleSnack={handleSnack} />
 				<DeleteItem
 					deleteAsync={deleteAsync}
 					id={offer.id_offer}

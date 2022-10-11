@@ -6,7 +6,6 @@ const initialState = {
 	isLoading: false,
 	filterLoading: false,
 	fetchFailed: false,
-	// companiesToAsing:null
 };
 
 const productsSlice = createSlice({
@@ -31,9 +30,6 @@ const productsSlice = createSlice({
 			state.filterLoading = false;
 			state.isLoading = false;
 		},
-		// setCompanies:(state,{payload}) =>{
-		// 	state.companiesToAsing = payload;
-		// }
 	},
 });
 
@@ -74,7 +70,6 @@ export const addProductAsync = (token, producto, image) => async dispatch => {
 	dispatch(setLoading(true));
 	const b64 = image ? await convertToB64(image) : null;
 	const data = { ...producto, image: b64 };
-	// console.log('productFORM', data);
 	try {
 		const r = await API.post('producto/create', data, {
 			headers: { Authorization: `Bearer ${token}` },

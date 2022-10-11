@@ -1,27 +1,9 @@
-import {
-	Add,
-	AddBox,
-	AddRounded,
-	Edit,
-	Email,
-	Facebook,
-	Instagram,
-	Language,
-	Phone,
-	StackedBarChart,
-	Warning,
-} from '@mui/icons-material';
-import { Box, Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { Email, Facebook, Instagram, Language } from '@mui/icons-material';
+import { Box, Stack, Typography } from '@mui/material';
 import { blue, grey, pink } from '@mui/material/colors';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSearchParams, Link, useNavigate } from 'react-router-dom';
-import { updateInfoAsync } from '../store/companiesSlice';
+
 import EditCompanie from './dialogs/EditCompanie';
-import EditCompanieField from './dialogs/EditCompanieField';
 import SocialForm from './dialogs/SocialForm';
-import SnackCustom from './SnackCustom';
-import WarningVerified from './WarningVerified';
 
 export default function ProfileInfo({ companie, handleSnack }) {
 	const noSocial =
@@ -130,7 +112,6 @@ export default function ProfileInfo({ companie, handleSnack }) {
 						<Typography variant="h5">{companie?.razon_social} </Typography>
 						<EditCompanie companie={companie} handleSnack={handleSnack} />
 					</Box>
-					{/* <Typography variant="body1">{companie?.rubro} </Typography> */}
 					<Typography variant="body1"> {companie?.telefono} </Typography>
 				</Box>
 			</Box>

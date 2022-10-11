@@ -1,20 +1,17 @@
-import { Edit } from '@mui/icons-material';
 import {
 	Avatar,
-	IconButton,
 	List,
 	ListItem,
 	ListItemAvatar,
 	ListItemIcon,
 	ListItemText,
-	Tooltip,
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
-import EditCompanieField from '../dialogs/EditCompanieField';
+import EditManager from '../dialogs/EditManager';
 
-export default function ProfileUsers({ users }) {
+export default function ProfileUsers({ users, handleSnack }) {
 	const { provider, cashiers } = users;
 	const { isAdmin } = useSelector(state => state.user);
 
@@ -29,21 +26,17 @@ export default function ProfileUsers({ users }) {
 					width: '100%',
 					borderRadius: 2,
 				}}>
-				<ListItem key={provider.id} alignItems="center" sx={{ py: 0, px: 2 }}>
+				<ListItem key={provider?.id} alignItems="center" sx={{ py: 0, px: 2 }}>
 					<ListItemAvatar>
-						<Avatar alt={provider.nombres} src={provider.picture} />
+						<Avatar alt={provider?.nombres} src={provider?.picture} />
 					</ListItemAvatar>
 					<ListItemText
-						primary={provider.nombres + ' ' + provider.apellidos}
+						primary={provider?.nombres + ' ' + provider?.apellidos}
 						secondary="responsable"
 					/>
 					{isAdmin && (
 						<ListItemIcon>
-							<EditCompanieField
-								tooltip="Cambiar responsable"
-								fieldName="responsable"
-								data={provider.id}
-							/>
+							<EditManager data={provider?.id} handleSnack={handleSnack} />
 						</ListItemIcon>
 					)}
 				</ListItem>

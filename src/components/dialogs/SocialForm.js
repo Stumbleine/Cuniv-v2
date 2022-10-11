@@ -15,11 +15,9 @@ import {
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import UploadImage from '../UploadImage';
-import * as Yup from 'yup';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateInfoAsync, updateSocialAsync } from '../../store/companiesSlice';
+import { updateSocialAsync } from '../../store/companiesSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -62,7 +60,7 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 				});
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
@@ -92,7 +90,11 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 					)}
 				</IconButton>
 			</Tooltip>
-			<Dialog open={open} disableEscapeKeyDown={true} TransitionComponent={Transition}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				onClose={handleClose}
+				TransitionComponent={Transition}>
 				<DialogTitle>{mode === 'edit' ? 'Editar' : 'Agregar'} redes sociales</DialogTitle>
 
 				<DialogContent sx={{ minWidth: 400 }}>

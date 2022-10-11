@@ -1,5 +1,4 @@
 import {
-	Autocomplete,
 	Box,
 	Button,
 	Paper,
@@ -16,8 +15,7 @@ import {
 } from '@mui/material';
 import { FastField, Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
-import AddCompanyBranch from './AddCompanyBranch';
+import { useEffect, useState } from 'react';
 import CompanyBranch from '../cards/CompanyBranch';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -25,16 +23,15 @@ import {
 	getProveedores,
 	getRubros,
 } from '../../store/companiesSlice';
-import { green, grey } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 import UploadImage from '../UploadImage';
 import { useNavigate } from 'react-router-dom';
 import SnackCustom from '../SnackCustom';
-import API from '../../conection';
 
 function CompanieRegisterForm() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { user, isAdmin } = useSelector(state => state.user);
+	const { isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const { providers, selectRubros } = useSelector(state => state.companies);
 	const [fileLogo, setFileLogo] = useState(null);
@@ -60,14 +57,6 @@ function CompanieRegisterForm() {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 	useEffect(() => {
-		// const getRubros = async () => {
-		// 	const r = await API.get('select/rubros', {
-		// 		headers: { Authorization: `Bearer ${accessToken}` },
-		// 	});
-		// 	setRubros(r.data);
-		// };
-		// getRubros();
-
 		isAdmin && dispatch(getProveedores(accessToken));
 		dispatch(getRubros(accessToken));
 	}, []);
@@ -115,7 +104,7 @@ function CompanieRegisterForm() {
 				});
 		},
 	});
-	const { values, isSubmitting, handleSubmit } = formik;
+	const { isSubmitting, handleSubmit } = formik;
 
 	return (
 		<>
@@ -124,156 +113,148 @@ function CompanieRegisterForm() {
 				<Form onSubmit={handleSubmit}>
 					<Grid container spacing={2}>
 						<Grid item xs={12} md={6}>
-							<Paper sx={{ p: 2 }}>
-								<Stack spacing={2}>
-									<UploadImage
-										label="logo"
-										type="Circle"
-										handleChangeFile={handleChangeFile}
-										id="register-companie"
-									/>
-									<Typography sx={{ fontWeight: 'bold' }}>Informacion</Typography>
-									<FastField name="razon_social">
-										{({ field, form, meta }) => (
-											<TextField
-												fullWidth
-												variant="outlined"
-												size="small"
-												label="Razon social"
-												placeholder="nombre de la empresa"
-												{...field}
-												error={Boolean(meta.touched && meta.error)}
-												helperText={meta.touched && meta.error}
-											/>
-										)}
-									</FastField>
+							<Stack component={Paper} sx={{ p: 2, borderRadius: 2 }} spacing={2}>
+								<UploadImage
+									label="logo"
+									type="Circle"
+									handleChangeFile={handleChangeFile}
+									id="register-companie"
+								/>
+								<Typography sx={{ fontWeight: 'bold' }}>Informacion</Typography>
+								<FastField name="razon_social">
+									{({ field, form, meta }) => (
+										<TextField
+											fullWidth
+											variant="outlined"
+											size="small"
+											label="Razon social"
+											placeholder="nombre de la empresa"
+											{...field}
+											error={Boolean(meta.touched && meta.error)}
+											helperText={meta.touched && meta.error}
+										/>
+									)}
+								</FastField>
 
-									<FastField name="descripcion">
-										{({ field, form, meta }) => (
-											<TextField
-												fullWidth
-												variant="outlined"
-												label="Descripcion"
-												size="small"
-												multiline
-												placeholder="Descripcion"
-												{...field}
-												error={Boolean(meta.touched && meta.error)}
-												helperText={meta.touched && meta.error}
-											/>
-										)}
-									</FastField>
-									<FastField name="telefono">
-										{({ field, form, meta }) => (
-											<TextField
-												fullWidth
-												variant="outlined"
-												label="telefono"
-												size="small"
-												placeholder="telefono"
-												{...field}
-												error={Boolean(meta.touched && meta.error)}
-												helperText={meta.touched && meta.error}
-											/>
-										)}
-									</FastField>
-								</Stack>
-							</Paper>
+								<FastField name="descripcion">
+									{({ field, form, meta }) => (
+										<TextField
+											fullWidth
+											variant="outlined"
+											label="Descripcion"
+											size="small"
+											multiline
+											placeholder="Descripcion"
+											{...field}
+											error={Boolean(meta.touched && meta.error)}
+											helperText={meta.touched && meta.error}
+										/>
+									)}
+								</FastField>
+								<FastField name="telefono">
+									{({ field, form, meta }) => (
+										<TextField
+											fullWidth
+											variant="outlined"
+											label="telefono"
+											size="small"
+											placeholder="telefono"
+											{...field}
+											error={Boolean(meta.touched && meta.error)}
+											helperText={meta.touched && meta.error}
+										/>
+									)}
+								</FastField>
+							</Stack>
 						</Grid>
 						<Grid item xs={12} md={6}>
 							{/* segundo panel */}
-							<Paper
-								sx={{
-									p: 2,
-								}}>
-								<Stack spacing={2}>
+
+							<Stack component={Paper} sx={{ p: 2, borderRadius: 2 }} spacing={2}>
+								<FormControl fullWidth size="small">
+									<InputLabel id="rubro-label">rubro</InputLabel>
+									<FastField name="rubro">
+										{({ field, form, meta }) => (
+											<Select
+												labelId="rubro-label"
+												id="select-rubro-c"
+												input={<OutlinedInput id="select-rubro-c" label="rubro" />}
+												{...field}
+												error={Boolean(meta.touched && meta.errors)}>
+												{selectRubros?.map(r => (
+													<MenuItem key={r.nombre} value={r.nombre}>
+														{r.nombre}
+													</MenuItem>
+												))}
+											</Select>
+										)}
+									</FastField>
+								</FormControl>
+
+								<FastField name="nit">
+									{({ field, form, meta }) => (
+										<TextField
+											fullWidth
+											variant="outlined"
+											label="NIT (opcional)"
+											size="small"
+											placeholder="nit del negocio"
+											{...field}
+										/>
+									)}
+								</FastField>
+								{isAdmin && providers && (
 									<FormControl fullWidth size="small">
-										<InputLabel id="rubro-label">rubro</InputLabel>
-										<FastField name="rubro">
+										<InputLabel id="resp-label">Responsable</InputLabel>
+										<FastField name="id_proveedor">
 											{({ field, form, meta }) => (
 												<Select
-													labelId="rubro-label"
-													id="select-rubro-c"
-													input={<OutlinedInput id="select-rubro-c" label="rubro" />}
 													{...field}
+													labelId="resp-label"
+													id="select-resp-c"
+													input={<OutlinedInput id="select-resp-c" label="Responsable" />}
 													error={Boolean(meta.touched && meta.errors)}>
-													{selectRubros?.map(r => (
-														<MenuItem key={r.nombre} value={r.nombre}>
-															{r.nombre}
+													{providers.map(r => (
+														<MenuItem key={r.id} value={r.id}>
+															{r.nombres} {r.apellidos}
 														</MenuItem>
 													))}
 												</Select>
 											)}
 										</FastField>
 									</FormControl>
+								)}
+								{/* Agregar sucurusales */}
 
-									<FastField name="nit">
-										{({ field, form, meta }) => (
-											<TextField
-												fullWidth
-												variant="outlined"
-												label="NIT (opcional)"
-												size="small"
-												placeholder="nit del negocio"
-												{...field}
+								<CompanyBranch updateListBranchs={updateListBranchs} />
+
+								<Stack direction="row" spacing={2} justifyContent="end">
+									<Button
+										onClick={() => {
+											navigate(-1);
+										}}>
+										Cancelar
+									</Button>
+									<Box sx={{ position: 'relative' }}>
+										<Button disabled={isSubmitting} type="submit" variant="contained">
+											Guardar
+										</Button>
+										{isSubmitting && (
+											<CircularProgress
+												size={24}
+												sx={{
+													color: green[500],
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													marginTop: '-12px',
+													marginLeft: '-12px',
+												}}
 											/>
 										)}
-									</FastField>
-									{isAdmin && providers && (
-										<FormControl fullWidth size="small">
-											<InputLabel id="resp-label">Responsable</InputLabel>
-											<FastField name="id_proveedor">
-												{({ field, form, meta }) => (
-													<Select
-														{...field}
-														labelId="resp-label"
-														id="select-resp-c"
-														input={
-															<OutlinedInput id="select-resp-c" label="Responsable" />
-														}
-														error={Boolean(meta.touched && meta.errors)}>
-														{providers.map(r => (
-															<MenuItem key={r.id} value={r.id}>
-																{r.nombres} {r.apellidos}
-															</MenuItem>
-														))}
-													</Select>
-												)}
-											</FastField>
-										</FormControl>
-									)}
-									{/* Agregar sucurusales */}
-
-									<CompanyBranch updateListBranchs={updateListBranchs} />
-
-									<Stack direction="row" spacing={2} justifyContent="end">
-										<Button
-											onClick={() => {
-												navigate(-1);
-											}}>
-											Cancelar
-										</Button>
-										<Box sx={{ position: 'relative' }}>
-											<Button disabled={isSubmitting} type="submit" variant="contained">
-												Guardar
-											</Button>
-											{isSubmitting && (
-												<CircularProgress
-													size={24}
-													sx={{
-														color: green[500],
-														position: 'absolute',
-														top: '50%',
-														left: '50%',
-														marginTop: '-12px',
-														marginLeft: '-12px',
-													}}
-												/>
-											)}
-										</Box>
-									</Stack>
+									</Box>
 								</Stack>
-							</Paper>
+							</Stack>
 						</Grid>
 					</Grid>
 				</Form>
@@ -281,14 +262,5 @@ function CompanieRegisterForm() {
 		</>
 	);
 }
-export const proveedores = [
-	{ label: 'Cristhian Mercado Cespedes', iduser: 2 },
-	{ label: 'Natalia Lafourcade', iduser: 2 },
-	{ label: 'Aljosha kosntanty ', iduser: 2 },
-	{ label: 'Guy Berriman', iduser: 2 },
-	{ label: 'William Champion', iduser: 2 },
-	{ label: 'Jonny Marck Buckland ', iduser: 2 },
-	{ label: 'Carolina londever', iduser: 2 },
-];
 
 export default CompanieRegisterForm;

@@ -1,6 +1,5 @@
 import {
 	Card,
-	CardHeader,
 	CircularProgress,
 	Container,
 	Grid,
@@ -9,15 +8,12 @@ import {
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CodeGenerated from '../components/charts/CodeGenerated';
 import CodeRedeemed from '../components/charts/CodeRedeemed';
 import OffersViewTable from '../components/charts/OffersViewTable';
 import OfferVisits from '../components/charts/OfferVisits';
-import ResumePie from '../components/charts/ResumePie';
 import ShowRoles from '../components/ShowRoles';
 import { summaryAsync } from '../store/statisticsSlice';
 
@@ -133,9 +129,6 @@ function StaticsPage() {
 					<Grid item xs={12} md={6}>
 						<CodeRedeemed />
 					</Grid>
-					{/* <Grid item xs={12} md={6}>
-						<ResumePie />
-					</Grid> */}
 				</Grid>
 			</Box>
 		</Container>

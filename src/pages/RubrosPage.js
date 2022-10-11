@@ -1,6 +1,6 @@
 import { Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import RubroAddForm from '../components/forms/RubroAddForm';
 import RubrosTable from '../components/tables/RubrosTable';
 import ShowRoles from '../components/ShowRoles';

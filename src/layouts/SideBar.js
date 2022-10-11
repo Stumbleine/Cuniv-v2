@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { Avatar, Drawer, Link, MenuItem, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import Logo from '../components/Logo';
@@ -55,7 +55,6 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 					<MenuItem
 						key={item.name}
 						sx={{
-							// typography: 'body2',
 							py: 2,
 							px: 2,
 							borderRadius: 2,

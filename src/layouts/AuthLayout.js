@@ -1,6 +1,4 @@
 import { styled } from '@mui/material/styles';
-// import { pink } from '@mui/material/colors';
-import React from 'react';
 import { Link as RouterLink, Outlet, useLocation } from 'react-router-dom';
 import {
 	Typography,
@@ -9,36 +7,36 @@ import {
 	Toolbar,
 	Link,
 	Button,
-	CircularProgress,
 	Stack,
-	IconButton,
 } from '@mui/material';
 
 import { Box } from '@mui/system';
-import { useDispatch, useSelector } from 'react-redux';
-import { setThemeMode } from '../store/settingSlice';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import NightlightIcon from '@mui/icons-material/Nightlight';
-import { screenSizes } from '../Utils/Breakpoints';
+
 import Logo from '../components/Logo';
-const ContainerStyle = styled('div')(({ theme }) => ({
-	// flexGrow: 1,
-	overflow: 'auto',
-	minHeight: '93vh',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	paddingTop: theme.spacing(2),
-	paddingBottom: theme.spacing(2),
-}));
+import Footer from '../components/Footer';
+
 export default function AuthLayout() {
-	const dispatch = useDispatch();
-	const mode = useSelector(state => state.setting.theme.mode);
-	//	functions
-	const changeMode = () => {
-		dispatch(setThemeMode());
-	};
 	const { pathname } = useLocation();
+
+	const Page = styled('div')(({ theme }) => ({
+		overflow: 'auto',
+		minHeight: '100vh',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		position: 'relative',
+
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(10),
+	}));
+	const LandingPage = styled('div')(({ theme }) => ({
+		overflow: 'auto',
+		minHeight: '100vh',
+		position: 'relative',
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(10),
+	}));
+
 	return (
 		<>
 			<AppBar position="static" sx={{ background: 'white' }}>
@@ -50,44 +48,22 @@ export default function AuthLayout() {
 							sx={{
 								flexGrow: 1,
 								mr: 2,
-								// display: {
-								// 	xs: 'none',
-								// 	md: 'flex',
-								// },
+
 								textDecoration: 'none',
 							}}>
 							<Logo />
 						</Box>
-						{/* <Box>
-							<IconButton sx={{ ml: 1 }} onClick={changeMode}>
-								{mode === 'dark' ? (
-									<LightModeIcon sx={{ color: 'text.icon' }}></LightModeIcon>
-								) : (
-									<NightlightIcon sx={{ color: 'text.icon' }}></NightlightIcon>
-								)}
-							</IconButton>
-						</Box> */}
-						{screenSizes()}
-
 						{pathname === '/login' ? (
 							<Stack direction="row" spacing={2}>
-								<Typography color="textPrimary">Aun no tiene una cuenta?</Typography>
-								<Link
-									// underline="none"
-									// variant="subtitle1"
-									component={RouterLink}
-									to="/register">
+								<Typography color="textPrimary">¿No tiene una cuenta?</Typography>
+								<Link component={RouterLink} to="/register">
 									Registrarse
 								</Link>
 							</Stack>
 						) : pathname === '/register' ? (
 							<Stack direction="row" spacing={2}>
-								<Typography color="textPrimary">Ya tiene una cuenta?</Typography>
-								<Link
-									// underline="none"
-									// variant="subtitle1"
-									component={RouterLink}
-									to="/login">
+								<Typography color="textPrimary">¿Ya tiene una cuenta?</Typography>
+								<Link component={RouterLink} to="/login">
 									Iniciar Sesion
 								</Link>
 							</Stack>
@@ -100,28 +76,36 @@ export default function AuthLayout() {
 									component={RouterLink}
 									sx={{ mr: 2 }}
 									to="/login">
-									<Button size="small" color="inherit" variant="outlined">
+									<Button size="small" color="inherit">
 										Iniciar Sesion
 									</Button>
 								</Link>
-								{/* <Link
+								<Link
 									underline="none"
 									variant="subtitle2"
 									component={RouterLink}
-									sx={{ color: 'white' }}
 									to="/register">
 									<Button size="small" variant="outlined" color="inherit">
 										Registrarse
 									</Button>
-								</Link> */}
+								</Link>
 							</Box>
 						) : null}
 					</Toolbar>
 				</Container>
 			</AppBar>
-			<ContainerStyle>
-				<Outlet />
-			</ContainerStyle>
+
+			{pathname === '/index' ? (
+				<LandingPage>
+					<Outlet />
+					<Footer />
+				</LandingPage>
+			) : (
+				<Page>
+					<Outlet />
+					<Footer />
+				</Page>
+			)}
 		</>
 	);
 }

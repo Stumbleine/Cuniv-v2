@@ -7,13 +7,12 @@ import {
 	CircularProgress,
 	Container,
 	Grid,
-	IconButton,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ShowRoles from '../components/ShowRoles';
 import * as Yup from 'yup';
@@ -58,7 +57,6 @@ export default function AccountProfile() {
 				.required('Correo Electronico es requerido'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			// fileImage!==null && values = {values,picture:fileImage}
 			const fetch = async () => {
 				return await dispatch(updateAccountAsync(accessToken, values, fileImage));
 			};
@@ -101,9 +99,7 @@ export default function AccountProfile() {
 									justifyContent: 'center',
 									display: 'flex',
 									flexDirection: 'column',
-									// background: 'pink',
 								}}>
-								{/* <IconButton></IconButton> */}
 								<Avatar
 									src={user.picture}
 									alt="avatar"
@@ -111,7 +107,6 @@ export default function AccountProfile() {
 								/>
 								<Typography sx={{ mt: 1, fontWeight: 'bold' }}>{user.nombres}</Typography>
 								<Typography sx={{ fontWeight: 'bold' }}>{user.apellidos}</Typography>
-								{/* <Typography>{user.email}</Typography> */}
 								<Typography color="textSecondary">{user.email}</Typography>
 							</Box>
 							<Button
@@ -176,9 +171,7 @@ export default function AccountProfile() {
 									<Box sx={{ position: 'relative' }}>
 										<Button
 											color="primary"
-											/* 						disabled={formik.isSubmitting} */
 											fullWidth
-											// size="small"
 											type="submit"
 											disabled={isSubmitting}
 											variant="contained">

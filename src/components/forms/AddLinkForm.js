@@ -2,25 +2,21 @@ import {
 	Button,
 	Card,
 	CircularProgress,
-	MenuItem,
-	Select,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { Box } from '@mui/system';
-import MapView from '../MapView';
 import { green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { addLocationAsync, addSiteASync } from '../../store/umssSlice';
+import { addSiteASync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 
 export default function AddLinkForm() {
-	const [position, setPosition] = useState(null);
 	const { accessToken } = useSelector(state => state.login);
 	const [fileImage, setFileImage] = useState(null);
 
@@ -51,7 +47,6 @@ export default function AddLinkForm() {
 		},
 		validationSchema: Yup.object().shape({
 			title: Yup.string().required('El titulo del sitio es necesario'),
-			// description: Yup.string().required('El titulo del sitio es necesario'),
 			url: Yup.string().required('Especifique el URL'),
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
@@ -71,7 +66,7 @@ export default function AddLinkForm() {
 				});
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<Card>
@@ -102,8 +97,6 @@ export default function AddLinkForm() {
 							size="small"
 							label="Descripcion (opcional)"
 							{...getFieldProps('description')}
-							// error={Boolean(touched.description && errors.description)}
-							// helperText={touched.description && errors.description}
 						/>
 						<TextField
 							variant="outlined"

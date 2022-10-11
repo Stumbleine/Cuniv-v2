@@ -1,15 +1,13 @@
-import { Delete, Edit, Warning } from '@mui/icons-material';
+import { Warning } from '@mui/icons-material';
 import {
 	Stack,
 	Typography,
-	Card,
 	TableContainer,
 	Table,
 	TableBody,
 	TableRow,
 	TableCell,
 	Avatar,
-	IconButton,
 	TableHead,
 	TablePagination,
 	Paper,
@@ -22,9 +20,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import 'moment/locale/es';
-import { deleteUserAsync, updateUserAsync } from '../../store/usersSlice';
+import { deleteUserAsync } from '../../store/usersSlice';
 import SnackCustom from '../SnackCustom';
-import { Link } from 'react-router-dom';
 import Edituser from '../dialogs/EditUser';
 import DeleteItem from '../dialogs/DeleteItem';
 function UsersTable() {
@@ -42,15 +39,13 @@ function UsersTable() {
 		{ id: 'estado', label: 'Estado', alignRight: false },
 		{ id: 'acciones', label: 'Acciones', alignRight: false },
 	];
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [selected, setSelected] = useState([]);
+	const [rowsPerPage, setRowsPerPage] = useState(15);
 	const [page, setPage] = useState(0);
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
 	const handleChangeRowsPerPage = event => {
-		console.log('CantPerpage', event.target.value);
-		setRowsPerPage(parseInt(event.target.value, 10));
+		setRowsPerPage(parseInt(event.target.value, 20));
 		setPage(0);
 	};
 	const [snack, setSnack] = useState({
@@ -77,28 +72,16 @@ function UsersTable() {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
-	const updateAsync = (values, file) => {
-		const update = async () => {
-			return await dispatch(updateUserAsync(accessToken, values, file));
-		};
-		update()
-			.then(r => {
-				handleSnack('Usuario actualizado exitosamente', 'success');
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
 
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
 			<SnackCustom data={snack} closeSnack={closeSnack} />
 
-			<Table>
+			<Table size="small">
 				<TableHead sx={{ bgcolor: 'primary.main' }}>
 					<TableRow>
 						{TABLE_HEAD.map(cell => (
-							<TableCell key={cell.id} sx={{ color: 'white' }}>
+							<TableCell key={cell.id} sx={{ color: 'white', py: 1 }}>
 								<Typography noWrap>{cell.label}</Typography>
 							</TableCell>
 						))}
@@ -124,7 +107,14 @@ function UsersTable() {
 											<Stack direction="row" alignItems="center" spacing={2}>
 												<Avatar alt={user.nombres} src={user.picture} />
 												<Box>
-													<Typography variant="subtitle2">
+													<Typography
+														sx={{
+															maxWidth: 200,
+															whiteSpace: 'nowrap',
+															textOverflow: 'ellipsis',
+															overflow: 'hidden',
+														}}
+														variant="subtitle2">
 														{user.nombres + ' ' + user.apellidos}
 													</Typography>
 
@@ -142,11 +132,10 @@ function UsersTable() {
 											))}
 										</TableCell>
 										<TableCell align="left">{user.empresa}</TableCell>
-										<TableCell align="center">
+										<TableCell align="left">
 											{moment(user.created_at).format('LL')}
 										</TableCell>
 
-										{/* <TableCell align="center">Si</TableCell> */}
 										<TableCell align="center">
 											<Box
 												sx={{
@@ -166,7 +155,7 @@ function UsersTable() {
 										</TableCell>
 										<TableCell align="right">
 											<Box sx={{ display: 'flex' }}>
-												<Edituser user={user} updateAsync={updateAsync} />
+												<Edituser user={user} handleSnack={handleSnack} />
 												<DeleteItem
 													deleteAsync={deleteAsync}
 													id={user.id}
@@ -199,12 +188,7 @@ function UsersTable() {
 			)}
 			{users && (
 				<TablePagination
-					sx={{
-						background: 'white',
-						// borderBottomLeftRadius: 2,
-						// borderBottomRightRadius: 2,
-					}}
-					rowsPerPageOptions={[10, 15]}
+					rowsPerPageOptions={[15, 20]}
 					component="div"
 					count={users?.length}
 					rowsPerPage={rowsPerPage}

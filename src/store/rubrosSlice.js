@@ -50,7 +50,7 @@ export const rubrosAsync = token => async dispatch => {
 	}
 };
 
-export const filterRubrosAsync = (token, search, idc) => async dispatch => {
+export const filterRubrosAsync = (token, search) => async dispatch => {
 	dispatch(setFilterLoading());
 	try {
 		const r = await API.get(`rubro/list?search=${search}`, {
@@ -82,6 +82,19 @@ export const updateRubroAsync = (token, values, icon) => async dispatch => {
 	console.log(values);
 	try {
 		await API.post(`user/update?id=${values.id}`, values, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		dispatch(rubrosAsync(token));
+	} catch (e) {
+		throw new Error(e);
+	}
+};
+
+export const createRubroAsync = (token, values, image) => async dispatch => {
+	const b64 = image ? await convertToB64(image) : null;
+	const data = { ...values, icono: b64 };
+	try {
+		await API.post(`rubro/create`, data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(rubrosAsync(token));

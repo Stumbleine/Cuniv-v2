@@ -23,15 +23,12 @@ import React, { useEffect, useState } from 'react';
 import ShowRoles from '../components/ShowRoles';
 import StudentCard from '../components/cards/StudentCard';
 import * as Yup from 'yup';
-import API from '../conection';
-import { Link } from 'react-router-dom';
-import { Add, Warning } from '@mui/icons-material';
+import { Warning } from '@mui/icons-material';
 import AddCashier from '../components/dialogs/AddCashier';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUserAsync, deleteUserAsync } from '../store/usersSlice';
+import { deleteUserAsync } from '../store/usersSlice';
 import SnackCustom from '../components/SnackCustom';
 import SkeletonList from '../components/skeletons/SkeletonList';
-import EditLink from '../components/dialogs/EditLink';
 import DeleteItem from '../components/dialogs/DeleteItem';
 import { hasPrivilege } from '../Utils/RBAC';
 import { cashiersAsync, redeemAsync } from '../store/cashierSlice';
@@ -76,7 +73,7 @@ function RedeemPage() {
 				});
 		},
 	});
-	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
@@ -223,8 +220,6 @@ function RedeemPage() {
 									sx={{
 										mb: 2,
 										fontWeight: 'bold',
-										// color: 'text.title',
-										// fontStyle: 'italic',
 									}}>
 									Cajeros
 								</Typography>

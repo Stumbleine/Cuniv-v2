@@ -1,30 +1,20 @@
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ShowRoles from '../components/ShowRoles';
 import CompanieRegisterForm from '../components/forms/CompanieRegisterForm';
-import { amber } from '@mui/material/colors';
-import { ArrowBack, Warning } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import WarningVerified from '../components/WarningVerified';
 import { Link } from 'react-router-dom';
 
 function CreateSupplierCompanyPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
-	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 		document.title = 'ssansi | registro empresa';
 	}, []);
-
-	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setOpen(false);
-		// Navigate('/reg-task');
-	};
 
 	return (
 		<Container maxWidth="lg">

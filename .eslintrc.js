@@ -21,6 +21,6 @@ module.exports = {
 		'no-unused-vars': 'warn',
 		eqeqeq: 'off',
 		'react/prop-types': 0,
-		'prefer-const': 'warn',
+		'prefer-const': 'off',
 	},
 };

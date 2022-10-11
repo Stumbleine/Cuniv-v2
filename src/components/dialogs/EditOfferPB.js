@@ -1,4 +1,4 @@
-import { AppRegistration, Edit } from '@mui/icons-material';
+import { AppRegistration } from '@mui/icons-material';
 import {
 	Box,
 	Button,
@@ -8,25 +8,18 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	FormControl,
-	FormHelperText,
 	IconButton,
 	MenuItem,
 	OutlinedInput,
 	Select,
 	Slide,
 	Stack,
-	TextField,
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import * as Yup from 'yup';
-import { Form, FormikProvider, useFormik } from 'formik';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
 import API from '../../conection';
 import CheckFrequency from '../forms/CheckFrequency';
 import { useTheme } from '@emotion/react';
@@ -38,7 +31,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function EditOfferPB({ offer, handleSnack }) {
 	const dispatch = useDispatch();
-	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 
@@ -166,7 +158,7 @@ export default function EditOfferPB({ offer, handleSnack }) {
 			</Tooltip>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
 				onClose={handleClose}
 				TransitionComponent={Transition}>

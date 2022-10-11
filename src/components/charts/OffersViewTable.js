@@ -1,21 +1,17 @@
 import { Warning } from '@mui/icons-material';
 import {
-	Card,
 	Paper,
-	Select,
 	Stack,
 	Table,
 	TableBody,
 	TableCell,
 	TableContainer,
 	TableHead,
-	TablePagination,
 	TableRow,
 	Typography,
 } from '@mui/material';
-import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { offersViewAsync } from '../../store/statisticsSlice';
 
@@ -25,7 +21,7 @@ export default function OffersViewTable() {
 	const dispatch = useDispatch();
 
 	const { accessToken } = useSelector(state => state.login);
-	const { user, isAdmin } = useSelector(state => state.user);
+	const { isAdmin } = useSelector(state => state.user);
 	const { offersView } = useSelector(state => state.statics);
 
 	const [statusFetch, setStatusFetch] = useState({
@@ -57,7 +53,7 @@ export default function OffersViewTable() {
 				<TableHead sx={{ bgcolor: 'primary.main' }}>
 					<TableRow>
 						{TABLE_HEAD.map(cell => (
-							<TableCell align="center" key={cell.id} sx={{ color: 'white' }}>
+							<TableCell align="center" key={cell.id} sx={{ color: 'white', py: 1 }}>
 								<Typography noWrap> {cell.label}</Typography>
 							</TableCell>
 						))}

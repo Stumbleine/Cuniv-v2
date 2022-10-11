@@ -6,43 +6,32 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
-	FormControl,
-	FormHelperText,
 	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
 	Slide,
 	Stack,
 	TextField,
-	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
+import { updateRubroAsync } from '../../store/rubrosSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditRubro({ rubro, updateAsync }) {
+export default function EditRubro({ rubro, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-	const { isAdmin } = useSelector(state => state.user);
 
 	const [open, setOpen] = useState(false);
-	const [editFile, setEditFile] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		setEditFile(true);
 		setFileImage(file);
 	};
 
@@ -52,34 +41,26 @@ export default function EditRubro({ rubro, updateAsync }) {
 	const handleClose = () => {
 		setOpen(false);
 	};
-	const validateIcon = () => {
-		let errors = {};
-		if (fileImage === null) {
-			errors.icon = 'Es necesario subir un icono que identifique al rubro.';
-		}
-
-		return errors;
-	};
 	const formik = useFormik({
 		initialValues: {
-			nombre: '',
-			descripcion: '',
-			icon: '',
+			nombre: rubro.nombre || '',
+			descripcion: rubro.descripcion || '',
 		},
 		validationSchema: Yup.object().shape({
 			nombre: Yup.string().required('Nombre de rubro es requerido.'),
 		}),
-		validate: validateIcon,
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const sub = async () => {
-				updateAsync(values, fileImage);
+			const update = async () => {
+				return await dispatch(updateRubroAsync(accessToken, values, fileImage));
 			};
-			sub().then(r => {
-				resetForm();
-				handleClose();
-				setSubmitting(false);
-			});
+			update()
+				.then(r => {
+					handleSnack('Usuario actualizado exitosamente', 'success');
+				})
+				.catch(e => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				});
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
@@ -98,8 +79,9 @@ export default function EditRubro({ rubro, updateAsync }) {
 			</IconButton>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
+				onClose={handleClose}
 				disableEscapeKeyDown={true}
 				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + rubro?.nombre}</DialogTitle>
@@ -112,17 +94,8 @@ export default function EditRubro({ rubro, updateAsync }) {
 									label="icono"
 									id="update-rubro"
 									handleChangeFile={handleChangeFile}
-									type="Circle">
-									{errors.icon && (
-										<Typography
-											textAlign="center"
-											sx={{ mt: 1 }}
-											color="error"
-											variant="caption">
-											{errors.icon}
-										</Typography>
-									)}
-								</UploadImage>
+									preload={rubro?.icono}
+									type="Circle"></UploadImage>
 								<TextField
 									required
 									fullWidth
@@ -143,8 +116,6 @@ export default function EditRubro({ rubro, updateAsync }) {
 									label="Descripcion"
 									placeholder="Descripcion (opcional)"
 									{...getFieldProps('descripcion')}
-									// error={Boolean(touched.nombre && errors.nombre)}
-									// helperText={touched.nombre && errors.nombre}
 								/>
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>

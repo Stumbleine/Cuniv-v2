@@ -1,11 +1,7 @@
 import { NotificationsActive } from '@mui/icons-material';
 import { Box, Slide, Snackbar, Typography } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-function TransitionRight(props) {
-	return <Slide {...props} direction="right" />;
-}
 function TransitionLeft(props) {
 	return <Slide {...props} direction="left" />;
 }
@@ -44,7 +40,3 @@ export default function NotificationSnack({ data, closeSnack }) {
 		/>
 	);
 }
-/* <Alert sx={{ borderRadius: 1,alignItems:'center' }} onClose={handleClose}> */
-
-/* </Alert> */
-/* </Snackbar> */

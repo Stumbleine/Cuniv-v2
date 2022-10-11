@@ -1,6 +1,5 @@
 import { Snackbar } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { borderRadius, style } from '@mui/system';
+import MuiAlert from '@mui/material/Alert';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

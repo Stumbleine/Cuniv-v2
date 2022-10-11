@@ -8,8 +8,8 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useRef, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLogout } from '../store/loginSlice';
 import { GoogleLogout } from 'react-google-login';
@@ -18,7 +18,6 @@ import { logoutAsync } from '../store/userSlice';
 import { setNavlinks, setNotifications } from '../store/settingSlice';
 function AccountPopover() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const user = useSelector(state => state.user.user);
 	const { accessToken } = useSelector(state => state.login);
 
@@ -66,7 +65,7 @@ function AccountPopover() {
 					// borderRadius: 10,
 					// background: 'pink',
 				}}
-				PaperProps={{ style: { borderRadius: 7 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				id="menu-appbar"
 				anchorEl={anchorElUser}
 				anchorOrigin={{

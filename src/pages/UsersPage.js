@@ -11,7 +11,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FilterBar from '../components/FilterBar';
@@ -59,8 +59,6 @@ function UsersPage() {
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterUsersAsync(accessToken, values.search, rol, sesion));
-		// const leter = 'HOLALA';
-		// console.log(leter.toLocaleLowerCase());
 	};
 
 	return (
@@ -80,9 +78,7 @@ function UsersPage() {
 					</Typography>
 					<Stack
 						direction={{ xs: 'column', md: 'row' }}
-						// flexWrap="wrap-reverse"
 						alignItems="center"
-						// justifyContent="space-between"
 						sx={{
 							mb: 3,
 						}}

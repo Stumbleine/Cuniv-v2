@@ -7,32 +7,29 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
+	FormHelperText,
 	IconButton,
 	InputLabel,
 	MenuItem,
 	OutlinedInput,
 	Select,
 	Slide,
-	Stack,
-	TextField,
 	Tooltip,
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import API from '../../conection';
-import { getProveedores } from '../../store/companiesSlice';
+import { updateInfoAsync } from '../../store/companiesSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditCompanieField({ fieldName, tooltip, data }) {
+export default function EditManager({ data, handleSnack }) {
 	const [open, setOpen] = useState(false);
-
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -40,7 +37,6 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 		setOpen(false);
 	};
 	const { accessToken } = useSelector(state => state.login);
-	const { user, isAdmin } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	const { providers } = useSelector(state => state.companies);
@@ -52,15 +48,28 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 		validationSchema: Yup.object().shape({
 			id_proveedor: Yup.number().required('Es necesario asingar el responsable'),
 		}),
-		onSubmit: (values, { resetForm }) => {
-			console.log(values);
+		onSubmit: (values, { resetForm, setSubmitting }) => {
+			const edit = async () => {
+				return await dispatch(updateInfoAsync(accessToken, values));
+			};
+			edit()
+				.then(() => {
+					handleSnack('Empresa actualizada exitosamente', 'success');
+					resetForm();
+					handleClose();
+				})
+				.catch(() => {
+					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+					handleClose();
+				});
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
-			<Tooltip title={tooltip}>
+			<Tooltip title="Asignar a otro responsable">
 				<IconButton size="small" sx={{ ml: 1, p: 0 }} onClick={handleClickOpen}>
 					<Edit
 						sx={{
@@ -73,8 +82,12 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 					/>
 				</IconButton>
 			</Tooltip>
-			<Dialog open={open} disableEscapeKeyDown={true} TransitionComponent={Transition}>
-				<DialogTitle>{'Editar ' + fieldName}</DialogTitle>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				onClose={handleClose}
+				TransitionComponent={Transition}>
+				<DialogTitle>{'Editar responsable'}</DialogTitle>
 				<FormikProvider value={formik}>
 					<Form onSubmit={handleSubmit}>
 						<DialogContent sx={{ minWidth: 400, pt: 1 }}>
@@ -83,8 +96,10 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 								<Select
 									labelId="prv-label"
 									id="select-prv"
+									disabled={!providers}
 									input={<OutlinedInput id="select-prv" label="Responsable *" />}
 									{...getFieldProps('id_proveedor')}
+									helperText
 									error={Boolean(touched.id_proveedor && errors.id_proveedor)}>
 									{providers?.map(r => (
 										<MenuItem key={r.id} value={r.id}>
@@ -92,6 +107,9 @@ export default function EditCompanieField({ fieldName, tooltip, data }) {
 										</MenuItem>
 									))}
 								</Select>
+								{!providers && (
+									<FormHelperText>No hay proveedores disponibles</FormHelperText>
+								)}
 							</FormControl>
 
 							<DialogActions sx={{ mt: 2, p: 0 }}>

@@ -1,6 +1,6 @@
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductAddForm from '../components/forms/ProductAddForm';
 import ProductsTable from '../components/tables/ProductsTable';
@@ -9,6 +9,7 @@ import { productsAsync } from '../store/productsSlice';
 import { hasPrivilege } from '../Utils/RBAC';
 import WarningVerified from '../components/WarningVerified';
 import SnackCustom from '../components/SnackCustom';
+import API from '../conection';
 function ProductsPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
 
@@ -19,11 +20,18 @@ function ProductsPage() {
 		['gestionar productos', 'crear producto'],
 		user.permisos
 	);
-	// const privilegeListar = hasPrivilege(['gestionar productos','listar productos'],user.permisos)
+	const [companies, setCompanies] = useState(null);
 
 	useEffect(() => {
 		dispatch(productsAsync(accessToken));
 		document.title = 'ssansi | productos';
+		const getCompanies = async () => {
+			const r = await API.get('select/companies', {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setCompanies(r.data);
+		};
+		getCompanies();
 	}, []);
 
 	const [snack, setSnack] = useState({
@@ -66,11 +74,11 @@ function ProductsPage() {
 
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={privilegeCreate ? 7 : 12}>
-						<ProductsTable handleSnack={handleSnack} />
+						<ProductsTable handleSnack={handleSnack} companies={companies} />
 					</Grid>
 					{privilegeCreate && (
 						<Grid item xs={12} md={5}>
-							<ProductAddForm handleSnack={handleSnack} />
+							<ProductAddForm handleSnack={handleSnack} companies={companies} />
 						</Grid>
 					)}
 				</Grid>

@@ -23,7 +23,6 @@ export default function Complaint({ complaint }) {
 	};
 	return (
 		<Card sx={{ p: 2 }}>
-			{/* <Box sx={{ display: 'flex', alignItems: 'center' }}> */}
 			<Stack spacing={1} sx={{ mb: 1 }}>
 				<Box
 					sx={{
@@ -31,7 +30,6 @@ export default function Complaint({ complaint }) {
 						alignItems: 'center',
 						justifyContent: 'space-between',
 						mb: 1,
-						// background: 'pink',
 					}}>
 					<Box display="flex" sx={{ alignItems: 'center' }}>
 						<Avatar src={complaint?.student?.picture} />
@@ -84,10 +82,8 @@ export default function Complaint({ complaint }) {
 								Descuento: {complaint?.offer_discount}
 							</Typography>
 							<StatusLabel status={complaint?.offer_status} />
-							{/* <Typography color="textSecondary">{complaint?.offer.status} </Typography> */}
 						</Stack>
 						<Stack
-							// spacing={0.2}
 							direction="column"
 							sx={{
 								width: '49%',
@@ -95,7 +91,6 @@ export default function Complaint({ complaint }) {
 								px: 2,
 								background: grey[200],
 								borderRadius: 2,
-								// flexGrow: 1,
 							}}>
 							<Typography variant="body2" color="textSecondary">
 								Empresa:{' '}

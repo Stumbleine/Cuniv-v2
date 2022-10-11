@@ -6,12 +6,8 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
-	FormControl,
-	FormHelperText,
 	IconButton,
-	InputLabel,
 	MenuItem,
 	Select,
 	Slide,
@@ -19,14 +15,12 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
 import { updateProductAsync } from '../../store/productsSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -37,13 +31,10 @@ export default function EditProduct({ product, companies, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { isAdmin } = useSelector(state => state.user);
-
 	const [open, setOpen] = useState(false);
-	const [editFile, setEditFile] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
 
 	const handleChangeFile = file => {
-		setEditFile(true);
 		setFileImage(file);
 	};
 
@@ -105,9 +96,9 @@ export default function EditProduct({ product, companies, handleSnack }) {
 			</IconButton>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
-				disableEscapeKeyDown={true}
+				onClose={handleClose}
 				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + product?.name}</DialogTitle>
 
@@ -159,8 +150,8 @@ export default function EditProduct({ product, companies, handleSnack }) {
 										inputProps={{ 'aria-label': 'Without label' }}
 										{...getFieldProps('tipo')}
 										error={Boolean(touched.tipo && errors.tipo)}>
-										<MenuItem value="Producto">producto</MenuItem>
-										<MenuItem value="Servicio">servicio</MenuItem>
+										<MenuItem value="producto">producto</MenuItem>
+										<MenuItem value="servicio">servicio</MenuItem>
 									</Select>
 								</Box>
 								{isAdmin && (

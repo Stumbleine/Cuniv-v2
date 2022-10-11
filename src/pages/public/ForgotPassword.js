@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { forgotPassword } from '../../store/loginSlice';
 import {
 	Box,
@@ -19,7 +19,6 @@ import { green } from '@mui/material/colors';
 import SnackCustom from '../../components/SnackCustom';
 export default function ForgotPassword() {
 	const dispatch = useDispatch();
-	const { isLoading, isAuthFailed } = useSelector(state => state.login);
 	const [forgot, setForgot] = useState(false);
 	const [snack, setSnack] = useState({
 		open: false,

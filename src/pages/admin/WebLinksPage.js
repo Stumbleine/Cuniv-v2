@@ -1,40 +1,22 @@
-import { Edit, FilterBAndW, Language } from '@mui/icons-material';
-import {
-	Avatar,
-	Container,
-	Divider,
-	Grid,
-	IconButton,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemIcon,
-	ListItemText,
-	Paper,
-	Typography,
-} from '@mui/material';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import DeleteDialog from '../../components/dialogs/DeleteDialog';
-import EditLink from '../../components/dialogs/EditLink';
 import FilterBar from '../../components/FilterBar';
 import AddLinkForm from '../../components/forms/AddLinkForm';
 import ListLinks from '../../components/lists/ListLinks';
 import ShowRoles from '../../components/ShowRoles';
-import SkeletonList from '../../components/skeletons/SkeletonList';
 import SnackCustom from '../../components/SnackCustom';
-import { deleteSiteAsync, getSitesAsync } from '../../store/umssSlice';
+import { getSitesAsync } from '../../store/umssSlice';
 
 export default function WebLinksPage() {
 	const { accessToken } = useSelector(state => state.login);
-	const { webSites, isLoading } = useSelector(state => state.umss);
-	const [search, setSearch] = useState('All');
 
 	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch(getSitesAsync(accessToken, search));
+		dispatch(getSitesAsync(accessToken, 'All'));
 	}, []);
+
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
@@ -48,22 +30,7 @@ export default function WebLinksPage() {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 
-	const closeDialog = useRef(null);
-	const deleteAsync = id => {
-		const del = async () => {
-			return await dispatch(deleteSiteAsync(accessToken, id));
-		};
-		del()
-			.then(() => {
-				handleSnack('Link eliminado exitosamente', 'success');
-				closeDialog.current();
-			})
-			.catch(() => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
 	const handleSearch = values => {
-		setSearch(values.search);
 		dispatch(getSitesAsync(accessToken, values.search));
 	};
 	return (
@@ -95,7 +62,7 @@ export default function WebLinksPage() {
 								overflowX: 'hidden',
 							}}
 							className="container">
-							<ListLinks />
+							<ListLinks handleSnack={handleSnack} />
 						</Paper>
 					</Grid>
 					<Grid item xs={12} md={6}>

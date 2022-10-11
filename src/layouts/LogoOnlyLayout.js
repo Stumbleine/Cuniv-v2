@@ -1,10 +1,9 @@
 import { styled } from '@mui/material/styles';
-// import { pink } from '@mui/material/colors';
-import React from 'react';
-import { Link as RouterLink, Outlet } from 'react-router-dom';
-import { Typography, AppBar, Container, Toolbar } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import { AppBar, Container, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
 import Logo from '../components/Logo';
+import Footer from '../components/Footer';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
 	// flexGrow: 1,
@@ -21,7 +20,7 @@ const LogoOnlyLayout = () => {
 		<>
 			<AppBar
 				position="static"
-				elevation={0}
+				elevation={1}
 				sx={{
 					background: 'white',
 					zIndex: 'tooltip',
@@ -42,6 +41,7 @@ const LogoOnlyLayout = () => {
 			</AppBar>
 			<ContainerStyle>
 				<Outlet />
+				<Footer />
 			</ContainerStyle>
 		</>
 	);

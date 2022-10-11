@@ -23,17 +23,17 @@ export const getNavlinks = userPermissions => {
 
 	hasPrivilege(['estadisticas'], userPermissions) &&
 		navlinks.push(getLink('Estadisticas'));
-	hasPrivilege(['listar rubros', 'gestionar rubros'], userPermissions) &&
-		navlinks.push(getLink('Rubros'));
 	hasPrivilege(['listar usuarios', 'gestionar usuarios'], userPermissions) &&
 		navlinks.push(getLink('Usuarios'));
+	hasPrivilege(['listar rubros', 'gestionar rubros'], userPermissions) &&
+		navlinks.push(getLink('Rubros'));
 	// hasPrivilege(['gestionar roles'], userPermissions) && navlinks.push(getLink('Roles'));
 	hasPrivilege(['cajero'], userPermissions) && navlinks.push(getLink('Cajero'));
+	hasPrivilege(['gestionar reclamos'], userPermissions) &&
+		navlinks.push(getLink('Reclamos'));
 	hasPrivilege(['gestionar locaciones'], userPermissions) &&
 		navlinks.push(getLink('Locaciones'));
 	hasPrivilege(['gestionar links'], userPermissions) && navlinks.push(getLink('Links'));
-	hasPrivilege(['gestionar reclamos'], userPermissions) &&
-		navlinks.push(getLink('Reclamos'));
 
 	return navlinks;
 };
@@ -47,13 +47,11 @@ export const links = [
 	{ name: 'Empresas', path: 'supplierCompanies', icon: 'companies' }, // listar empresas
 	{ name: 'Rubros', path: 'rubros', icon: 'rubros' }, // listar rubros o gestionar rubros
 	{ name: 'Estadisticas', path: 'statics', icon: 'analytics' }, // estadisticas??
-
 	// only admins
 	{ name: 'Locaciones', path: 'locations', icon: 'home' },
 	{ name: 'Links', path: 'links', icon: 'home' },
 	{ name: 'Reclamos', path: 'complaints', icon: 'home' },
 	{ name: 'Usuarios', path: 'users', icon: 'users' }, // listar usuarios
-	{ name: 'Roles', path: 'roles&&permissions', icon: 'key' }, // gestionar roles
 	// only proveedor
 	{ name: 'Mi Empresa', path: 'profileCompanie', icon: 'mycompanie' }, // perfil de empresa
 	// only Cajero

@@ -6,12 +6,14 @@ export default function Button(theme) {
 			styleOverrides: {
 				root: {
 					textTransform: 'none',
+					borderRadius: 12,
 				},
 				sizeLarge: {
 					height: 48,
 				},
 				// containedInherit: {
-				// 	color: theme.palette.grey[800],
+				// 	// color: theme.palette.grey[800],
+				// 	borderRadius: 10,
 				// },
 
 				// outlinedInherit: {

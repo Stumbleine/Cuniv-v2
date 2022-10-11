@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
 import API from '../conection';
-import { setNavlinks } from './settingSlice';
-import { getUserAsync, setUser } from './userSlice';
+import { getUserAsync } from './userSlice';
 
 const initialState = {
 	isAuth: false,
@@ -87,7 +85,7 @@ export const registerAsync = user => async dispatch => {
 	let succes = false;
 	dispatch(setLoading());
 	try {
-		const r = await API.post('auth/register', user);
+		await API.post('auth/register', user);
 		dispatch(setRegister());
 		succes = true;
 	} catch (e) {
@@ -100,7 +98,7 @@ export const registerAsync = user => async dispatch => {
 export const forgotPassword = values => async dispatch => {
 	dispatch(setLoading());
 	try {
-		const r = await API.post('auth/forgot-password', values);
+		await API.post('auth/forgot-password', values);
 		dispatch(setRegister());
 	} catch (e) {
 		throw new Error(e);

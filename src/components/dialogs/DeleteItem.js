@@ -1,12 +1,6 @@
-import {
-	Delete,
-	FamilyRestroomRounded,
-	Warning,
-	WarningAmber,
-} from '@mui/icons-material';
+import { Delete, WarningAmber } from '@mui/icons-material';
 import {
 	Button,
-	CardActionArea,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -14,11 +8,8 @@ import {
 	DialogTitle,
 	IconButton,
 	Slide,
-	Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
-import SnackCustom from '../SnackCustom';
+import React from 'react';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -50,7 +41,11 @@ export default function DeleteItem({ deleteAsync, id, itemName, disabled }) {
 					}}
 				/>
 			</IconButton>
-			<Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				TransitionComponent={Transition}
+				onClose={handleClose}>
 				<DialogTitle>{'Eliminar ' + itemName + '?'}</DialogTitle>
 				<DialogContent>
 					<DialogContentText display="flex">

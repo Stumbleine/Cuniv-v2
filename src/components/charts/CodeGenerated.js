@@ -1,10 +1,4 @@
-import {
-	CalendarMonth,
-	CalendarViewMonth,
-	Refresh,
-	Today,
-	Warning,
-} from '@mui/icons-material';
+import { CalendarMonth, Refresh, Today, Warning } from '@mui/icons-material';
 import {
 	Box,
 	Button,
@@ -18,10 +12,10 @@ import {
 	Typography,
 } from '@mui/material';
 import { cyan, green, grey } from '@mui/material/colors';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatedChartAsync, codeGeneratedAsync } from '../../store/statisticsSlice';
+import { generatedChartAsync } from '../../store/statisticsSlice';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment';
@@ -30,7 +24,6 @@ function CodeGenerated() {
 	const dispatch = useDispatch();
 
 	const { accessToken } = useSelector(state => state.login);
-	const { user, isAdmin } = useSelector(state => state.user);
 	const { codeGenerated } = useSelector(state => state.statics);
 	const [chartMode, setChartMode] = useState('daily');
 	const [reload, setReload] = useState(false);
@@ -63,7 +56,6 @@ function CodeGenerated() {
 		{
 			name: 'Codigos generados',
 			type: 'area',
-			// data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
 			data: codeGenerated
 				? chartMode === 'daily'
 					? codeGenerated?.daily.data
@@ -100,7 +92,6 @@ function CodeGenerated() {
 				opacity: 0.5,
 			},
 		},
-		// labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
 		xaxis: {
 			categories: codeGenerated
 				? chartMode === 'daily'
@@ -144,7 +135,7 @@ function CodeGenerated() {
 		},
 	});
 
-	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
 	return (
 		<Stack component={Card}>
@@ -193,9 +184,36 @@ function CodeGenerated() {
 					<Refresh />
 				</IconButton>
 			</Stack>
-			{/* <Box sx={{ p: 1 }} dir="ltr">
-				<ReactApexChart type="area" series={data} options={chartOptions} height={390} />
-			</Box> */}
+			{showRangeComponent && (
+				<FormikProvider value={formik}>
+					<Form onSubmit={handleSubmit}>
+						<Stack
+							spacing={1}
+							direction="row"
+							sx={{ mx: 3, mt: 1, background: grey[100], borderRadius: 1, p: 1 }}>
+							<TextField
+								size="small"
+								type="date"
+								{...getFieldProps('startDate')}
+								error={Boolean(touched.startDate && errors.startDate)}
+							/>
+							<TextField
+								size="small"
+								type="date"
+								{...getFieldProps('endDate')}
+								error={Boolean(touched.endDate && errors.endDate)}
+							/>
+							<Button
+								size="small"
+								type="submit"
+								disabled={isSubmitting}
+								variant="contained">
+								Consultar
+							</Button>
+						</Stack>
+					</Form>
+				</FormikProvider>
+			)}
 			<Box
 				sx={{
 					p: 1,

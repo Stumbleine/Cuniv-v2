@@ -1,9 +1,7 @@
-import { Delete, Edit, Warning } from '@mui/icons-material';
+import { Warning } from '@mui/icons-material';
 import {
-	Card,
 	CircularProgress,
 	FormControl,
-	IconButton,
 	InputLabel,
 	MenuItem,
 	OutlinedInput,
@@ -21,41 +19,27 @@ import {
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import API from '../../conection';
-import {
-	deleteProductAsync,
-	filterProductsAsync,
-	updateProductAsync,
-} from '../../store/productsSlice';
+import { deleteProductAsync, filterProductsAsync } from '../../store/productsSlice';
 import { hasPrivilege } from '../../Utils/RBAC';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditProduct from '../dialogs/EditProduct';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
 
-export default function ProductsTable({ handleSnack }) {
+export default function ProductsTable({ handleSnack, companies }) {
 	const dispatch = useDispatch();
 	const { products, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.products
 	);
 	const { accessToken } = useSelector(state => state.login);
 	const { user, isAdmin } = useSelector(state => state.user);
-	// const { companies } = useSelector(state => state.companies);
 	const [companieFilter, setCompanieFilter] = useState('All');
-	const [companies, setCompanies] = useState(null);
 	const [search, setSearch] = useState('All');
 
 	useEffect(() => {
 		document.title = 'ssansi | productos';
-		const getCompanies = async () => {
-			const r = await API.get('select/companies', {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			setCompanies(r.data);
-		};
-		getCompanies();
 	}, []);
 
 	const privilegeEdit = hasPrivilege(
@@ -78,8 +62,7 @@ export default function ProductsTable({ handleSnack }) {
 	if (privilegeEdit || privilegeDelete) {
 		TABLE_HEAD.push({ id: 'acciones', label: 'Acciones', alignRight: false });
 	}
-	const [rowsPerPage, setRowsPerPage] = useState(7);
-	const [selected, setSelected] = useState([]);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 
 	const handleChangePage = (event, newPage) => {
@@ -126,7 +109,7 @@ export default function ProductsTable({ handleSnack }) {
 							input={<OutlinedInput id="companie-filter" label="Empresa" />}>
 							<MenuItem value="All">Todos</MenuItem>
 							{companies?.map(c => (
-								<MenuItem key={c.id_empresa} value={c.razon_social}>
+								<MenuItem key={c.id_empresa} value={c.id_empresa}>
 									{c.razon_social}
 								</MenuItem>
 							))}
@@ -135,13 +118,11 @@ export default function ProductsTable({ handleSnack }) {
 				)}
 			</FilterBar>
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mt: 2 }}>
-				{/* {products && ( */}
-				{/* )} */}
-				<Table>
+				<Table size="small">
 					<TableHead sx={{ bgcolor: 'primary.main' }}>
 						<TableRow>
 							{TABLE_HEAD.map(cell => (
-								<TableCell key={cell.id} sx={{ color: 'white' }}>
+								<TableCell key={cell.id} sx={{ color: 'white', py: 1 }}>
 									<Typography noWrap> {cell.label}</Typography>
 								</TableCell>
 							))}
@@ -151,7 +132,7 @@ export default function ProductsTable({ handleSnack }) {
 						{filterLoading && (
 							<TableRow>
 								<TableCell component="th" scope="row" />
-								<TableCell component="th" scope="row">
+								<TableCell component="th" scope="row" align="center">
 									<CircularProgress size={24} sx={{ color: green[500] }} />
 								</TableCell>
 							</TableRow>
@@ -172,14 +153,21 @@ export default function ProductsTable({ handleSnack }) {
 														}}
 														src={product?.image || '/imgs/defaultImg.svg'}
 														sx={{
-															maxWidth: 80,
-															maxHeight: 70,
+															maxWidth: 65,
 															borderRadius: 2,
 															objectFit: !product.image && 'fill',
 														}}
 													/>
 													<Box>
-														<Typography noWrap>{product.name}</Typography>
+														<Typography
+															sx={{
+																maxWidth: 200,
+																whiteSpace: 'nowrap',
+																textOverflow: 'ellipsis',
+																overflow: 'hidden',
+															}}>
+															{product.name}
+														</Typography>
 
 														<Typography
 															variant="subtitle2"
@@ -197,7 +185,11 @@ export default function ProductsTable({ handleSnack }) {
 												<TableCell align="right">
 													<Box sx={{ display: 'flex' }}>
 														{privilegeEdit && (
-															<EditProduct product={product} handleSnack={handleSnack} />
+															<EditProduct
+																product={product}
+																companies={companies}
+																handleSnack={handleSnack}
+															/>
 														)}
 														{privilegeDelete && (
 															<DeleteItem
@@ -240,7 +232,7 @@ export default function ProductsTable({ handleSnack }) {
 				)}
 				{products && (
 					<TablePagination
-						rowsPerPageOptions={10}
+						rowsPerPageOptions={[10, 15]}
 						component="div"
 						count={products?.length}
 						rowsPerPage={rowsPerPage}

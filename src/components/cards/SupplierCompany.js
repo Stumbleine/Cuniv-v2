@@ -1,4 +1,4 @@
-import { Delete, Edit, Email, Facebook, Instagram, Language } from '@mui/icons-material';
+import { Edit, Email, Facebook, Instagram, Language } from '@mui/icons-material';
 import {
 	Card,
 	CardActionArea,
@@ -10,17 +10,12 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import { blue, grey, orange, pink, red } from '@mui/material/colors';
+import { blue, grey, pink } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-	deleteCompanieAsync,
-	getCompaniesAsync,
-	updateInfoAsync,
-} from '../../store/companiesSlice';
+import { deleteCompanieAsync } from '../../store/companiesSlice';
 import DeleteItem from '../dialogs/DeleteItem';
-import EditCompanie from '../dialogs/EditCompanie';
 
 function SupplierCompany({ companie, handleSnack }) {
 	const dispatch = useDispatch();
@@ -38,19 +33,7 @@ function SupplierCompany({ companie, handleSnack }) {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
-	const updateAsync = (values, file) => {
-		const update = async () => {
-			return await dispatch(updateInfoAsync(accessToken, values, file));
-		};
-		update()
-			.then(r => {
-				handleSnack('Usuario actualizado exitosamente', 'success');
-				dispatch(getCompaniesAsync(accessToken));
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
+
 	return (
 		<Card
 			sx={{
@@ -94,7 +77,8 @@ function SupplierCompany({ companie, handleSnack }) {
 							<Facebook
 								sx={{
 									color: blue[500],
-								}}></Facebook>
+								}}
+							/>
 						</IconButton>
 					) : null}
 					{companie.instagram ? (
@@ -102,7 +86,8 @@ function SupplierCompany({ companie, handleSnack }) {
 							<Instagram
 								sx={{
 									color: pink[500],
-								}}></Instagram>
+								}}
+							/>
 						</IconButton>
 					) : null}
 					{companie.sitio_web ? (
@@ -110,7 +95,8 @@ function SupplierCompany({ companie, handleSnack }) {
 							<Language
 								sx={{
 									color: grey[700],
-								}}></Language>
+								}}
+							/>
 						</IconButton>
 					) : null}
 					{companie.email ? (
@@ -123,7 +109,8 @@ function SupplierCompany({ companie, handleSnack }) {
 							<Email
 								sx={{
 									color: blue[500],
-								}}></Email>
+								}}
+							/>
 						</IconButton>
 					) : null}
 				</Box>
@@ -147,7 +134,6 @@ function SupplierCompany({ companie, handleSnack }) {
 						/>
 					</IconButton>
 				</Tooltip>
-				{/* <EditCompanie companie={companie} updateAsync={updateAsync} /> */}
 				<DeleteItem
 					deleteAsync={deleteAsync}
 					id={companie.id_empresa}

@@ -1,8 +1,6 @@
 import { Warning } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { amber } from '@mui/material/colors';
-import React from 'react';
-import RejectCompanie from './dialogs/RejectCompanie';
 
 export default function WarningVerified(props) {
 	return (

@@ -1,4 +1,5 @@
 import {
+	Card,
 	Container,
 	FormControl,
 	Grid,
@@ -6,11 +7,13 @@ import {
 	MenuItem,
 	OutlinedInput,
 	Select,
+	Skeleton,
 	Stack,
 	Typography,
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Complaint from '../../components/cards/Complaint';
 import FilterBar from '../../components/FilterBar';
@@ -19,9 +22,7 @@ import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSli
 
 export default function ComplaintPage() {
 	const dispatch = useDispatch();
-	const { isLoading, filterLoading, fetchFailed, complaints } = useSelector(
-		state => state.complaint
-	);
+	const { isLoading, filterLoading, complaints } = useSelector(state => state.complaint);
 	const { accessToken } = useSelector(state => state.login);
 
 	const [search, setSearch] = useState('All');
@@ -43,14 +44,19 @@ export default function ComplaintPage() {
 	};
 	const types = [
 		{ name: 'Tiempo de atención' },
+		{ name: 'No cumple con la oferta' },
 		{ name: 'Higiene' },
-		{ name: 'No acepta codigo de canje' },
+		{ name: 'No se acepta código de canje' },
 		{ name: 'Otro' },
 	];
 
-	const compRow1 = complaints?.slice(0, 2);
-	const compRow2 = complaints?.slice(2);
-
+	const msgclaimsNull = () => {
+		return (
+			<Stack width={1} spacing={2} alignItems="center">
+				<Typography>No se han encontrado reportes</Typography>
+			</Stack>
+		);
+	};
 	return (
 		<Container maxWidth="lg">
 			<ShowRoles />
@@ -66,15 +72,7 @@ export default function ComplaintPage() {
 						}}>
 						Reclamos
 					</Typography>
-					{/* <Stack
-						direction="row"
-						// flexWrap="wrap-reverse"
-						alignItems="center"
-						// justifyContent="space-between"
-						sx={{
-							mb: 3,
-						}}
-						spacing={2}> */}
+
 					<FilterBar handleSearch={handleSearch}>
 						<FormControl sx={{ minWidth: 200 }} size="small">
 							<InputLabel id="claim-label">Tipo de reclamo</InputLabel>
@@ -93,100 +91,65 @@ export default function ComplaintPage() {
 							</Select>
 						</FormControl>
 					</FilterBar>
-
-					{/* </Stack> */}
 				</Box>
 				<Grid container spacing={2} alignContent="center" justifyContent="center">
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{
-								complaints?.slice(0, 5).map(claim => (
-									<Complaint key={claim.id} complaint={claim} />
-								))
-								// : isLoading
-								// ? [1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
-								// 		<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
-								// 			<Skeletonclaim />
-								// 		</Grid>
-								//   ))
-								// : msgclaimsNull()
-							}
+							{complaints?.slice(0, complaints.length / 2 + 1).map(claim => (
+								<Complaint key={claim.id} complaint={claim} />
+							))}
 						</Stack>
 					</Grid>
 					{/* {compRow2 && ( */}
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{complaints?.slice(5).map(claim => (
+							{complaints?.slice(complaints.length / 2 + 1).map(claim => (
 								<Complaint key={claim.id} complaint={claim} />
 							))}
 						</Stack>
+						<Stack spacing={2}>
+							{isLoading || filterLoading
+								? [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)
+								: !complaints && msgclaimsNull()}
+						</Stack>
 					</Grid>
-					{/* )} */}
 				</Grid>
 			</Box>
 		</Container>
 	);
 }
+export const Skeletonclaim = () => {
+	return (
+		<Stack component={Card} spacing={1} sx={{ mb: 1, p: 2 }}>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					mb: 1,
+				}}>
+				<Box display="flex" sx={{ alignItems: 'center' }}>
+					<Skeleton
+						sx={{
+							width: 40,
+							height: 40,
+						}}
+						animation="wave"
+						variant="circular"
+					/>
+					<Box sx={{ ml: 2 }}>
+						<Skeleton animation="wave" variant="text" width={160} />
+						<Skeleton animation="wave" variant="text" width={140} />
+					</Box>
+				</Box>
+				<Box sx={{ p: 1, px: 2, background: grey[200], borderRadius: 10 }}>
+					<Skeleton animation="wave" variant="text" width={100} />
+				</Box>
+			</Box>
+			<Skeleton animation="wave" variant="text" />
+			<Skeleton animation="wave" variant="text" />
 
-// export const complaints = [
-// 	{
-// 		id: 1,
-// 		type: 'Tiempo de atencion',
-// 		date: '20/05/22',
-// 		description:
-// 			'The content of Accordions is mounted by default even if the accordion is not expanded. This default behavior has server-side rendering and SEO in mind. If you render expensive component trees inside your accordion details or simply render many accordions it might be a good idea to change this default behavior by enabling the claim',
-// 		student: {
-// 			nombres: 'Yurguen',
-// 			apellidos: 'Pariente Ulloa',
-// 			picture: 'image',
-// 		},
-// 		companie: 'Milcar SRL',
-// 		offer: { title: 'Pollo Asado', discount: '20%', status: 'Vigente' },
-// 		head: { nombres: 'Rene', apellidos: 'perez olguin', email: 'reneolguen@gmail.com' },
-// 	},
-// 	{
-// 		id: 2,
-// 		type: 'Tiempo de atencion',
-// 		date: '20/05/22',
-// 		description:
-// 			'The content of Accordions is mounted by default even if the accordion is not expanded. This default behavior has server-side rendering and SEO in mind. If you render expensive component trees inside your accordion details or simply render many accordions it might be a good idea to change this default behavior by enabling the claim',
-// 		student: {
-// 			nombres: 'Cristhian',
-// 			apellidos: 'Pariente Ulloa',
-// 			picture: 'image',
-// 		},
-// 		companie: 'Milcar SRL',
-// 		offer: { title: 'Pollo Asado', discount: '20%', status: 'Vigente' },
-// 		head: { nombres: 'Rene', apellidos: 'perez olguin', email: 'reneolguen@gmail.com' },
-// 	},
-// 	{
-// 		id: 3,
-// 		type: 'Tiempo de atencion',
-// 		date: '20/05/22',
-// 		description:
-// 			'The content of Accordions is mounted by default even if the accordion is not expanded. This default behavior has server-side rendering and SEO in mind. If you render expensive component trees inside your accordion details or simply render many accordions it might be a good idea to change this default behavior by enabling the claim',
-// 		student: {
-// 			nombres: 'Josue',
-// 			apellidos: 'Pariente Ulloa',
-// 			picture: 'image',
-// 		},
-// 		companie: 'Panchita SRL',
-// 		offer: { title: 'Pollo Asado', discount: '20%', status: 'Vigente' },
-// 		head: { nombres: 'Rene', apellidos: 'perez olguin', email: 'reneolguen@gmail.com' },
-// 	},
-// 	{
-// 		id: 10,
-// 		type: 'Tiempo de atencion',
-// 		date: '20/05/22',
-// 		description:
-// 			'The content of Accordions is mounted by default even if the accordion is not expanded. This default behavior has server-side rendering and SEO in mind. If you render expensive component trees inside your accordion details or simply render many accordions it might be a good idea to change this default behavior by enabling the claim',
-// 		student: {
-// 			nombres: 'Alicia',
-// 			apellidos: 'Pariente Ulloa',
-// 			picture: 'image',
-// 		},
-// 		companie: 'Milcar SRL',
-// 		offer: { title: 'Pollo Asado', discount: '20%', status: 'Vigente' },
-// 		head: { nombres: 'Rene', apellidos: 'perez olguin', email: 'reneolguen@gmail.com' },
-// 	},
-// ];
+			<Skeleton animation="wave" variant="text" />
+		</Stack>
+	);
+};

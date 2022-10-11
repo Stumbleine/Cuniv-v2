@@ -19,8 +19,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import StatusLabel from '../StatusLabel';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -31,8 +30,6 @@ function OfferContent({ offer, children }) {
 	moment.locale('es');
 	const [open, setOpen] = React.useState(false);
 
-	const dispatch = useDispatch();
-
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -42,14 +39,13 @@ function OfferContent({ offer, children }) {
 	return (
 		<>
 			<CardActionArea onClick={handleClickOpen}>{children}</CardActionArea>
-			<Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				TransitionComponent={Transition}
+				onClose={handleClose}>
 				<Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-					<Avatar
-						alt="logo"
-						// src="/mock-images/avatars/avatar_3.jpg"
-						src={offer.companie?.logo}
-						sx={{ width: 32, height: 32 }}
-					/>
+					<Avatar alt="logo" src={offer.companie?.logo} sx={{ width: 32, height: 32 }} />
 					<Typography component="div" sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
 						{offer.companie?.razon_social}
 					</Typography>
@@ -133,12 +129,7 @@ function OfferContent({ offer, children }) {
 									<ListItem
 										alignItems="flex-start"
 										sx={{ alignItems: 'center', py: 0, px: 1 }}>
-										<ListItemIcon
-											sx={
-												{
-													// mt: 2,
-												}
-											}>
+										<ListItemIcon>
 											<Check />
 										</ListItemIcon>
 										<ListItemText

@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import React from 'react';
 
 function BgAvatar({ src, color = 'inherit', sx }) {
 	return (

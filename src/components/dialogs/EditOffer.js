@@ -6,10 +6,8 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
 	FormControl,
-	FormHelperText,
 	IconButton,
 	InputAdornment,
 	InputLabel,
@@ -21,26 +19,23 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { edituserAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
-import API from '../../conection';
 import { updateOfferAsync } from '../../store/offersSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditOffer({ offer, handleSnack }) {
+export default function EditOffer({ offer, handleSnack, companies }) {
 	const sdate = offer.start_date?.split(' ')[0];
 	const edate = offer.end_date?.split(' ')[0];
 	const dispatch = useDispatch();
-	const { user, isAdmin } = useSelector(state => state.user);
+	const { isAdmin } = useSelector(state => state.user);
 	const [changeCompanie, setCCompanie] = useState(false);
 
 	const { accessToken } = useSelector(state => state.login);
@@ -57,16 +52,6 @@ export default function EditOffer({ offer, handleSnack }) {
 	const handleClose = () => {
 		setOpen(false);
 	};
-	const [companies, setCompanies] = useState(null);
-	useEffect(() => {
-		async function fetch() {
-			const r = await API.get('select/companies', {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			setCompanies(r.data);
-		}
-		isAdmin && changeCompanie && fetch();
-	}, []);
 
 	const formik = useFormik({
 		initialValues: {
@@ -84,7 +69,6 @@ export default function EditOffer({ offer, handleSnack }) {
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
-			// id_empresa: isAdmin ? Yup.number().required('Es necesario asignar la empresa') : '',
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -122,7 +106,7 @@ export default function EditOffer({ offer, handleSnack }) {
 			</Tooltip>
 
 			<Dialog
-				PaperProps={{ style: { borderRadius: 2 } }}
+				PaperProps={{ style: { borderRadius: 15 } }}
 				open={open}
 				onClose={handleClose}
 				TransitionComponent={Transition}>
@@ -244,9 +228,6 @@ export default function EditOffer({ offer, handleSnack }) {
 											))}
 										</Select>
 										{!companies && <Typography variant="caption">cargando.. </Typography>}
-										<Typography sx={{ ml: 2 }} variant="caption" color="error">
-											{errors.id_empresa}
-										</Typography>
 									</FormControl>
 								)}
 								<Stack direction="row" spacing={2} justifyContent="center">

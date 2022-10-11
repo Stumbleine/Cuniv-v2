@@ -1,15 +1,7 @@
 import { ArrowBack } from '@mui/icons-material';
-import {
-	Box,
-	Button,
-	Card,
-	CircularProgress,
-	Stack,
-	TextField,
-} from '@mui/material';
+import { Box, Button, Card, CircularProgress, Stack, TextField } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import AssignPrivilegesForm from './AssignPrivilegesForm';
@@ -30,8 +22,7 @@ function RoleCreateForm() {
 		}),
 		onSubmit: (values, { resetForm }) => {},
 	});
-	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-		formik;
+	const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<FormikProvider value={formik}>
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>

@@ -1,9 +1,7 @@
-import { Delete, Edit, Warning } from '@mui/icons-material';
+import { Warning } from '@mui/icons-material';
 import {
-	Avatar,
 	CardMedia,
 	CircularProgress,
-	IconButton,
 	Paper,
 	Stack,
 	Table,
@@ -17,13 +15,9 @@ import {
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	deleteRubroAsync,
-	filterRubrosAsync,
-	updateRubroAsync,
-} from '../../store/rubrosSlice';
+import { deleteRubroAsync, filterRubrosAsync } from '../../store/rubrosSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditRubro from '../dialogs/EditRubro';
 import FilterBar from '../FilterBar';
@@ -37,15 +31,12 @@ function RubrosTable({ handleSnack }) {
 	);
 	const { accessToken } = useSelector(state => state.login);
 
-	const [search, setSearch] = useState('All');
-
 	const TABLE_HEAD = [
 		{ id: 'nombre', label: 'Nombre rubro', alignRight: false },
 		{ id: 'descripcion', label: 'Descripcion', alignRight: false },
 		{ id: 'acciones', label: 'Acciones', alignRight: false },
 	];
 	const [rowsPerPage, setRowsPerPage] = useState(5);
-	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 
 	const handleChangePage = (event, newPage) => {
@@ -57,7 +48,6 @@ function RubrosTable({ handleSnack }) {
 	};
 
 	const handleSearch = values => {
-		setSearch(values.search);
 		dispatch(filterRubrosAsync(accessToken, values.search));
 	};
 
@@ -67,20 +57,7 @@ function RubrosTable({ handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente', 'success');
-			})
-			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
-			});
-	};
-
-	const updateAsync = (values, file) => {
-		const update = async () => {
-			return await dispatch(updateRubroAsync(accessToken, values, file));
-		};
-		update()
-			.then(r => {
-				handleSnack('Usuario actualizado exitosamente', 'success');
+				handleSnack('Rubro eliminado exitosamente', 'success');
 			})
 			.catch(e => {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
@@ -91,11 +68,11 @@ function RubrosTable({ handleSnack }) {
 		<>
 			<FilterBar handleSearch={handleSearch} />
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mt: 2 }}>
-				<Table>
+				<Table size="small">
 					<TableHead sx={{ bgcolor: 'primary.main' }}>
 						<TableRow>
 							{TABLE_HEAD.map(cell => (
-								<TableCell key={cell.id} sx={{ color: 'white' }}>
+								<TableCell key={cell.id} sx={{ color: 'white', py: 1 }}>
 									<Typography noWrap> {cell.label}</Typography>
 								</TableCell>
 							))}
@@ -130,7 +107,7 @@ function RubrosTable({ handleSnack }) {
 											<TableCell>{rubro.descripcion}</TableCell>
 											<TableCell align="right">
 												<Box sx={{ display: 'flex' }}>
-													<EditRubro rubro={rubro} updateAsync={updateAsync} />
+													<EditRubro rubro={rubro} handleSnack={handleSnack} />
 													<DeleteItem
 														deleteAsync={deleteAsync}
 														id={rubro.nombre}

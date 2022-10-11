@@ -6,28 +6,25 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
 	IconButton,
 	Slide,
 	Stack,
 	TextField,
-	Typography,
 } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { editLinkAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
-import SnackCustom from '../SnackCustom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditLink({ link }) {
+export default function EditLink({ link, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
@@ -45,18 +42,6 @@ export default function EditLink({ link }) {
 	const handleClose = () => {
 		setOpen(false);
 	};
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
 
 	const formik = useFormik({
 		initialValues: {
@@ -70,12 +55,12 @@ export default function EditLink({ link }) {
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm }) => {
-			const add = async () => {
+			const edit = async () => {
 				return await dispatch(
 					editLinkAsync(accessToken, values, link.id, fileImage, editFile)
 				);
 			};
-			add()
+			edit()
 				.then(() => {
 					handleSnack('Link actualizado exitosamente', 'success');
 					handleClose();
@@ -83,12 +68,11 @@ export default function EditLink({ link }) {
 				})
 				.catch(() => {
 					handleSnack('Algo salio, vuelva a intentarlo', 'error');
-					handleClose();
-					resetForm();
+					isSubmitting(false);
 				});
 		},
 	});
-	const { errors, values, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
+	const { errors, touched, handleSubmit, getFieldProps, isSubmitting } = formik;
 
 	return (
 		<>
@@ -102,9 +86,12 @@ export default function EditLink({ link }) {
 					}}
 				/>
 			</IconButton>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 
-			<Dialog open={open} disableEscapeKeyDown={true} TransitionComponent={Transition}>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				onClose={handleClose}
+				TransitionComponent={Transition}>
 				<DialogTitle>{'Editar ' + link.title}</DialogTitle>
 
 				<DialogContent sx={{ minWidth: 400 }}>
@@ -118,7 +105,6 @@ export default function EditLink({ link }) {
 									label="imagen"
 									type="Circle"
 								/>
-								{/* <UpdateImage label="update" type="Circle" /> */}
 								<TextField
 									variant="outlined"
 									size="small"

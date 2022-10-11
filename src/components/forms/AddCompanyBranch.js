@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { green, grey } from '@mui/material/colors';
-import { useEffect, useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import MapView from '../MapView';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
@@ -147,6 +147,7 @@ function AddCompanyBranch({
 				open={open}
 				TransitionComponent={Transition}
 				keepMounted
+				PaperProps={{ style: { borderRadius: 15 } }}
 				onClose={handleClose}
 				aria-describedby="alert-dialog-slide-description"
 				sx={{ minWidth: 500 }}>
