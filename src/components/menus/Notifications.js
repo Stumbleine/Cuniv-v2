@@ -74,8 +74,15 @@ export default function Notifications() {
 				open={Boolean(anchorNoti)}
 				onClose={handleCloseUserMenu}>
 				<Box sx={{ my: 1, px: 2.5 }}>
-					<Typography variant="subtitle1" noWrap sx={{ fontWeight: 'bold' }}>
+					<Typography
+						variant="subtitle1"
+						component="span"
+						display="flex"
+						sx={{ fontWeight: 'bold', alignItems: 'center' }}>
 						Notificaciones
+						<Typography sx={{ ml: 1 }} variant="body2" color="textSecondary">
+							(Recientes)
+						</Typography>
 					</Typography>
 				</Box>
 				<Divider sx={{ my: 1 }} />
@@ -85,6 +92,7 @@ export default function Notifications() {
 							sx={{ px: 2.5 }}
 							component={RouterLink}
 							onClick={handleCloseUserMenu}
+							selected={noti?.recent || false}
 							key={index}
 							to={
 								noti?.id_empresa

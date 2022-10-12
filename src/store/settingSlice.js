@@ -17,7 +17,8 @@ const settingSlice = createSlice({
 		},
 
 		setNewNoti: (state, { payload }) => {
-			state.notilist = [...state.notilist, payload];
+			const noti = { ...payload, recent: true };
+			state.notilist = [noti, ...state.notilist];
 		},
 		setBadge: (state, { payload }) => {
 			state.badge = payload;
