@@ -15,6 +15,11 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingBottom: theme.spacing(2),
 }));
+
+/**
+ * Componente barra de navegacion para paginas publicas como error 404 que utiliza el componente Appbar de MUI,
+ * @component
+ */
 const LogoOnlyLayout = () => {
 	return (
 		<>

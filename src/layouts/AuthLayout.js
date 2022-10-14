@@ -15,6 +15,12 @@ import { Box } from '@mui/system';
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
 
+/**
+ * Componente barra de navegacion para paginas publicas como el login, register, forgtoPassword e index que utiliza el componente Drawer de MUI,
+ * Tiene dos componentes Page y LandingPage, que se adapta al contenido.
+ * @component
+ */
+
 export default function AuthLayout() {
 	const { pathname } = useLocation();
 
@@ -25,7 +31,6 @@ export default function AuthLayout() {
 		alignItems: 'center',
 		justifyContent: 'center',
 		position: 'relative',
-
 		paddingTop: theme.spacing(2),
 		paddingBottom: theme.spacing(10),
 	}));

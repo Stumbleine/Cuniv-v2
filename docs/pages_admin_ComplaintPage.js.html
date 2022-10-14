@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/admin/ComplaintPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/admin/ComplaintPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+	Card,
+	Container,
+	FormControl,
+	Grid,
+	InputLabel,
+	MenuItem,
+	OutlinedInput,
+	Select,
+	Skeleton,
+	Stack,
+	Typography,
+} from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { Box } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Complaint from '../../components/cards/Complaint';
+import FilterBar from '../../components/FilterBar';
+import ShowRoles from '../../components/ShowRoles';
+import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSlice';
+
+/**
+ * Pagina de reclamos, donde se lista los reclamos de los estudiantes en dos columnas.
+ * @component
+ */
+
+function ComplaintPage() {
+	const dispatch = useDispatch();
+	const { isLoading, filterLoading, complaints } = useSelector(state => state.complaint);
+	const { accessToken } = useSelector(state => state.login);
+
+	const [search, setSearch] = useState('All');
+	const [type, setType] = useState('All');
+
+	useEffect(() => {
+		document.title = 'ssansi | reclamos';
+		dispatch(complaintsAsync(accessToken));
+	}, []);
+
+	const handleType = event => {
+		setType(event.target.value);
+		dispatch(complaintsFilterAsync(accessToken, search, event.target.value));
+	};
+	const handleSearch = values => {
+		setSearch(values.search);
+		dispatch(complaintsFilterAsync(accessToken, values.search, type));
+	};
+	/** Tipo de reclamos, objeto utilizado para el filtro de reclamos por tipo */
+	const types = [
+		{ name: 'Tiempo de atención' },
+		{ name: 'No cumple con la oferta' },
+		{ name: 'Higiene' },
+		{ name: 'No se acepta código de canje' },
+		{ name: 'Otro' },
+	];
+
+	/** Componente mensaje que indica cuando no se recupero reportes en la peticion.
+	 * @component
+	 */
+	const msgclaimsNull = () => {
+		return (
+			&lt;Stack width={1} spacing={2} alignItems="center">
+				&lt;Typography>No se han encontrado reportes&lt;/Typography>
+			&lt;/Stack>
+		);
+	};
+	return (
+		&lt;Container maxWidth="lg">
+			&lt;ShowRoles />
+			&lt;Box>
+				&lt;Box sx={{ mb: 3 }}>
+					&lt;Typography
+						variant="h5"
+						sx={{
+							mb: 2,
+							fontWeight: 'bold',
+							color: 'text.title',
+							fontStyle: 'italic',
+						}}>
+						Reclamos
+					&lt;/Typography>
+
+					&lt;FilterBar handleSearch={handleSearch}>
+						&lt;FormControl sx={{ minWidth: 200 }} size="small">
+							&lt;InputLabel id="claim-label">Tipo de reclamo&lt;/InputLabel>
+							&lt;Select
+								labelId="claim-label"
+								id="claim-filter"
+								defaultValue={'All'}
+								onChange={handleType}
+								input={&lt;OutlinedInput id="claim-filter" label="Tipo de reclamo" />}>
+								&lt;MenuItem value="All">Todos&lt;/MenuItem>
+								{types?.map(type => (
+									&lt;MenuItem key={type.name} value={type.name}>
+										{type.name}
+									&lt;/MenuItem>
+								))}
+							&lt;/Select>
+						&lt;/FormControl>
+					&lt;/FilterBar>
+				&lt;/Box>
+				&lt;Grid container spacing={2} alignContent="center" justifyContent="center">
+					&lt;Grid item md={6}>
+						&lt;Stack spacing={2} direction="column">
+							{complaints?.slice(0, complaints.length / 2 + 1).map(claim => (
+								&lt;Complaint key={claim.id} complaint={claim} />
+							))}
+						&lt;/Stack>
+					&lt;/Grid>
+					{/* {compRow2 &amp;&amp; ( */}
+					&lt;Grid item md={6}>
+						&lt;Stack spacing={2} direction="column">
+							{complaints?.slice(complaints.length / 2 + 1).map(claim => (
+								&lt;Complaint key={claim.id} complaint={claim} />
+							))}
+						&lt;/Stack>
+						&lt;Stack spacing={2}>
+							{isLoading || filterLoading
+								? [1, 2, 3, 4]?.map((sk, index) => &lt;Skeletonclaim key={index} />)
+								: !complaints &amp;&amp; msgclaimsNull()}
+						&lt;/Stack>
+					&lt;/Grid>
+				&lt;/Grid>
+			&lt;/Box>
+		&lt;/Container>
+	);
+}
+export default ComplaintPage;
+
+/**
+ * Component eskeleto para mostrar una animacion de carga en la pagina complaints (reclamos), es invocado cuando la variable isLoading es true.
+ * @component
+ */
+const Skeletonclaim = () => {
+	return (
+		&lt;Stack component={Card} spacing={1} sx={{ mb: 1, p: 2 }}>
+			&lt;Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					mb: 1,
+				}}>
+				&lt;Box display="flex" sx={{ alignItems: 'center' }}>
+					&lt;Skeleton
+						sx={{
+							width: 40,
+							height: 40,
+						}}
+						animation="wave"
+						variant="circular"
+					/>
+					&lt;Box sx={{ ml: 2 }}>
+						&lt;Skeleton animation="wave" variant="text" width={160} />
+						&lt;Skeleton animation="wave" variant="text" width={140} />
+					&lt;/Box>
+				&lt;/Box>
+				&lt;Box sx={{ p: 1, px: 2, background: grey[200], borderRadius: 10 }}>
+					&lt;Skeleton animation="wave" variant="text" width={100} />
+				&lt;/Box>
+			&lt;/Box>
+			&lt;Skeleton animation="wave" variant="text" />
+			&lt;Skeleton animation="wave" variant="text" />
+
+			&lt;Skeleton animation="wave" variant="text" />
+		&lt;/Stack>
+	);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ComplaintPage.html">ComplaintPage</a></li><li><a href="ComplaintPage-msgclaimsNull.html">msgclaimsNull</a></li><li><a href="DashboardLayout.html">DashboardLayout</a></li><li><a href="LogoOnlyLayout.html">LogoOnlyLayout</a></li><li><a href="module.exports.html">exports</a></li><li><a href="NavBar.html">NavBar</a></li><li><a href="NavBar-ItemNav.html">ItemNav</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="Skeletonclaim.html">Skeletonclaim</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Oct 13 2022 18:02:30 GMT-0400 (Bolivia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

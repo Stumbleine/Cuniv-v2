@@ -1,4 +1,32 @@
-import {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: layouts/NavBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: layouts/NavBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
 	AppBar,
 	Box,
 	Toolbar,
@@ -39,9 +67,9 @@ function NavBar({ onOpenSidebar }) {
 		const router = useLocation();
 		const active = props.href ? router.pathname === '/main/' + props.href : false;
 		return (
-			<>
-				<NavLink to={props.href} style={{ textDecoration: 'none' }}>
-					<Button
+			&lt;>
+				&lt;NavLink to={props.href} style={{ textDecoration: 'none' }}>
+					&lt;Button
 						sx={{
 							color: active ? 'primary.main' : 'text.disabled',
 							fontWeight: 'bold',
@@ -49,59 +77,59 @@ function NavBar({ onOpenSidebar }) {
 							px: 1,
 						}}>
 						{props.text}
-					</Button>
-				</NavLink>
-				{props.index !== navlinks.length - 1 && (
-					<Divider orientation="vertical" flexItem variant="middle" />
+					&lt;/Button>
+				&lt;/NavLink>
+				{props.index !== navlinks.length - 1 &amp;&amp; (
+					&lt;Divider orientation="vertical" flexItem variant="middle" />
 				)}
-			</>
+			&lt;/>
 		);
 	};
 
 	return (
-		<>
-			<AppBar
+		&lt;>
+			&lt;AppBar
 				position="static"
 				elevation={1}
 				sx={{
 					background: 'white',
 					zIndex: 'tooltip',
 				}}>
-				<Container maxWidth="xl">
-					<Toolbar disableGutters>
-						<Box
+				&lt;Container maxWidth="xl">
+					&lt;Toolbar disableGutters>
+						&lt;Box
 							component="div"
 							sx={{
 								mr: { xs: 0.5, md: 2 },
 								display: {
 									xs: 'none',
 									md: navlinks.length > 8 ? 'none' : 'flex',
-									lg: navlinks.length > 8 && 'flex',
+									lg: navlinks.length > 8 &amp;&amp; 'flex',
 								},
 							}}>
-							<Logo />
-						</Box>
+							&lt;Logo />
+						&lt;/Box>
 
 						{/* menu responsivo con items de pestañas */}
-						<Box
+						&lt;Box
 							sx={{
 								flexGrow: 1,
 								display: {
 									xs: 'flex',
 									// md: 'none',
 									md: navlinks.length > 8 ? 'flex' : 'none',
-									lg: navlinks.length > 8 && 'none',
+									lg: navlinks.length > 8 &amp;&amp; 'none',
 								},
 							}}>
-							<IconButton
+							&lt;IconButton
 								aria-controls="menu-appbar"
 								size="large"
 								aria-haspopup="true"
 								onClick={onOpenSidebar}>
-								<MenuIcon></MenuIcon>
-							</IconButton>
-						</Box>
-						<Box
+								&lt;MenuIcon>&lt;/MenuIcon>
+							&lt;/IconButton>
+						&lt;/Box>
+						&lt;Box
 							component="div"
 							sx={{
 								flexGrow: 1,
@@ -110,41 +138,64 @@ function NavBar({ onOpenSidebar }) {
 									xs: 'flex',
 									// md: 'none',
 									md: navlinks.length > 8 ? 'flex' : 'none',
-									lg: navlinks.length > 8 && 'none',
+									lg: navlinks.length > 8 &amp;&amp; 'none',
 								},
 							}}>
-							<Logo />
-						</Box>
+							&lt;Logo />
+						&lt;/Box>
 
 						{/* Contenendor de pestañas/pagesLinks */}
-						<Box
+						&lt;Box
 							sx={{
 								display: {
 									xs: 'none',
 									// md: 'flex',
 									md: navlinks.length > 8 ? 'none' : 'flex',
-									lg: navlinks.length > 8 && 'flex',
+									lg: navlinks.length > 8 &amp;&amp; 'flex',
 								},
 								flexGrow: 1,
 							}}>
 							{navlinks?.map((item, index) => (
-								<ItemNav
+								&lt;ItemNav
 									href={item.path}
 									text={item.name}
 									key={item.name}
 									index={index}
 								/>
 							))}
-						</Box>
+						&lt;/Box>
 
-						<Stack spacing={2} direction="row" alignItems="center">
-							<Notifications />
-							<AccountPopover />
-						</Stack>
-					</Toolbar>
-				</Container>
-			</AppBar>
-		</>
+						&lt;Stack spacing={2} direction="row" alignItems="center">
+							&lt;Notifications />
+							&lt;AccountPopover />
+						&lt;/Stack>
+					&lt;/Toolbar>
+				&lt;/Container>
+			&lt;/AppBar>
+		&lt;/>
 	);
 }
 export default NavBar;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ComplaintPage.html">ComplaintPage</a></li><li><a href="ComplaintPage-msgclaimsNull.html">msgclaimsNull</a></li><li><a href="DashboardLayout.html">DashboardLayout</a></li><li><a href="LogoOnlyLayout.html">LogoOnlyLayout</a></li><li><a href="module.exports.html">exports</a></li><li><a href="NavBar.html">NavBar</a></li><li><a href="NavBar-ItemNav.html">ItemNav</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="Skeletonclaim.html">Skeletonclaim</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Oct 13 2022 18:02:30 GMT-0400 (Bolivia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -20,7 +20,12 @@ import FilterBar from '../../components/FilterBar';
 import ShowRoles from '../../components/ShowRoles';
 import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSlice';
 
-export default function ComplaintPage() {
+/**
+ * Pagina de reclamos, donde se lista los reclamos de los estudiantes en dos columnas.
+ * @component
+ */
+
+function ComplaintPage() {
 	const dispatch = useDispatch();
 	const { isLoading, filterLoading, complaints } = useSelector(state => state.complaint);
 	const { accessToken } = useSelector(state => state.login);
@@ -30,7 +35,6 @@ export default function ComplaintPage() {
 
 	useEffect(() => {
 		document.title = 'ssansi | reclamos';
-
 		dispatch(complaintsAsync(accessToken));
 	}, []);
 
@@ -42,6 +46,7 @@ export default function ComplaintPage() {
 		setSearch(values.search);
 		dispatch(complaintsFilterAsync(accessToken, values.search, type));
 	};
+	/** Tipo de reclamos, objeto utilizado para el filtro de reclamos por tipo */
 	const types = [
 		{ name: 'Tiempo de atención' },
 		{ name: 'No cumple con la oferta' },
@@ -50,6 +55,9 @@ export default function ComplaintPage() {
 		{ name: 'Otro' },
 	];
 
+	/** Componente mensaje que indica cuando no se recupero reportes en la peticion.
+	 * @component
+	 */
 	const msgclaimsNull = () => {
 		return (
 			<Stack width={1} spacing={2} alignItems="center">
@@ -118,7 +126,13 @@ export default function ComplaintPage() {
 		</Container>
 	);
 }
-export const Skeletonclaim = () => {
+export default ComplaintPage;
+
+/**
+ * Component eskeleto para mostrar una animacion de carga en la pagina complaints (reclamos), es invocado cuando la variable isLoading es true.
+ * @component
+ */
+const Skeletonclaim = () => {
 	return (
 		<Stack component={Card} spacing={1} sx={{ mb: 1, p: 2 }}>
 			<Box

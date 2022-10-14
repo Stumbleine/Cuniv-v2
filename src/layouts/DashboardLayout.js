@@ -18,6 +18,12 @@ const Page = styled('div')(({ theme }) => ({
 	paddingTop: theme.spacing(2),
 	paddingBottom: theme.spacing(10),
 }));
+
+/**
+ * Component panel para la navegacion de dos formas, Sidebar y Navbar.
+ * recibe las notificaciones a travez del socket, emite snackbar por cada notificacion sobre la pantalla.
+ * @component
+ */
 function DashboardLayout() {
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
@@ -32,25 +38,26 @@ function DashboardLayout() {
 		redirectPath: null,
 	});
 
-	const audioPlayer = useRef(null);
-	function playAudio() {
-		audioPlayer.current.play();
-	}
-
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
-	const handleSnack = data => {
+	const handleNotiSnack = data => {
 		setSnack({ ...snack, open: true, body: data });
 		playAudio();
 		dispatch(setNewNoti(data));
 		dispatch(setBadge(false));
 	};
 
+	const audioPlayer = useRef(null);
+
+	function playAudio() {
+		audioPlayer.current.play();
+	}
+
 	useEffect(() => {
 		if (user !== null && isAdmin) {
 			socket.on('web', data => {
-				handleSnack(data);
+				handleNotiSnack(data);
 			});
 		}
 	}, []);

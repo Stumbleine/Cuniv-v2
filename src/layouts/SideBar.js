@@ -6,6 +6,14 @@ import { useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import Logo from '../components/Logo';
 
+/**
+ * Componente barra de navegacion SideBar que utiliza el componente Drawer de MUI,
+ * Se muestra como barra de navegacion alternativa en pantallas pequeñas, aparece el lado izquierdo, cuando se presione sobre el boton Menu
+ * @component
+ * @property { bool } onOpenSidebar parametro que indica cuando se abre el sideBar.
+ * @property { function } onCloseSideBar funcion para cerrar el sideBar..
+ */
+
 function SideBar({ openSideBar, onCloseSideBar }) {
 	const theme = useTheme();
 	const { pathname } = useLocation();
