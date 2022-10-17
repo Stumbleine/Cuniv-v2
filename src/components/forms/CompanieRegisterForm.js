@@ -26,16 +26,23 @@ import {
 import { green } from '@mui/material/colors';
 import UploadImage from '../UploadImage';
 import { useNavigate } from 'react-router-dom';
-import SnackCustom from '../SnackCustom';
-
-function CompanieRegisterForm() {
+/**
+ * Formulario para registar empresas
+ * @component CompanieRegisterForm
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports CompanieRegisterForm
+ */
+export default function CompanieRegisterForm({ handleSnack }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const { providers, selectRubros } = useSelector(state => state.companies);
 	const [fileLogo, setFileLogo] = useState(null);
-
+	/**
+	 * Inicializa una sucursal por defecto para cada empresa
+	 * @constant defaultBranch
+	 */
 	const defaultBranch = {
 		nombre: 'Sucursal central',
 		direccion: 's/n',
@@ -44,30 +51,32 @@ function CompanieRegisterForm() {
 	};
 	const [branchs, setBranchs] = useState([defaultBranch]);
 
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
 	useEffect(() => {
 		isAdmin && dispatch(getProveedores(accessToken));
 		dispatch(getRubros(accessToken));
 	}, []);
-
+	/**
+	 * Asigna el archivo logo de empresa proveniente de UploadImage
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileLogo(file);
 	};
+	/**
+	 * Actualiza el arreglo de sucursales añadidos
+	 * @function updateListBranchs
+	 */
 	const updateListBranchs = data => {
 		setBranchs(data);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario el registro de una empresa
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			razon_social: '',
@@ -75,7 +84,6 @@ function CompanieRegisterForm() {
 			telefono: '',
 			rubro: '',
 			nit: '',
-
 			id_proveedor: '',
 		},
 		validationSchema: Yup.object().shape({
@@ -86,8 +94,11 @@ function CompanieRegisterForm() {
 			id_proveedor:
 				isAdmin && Yup.number().required('Es necesario asingar el responsable'),
 		}),
-
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia createCompanieAsync con valores del form para registrar empresa
+			 * @function {async} post
+			 */
 			async function post() {
 				return await dispatch(
 					createCompanieAsync(accessToken, values, fileLogo, branchs)
@@ -108,7 +119,6 @@ function CompanieRegisterForm() {
 
 	return (
 		<>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 			<FormikProvider value={formik}>
 				<Form onSubmit={handleSubmit}>
 					<Grid container spacing={2}>
@@ -262,5 +272,3 @@ function CompanieRegisterForm() {
 		</>
 	);
 }
-
-export default CompanieRegisterForm;

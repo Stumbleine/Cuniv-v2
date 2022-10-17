@@ -9,10 +9,13 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
-
-export default function ProfileOffers(props) {
-	const { offers } = props;
-
+/**
+ * Componente lista para mostrar las principales ofertas en el perfil de una empresa
+ * @component ProfileOffers
+ * @property {Array} offers lista de ofertas de la empresa
+ * @exports ProfileOffers
+ */
+export default function ProfileOffers({ offers }) {
 	return (
 		<Box>
 			<Typography variant="body1" sx={{ fontWeight: 'bold' }}>

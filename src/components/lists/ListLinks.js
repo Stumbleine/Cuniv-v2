@@ -16,15 +16,27 @@ import { deleteSiteAsync } from '../../store/umssSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditLink from '../dialogs/EditLink';
 import SkeletonList from '../skeletons/SkeletonList';
-
+/**
+ * Componente lista para mostrar los links agregados
+ * @component ListLinks
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports ListLinks
+ */
 export default function ListLinks({ handleSnack }) {
 	const { accessToken } = useSelector(state => state.login);
 	const { webSites, isLoadingL, filterLoadingL, fetchFailedL } = useSelector(
 		state => state.umss
 	);
 	const dispatch = useDispatch();
-
+	/**
+	 * Realiza dispatch hacia la peticion deleteSiteAsync para eliminar un link
+	 * @function deleteAsync
+	 * @param {Number} id identificador del link
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			await dispatch(deleteSiteAsync(accessToken, id));
 		};

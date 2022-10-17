@@ -7,8 +7,12 @@ import ShowRoles from '../components/ShowRoles';
 import { useDispatch, useSelector } from 'react-redux';
 import { rubrosAsync } from '../store/rubrosSlice';
 import SnackCustom from '../components/SnackCustom';
-
-function RubrosPage() {
+/**
+ * Pagina para mostrar los rubros existentes, y agregar rubros
+ * @component RubrosPage
+ * @exports RubrosPage
+ */
+export default function RubrosPage() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 
@@ -16,15 +20,27 @@ function RubrosPage() {
 		dispatch(rubrosAsync(accessToken));
 		document.title = 'ssansi | rubros';
 	}, []);
+
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
@@ -59,5 +75,3 @@ function RubrosPage() {
 		</Container>
 	);
 }
-
-export default RubrosPage;

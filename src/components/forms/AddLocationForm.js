@@ -10,36 +10,39 @@ import {
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useState } from 'react';
-import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { Box } from '@mui/system';
 import MapView from '../MapView';
 import { green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { addLocationAsync } from '../../store/umssSlice';
-
-export default function AddLocationForm() {
+/**
+ * Formulario para registar locaciones de la universidad como Aulas, Bibliotecas, etc.
+ * @component AddLocationForm
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports AddLocationForm
+ */
+export default function AddLocationForm({ handleSnack }) {
 	const [position, setPosition] = useState(null);
 	const { accessToken } = useSelector(state => state.login);
 	const dispatch = useDispatch();
-
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
-
+	/**
+	 * Recibe las coordenadas desde el componente <MapView/>
+	 * @function sendPosition
+	 * @param {Object} pos coordenadas: lat,lng
+	 */
 	const sendPosition = pos => {
 		setPosition(pos);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario para añadir una locacion
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit",
+	 * validate: verifica que se ah seleccionado una ubicacion en <MapView/>
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			name: '',
@@ -59,6 +62,10 @@ export default function AddLocationForm() {
 			return errors;
 		},
 		onSubmit: (values, { resetForm }) => {
+			/**
+			 * Ejecuta el dispatch hacia addLocationAsync con valores del form para crear una locacion
+			 * @function {async} add
+			 */
 			const add = async () => {
 				return await dispatch(addLocationAsync(accessToken, values, position));
 			};
@@ -77,7 +84,6 @@ export default function AddLocationForm() {
 
 	return (
 		<Card>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 			<FormikProvider value={formik}>
 				<Form onSubmit={handleSubmit}>
 					<Stack spacing={2} sx={{ p: 2 }}>

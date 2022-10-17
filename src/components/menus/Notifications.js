@@ -14,23 +14,37 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { notificationsAsync, setBadge } from '../../store/settingSlice';
+/**
+ * Menu para mostrar notificaciones del sistema
+ * @component Notifications
+ * @exports Notifications
+ */
 export default function Notifications() {
 	const dispatch = useDispatch();
 	const { notilist, badge } = useSelector(state => state.setting);
-
 	const { accessToken } = useSelector(state => state.login);
 	const [anchorNoti, setAnchorNoti] = useState(null);
 	const { isAdmin } = useSelector(state => state.user);
-
-	const handleOpenUserMenu = event => {
+	/**
+	 * Abre el menu y cambia el estado de badge en el store
+	 * @function handleOpenNotiMenu
+	 */
+	const handleOpenNotiMenu = event => {
 		setAnchorNoti(event.currentTarget);
 		dispatch(setBadge(true));
 	};
-
-	const handleCloseUserMenu = () => {
+	/**
+	 * cierra el menu
+	 * @function handleCloseNotiMenu
+	 */
+	const handleCloseNotiMenu = () => {
 		setAnchorNoti(null);
 	};
 	useEffect(() => {
+		/**
+		 * Peticion asincrona al store para la funcion notificationsAsync que devuelve lista de notificaciones
+		 * @function {async} getNotis
+		 */
 		const getNotis = async () => {
 			return await dispatch(notificationsAsync(accessToken));
 		};
@@ -46,7 +60,7 @@ export default function Notifications() {
 					position: 'relative',
 				}}>
 				<Tooltip title="Notificaciones" sx={{}}>
-					<IconButton onClick={handleOpenUserMenu}>
+					<IconButton onClick={handleOpenNotiMenu}>
 						<Badge color="error" variant="dot" invisible={badge}>
 							<NotificationsIcon sx={{ color: 'text.secondary' }} />
 						</Badge>
@@ -72,7 +86,7 @@ export default function Notifications() {
 					horizontal: 'right',
 				}}
 				open={Boolean(anchorNoti)}
-				onClose={handleCloseUserMenu}>
+				onClose={handleCloseNotiMenu}>
 				<Box sx={{ my: 1, px: 2.5 }}>
 					<Typography
 						variant="subtitle1"
@@ -91,7 +105,7 @@ export default function Notifications() {
 						<MenuItem
 							sx={{ px: 2.5 }}
 							component={RouterLink}
-							onClick={handleCloseUserMenu}
+							onClick={handleCloseNotiMenu}
 							selected={noti?.recent || false}
 							key={index}
 							to={

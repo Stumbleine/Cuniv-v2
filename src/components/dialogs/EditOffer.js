@@ -13,24 +13,29 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
-	Slide,
 	Stack,
 	TextField,
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { updateOfferAsync } from '../../store/offersSlice';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo con formulario para editar informacion de una oferta,
+ * excepto productos incluidos y sucursales disponibles
+ * @component EditOffer
+ * @property {Object} offer datos de la oferta a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @property {Array} [companies] lista de empresas para la opcion de reasignar info.
+ * @exports EditOffer
+ */
 export default function EditOffer({ offer, handleSnack, companies }) {
 	const sdate = offer.start_date?.split(' ')[0];
 	const edate = offer.end_date?.split(' ')[0];
@@ -41,18 +46,35 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de UploadImage
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario para editar la oferta
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales de la oferta,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			id_beneficio: offer.id_offer,
@@ -72,6 +94,10 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateOfferAsync con valores del form para editar la oferta
+			 * @function {async} update
+			 */
 			const update = async () => {
 				return await dispatch(updateOfferAsync(accessToken, values, fileImage));
 			};

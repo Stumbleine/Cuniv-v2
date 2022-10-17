@@ -12,7 +12,6 @@ import {
 	MenuItem,
 	OutlinedInput,
 	Select,
-	Slide,
 	Stack,
 	TextField,
 	Tooltip,
@@ -20,16 +19,21 @@ import {
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { FastField, Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UploadImage from '../UploadImage';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateInfoAsync } from '../../store/companiesSlice';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo para editar informacion de una empresa
+ * @component EditCompanie
+ * @property {Object} companie datos de empresa.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ *
+ * @exports EditCompanie
+ */
 export default function EditCompanie({ companie, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
@@ -37,17 +41,36 @@ export default function EditCompanie({ companie, handleSnack }) {
 
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Cambia el estado fileImage asigna el logo recibido del componente UploadImage
+	 * @function handleChangeFile
+	 * @param {File} file
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
+	/**
+	 * Creacion y configuracion del formulario edicion de empresa
+	 * propiedades:
+	 * 	initialValues que inicializa valores del formulario con los datos actuales de la empresa,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			razon_social: companie?.razon_social,
@@ -64,6 +87,10 @@ export default function EditCompanie({ companie, handleSnack }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateInfoAsync con valores del form y el logo para editar la empresa
+			 * @function {async} edit
+			 */
 			const edit = async () => {
 				return await dispatch(updateInfoAsync(accessToken, values, fileImage));
 			};

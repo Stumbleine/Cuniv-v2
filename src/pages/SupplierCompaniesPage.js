@@ -32,8 +32,12 @@ import SkeletonCompanie from '../components/skeletons/SkeletonCompanie';
 import FilterBar from '../components/FilterBar';
 import SnackCustom from '../components/SnackCustom';
 import { green } from '@mui/material/colors';
-
-function SupplierCompaniesPage() {
+/**
+ * Pagina que enlista las empresas registradas, aprobadas y que enviaron solicitud de afiliacion
+ * @component SupplierCompaniesPage
+ * @exports SupplierCompaniesPage
+ */
+export default function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
 	const { isLoading, companies, companiesNV, selectRubros, filterLoading } = useSelector(
 		state => state.companies
@@ -44,6 +48,7 @@ function SupplierCompaniesPage() {
 	const [showNVCompanies, setNVCompanies] = useState(false);
 	const [search, setSearch] = useState('All');
 	const [rubro, setRubro] = useState('All');
+
 	useEffect(() => {
 		document.title = 'ssansi | empresas';
 		if (hasPrivilege(['crear empresa', 'gestionar empresas'], user.permisos) || isAdmin) {
@@ -53,30 +58,58 @@ function SupplierCompaniesPage() {
 		dispatch(compNotVerifiedAsync(accessToken));
 		dispatch(getRubros(accessToken));
 	}, []);
+
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
+	/**
+	 * Muestra la lista de empresa no verificadas y rechazadas
+	 * @function handleClick
+	 */
 	const handleClick = () => setNVCompanies(!showNVCompanies);
-
+	/**
+	 * Realiza dispatch a filterCompaniesAsync para filtrar empresas segun su rubro
+	 * @function handleRubro
+	 * @param {Object} event
+	 */
 	const handleRubro = event => {
 		setRubro(event.target.value);
 		dispatch(filterCompaniesAsync(accessToken, search, event.target.value));
 	};
-
+	/**
+	 * Realiza dispatch hacia filterCompaniesAsync para una busqueda de empresas por caracteres ingresados
+	 * @function handleSearch
+	 * @param {Object} values
+	 *
+	 */
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterCompaniesAsync(accessToken, values.search, rubro));
 	};
-
+	/**
+	 * Muestra un mensaje en caso de no existir empresas.
+	 * @constant {Component} MsgCompaniesNull
+	 */
 	const MsgCompaniesNull = props => {
 		return (
 			<Stack spacing={2} justifyContent="center" sx={{ mt: 2, width: 1 }}>
@@ -84,7 +117,10 @@ function SupplierCompaniesPage() {
 			</Stack>
 		);
 	};
-
+	/**
+	 * Lista de empresas no verificadas.
+	 * @constant {Component} listCompaniesNV
+	 */
 	const listCompaniesNV = () => {
 		return (
 			<>
@@ -113,7 +149,10 @@ function SupplierCompaniesPage() {
 			</>
 		);
 	};
-
+	/**
+	 * Lista de empresas aprobadas.
+	 * @constant {Component} listCompanies
+	 */
 	const listCompanies = () => {
 		return companies ? (
 			companies.map((companie, index) => (
@@ -206,5 +245,3 @@ function SupplierCompaniesPage() {
 		</Container>
 	);
 }
-
-export default SupplierCompaniesPage;

@@ -9,7 +9,11 @@ import {
 import { Container, IconButton, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
-
+/**
+ * Footer que muestra los datos de la Universidad, anlcado siempre a la parte inferior
+ * @component Footer
+ * @exports Footer
+ */
 export default function Footer() {
 	return (
 		<Box

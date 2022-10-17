@@ -10,9 +10,14 @@ import { hasPrivilege } from '../Utils/RBAC';
 import WarningVerified from '../components/WarningVerified';
 import SnackCustom from '../components/SnackCustom';
 import API from '../conection';
-function ProductsPage() {
-	const { user, isAdmin } = useSelector(state => state.user);
+/**
+ * Pagina que muestra una tabla de productos y formulario para agregar nuevos productos
+ * @component ProductsPage
+ * @exports ProductsPage
+ */
 
+export default function ProductsPage() {
+	const { user, isAdmin } = useSelector(state => state.user);
 	const { profile } = useSelector(state => state.companies);
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
@@ -25,6 +30,10 @@ function ProductsPage() {
 	useEffect(() => {
 		dispatch(productsAsync(accessToken));
 		document.title = 'ssansi | productos';
+		/**
+		 * Hace peticion al servidor para traer empresas, que es usado en el filtro
+		 * @function {async} getCompanies
+		 */
 		const getCompanies = async () => {
 			const r = await API.get('select/companies', {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -40,16 +49,26 @@ function ProductsPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 	return (
 		<Container maxWidth="lg">
 			<SnackCustom data={snack} closeSnack={closeSnack} />
-
 			<ShowRoles />
 			<Box>
 				<Box>
@@ -86,5 +105,3 @@ function ProductsPage() {
 		</Container>
 	);
 }
-
-export default ProductsPage;

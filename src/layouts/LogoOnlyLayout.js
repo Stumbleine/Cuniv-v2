@@ -5,22 +5,26 @@ import { Box } from '@mui/system';
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
 
-const ContainerStyle = styled('div')(({ theme }) => ({
-	// flexGrow: 1,
-	overflow: 'auto',
-	minHeight: '93vh',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	paddingTop: theme.spacing(2),
-	paddingBottom: theme.spacing(2),
-}));
-
 /**
  * Componente barra de navegacion para paginas publicas como error 404 que utiliza el componente Appbar de MUI,
- * @component
+ * @component LogoOnlyLayout
+ * @exports LogoOnlyLayout
  */
-const LogoOnlyLayout = () => {
+export default function LogoOnlyLayout() {
+	/**
+	 * Contenedor estilizado
+	 * @constant ContainerStyle
+	 */
+	const ContainerStyle = styled('div')(({ theme }) => ({
+		// flexGrow: 1,
+		overflow: 'auto',
+		minHeight: '93vh',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(2),
+	}));
 	return (
 		<>
 			<AppBar
@@ -50,5 +54,4 @@ const LogoOnlyLayout = () => {
 			</ContainerStyle>
 		</>
 	);
-};
-export default LogoOnlyLayout;
+}

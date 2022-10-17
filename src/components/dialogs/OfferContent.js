@@ -5,7 +5,6 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	Slide,
 	CardMedia,
 	Typography,
 	Avatar,
@@ -21,18 +20,29 @@ import { Box } from '@mui/system';
 import moment from 'moment';
 import React from 'react';
 import StatusLabel from '../StatusLabel';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
-function OfferContent({ offer, children }) {
+/**
+ * Dialogo que muestra la informacion sobre una oferta, que se abre al hacer click sobre el componente <CardActionArea/>
+ * @component OfferContent
+ * @property {Object} offer datos de la oferta a modificar.
+ * @property {Component} children recive un componente <CardActionArea/>
+ * @exports OfferContent
+ */
+export default function OfferContent({ offer, children }) {
 	moment.locale('es');
 	const [open, setOpen] = React.useState(false);
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -164,5 +174,3 @@ function OfferContent({ offer, children }) {
 		</>
 	);
 }
-
-export default OfferContent;

@@ -8,39 +8,58 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Slide,
 	Stack,
 	TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { updateRubroAsync } from '../../store/rubrosSlice';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+import { Transition } from '../../Utils/Transitions';
+/**
+ * Dialogo con formulario para editar un rubro
+ * @component EditRubro
+ * @property {Object} rubro datos del rubro a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports EditRubro
+ */
 export default function EditRubro({ rubro, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de UploadImage
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
+	/**
+	 * Creacion y configuracion del formulario para editar el rubro
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales del ruvro,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			nombre: rubro.nombre || '',
@@ -51,15 +70,23 @@ export default function EditRubro({ rubro, handleSnack }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateRubroAsync con valores del form para editar el rubro
+			 * @function {async} update
+			 */
 			const update = async () => {
 				return await dispatch(updateRubroAsync(accessToken, values, fileImage));
 			};
 			update()
 				.then(r => {
-					handleSnack('Usuario actualizado exitosamente', 'success');
+					handleSnack('Rubro actualizado exitosamente', 'success');
+					resetForm();
+					handleClose();
 				})
 				.catch(e => {
 					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					setSubmitting(false);
+					handleClose();
 				});
 		},
 	});

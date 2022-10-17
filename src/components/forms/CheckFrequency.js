@@ -7,7 +7,14 @@ import {
 	Typography,
 } from '@mui/material';
 import React from 'react';
-
+/**
+ * Formulario Checkbox para elegir la frecuencia de canje de una oferta, tiene 3 opciones
+ * ilimitado, una vez, sin canje
+ * @component CheckFrequency
+ * @property {Function} handleFrequency asigna la opcion escogida a un estado en el componente padre.
+ * @property {String} [fr] atributo escogido inicialmente, el form se mostrara con esta opcion escogida.
+ * @exports CheckFrequency
+ */
 export default function CheckFrequency({ handleFrequency, fr }) {
 	let frDefault = [true, false, false];
 	if (fr !== null) {
@@ -25,7 +32,10 @@ export default function CheckFrequency({ handleFrequency, fr }) {
 	];
 
 	const [isChecked, setIsChecked] = React.useState(frDefault);
-
+	/**
+	 * Actualiza el arreglo de checks con la opcion escogida visualmente.
+	 * @function toggleCheckboxValue
+	 */
 	const toggleCheckboxValue = (index, e) => {
 		setIsChecked(isChecked.map((v, i) => (i === index ? !v : false)));
 	};

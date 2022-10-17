@@ -14,10 +14,19 @@ import { Box } from '@mui/system';
 import moment from 'moment';
 import React from 'react';
 import StatusLabel from '../StatusLabel';
-
+/**
+ * Tarjeta de reclamo que muestra informacion del reclamo, con la foto del estudiante, info de oferta y empresa a la que pertenecese
+ *
+ * @component Complaint
+ * @property {Object} complaint datos del reclamo que incluyen datos de ka enoresa, estudiante y oferta
+ * @exports Complaint
+ */
 export default function Complaint({ complaint }) {
 	const [expanded, setExpanded] = React.useState(false);
-
+	/**
+	 *  Cambia el estado expanded, que se usa para abrir o cerrar el acordion que muestra informacion de la emrpresa y oferta
+	 * @function handleEditBranch
+	 */
 	const handleChange = () => {
 		setExpanded(!expanded);
 	};

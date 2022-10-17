@@ -18,27 +18,23 @@ import * as Yup from 'yup';
 import { registerAsync } from '../../store/loginSlice';
 import { green } from '@mui/material/colors';
 import SnackCustom from '../../components/SnackCustom';
-
+/**
+ * Pagina con formulario para registrarse como proveedor en el sistema
+ * @component RegisterPage
+ * @exports RegisterPage
+ */
 export default function RegisterPage() {
 	const [showPassword, setShowPassword] = useState(false);
 	const { isLoading } = useSelector(state => state.login);
 	const dispatch = useDispatch();
-	const schema = Yup.object().shape({
-		nombres: Yup.string().required('Nombres son requeridos'),
-		apellidos: Yup.string().required('Apellidos son requeridos'),
-		email: Yup.string().email('Correo no valido').required('Correo es requerido'),
-		password: Yup.string()
-			.required('Contraseña es requerido')
-			.matches(
-				/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
-				'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
-			),
-		confirm: Yup.string().oneOf(
-			[Yup.ref('password'), null],
-			'Las contraseñas deben ser iguales'
-		),
-	});
-
+	/**
+	 * Creacion y configuracion del formulario para registrarse en el sistema
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			picture: 'null',
@@ -49,7 +45,21 @@ export default function RegisterPage() {
 			confirm: '',
 			rol: 'proveedor',
 		},
-		validationSchema: schema,
+		validationSchema: Yup.object().shape({
+			nombres: Yup.string().required('Nombres son requeridos'),
+			apellidos: Yup.string().required('Apellidos son requeridos'),
+			email: Yup.string().email('Correo no valido').required('Correo es requerido'),
+			password: Yup.string()
+				.required('Contraseña es requerido')
+				.matches(
+					/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
+					'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
+				),
+			confirm: Yup.string().oneOf(
+				[Yup.ref('password'), null],
+				'Las contraseñas deben ser iguales'
+			),
+		}),
 		onSubmit: async (values, { resetForm }) => {
 			const register = async () => {
 				const r = await dispatch(registerAsync(values));
@@ -68,9 +78,20 @@ export default function RegisterPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};

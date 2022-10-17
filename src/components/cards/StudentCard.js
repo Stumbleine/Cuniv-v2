@@ -2,10 +2,14 @@ import { Card, CardMedia, Grid, Stack, Typography } from '@mui/material';
 import { green, grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
 
-export default function StudentCard(props) {
-	const { offer } = props.data;
-	const { student } = props.data;
-
+/**
+ * Tarjeta para mostrar los datos del estudiante que ha canjeado el codigo, realizado mediante el formulario del cajero.
+ * @component StudentCard
+ * @property {Object} offer datos de la oferta relacionada con el codigo de canje.
+ * @property {Object} student datos del estudiante que genero el codigo.
+ * @exports StudentCard
+ */
+export default function StudentCard({ offer, student }) {
 	return (
 		<Grid container justifyContent="center">
 			<Grid item sm={6} xs={12}>

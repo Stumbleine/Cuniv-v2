@@ -18,31 +18,34 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { createUserAsync } from '../../store/usersSlice';
-import SnackCustom from '../SnackCustom';
 import UploadImage from '../UploadImage';
-
-function UserCreateForm() {
+/**
+ * Formulario para registar usuarios con rol
+ * @component UserCreateForm
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports UserCreateForm
+ */
+function UserCreateForm({ handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de <UploadImage/>
+	 * @function handleChangeFile
+	 * @param {File} file
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
 
+	/**
+	 * Creacion y configuracion del formulario para crear un usuario
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			nombres: '',
@@ -57,6 +60,10 @@ function UserCreateForm() {
 			rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia createUserAsync con valores del form para crear un usario
+			 * @function {async} create
+			 */
 			const create = async () => {
 				return await dispatch(createUserAsync(accessToken, values, fileImage));
 			};
@@ -75,8 +82,6 @@ function UserCreateForm() {
 	const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 	return (
 		<FormikProvider value={formik}>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
-
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
 				<Card sx={{ p: 2 }}>
 					<Stack spacing={2}>

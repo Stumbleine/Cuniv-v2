@@ -1,13 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { convertToB64 } from '../Utils/Helper';
+/**
+ * Slice para la gestion de productos
+ * @module productsSlice
+ */
+/**
+ * Valores iniciales del slice
+ * @constant initialState
+ */
 const initialState = {
 	products: null,
 	isLoading: false,
 	filterLoading: false,
 	fetchFailed: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant productsSlice
+ */
 const productsSlice = createSlice({
 	name: 'products',
 	initialState,
@@ -36,7 +47,12 @@ const productsSlice = createSlice({
 export const { setProducts, setLoading, setFilterLoading, setFetchFailed } =
 	productsSlice.actions;
 export default productsSlice.reducer;
-
+/**
+ * Endpoint, realiza la peticion para listar productos
+ * @function {async} productsAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const productsAsync = token => async dispatch => {
 	dispatch(setLoading(true));
 	try {
@@ -50,6 +66,14 @@ export const productsAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para filtrar y realizar busquedas de productos
+ * @function {async} filterProductsAsync
+ * @param {String} token access_token del usuario
+ * @param {String} search
+ * @param {Number} idc identificador de empresa
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 
 export const filterProductsAsync = (token, search, idc) => async dispatch => {
 	dispatch(setFilterLoading());
@@ -64,7 +88,14 @@ export const filterProductsAsync = (token, search, idc) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para crear un nuevo producto
+ * @function {async} addProductAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} producto
+ * @param {File} image
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const addProductAsync = (token, producto, image) => async dispatch => {
 	let succes = null;
 	dispatch(setLoading(true));
@@ -84,7 +115,14 @@ export const addProductAsync = (token, producto, image) => async dispatch => {
 	}
 	return succes;
 };
-
+/**
+ * Endpoint, realiza la peticion para actualizar la informacion de un producto
+ * @function {async} updateProductAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values
+ * @param {File} imageFile
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const updateProductAsync = (token, values, fileImage) => async dispatch => {
 	const b64 = fileImage ? await convertToB64(fileImage) : null;
 	if (b64 !== null) {
@@ -99,7 +137,13 @@ export const updateProductAsync = (token, values, fileImage) => async dispatch =
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para dar de baja un producto
+ * @function {async} deleteProductAsync
+ * @param {String} token access_token del usuario
+ * @param {Number} id identificador del producto
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const deleteProductAsync = (token, id) => async dispatch => {
 	try {
 		await API.delete(`producto/delete?id=${id}`, {

@@ -1,7 +1,11 @@
 import { Skeleton, TableCell, TableRow } from '@mui/material';
-
-function SkeletonTable(props) {
-	const { head } = props;
+/**
+ * Esqueleto para componentes lista con animacion de olas, sirve para indicar que los datos se estan cargando
+ * @component SkeletonList
+ * @property {Number} head indica la cantidad columnas a mostrar en el esqueleto
+ * @exports SkeletonList
+ */
+export default function SkeletonTable({ head }) {
 	return (
 		<>
 			{[1, 2, 3, 4, 5].map((r, index) => (
@@ -16,5 +20,3 @@ function SkeletonTable(props) {
 		</>
 	);
 }
-
-export default SkeletonTable;

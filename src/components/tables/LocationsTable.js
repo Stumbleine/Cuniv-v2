@@ -18,7 +18,11 @@ import { deleteLocationAsync } from '../../store/umssSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditLocation from '../dialogs/EditLocation';
 import SkeletonTable from '../skeletons/SkeletonTable';
-
+/**
+ * Tabla que enlista las locaciones
+ * @component LocationsTable
+ * @exports LocationsTable
+ */
 export default function LocationsTable({ handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
@@ -40,8 +44,15 @@ export default function LocationsTable({ handleSnack }) {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
-
+	/**
+	 * Realiza dispatch hacia la peticion deleteLocationAsync para eliminar una locacion
+	 * @function deleteAsync
+	 * @param {Number} id identificador de la locacion
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			return await dispatch(deleteLocationAsync(accessToken, id));
 		};
@@ -150,7 +161,7 @@ export default function LocationsTable({ handleSnack }) {
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onPageChange={handleChangePage}
-					// onRowsPerPageChange={handleChangeRowsPerPage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			)}
 		</TableContainer>

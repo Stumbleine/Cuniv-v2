@@ -1,8 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
-function ShowRoles() {
+/**
+ * Label que indica que roles tiene el usuario que inicio sesion
+ * @component ShowRoles
+ * @exports ShowRoles
+ */
+export default function ShowRoles() {
 	const {
 		user: { roles },
 	} = useSelector(state => state.user);
@@ -33,5 +37,3 @@ function ShowRoles() {
 		</Box>
 	);
 }
-
-export default ShowRoles;

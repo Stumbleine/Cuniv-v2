@@ -20,7 +20,11 @@ import { updateAccountAsync } from '../store/userSlice';
 import SnackCustom from '../components/SnackCustom';
 import { green } from '@mui/material/colors';
 import UploadImage from '../components/UploadImage';
-
+/**
+ * Pagina perfil de usuario que muestra la informacion del usuario
+ * @component AccountProfile
+ * @exports AccountProfile
+ */
 export default function AccountProfile() {
 	const dispatch = useDispatch();
 	const { user } = useSelector(state => state.user);
@@ -36,13 +40,31 @@ export default function AccountProfile() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
-
+	/**
+	 * Configuracion del formulario para editar la informacion del usuario
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			email: user?.email,
@@ -57,6 +79,10 @@ export default function AccountProfile() {
 				.required('Correo Electronico es requerido'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Realiza dispatch a updateAccountAsync para editar la informacion del usuario
+			 * @function {async} fetch
+			 */
 			const fetch = async () => {
 				return await dispatch(updateAccountAsync(accessToken, values, fileImage));
 			};

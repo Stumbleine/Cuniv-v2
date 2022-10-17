@@ -24,7 +24,12 @@ import { deleteUserAsync } from '../../store/usersSlice';
 import SnackCustom from '../SnackCustom';
 import Edituser from '../dialogs/EditUser';
 import DeleteItem from '../dialogs/DeleteItem';
-function UsersTable() {
+/**
+ * Tabla que enlista usuarios del sistema
+ * @component UsersTable
+ * @exports UsersTable
+ */
+export default function UsersTable() {
 	const dispatch = useDispatch();
 	const { users, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.users
@@ -41,26 +46,56 @@ function UsersTable() {
 	];
 	const [rowsPerPage, setRowsPerPage] = useState(15);
 	const [page, setPage] = useState(0);
+	/**
+	 * Cambia de pagina en la tabla
+	 * @function handleChangePage
+	 * @param {Object} event
+	 */
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
+	/**
+	 * Cambia la cantidad de usuarios a mostrarse en la tabla
+	 * @function handleChangeRowsPerPage
+	 * @param {Object} event
+	 */
 	const handleChangeRowsPerPage = event => {
 		setRowsPerPage(parseInt(event.target.value, 20));
 		setPage(0);
 	};
+
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
+	/**
+	 * Realiza dispatch hacia la peticion deleteUserAsync para eliminar un usuario
+	 * @function deleteAsync
+	 * @param {Number} id identificador de la locacion
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			await dispatch(deleteUserAsync(accessToken, id));
 		};
@@ -200,5 +235,3 @@ function UsersTable() {
 		</TableContainer>
 	);
 }
-
-export default UsersTable;

@@ -8,10 +8,19 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-
-function MapView({ sendPosition }) {
+/**
+ * Visualizador de mapas de la libreria OpenStretMap
+ * @component MapView
+ * @property {Function} sendPosition envia las coordenadas elegidas en el mapa
+ * @exports MapView
+ */
+export default function MapView({ sendPosition }) {
 	const [position, setPosition] = useState(null);
 	const positionDefault = [-17.393862599382608, -66.14674424552783];
+	/**
+	 * Carga un icono personalizado porque el icono por defecto de Leaftlet no se rederiza
+	 * @constant myIcon
+	 */
 	const myIcon = new L.Icon({
 		iconUrl: '/svgs/location.svg',
 		iconRetinaUrl: '/svgs/location.svg',
@@ -35,6 +44,11 @@ function MapView({ sendPosition }) {
 			/>
 			<MapConsumer>
 				{() => {
+					/**
+					 * Renderiza los marcadores, y evita que existan mas de dos marcadores.
+					 * ojo esta funcion es importante!
+					 * @function useMapEvents
+					 */
 					const map = useMapEvents({
 						click(e) {
 							const { lat, lng } = e.latlng;
@@ -42,7 +56,6 @@ function MapView({ sendPosition }) {
 							sendPosition(e.latlng);
 						},
 					});
-
 					return position === null ? null : (
 						<Marker position={position} icon={myIcon}></Marker>
 					);
@@ -51,5 +64,3 @@ function MapView({ sendPosition }) {
 		</MapContainer>
 	);
 }
-
-export default MapView;

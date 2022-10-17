@@ -8,11 +8,15 @@ import ListLinks from '../../components/lists/ListLinks';
 import ShowRoles from '../../components/ShowRoles';
 import SnackCustom from '../../components/SnackCustom';
 import { getSitesAsync } from '../../store/umssSlice';
-
+/**
+ * Pagina para gestionar links del sistema
+ * @component WebLinksPage
+ * @exports WebLinksPage
+ */
 export default function WebLinksPage() {
 	const { accessToken } = useSelector(state => state.login);
-
 	const dispatch = useDispatch();
+
 	useEffect(() => {
 		dispatch(getSitesAsync(accessToken, 'All'));
 	}, []);
@@ -23,13 +27,28 @@ export default function WebLinksPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
-
+	/**
+	 * Realiza la busqueda de links segun los caracteres ingresados
+	 * @function closeSnack
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		dispatch(getSitesAsync(accessToken, values.search));
 	};
@@ -66,7 +85,7 @@ export default function WebLinksPage() {
 						</Paper>
 					</Grid>
 					<Grid item xs={12} md={6}>
-						<AddLinkForm />
+						<AddLinkForm handleSnack={handleSnack} />
 					</Grid>
 				</Grid>
 			</Box>

@@ -1,12 +1,28 @@
 import { NotificationsActive } from '@mui/icons-material';
 import { Box, Slide, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-
+/**
+ * funcion de transion desde la izquierda para el snackbar de notificacion
+ * @function TransitionLeft
+ * @param {Object} props
+ */
 function TransitionLeft(props) {
 	return <Slide {...props} direction="left" />;
 }
+/**
+ * Alerta para mostrar una notificacion
+ * @component NotificationSnack
+ * @property {Function} closeSnack funcion de cierre
+ * @property {Object} data datos de la notificacion: {title,msg}
+ * @exports NotificationSnack
+ */
 export default function NotificationSnack({ data, closeSnack }) {
 	const [open, setOpen] = useState(data.open);
+	/**
+	 * funcion de cierre del snack
+	 * @function handleClose
+	 * @param {Object} props
+	 */
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -14,6 +30,7 @@ export default function NotificationSnack({ data, closeSnack }) {
 		setOpen(false);
 		closeSnack();
 	};
+
 	useEffect(() => {
 		setOpen(data.open);
 	}, [data]);

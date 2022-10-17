@@ -32,8 +32,12 @@ import SkeletonList from '../components/skeletons/SkeletonList';
 import DeleteItem from '../components/dialogs/DeleteItem';
 import { hasPrivilege } from '../Utils/RBAC';
 import { cashiersAsync, redeemAsync } from '../store/cashierSlice';
-
-function RedeemPage() {
+/**
+ * Pagina para el cajero
+ * @component RedeemPage
+ * @exports RedeemPage
+ */
+export default function RedeemPage() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { cashiers, isLoading, fetchFailed, redeemResponse } = useSelector(
@@ -57,6 +61,10 @@ function RedeemPage() {
 			code: Yup.string().required('Es necesario introducirse un codigo'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Realiza dispatch a redeemAsync para canjear un codigo de canje
+			 * @function {async} redeem
+			 */
 			const redeem = async () => {
 				return await dispatch(redeemAsync(accessToken, values));
 			};
@@ -73,6 +81,7 @@ function RedeemPage() {
 				});
 		},
 	});
+
 	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 	const [snack, setSnack] = useState({
 		open: false,
@@ -80,15 +89,31 @@ function RedeemPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
-
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
-
+	/**
+	 * Realiza dispatch hacia deleteUserAsync para eliminar un cajero
+	 * @function deleteAsync
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			await dispatch(deleteUserAsync(accessToken, id));
 		};
@@ -101,6 +126,10 @@ function RedeemPage() {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
+	/**
+	 * Componente que muestra cuando existe un error con el codigo ingresado
+	 * @constant {Component} codeError
+	 */
 	const codeError = () => {
 		return (
 			<Box width={1} sx={{ borderRadius: 3, background: red[100], p: 2, mt: 2 }}>
@@ -110,6 +139,10 @@ function RedeemPage() {
 			</Box>
 		);
 	};
+	/**
+	 * Componente que muestra cuando el codigo ya fue canjeado por un estudiante
+	 * @constant {Component} codeErrorRedeemed
+	 */
 	const codeErrorRedeemed = () => {
 		return (
 			<Box width={1} sx={{ borderRadius: 3, background: amber[200], p: 2, mt: 2 }}>
@@ -258,7 +291,7 @@ function RedeemPage() {
 													/>
 												</ListItemIcon>
 											</ListItem>
-											{index !== cajeros.length - 1 && (
+											{index !== cashiers.length - 1 && (
 												<Divider variant="inset" sx={{ mr: 2 }} component="li" />
 											)}
 										</React.Fragment>
@@ -291,36 +324,3 @@ function RedeemPage() {
 		</Container>
 	);
 }
-
-export default RedeemPage;
-
-const cajeros = [
-	{
-		id: 1,
-		nombres: 'juan ',
-		apellidos: 'delivery crazo',
-		email: 'juangarsa@gmail.com',
-		pciture: null,
-	},
-	{
-		id: 2,
-		nombres: 'juan ',
-		apellidos: 'delivery crazo',
-		pciture: null,
-		email: 'juangarsa@gmail.com',
-	},
-	{
-		id: 3,
-		nombres: 'juan ',
-		apellidos: 'delivery crazo',
-		pciture: null,
-		email: 'juangarsa@gmail.com',
-	},
-	{
-		id: 4,
-		nombres: 'juan ',
-		apellidos: 'delivery crazo',
-		pciture: null,
-		email: 'juangarsa@gmail.com',
-	},
-];

@@ -1,7 +1,11 @@
 import { createTheme } from '@mui/material/styles';
 import { grey, orange, red, blue } from '@mui/material/colors';
 import componentsOverride from './overrides';
-
+/**
+ * Configuracion del tema de MUI, con valores personalizados
+ * @constant lightTheme
+ * @exports lightTheme
+ */
 export const lightTheme = createTheme({
 	palette: {
 		mode: 'light',

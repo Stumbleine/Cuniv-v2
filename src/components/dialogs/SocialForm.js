@@ -7,7 +7,6 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Slide,
 	Stack,
 	TextField,
 	Tooltip,
@@ -15,26 +14,47 @@ import {
 import { green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSocialAsync } from '../../store/companiesSlice';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+import { Transition } from '../../Utils/Transitions';
+/**
+ * Dialogo con formulario para añadir o editar las redes sociales de la empresa
+ * @component SocialForm
+ * @property {Object} companie datos de la empresa
+ * @property {String} mode indica de que forma se comportara el formulario
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @example
+ * const mode = "add";
+ * const mode = "edit";
+ * @exports SocialForm
+ */
 export default function SocialForm({ companie, mode, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
 	const [open, setOpen] = useState(false);
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
+	/**
+	 * Creacion y configuracion del formulario para añadir o editar redes sociales
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales de la oferta o vacios si se trata de agregar,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			facebook: companie?.facebook || '',
@@ -43,6 +63,10 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 			email: companie?.email || '',
 		},
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateSocialAsync para actualizar las redes sociales
+			 * @function {async} update
+			 */
 			const add = async () => {
 				return await dispatch(
 					updateSocialAsync(accessToken, values, companie.id_empresa)

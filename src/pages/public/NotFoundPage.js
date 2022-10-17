@@ -2,8 +2,12 @@ import { ArrowBack } from '@mui/icons-material';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
-
-function NotFoundPage() {
+/**
+ * Pagina 404, se muestra cuando se ingresa a un ruta inexistente
+ * @component NotFoundPage
+ * @exports NotFoundPage
+ */
+export default function NotFoundPage() {
 	return (
 		<Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center' }}>
 			<Box>
@@ -39,5 +43,3 @@ function NotFoundPage() {
 		</Container>
 	);
 }
-
-export default NotFoundPage;

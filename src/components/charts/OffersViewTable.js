@@ -14,9 +14,12 @@ import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { offersViewAsync } from '../../store/statisticsSlice';
-
 import SkeletonTable from '../skeletons/SkeletonTable';
-
+/**
+ * Tabla de ofertas con mas visualizaciones
+ * @component OffersViewTable
+ * @exports OffersViewTable
+ */
 export default function OffersViewTable() {
 	const dispatch = useDispatch();
 
@@ -31,6 +34,10 @@ export default function OffersViewTable() {
 	});
 
 	useEffect(() => {
+		/**
+		 * Ejecuta el dispatch hacia la peticion offersViewAsync que devuelve una lista de ofertas top.
+		 * @function {async} fetch
+		 */
 		const fetch = async () => {
 			setStatusFetch({ error: false, success: false, isLoading: true });
 			return await dispatch(offersViewAsync(accessToken));

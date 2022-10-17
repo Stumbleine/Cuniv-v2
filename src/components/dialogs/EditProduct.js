@@ -10,41 +10,61 @@ import {
 	IconButton,
 	MenuItem,
 	Select,
-	Slide,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { updateProductAsync } from '../../store/productsSlice';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+import { Transition } from '../../Utils/Transitions';
+/**
+ * Dialogo con formulario para editar un producto
+ * @component EditProduct
+ * @property {Object} product datos del producto a modificar.
+ * @property {Array} companies lista de empresas para select "Empresa".
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports EditProduct
+ */
 export default function EditProduct({ product, companies, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { isAdmin } = useSelector(state => state.user);
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de UploadImage
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario para editar el producto
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales del producto,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			id_producto: product?.id_product || '',
@@ -64,6 +84,10 @@ export default function EditProduct({ product, companies, handleSnack }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateOfferAsync con valores del form para editar el producto
+			 * @function {async} update
+			 */
 			const update = async () => {
 				return await dispatch(updateProductAsync(accessToken, values, fileImage));
 			};

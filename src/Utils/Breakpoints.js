@@ -1,10 +1,12 @@
 import { Typography } from '@mui/material';
-
+/**
+ * Indica el tamaño de la pantalla en la que se encuentra el usuario, tamano de ventana del navegador.
+ * @function screenSizes
+ */
 export const screenSizes = () => {
 	return (
 		<>
-			<Typography
-				sx={{ display: { xs: 'flex', sm: 'none' }, color: 'secondary.main' }}>
+			<Typography sx={{ display: { xs: 'flex', sm: 'none' }, color: 'secondary.main' }}>
 				xs
 			</Typography>
 			<Typography

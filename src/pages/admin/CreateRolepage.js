@@ -1,10 +1,8 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
-import React from 'react';
-import AssignPrivilegesForm from '../../components/forms/AssignPrivilegesForm';
 import RoleCreateForm from '../../components/forms/RoleCreateForm';
 import ShowRoles from '../../components/ShowRoles';
 
-function CreateRolepage() {
+export default function CreateRolepage() {
 	return (
 		<Container>
 			<ShowRoles />
@@ -29,5 +27,3 @@ function CreateRolepage() {
 		</Container>
 	);
 }
-
-export default CreateRolepage;

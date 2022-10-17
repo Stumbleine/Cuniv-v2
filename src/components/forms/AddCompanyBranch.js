@@ -2,7 +2,6 @@ import { Add, Edit } from '@mui/icons-material';
 import {
 	Dialog,
 	Button,
-	Slide,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
@@ -19,10 +18,20 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBranchAsync, updateBranchAsync } from '../../store/companiesSlice';
-const Transition = forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-function AddCompanyBranch({
+import { Transition } from '../../Utils/Transitions';
+
+/**
+ * Dialogo con formulario para añadir o editar una sucursal, ya sea de modo local o haciendo una peticion hacia el servidor
+ * @component AddCompanyBranch
+ * @property {Function} handleAddSucursal añade la lista de sucursales en el componente padre
+ * @property {String} actionType modo de comportamiento del formulario.
+ * @property {Function} [handleEditSucursal] edita un sucursal de la lista de sucursales en el componente padre
+ * @property {Object} [editData] datos de la sucursal a editar
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @property {Number} idEmpresa
+ * @exports AddCompanyBranch
+ */
+export default function AddCompanyBranch({
 	handleAddSucursal,
 	actionType,
 	handleEditSucursal,
@@ -38,15 +47,32 @@ function AddCompanyBranch({
 		actionType !== 'add' ? { lat: editData?.latitud, lng: editData?.longitud } : null
 	);
 
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
+	/**
+	 * Recibe la posicion desde el componente <MapView/>
+	 * @function sendPosition
+	 * @param {Object} pos coordenadas: lat, lng
+	 */
 	const sendPosition = pos => {
 		setPosition(pos);
 	};
+	/**
+	 * Verifica que se seleccionado una ubicacion en el componente <MapView/>
+	 * @function validateMap
+	 */
 	const validateMap = () => {
 		let errores = {};
 		if (position === null) {
@@ -54,6 +80,15 @@ function AddCompanyBranch({
 		}
 		return errores;
 	};
+	/**
+	 * Creacion y configuracion del formulario para añadir o editar una sucursal
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales del sucursal en caso de editar
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit", realiza una accion segun actionType
+	 * validate: recibe una funcion personalizada de validacion de coordenadas
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			name: editData?.nombre || '',
@@ -84,6 +119,10 @@ function AddCompanyBranch({
 				resetForm();
 				handleClose();
 			} else if (actionType === 'update-fetch') {
+				/**
+				 * Realiza dispatch hacia addBranchAsync para editar una sucursal
+				 * @function {async} editAsync
+				 */
 				const editAsync = async () => {
 					return await dispatch(
 						updateBranchAsync(
@@ -106,6 +145,10 @@ function AddCompanyBranch({
 						handleClose();
 					});
 			} else if (actionType === 'add-fetch') {
+				/**
+				 * Realiza dispatch hacia addBranchAsync para añadir una sucursal
+				 * @function {async} addAsync
+				 */
 				const addAsync = async () => {
 					return await dispatch(addBranchAsync(accessToken, sucursal, idEmpresa));
 				};
@@ -258,5 +301,3 @@ function AddCompanyBranch({
 		</>
 	);
 }
-
-export default AddCompanyBranch;

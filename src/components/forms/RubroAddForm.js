@@ -14,23 +14,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { createRubroAsync } from '../../store/rubrosSlice';
 import UploadImage from '../UploadImage';
-
-function RubroAddForm({ handleSnack }) {
+/**
+ * Formulario para registar rubros
+ * @component RubroAddForm
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports RubroAddForm
+ */
+export default function RubroAddForm({ handleSnack }) {
 	const [fileImage, setFileImage] = useState(null);
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
+	/**
+	 * Asigna el archivo icono proveniente de <UploadImage/>
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
+	/**
+	 * Verifica que se haya subido un archivo icono
+	 * @function handleChangeFile
+	 */
 	const validateIcon = values => {
 		let errors = {};
 		if (fileImage === null) {
 			errors.icon = 'Es necesario subir un icono que identifique al rubro.';
 		}
-
 		return errors;
 	};
+	/**
+	 * Creacion y configuracion del formulario para crear un rubro
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: configura la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			nombre: '',
@@ -41,6 +60,10 @@ function RubroAddForm({ handleSnack }) {
 		}),
 		validate: validateIcon,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia createRubroAsync con valores del form para crear un nuevo link
+			 * @function {async} add
+			 */
 			const add = async () => {
 				return await dispatch(createRubroAsync(accessToken, values, fileImage));
 			};
@@ -125,5 +148,3 @@ function RubroAddForm({ handleSnack }) {
 		</Card>
 	);
 }
-
-export default RubroAddForm;

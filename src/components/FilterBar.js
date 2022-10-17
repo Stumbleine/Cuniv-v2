@@ -2,8 +2,23 @@ import { SearchRounded } from '@mui/icons-material';
 import { IconButton, Stack, TextField } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-
+/**
+ * Barra de buscador y filtros diferentes
+ * @component FilterBar
+ * @property {Function} handleSearch asigna los caracteres que se introdujeron en el input search
+ * @property {Component} children redenriza los componentes dentro del tag
+ * @property {Number} [w] width preferido para input search
+ * @exports FilterBar
+ */
 export default function FilterBar({ handleSearch, children, w }) {
+	/**
+	 * Creacion y configuracion del formulario para buscar por caracteres
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: configura la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			search: '',

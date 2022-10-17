@@ -27,7 +27,13 @@ import DeleteItem from '../dialogs/DeleteItem';
 import EditProduct from '../dialogs/EditProduct';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
-
+/**
+ * Tabla que enlista los productos
+ * @component ProductsTable
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @property {Object} companies lista de empresas para el formulario de edicion
+ * @exports ProductsTable
+ */
 export default function ProductsTable({ handleSnack, companies }) {
 	const dispatch = useDispatch();
 	const { products, isLoading, filterLoading, fetchFailed } = useSelector(
@@ -64,25 +70,50 @@ export default function ProductsTable({ handleSnack, companies }) {
 	}
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
-
+	/**
+	 * Cambia de pagina en la tabla
+	 * @function handleChangePage
+	 * @param {Object} event
+	 */
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
+	/**
+	 * Cambia la cantidad de productos a mostrarse en la tabla
+	 * @function handleChangeRowsPerPage
+	 * @param {Object} event
+	 */
 	const handleChangeRowsPerPage = event => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
-
+	/**
+	 * filtra productos por empresa que proviene del componente <FilterBar/>
+	 * @function handleChangeRowsPerPage
+	 * @param {Object} event
+	 */
 	const handleCompanie = event => {
 		setCompanieFilter(event.target.value);
 		dispatch(filterProductsAsync(accessToken, search, event.target.value));
 	};
+	/**
+	 * Busca productos por caracteres con el buscador del componente <FilterBar/>
+	 * @function handleSearch
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterProductsAsync(accessToken, values.search, companieFilter));
 	};
-
+	/**
+	 * Realiza dispatch hacia la peticion deleteProductAsync para eliminar un producto
+	 * @function deleteAsync
+	 * @param {Number} id identificador de la locacion
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			await dispatch(deleteProductAsync(accessToken, id));
 		};

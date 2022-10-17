@@ -9,12 +9,13 @@ import Logo from '../components/Logo';
 /**
  * Componente barra de navegacion SideBar que utiliza el componente Drawer de MUI,
  * Se muestra como barra de navegacion alternativa en pantallas pequeñas, aparece el lado izquierdo, cuando se presione sobre el boton Menu
- * @component
- * @property { bool } onOpenSidebar parametro que indica cuando se abre el sideBar.
- * @property { function } onCloseSideBar funcion para cerrar el sideBar..
+ * @component SideBar
+ * @property { Boolean } openSideBar parametro que indica cuando se abre el sideBar.
+ * @property { Function } onCloseSideBar funcion para cerrar el sideBar..
+ * @exports SideBar
  */
 
-function SideBar({ openSideBar, onCloseSideBar }) {
+export default function SideBar({ openSideBar, onCloseSideBar }) {
 	const theme = useTheme();
 	const { pathname } = useLocation();
 	const { user } = useSelector(state => state.user);
@@ -87,5 +88,3 @@ function SideBar({ openSideBar, onCloseSideBar }) {
 		</Drawer>
 	);
 }
-
-export default SideBar;

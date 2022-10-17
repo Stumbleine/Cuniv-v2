@@ -8,36 +8,39 @@ import {
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useState } from 'react';
-import SnackCustom from '../SnackCustom';
 import * as Yup from 'yup';
 import { Box } from '@mui/system';
 import { green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSiteASync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
-
-export default function AddLinkForm() {
+/**
+ * Formulario para registar links importantes de la universidad
+ * @component AddLinkForm
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports AddLinkForm
+ */
+export default function AddLinkForm({ handleSnack }) {
 	const { accessToken } = useSelector(state => state.login);
+	const dispatch = useDispatch();
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de <UploadImage/>
+	 * @function handleChangeFile
+	 * @param {File} file
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-	const dispatch = useDispatch();
 
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
-
+	/**
+	 * Creacion y configuracion del formulario para añadir un link
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			title: '',
@@ -51,6 +54,10 @@ export default function AddLinkForm() {
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm }) => {
+			/**
+			 * Ejecuta el dispatch hacia addSiteASync con valores del form para crear un nuevo link
+			 * @function {async} add
+			 */
 			const add = async () => {
 				return await dispatch(addSiteASync(accessToken, values, fileImage));
 			};
@@ -70,8 +77,6 @@ export default function AddLinkForm() {
 
 	return (
 		<Card>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
-
 			<FormikProvider value={formik}>
 				<Form onSubmit={handleSubmit}>
 					<Stack spacing={2} sx={{ p: 2 }}>

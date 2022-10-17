@@ -1,7 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { green, red } from '@mui/material/colors';
-
-function StatusLabel(props) {
+/**
+ * Barra de estado que indica un si esta expirado o vigente una oferta
+ * @component StatusLabel
+ * @exports StatusLabel
+ */
+export default function StatusLabel(props) {
 	const status = props.status;
 	return (
 		<Box
@@ -27,5 +31,3 @@ function StatusLabel(props) {
 		</Box>
 	);
 }
-
-export default StatusLabel;

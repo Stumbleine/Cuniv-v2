@@ -5,7 +5,17 @@ import { Box } from '@mui/system';
 import { grey, orange } from '@mui/material/colors';
 import AddCompanyBranch from '../forms/AddCompanyBranch';
 
-function CompanyBranch({ updateListBranchs }) {
+/**
+ * Seccion de gestion de sucursales en el formulario de empresa.
+ * Componente para añadir, mostrar, editar y eliminar sucursales en el formulario de empresa (componente padre)
+ * Llama al formulario AddCompanyBranch de tipo dialogo.
+ *
+ * @component CompanyBranch
+ * @property {Function} updateListBranchs actualiza la lista de sucursales en el formulario de registro de empresa
+ * @exports CompanyBranch
+ */
+
+export default function CompanyBranch({ updateListBranchs }) {
 	const defaultBranch = {
 		nombre: 'Sucursal central',
 		direccion: '-',
@@ -20,7 +30,10 @@ function CompanyBranch({ updateListBranchs }) {
 	const handleAddBranch = sucursal => {
 		setBranchs([...branchs, sucursal]);
 	};
-
+	/**
+	 * Function const, realiza la edicion de una sucursal previamente añadida, haciendo uso del metodo slice()
+	 * @function handleEditBranch
+	 */
 	const handleEditBranch = (data, index) => {
 		setBranchs([
 			...branchs.slice(0, index),
@@ -28,6 +41,11 @@ function CompanyBranch({ updateListBranchs }) {
 			...branchs.slice(index + 1, branchs.length),
 		]);
 	};
+	/**
+	 * Function const, elimina una sucursal de la lista, haciendo uso del metodo slice()
+	 *
+	 * @function handleDeleteBranch
+	 */
 	const handleDeleteBranch = index => {
 		setBranchs([...branchs.slice(0, index), ...branchs.slice(index + 1, branchs.length)]);
 	};
@@ -109,5 +127,3 @@ function CompanyBranch({ updateListBranchs }) {
 		</>
 	);
 }
-
-export default CompanyBranch;

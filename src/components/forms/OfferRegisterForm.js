@@ -24,12 +24,16 @@ import { useTheme } from '@emotion/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { createOfferAsync } from '../../store/offersSlice';
 import * as Yup from 'yup';
-import SnackCustom from '../SnackCustom';
 import API from '../../conection';
 import { green } from '@mui/material/colors';
 import CheckFrequency from './CheckFrequency';
-
-function OfferRegisterForm() {
+/**
+ * Formulario para registar ofertas
+ * @component OfferRegisterForm
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports OfferRegisterForm
+ */
+export default function OfferRegisterForm({ handleSnack }) {
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
@@ -39,14 +43,12 @@ function OfferRegisterForm() {
 	const [products, setProducts] = useState(null);
 	const [companies, setCompanies] = useState(null);
 	const [branchOffices, setBranchOffices] = useState(null);
-	const [snack, setSnack] = useState({
-		open: false,
-		msg: '',
-		severity: 'success',
-		redirectPath: null,
-	});
 
 	useEffect(() => {
+		/**
+		 * Hace una peticion a las empresas, en caso de ser administrador.
+		 * @function {async} fetch
+		 */
 		async function fetch() {
 			const r = await API.get('select/companies', {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -55,13 +57,16 @@ function OfferRegisterForm() {
 			setBranchOffices(null);
 			setProducts(null);
 		}
-
 		isAdmin && fetch();
 	}, []);
 
 	const theme = useTheme();
 	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
+	/**
+	 * configuracion de propiedades con estilos para el component MenuItem
+	 * @constant MenuProps
+	 */
 	const MenuProps = {
 		PaperProps: {
 			style: {
@@ -70,25 +75,40 @@ function OfferRegisterForm() {
 			},
 		},
 	};
-
+	/**
+	 * Asigna el archivo imagen proveniente de <UploadImage/>
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Actualiza el estado de productos incluidos "prdInclude"
+	 * @function handleChange
+	 */
 	const handleChange = event => {
 		const {
 			target: { value },
 		} = event;
 		setPrdInclude(typeof value === 'string' ? value.split(',') : value);
 	};
-
+	/**
+	 * Actualiza el estado de sucursales disponibles "branchSelected"
+	 * @function handleSelectBranch
+	 */
 	const handleSelectBranch = event => {
 		const {
 			target: { value },
 		} = event;
 		setBranchSelected(typeof value === 'string' ? value.split(',') : value);
 	};
-
+	/**
+	 * Otorga estilos para el item de un Item seleccionado en un componente Select
+	 * @function getStyles
+	 * @param {String} name
+	 * @param {Object} item
+	 * @param {Object} theme configuacion del tema MUI
+	 */
 	function getStyles(name, itemName, theme) {
 		return {
 			fontWeight:
@@ -98,18 +118,23 @@ function OfferRegisterForm() {
 		};
 	}
 	const [frequency, setFrequency] = useState('unlimited');
-
+	/**
+	 * Actualiza el estado frequency, asigna una frecuencia de canje
+	 * @function handleFrequency
+	 * @param {Object} event evento de Check
+	 */
 	const handleFrequency = event => {
 		setFrequency(event.target.value);
 	};
 
-	const closeSnack = () => {
-		setSnack({ ...snack, open: false });
-	};
-	const handleSnack = (msg, sv, path) => {
-		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
-	};
-
+	/**
+	 * Creacion y configuracion del formulario para registrar una oferta
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			titulo: '',
@@ -128,6 +153,10 @@ function OfferRegisterForm() {
 			id_empresa: isAdmin ? Yup.number().required('Es necesario asignar la empresa') : '',
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Realiza el dispatch hacia la peticion createOfferAsync con con los valores del form
+			 * @function {async} register
+			 */
 			const register = async () => {
 				return await dispatch(
 					createOfferAsync(
@@ -153,7 +182,12 @@ function OfferRegisterForm() {
 		},
 	});
 	const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = formik;
+
 	useEffect(() => {
+		/**
+		 * Hace una peticion a productos de la empresa para seleccionar que productos van incluidos
+		 * @function {async} fetchProducts
+		 */
 		async function fetchProducts() {
 			const id = isAdmin ? values.id_empresa : user.companie;
 			const r = await API.get('select/products?empresa=' + id, {
@@ -161,9 +195,12 @@ function OfferRegisterForm() {
 			});
 			setProducts(r.data);
 		}
+		/**
+		 * Hace una peticion a sucursales de la empresa para seleccionar en cuales esta disponible la oferta
+		 * @function {async} fetchBranchs
+		 */
 		async function fetchBranchs() {
 			const id = isAdmin ? values.id_empresa : user.companie;
-
 			const r = await API.get('select/sucursales?empresa=' + id, {
 				headers: { Authorization: `Bearer ${accessToken}` },
 			});
@@ -179,7 +216,6 @@ function OfferRegisterForm() {
 	}, [values.id_empresa]);
 	return (
 		<FormikProvider value={formik}>
-			<SnackCustom data={snack} closeSnack={closeSnack} />
 			<Form onSubmit={handleSubmit}>
 				<Grid container spacing={2} sx={{}}>
 					{/* primer panel(image y titulos) */}
@@ -439,4 +475,3 @@ function OfferRegisterForm() {
 		</FormikProvider>
 	);
 }
-export default OfferRegisterForm;

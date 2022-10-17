@@ -1,13 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
-
+/**
+ * Slice para reclamos
+ * @module complaintSlice
+ */
+/**
+ * Valores iniciales del slice
+ * @constant initialState
+ */
 const initialState = {
 	complaints: null,
 	fetchFailed: false,
 	isLoading: false,
 	filterLoading: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant complaintSlice
+ */
 const complaintSlice = createSlice({
 	name: 'complaint',
 	initialState,
@@ -35,7 +45,12 @@ const complaintSlice = createSlice({
 export const { setComplaints, setLoading, setFetchFailed, setFilterLoading } =
 	complaintSlice.actions;
 export default complaintSlice.reducer;
-
+/**
+ * Endpoint, realiza la peticion para listar reclamos
+ * @function {async} complaintsAsync
+ * @param {String} token
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const complaintsAsync = token => async dispatch => {
 	dispatch(setLoading());
 	try {
@@ -49,7 +64,14 @@ export const complaintsAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para filtrar y buscar reclamos
+ * @function {async} complaintsFilterAsync
+ * @param {String} token
+ * @param {String} search
+ * @param {String} type tipo de reclamo
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const complaintsFilterAsync = (token, search, type) => async dispatch => {
 	dispatch(setFilterLoading());
 	try {

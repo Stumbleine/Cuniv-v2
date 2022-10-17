@@ -16,6 +16,11 @@ import { GoogleLogout } from 'react-google-login';
 import { Lock, Logout, Person } from '@mui/icons-material';
 import { logoutAsync } from '../store/userSlice';
 import { setNavlinks, setNotifications } from '../store/settingSlice';
+/**
+ * Menu de cuenta de usuario, muestra las configuraciones, seguridad y cerrar sesion
+ * @component AccountPopover
+ * @exports AccountPopover
+ */
 function AccountPopover() {
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.user.user);
@@ -23,13 +28,24 @@ function AccountPopover() {
 
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+	/**
+	 * Abre el menu
+	 * @function handleOpenUserMenu
+	 */
 	const handleOpenUserMenu = event => {
 		setAnchorElUser(event.currentTarget);
 	};
-
+	/**
+	 * cierra el menu
+	 * @function handleCloseUserMenu
+	 */
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
+	/**
+	 * limpia los datos del usuario y la sesion del usuario
+	 * @function logOut
+	 */
 	const logOut = () => {
 		dispatch(setLogout());
 		dispatch(setNavlinks([]));

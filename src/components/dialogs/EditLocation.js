@@ -8,37 +8,61 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Slide,
 	Stack,
 	TextField,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { editLocationAsync } from '../../store/umssSlice';
 import { green } from '@mui/material/colors';
 import MapView from '../MapView';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
+/**
+ * Dialogo para editar informacion de una locacion
+ * @component EditLocation
+ * @property {Object} location datos de la locacion a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports EditLocation
+ */
 export default function EditLocation({ location, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [position, setPosition] = useState({ lat: location.lat, lng: location.lng });
-
+	/**
+	 * Asigna las coordenadas
+	 * @function sendPosition
+	 * @param {Object} pos coordenadas de Mapas
+	 */
 	const sendPosition = pos => {
 		setPosition(pos);
 	};
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario edicion de una locacion
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales de la locacion,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 *  validate: valida las coordenadas del mapa
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			name: location.name,
@@ -57,12 +81,16 @@ export default function EditLocation({ location, handleSnack }) {
 			return errors;
 		},
 		onSubmit: (values, { resetForm }) => {
-			const add = async () => {
+			/**
+			 * Ejecuta el dispatch hacia editLocationAsync con valores del form  y la locacion para editar la locacion
+			 * @function {async} edit
+			 */
+			const edit = async () => {
 				return await dispatch(
 					editLocationAsync(accessToken, values, position, location.id)
 				);
 			};
-			add()
+			edit()
 				.then(() => {
 					handleSnack('Locacion actualizado exitosamente', 'success');
 					handleClose();

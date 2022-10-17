@@ -1,6 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 
+/**
+ * Slice de cajeros
+ * @module cashierSlice
+ */
+/**
+ * initialState: valores iniciales del slice
+ * @constant initialState
+ */
 const initialState = {
 	cashiers: null,
 	isLoading: false,
@@ -8,7 +16,10 @@ const initialState = {
 
 	redeemResponse: null,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant cashierSlice
+ */
 const cashierSlice = createSlice({
 	name: 'cashier',
 	initialState,
@@ -34,6 +45,12 @@ const cashierSlice = createSlice({
 export const { setCashiers, setRedeem, setFetchFailed, setLoading } =
 	cashierSlice.actions;
 export default cashierSlice.reducer;
+/**
+ * Endpoint, realiza la peticion para traer la lista de cajeros
+ * @function {async} cashiersAsync
+ * @param {String} token
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de cashierSlice
+ */
 export const cashiersAsync = token => async dispatch => {
 	try {
 		const r = await API.get(`user/list-cashiers`, {
@@ -44,6 +61,13 @@ export const cashiersAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para registrar un cajero
+ * @function {async} createCashierAsync
+ * @param {String} token
+ * @param {Object} values datos del cajero a registrar
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de cashierSlice
+ */
 export const createCashierAsync = (token, values) => async dispatch => {
 	try {
 		await API.post(`user/add-cashier`, values, {
@@ -54,7 +78,13 @@ export const createCashierAsync = (token, values) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para verificar y realizar el canje de un codigo
+ * @function {async} redeemAsync
+ * @param {String} token
+ * @param {String} values
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de cashierSlice
+ */
 export const redeemAsync = (token, values) => async dispatch => {
 	try {
 		const r = await API.post(`codigo/redeem`, values, {

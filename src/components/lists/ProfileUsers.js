@@ -10,7 +10,13 @@ import {
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import EditManager from '../dialogs/EditManager';
-
+/**
+ * Componente lista para mostrar usuarios relacionados con la empresa
+ * @component ProfileUsers
+ * @property {Array} users lista de usuarios de la empresa (cajeros, responsable)
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports ProfileUsers
+ */
 export default function ProfileUsers({ users, handleSnack }) {
 	const { provider, cashiers } = users;
 	const { isAdmin } = useSelector(state => state.user);

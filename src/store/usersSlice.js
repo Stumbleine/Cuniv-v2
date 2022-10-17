@@ -1,13 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { convertToB64 } from '../Utils/Helper';
+/**
+ * Slice para la gestion de usuarios
+ * @module usersSlice
+ */
+/**
+ * Valores iniciales del slice
+ * @constant initialState
+ */
 const initialState = {
 	users: null,
 	isLoading: false,
 	filterLoading: false,
 	fetchFailed: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant usersSlice
+ */
 const usersSlice = createSlice({
 	name: 'users',
 	initialState,
@@ -32,7 +43,12 @@ const usersSlice = createSlice({
 		},
 	},
 });
-
+/**
+ * Endpoint, realiza la peticion para listar usuarios
+ * @function {async} usersAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const usersAsync = token => async dispatch => {
 	dispatch(setLoading());
 	try {
@@ -46,6 +62,15 @@ export const usersAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para listar usuarios
+ * @function {async} filterUsersAsync
+ * @param {String} token access_token del usuario
+ * @param {String} search
+ * @param {String} rol
+ * @param {String} sesion
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const filterUsersAsync = (token, search, rol, sesion) => async dispatch => {
 	dispatch(setFilterLoading());
 	try {
@@ -59,7 +84,13 @@ export const filterUsersAsync = (token, search, rol, sesion) => async dispatch =
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para editar informacion de un usuario
+ * @function {async} updateUserAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const updateUserAsync = (token, values, imageFile) => async dispatch => {
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {
@@ -74,6 +105,13 @@ export const updateUserAsync = (token, values, imageFile) => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para dar de baja de un usuario
+ * @function {async} deleteUserAsync
+ * @param {String} token access_token del usuario
+ * @param {Number} id identificador de usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const deleteUserAsync = (token, id) => async dispatch => {
 	try {
 		await API.delete(`user/delete?id=${id}`, {
@@ -84,6 +122,14 @@ export const deleteUserAsync = (token, id) => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para crear un usuario
+ * @function {async} createUserAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values datos del usuario
+ * @param {File} imageFile
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const createUserAsync = (token, values, imageFile) => async dispatch => {
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {

@@ -1,5 +1,8 @@
-// ----------------------------------------------------------------------
-
+/**
+ * Personalizacion del componente Card de MUI.
+ * @function Card
+ * @exports Card
+ */
 export default function Card(theme) {
 	return {
 		MuiCard: {

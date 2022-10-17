@@ -7,36 +7,55 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	Slide,
 	Stack,
 	TextField,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { green } from '@mui/material/colors';
 import { createCashierAsync } from '../../store/cashierSlice';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo con formulario para registrar cajeros
+ * @component AddCashier
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @property {Function } setReload cambia el estado reload
+ * @property {Boolean } reload
+ *
+ * @exports AddCashier
+ */
 export default function AddCashier({ handleSnack, setReload, reload }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const { user } = useSelector(state => state.user);
 
 	const [open, setOpen] = useState(false);
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierrra el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario de registro de cajeros
+	 * propiedades:
+	 * 	initialValues que inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			nombres: '',
@@ -51,6 +70,10 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia la createCashierAsync con valores del form para registrar el cajero.
+			 * @function {async} add
+			 */
 			const add = async () => {
 				await dispatch(createCashierAsync(accessToken, values));
 			};

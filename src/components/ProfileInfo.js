@@ -1,14 +1,23 @@
 import { Email, Facebook, Instagram, Language } from '@mui/icons-material';
 import { Box, Stack, Typography } from '@mui/material';
 import { blue, grey, pink } from '@mui/material/colors';
-
 import EditCompanie from './dialogs/EditCompanie';
 import SocialForm from './dialogs/SocialForm';
-
+/**
+ * Muestra los datos princiapes de la empresa
+ * @component ProfileInfo
+ * @property {Object} companie datos de la empresa
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports ProfileInfo
+ */
 export default function ProfileInfo({ companie, handleSnack }) {
 	const noSocial =
 		companie?.facebook || companie?.instagram || companie?.sitio_web || companie?.email;
-
+	/**
+	 * componente que lista las redes sociales de la empresa
+	 * @component SocialList
+	 * @exports SocialList
+	 */
 	const SocialList = () => {
 		return (
 			<>

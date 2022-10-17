@@ -10,10 +10,13 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-function ProfileProducts(props) {
-	const { products } = props || [];
-
+/**
+ * Componente lista para mostrar los principales productos en el perfil de una empresa
+ * @component ProfileProducts
+ * @property {Array} products lista de productos de la empresa
+ * @exports ProfileProducts
+ */
+export default function ProfileProducts({ products }) {
 	return (
 		<Box>
 			<Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -65,5 +68,3 @@ function ProfileProducts(props) {
 		</Box>
 	);
 }
-
-export default ProfileProducts;

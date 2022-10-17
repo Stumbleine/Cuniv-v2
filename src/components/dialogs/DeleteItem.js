@@ -7,24 +7,39 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
-	Slide,
 } from '@mui/material';
 import React from 'react';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo para eliminar items
+ * @component DeleteItem
+ * @property {Function} deleteAsync funcion que ejecuta dispatch del metodo de eliminacion.
+ * @property {Number } id identificador del item.
+ * @property {Boolean } [disabled] desabilitar boton
+ *
+ * @exports DeleteItem
+ */
 export default function DeleteItem({ deleteAsync, id, itemName, disabled }) {
 	const [open, setOpen] = React.useState(false);
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Ejecuta la funcion de eliminacion.
+	 * @function {async} submit
+	 */
 	const submit = async () => {
 		await deleteAsync(id);
 	};

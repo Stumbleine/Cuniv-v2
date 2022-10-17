@@ -27,11 +27,14 @@ import WarningVerified from '../components/WarningVerified';
 import API from '../conection';
 import { filterOffersAsync, getOffersAsync } from '../store/offersSlice';
 import { hasPrivilege } from '../Utils/RBAC';
-
-function OffersPage() {
+/**
+ * Pagina que muestra la lista de ofertas registradas
+ * @component OffersPage
+ * @exports OffersPage
+ */
+export default function OffersPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { profile } = useSelector(state => state.companies);
-
 	const { accessToken } = useSelector(state => state.login);
 	const { isLoading, filterLoading, offers } = useSelector(state => state.offers);
 	const dispatch = useDispatch();
@@ -48,9 +51,20 @@ function OffersPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
@@ -80,16 +94,29 @@ function OffersPage() {
 			setShowList(false);
 		}
 	}, [offers, user]);
-
+	/**
+	 * Realiza dispatch hacia filterOffersAsync para filtrar ofertas por empresa
+	 * @function handleCompanie
+	 * @param {Object} event
+	 */
 	const handleCompanie = event => {
 		setIDC(event.target.value);
 		dispatch(filterOffersAsync(accessToken, search, event.target.value, status));
 	};
-
+	/**
+	 * Realiza dispatch hacia filterOffersAsync para filtrar ofertas por su estado "VIGENTE" o "EXPIRADO"
+	 * @function handleStatus
+	 * @param {Object} event
+	 */
 	const handleStatus = event => {
 		setStatus(event.target.value);
 		dispatch(filterOffersAsync(accessToken, search, idc, event.target.value));
 	};
+	/**
+	 * Realiza dispatch hacia filterOffersAsync para buscar ofertas por caracteres ingresados
+	 * @function handleSearch
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterOffersAsync(accessToken, values.search, idc, status));
@@ -97,6 +124,10 @@ function OffersPage() {
 
 	const [companies, setCompanies] = useState(null);
 	useEffect(() => {
+		/**
+		 * Hace una peticion al servidor para traer empresas, que es usado en el filtrador por empresa
+		 * @function getCompanies
+		 */
 		const getCompanies = async () => {
 			const r = await API.get('select/companies', {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -105,6 +136,10 @@ function OffersPage() {
 		};
 		isAdmin && getCompanies();
 	}, []);
+	/**
+	 * Enlista las ofertas existentes
+	 * @constant {Component} listOffers
+	 */
 	const listOffers = () => {
 		return (
 			<Grid container spacing={2}>
@@ -129,7 +164,10 @@ function OffersPage() {
 			</Grid>
 		);
 	};
-
+	/**
+	 * Mensaje que se muestra en caso no se encontraron ofertas
+	 * @constant {Component} msgOffersNull
+	 */
 	const msgOffersNull = () => {
 		return (
 			<Stack width={1} spacing={2} alignItems="center" sx={{ mt: 2 }}>
@@ -140,6 +178,10 @@ function OffersPage() {
 			</Stack>
 		);
 	};
+	/**
+	 * Mensaje que indica que no se ha registrado aun su empresa (siendo proveedor)
+	 * @constant {Component} listOffers
+	 */
 
 	const msgCompanyNull = () => {
 		return (
@@ -241,5 +283,3 @@ function OffersPage() {
 		</Container>
 	);
 }
-
-export default OffersPage;

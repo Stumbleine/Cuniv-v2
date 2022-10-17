@@ -20,9 +20,14 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment';
 
-function CodeGenerated() {
+/**
+ * Cuadro que muestra grafico linear en area sobre la cantidad de codigos generados sobre las ofertas de la empresa,
+ * o todas las empresas en caso de verlo desde un Administrador
+ * @component CodeGenerated
+ * @exports CodeGenerated
+ */
+export default function CodeGenerated() {
 	const dispatch = useDispatch();
-
 	const { accessToken } = useSelector(state => state.login);
 	const { codeGenerated } = useSelector(state => state.statics);
 	const [chartMode, setChartMode] = useState('daily');
@@ -38,6 +43,10 @@ function CodeGenerated() {
 	const startDaily = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
 	useEffect(() => {
+		/**
+		 * Ejecuta el dispatch hacia la peticion generatedChartAsync que devuelve datos para el grafico.
+		 * @function {async} fetch
+		 */
 		const fetch = async () => {
 			setStatus({ error: false, success: false, isLoading: true });
 			return await dispatch(
@@ -52,6 +61,10 @@ function CodeGenerated() {
 				setStatus({ isLoading: false, error: true, success: false });
 			});
 	}, []);
+	/**
+	 * Configuracion de datos del grafico en yaxis por meses o dias.
+	 * @constant data
+	 */
 	const data = [
 		{
 			name: 'Codigos generados',
@@ -63,6 +76,10 @@ function CodeGenerated() {
 				: [],
 		},
 	];
+	/**
+	 * Configuracion de propiedades del grafico de tipo Area
+	 * @constant chartOptions
+	 */
 	const chartOptions = {
 		chart: {
 			type: 'line',
@@ -100,6 +117,15 @@ function CodeGenerated() {
 				: [],
 		},
 	};
+	/**
+	 * Creacion y configuracion de formik para validaciones del formulario rango de fechas.
+	 * propiedades:
+	 * 	initialValues que inicializa valores del formulario,
+	 * 	validationSchema: que especifica como deben sera los datos ingresado en un campo.
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 *
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			start_date: '',
@@ -110,9 +136,13 @@ function CodeGenerated() {
 			end_date: Yup.string().required(),
 		}),
 		enableReinitialize: true,
-
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const fetch = async () => {
+			/**
+			 * Ejecuta el dispatch hacia la generatedChartAsync con parametros indicados en los campos
+			 * startDate, endDate
+			 * @function {async} fetchDateRange
+			 */
+			const fetchDateRange = async () => {
 				setStatus({ error: false, success: false, isLoading: true });
 				return await dispatch(
 					generatedChartAsync(
@@ -123,7 +153,7 @@ function CodeGenerated() {
 					)
 				);
 			};
-			fetch()
+			fetchDateRange()
 				.then(r => {
 					setStatus({ isLoading: false, error: false, success: true });
 					setSubmitting(false);
@@ -268,5 +298,3 @@ function CodeGenerated() {
 		</Stack>
 	);
 }
-
-export default CodeGenerated;

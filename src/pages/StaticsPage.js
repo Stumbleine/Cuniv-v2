@@ -16,13 +16,15 @@ import OffersViewTable from '../components/charts/OffersViewTable';
 import OfferVisits from '../components/charts/OfferVisits';
 import ShowRoles from '../components/ShowRoles';
 import { summaryAsync } from '../store/statisticsSlice';
-
-function StaticsPage() {
+/**
+ * Pagina que muestras graficos de estadisticas sobre el consumo, visualizacion de ofertas
+ * @component StaticsPage
+ * @exports StaticsPage
+ */
+export default function StaticsPage() {
 	const dispatch = useDispatch();
-
 	const { accessToken } = useSelector(state => state.login);
 	const { summary } = useSelector(state => state.statics);
-
 	const [status, setStatus] = useState({
 		error: false,
 		success: false,
@@ -31,6 +33,10 @@ function StaticsPage() {
 
 	useEffect(() => {
 		document.title = 'ssansi | estadisticas';
+		/**
+		 * Realiza dispatch a summaryAsync para cargar los totales de estadisticas
+		 * @function {async} fetch
+		 */
 		const fetch = async () => {
 			setStatus({ ...status, isLoading: true });
 			return await dispatch(summaryAsync(accessToken));
@@ -134,5 +140,3 @@ function StaticsPage() {
 		</Container>
 	);
 }
-
-export default StaticsPage;

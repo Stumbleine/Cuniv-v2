@@ -18,12 +18,16 @@ import Footer from '../components/Footer';
 /**
  * Componente barra de navegacion para paginas publicas como el login, register, forgtoPassword e index que utiliza el componente Drawer de MUI,
  * Tiene dos componentes Page y LandingPage, que se adapta al contenido.
- * @component
+ * @component AuthLayout
+ * @exports AuthLayout
  */
 
 export default function AuthLayout() {
 	const { pathname } = useLocation();
-
+	/**
+	 * Contenedor estilizado
+	 * @constant Page
+	 */
 	const Page = styled('div')(({ theme }) => ({
 		overflow: 'auto',
 		minHeight: '100vh',
@@ -34,6 +38,10 @@ export default function AuthLayout() {
 		paddingTop: theme.spacing(2),
 		paddingBottom: theme.spacing(10),
 	}));
+	/**
+	 * Contenedor estilizado para la pagina principal del sistema
+	 * @constant LandingPage
+	 */
 	const LandingPage = styled('div')(({ theme }) => ({
 		overflow: 'auto',
 		minHeight: '100vh',

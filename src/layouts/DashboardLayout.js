@@ -20,11 +20,12 @@ const Page = styled('div')(({ theme }) => ({
 }));
 
 /**
- * Component panel para la navegacion de dos formas, Sidebar y Navbar.
+ * Panel para la navegacion de dos formas, Sidebar y Navbar.
  * recibe las notificaciones a travez del socket, emite snackbar por cada notificacion sobre la pantalla.
- * @component
+ * @component DashboardLayout
+ * @exports DashboardLayout
  */
-function DashboardLayout() {
+export default function DashboardLayout() {
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
 	const [openSB, setOpenSB] = useState(false);
@@ -37,10 +38,18 @@ function DashboardLayout() {
 		},
 		redirectPath: null,
 	});
-
+	/**
+	 * Funcion de cierre de la notificacion
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una notificacion y actualiza el valor del badge
+	 * @function handleNotiSnack
+	 * @param {Object} data
+	 */
 	const handleNotiSnack = data => {
 		setSnack({ ...snack, open: true, body: data });
 		playAudio();
@@ -49,7 +58,10 @@ function DashboardLayout() {
 	};
 
 	const audioPlayer = useRef(null);
-
+	/**
+	 * Reproduce un sonido de notifiacion
+	 * @function playAudio
+	 */
 	function playAudio() {
 		audioPlayer.current.play();
 	}
@@ -75,5 +87,3 @@ function DashboardLayout() {
 		</>
 	);
 }
-
-export default DashboardLayout;

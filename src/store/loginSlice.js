@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { getUserAsync } from './userSlice';
-
+/**
+ * Slice para las funciones de autenticacion, login, register, forgotPassword
+ * @module loginSlice
+ */
+/**
+ * Valores iniciales del slice
+ * @constant initialState
+ */
 const initialState = {
 	isAuth: false,
 	isLoading: false,
@@ -10,7 +17,10 @@ const initialState = {
 	registerSuccess: false,
 	registerFailed: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant complaintSlice
+ */
 const loginSlice = createSlice({
 	name: 'login',
 	initialState,
@@ -47,6 +57,12 @@ const loginSlice = createSlice({
 		},
 	},
 });
+/**
+ * Endpoint, realiza la peticion para iniciar sesion en el sistema
+ * @function {async} loginAsync
+ * @param {Object} user email y contraseña
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const loginAsync = user => async dispatch => {
 	dispatch(setLoading());
 	try {
@@ -61,7 +77,12 @@ export const loginAsync = user => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para iniciar sesion mediante el uso de una cuenta Google
+ * @function {async} loginGoogleAsync
+ * @param {Object} user data de google
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const loginGoogleAsync = user => async dispatch => {
 	const data = {
 		username: user.email,
@@ -80,7 +101,12 @@ export const loginGoogleAsync = user => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para registrarse
+ * @function {async} registerAsync
+ * @param {Object} user datos del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const registerAsync = user => async dispatch => {
 	let succes = false;
 	dispatch(setLoading());
@@ -94,7 +120,12 @@ export const registerAsync = user => async dispatch => {
 	}
 	return succes;
 };
-
+/**
+ * Endpoint, realiza la peticion para recuperar contraseña
+ * @function {async} forgotPassword
+ * @param {Object} values email de la cuenta
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+ */
 export const forgotPassword = values => async dispatch => {
 	dispatch(setLoading());
 	try {

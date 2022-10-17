@@ -19,7 +19,11 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 import { changePasswordAsync } from '../store/userSlice';
 import SnackCustom from '../components/SnackCustom';
-
+/**
+ * Pagina para cambiar la contraseña de cuenta de usuario
+ * @component Security
+ * @exports Security
+ */
 export default function Security() {
 	const { accessToken } = useSelector(state => state.login);
 
@@ -31,34 +35,56 @@ export default function Security() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
 
-	const schema = Yup.object().shape({
-		password: Yup.string().required('Contraseña es requerido'),
-
-		new_password: Yup.string()
-			.required('Nueva contraseña es requerido')
-			.matches(
-				/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
-				'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
-			),
-		confirm: Yup.string()
-			.required('Confirme la contraseña nueva')
-			.oneOf([Yup.ref('new_password'), null], 'Las contraseñas deben ser iguales'),
-	});
+	/**
+	 * Creacion y configuracion del formulario para cambiar la contraseña
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			password: '',
 			new_password: '',
 			confirm: '',
 		},
-		validationSchema: schema,
+		validationSchema: Yup.object().shape({
+			password: Yup.string().required('Contraseña es requerido'),
+
+			new_password: Yup.string()
+				.required('Nueva contraseña es requerido')
+				.matches(
+					/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
+					'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
+				),
+			confirm: Yup.string()
+				.required('Confirme la contraseña nueva')
+				.oneOf([Yup.ref('new_password'), null], 'Las contraseñas deben ser iguales'),
+		}),
 		onSubmit: async (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Realiza dispatch a changePasswordAsync para cambiar contraseña de cuenta
+			 * @function {async} fetch
+			 */
 			const fetch = async () => {
 				return await dispatch(changePasswordAsync(accessToken, values));
 			};

@@ -1,5 +1,9 @@
 import { Grid, Paper, Skeleton, Stack } from '@mui/material';
-
+/**
+ * Tarjeta esqueleto para el perfil de una empresa con animacion de olas, sirve para indicar que los datos se estan cargando
+ * @component SkeletonProfile
+ * @exports SkeletonProfile
+ */
 export default function SkeletonProfile() {
 	return (
 		<Grid container spacing={2}>

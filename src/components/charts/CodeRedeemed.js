@@ -19,10 +19,14 @@ import { redeemedChartAsync } from '../../store/statisticsSlice';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment';
-
+/**
+ * Cuadro que muestra grafico linear en area sobre la cantidad de codigos canjeados de una empresa,
+ * o de todas las empresas en caso de verlo desde un Administrador
+ * @component CodeRedeemed
+ * @exports CodeRedeemed
+ */
 export default function CodeRedeemed() {
 	const dispatch = useDispatch();
-
 	const { accessToken } = useSelector(state => state.login);
 	const { codeRedeemed } = useSelector(state => state.statics);
 	const [chartMode, setChartMode] = useState('daily');
@@ -38,6 +42,10 @@ export default function CodeRedeemed() {
 	const startDaily = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
 	useEffect(() => {
+		/**
+		 * Ejecuta el dispatch hacia la peticion redeemedChartAsync que devuelve datos para el grafico.
+		 * @function {async} fetch
+		 */
 		const fetch = async () => {
 			setStatus({ error: false, success: false, isLoading: true });
 			return await dispatch(
@@ -52,6 +60,10 @@ export default function CodeRedeemed() {
 				setStatus({ isLoading: false, error: true, success: false });
 			});
 	}, []);
+	/**
+	 * Configuracion de datos del grafico en yaxis por meses o dias.
+	 * @constant data
+	 */
 	const data = [
 		{
 			name: 'Codigos Canjeados',
@@ -63,6 +75,10 @@ export default function CodeRedeemed() {
 				: [],
 		},
 	];
+	/**
+	 * Configuracion de propiedades del grafico de tipo Area
+	 * @constant chartOptions
+	 */
 	const chartOptions = {
 		chart: {
 			type: 'line',
@@ -88,7 +104,7 @@ export default function CodeRedeemed() {
 		},
 		grid: {
 			row: {
-				colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+				colors: ['#f3f3f3', 'transparent'],
 				opacity: 0.5,
 			},
 		},
@@ -100,6 +116,14 @@ export default function CodeRedeemed() {
 				: [],
 		},
 	};
+	/**
+	 * Creacion y configuracion de formik para validaciones del formulario rango de fechas.
+	 * propiedades:
+	 * 	initialValues que inicializa valores del formulario,
+	 * 	validationSchema: que especifica como deben sera los datos ingresado en un campo, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			start_date: '',
@@ -111,7 +135,12 @@ export default function CodeRedeemed() {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			const fetch = async () => {
+			/**
+			 * Ejecuta el dispatch hacia la redeemedChartAsync con parametros indicados en los campos
+			 * startDate, endDate
+			 * @function {async} fetchDateRange
+			 */
+			const fetchDateRange = async () => {
 				setStatus({ error: false, success: false, isLoading: true });
 				return await dispatch(
 					redeemedChartAsync(
@@ -122,7 +151,7 @@ export default function CodeRedeemed() {
 					)
 				);
 			};
-			fetch()
+			fetchDateRange()
 				.then(r => {
 					setStatus({ isLoading: false, error: false, success: true });
 					setSubmitting(false);

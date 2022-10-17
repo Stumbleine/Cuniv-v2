@@ -1,5 +1,8 @@
-// ----------------------------------------------------------------------
-
+/**
+ * Personalizacion del componente Button de MUI.
+ * @function Button
+ * @exports Button
+ */
 export default function Button(theme) {
 	return {
 		MuiButton: {

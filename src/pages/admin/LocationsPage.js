@@ -9,7 +9,11 @@ import SnackCustom from '../../components/SnackCustom';
 import LocationsTable from '../../components/tables/LocationsTable';
 import { getLocationsAsync } from '../../store/umssSlice';
 import '../../styles/scroll.css';
-
+/**
+ * Pagina para gestionar las locaciones registradas
+ * @component LocationsPage
+ * @exports LocationsPage
+ */
 export default function LocationsPage() {
 	const { accessToken } = useSelector(state => state.login);
 
@@ -17,7 +21,11 @@ export default function LocationsPage() {
 	useEffect(() => {
 		dispatch(getLocationsAsync(accessToken));
 	}, []);
-
+	/**
+	 * Buscador de locaciones por caracteres
+	 * @function handleSearch
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		dispatch(getLocationsAsync(accessToken, values.search));
 	};
@@ -28,9 +36,20 @@ export default function LocationsPage() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
@@ -58,7 +77,7 @@ export default function LocationsPage() {
 						<LocationsTable handleSnack={handleSnack} />
 					</Grid>
 					<Grid item xs={12} md={6}>
-						<AddLocationForm />
+						<AddLocationForm handleSnack={handleSnack} />
 					</Grid>
 				</Grid>
 			</Box>

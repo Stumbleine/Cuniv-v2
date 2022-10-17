@@ -19,8 +19,12 @@ import ShowRoles from '../components/ShowRoles';
 import UsersTable from '../components/tables/UsersTable';
 import API from '../conection';
 import { filterUsersAsync, usersAsync } from '../store/usersSlice';
-
-function UsersPage() {
+/**
+ * Pagina que muestra la tabla de usuarios del sistema
+ * @component UsersPage
+ * @exports UsersPage
+ */
+export default function UsersPage() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [roles, setRoles] = useState([
@@ -38,6 +42,10 @@ function UsersPage() {
 	useEffect(() => {
 		document.title = 'ssansi | usuarios';
 		dispatch(usersAsync(accessToken));
+		/**
+		 * Realiza una peticion para traer roles del sistema para usarlo en el filtrador
+		 * @function {async} getRoles
+		 */
 		const getRoles = async () => {
 			const r = await API.get('select/roles', {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -46,16 +54,29 @@ function UsersPage() {
 		};
 		getRoles();
 	}, []);
-
+	/**
+	 * Realiza dispatch hacia filterUsersAsync para filtrar usuarios por ROL
+	 * @function handleRol
+	 * @param {Object} event
+	 */
 	const handleRol = event => {
 		setRol(event.target.value);
 		dispatch(filterUsersAsync(accessToken, search, event.target.value, sesion));
 	};
-
+	/**
+	 * Realiza dispatch hacia filterUsersAsync para filtrar usuarios por estado de sesion
+	 * @function handleSesion
+	 * @param {Object} event
+	 */
 	const handleSesion = event => {
 		setSesion(event.target.value);
 		dispatch(filterUsersAsync(accessToken, search, rol, event.target.value));
 	};
+	/**
+	 * Realiza dispatch hacia filterUsersAsync para buscar usuarios por caracteres ingresado
+	 * @function handleSearch
+	 * @param {Object} event
+	 */
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(filterUsersAsync(accessToken, values.search, rol, sesion));
@@ -130,5 +151,3 @@ function UsersPage() {
 		</Container>
 	);
 }
-
-export default UsersPage;

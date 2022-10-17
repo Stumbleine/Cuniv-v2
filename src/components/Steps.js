@@ -2,11 +2,19 @@ import { Button, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
-function Steps() {
+/**
+ * Pasos segurido a seguir para el proveedor una vez que ingreso al sistema
+ * @component Steps
+ * @exports Steps
+ */
+export default function Steps() {
 	const { user } = useSelector(state => state.user);
 	return (
 		<Stack spacing={2} maxWidth="md">
+			<Typography variant="h2" fontWeight="bold">
+				¡Bienvenido!
+			</Typography>
+
 			<Typography variant="h4">Primero lo primero</Typography>
 			<Typography variant="h6" color="textSecondary">
 				Aqui algunos pasos a seguir sugeridos
@@ -59,5 +67,3 @@ function Steps() {
 		</Stack>
 	);
 }
-
-export default Steps;

@@ -16,11 +16,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { deleteCompanieAsync } from '../../store/companiesSlice';
 import DeleteItem from '../dialogs/DeleteItem';
-
-function SupplierCompany({ companie, handleSnack }) {
+/**
+ * Tarjeta para mostrar una empresa en un componente Card, que incluye acciones de eliminar y editar
+ * @component SupplierCompany
+ * @property {Object} companie datos de la empresa a mosrar en la tarjeta, incluye un resumen: razon_social, logo, redes sociales.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports SupplierCompany
+ */
+export default function SupplierCompany({ companie, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
+	/**
+	 * Ejecuta el dispatch hacia la funcion deleteCompanieAsync que hace la peticion DELETE para una empresa.
+	 * @funcion deleteAsync
+	 */
 	const deleteAsync = id => {
 		const delet = async () => {
 			await dispatch(deleteCompanieAsync(accessToken, id));
@@ -143,5 +152,3 @@ function SupplierCompany({ companie, handleSnack }) {
 		</Card>
 	);
 }
-
-export default SupplierCompany;

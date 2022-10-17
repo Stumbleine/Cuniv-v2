@@ -1,5 +1,10 @@
 import { Navigate } from 'react-router-dom';
-
+/**
+ * Verifica si el permiso(s) existe en los permisos del usuario
+ * @function hasPrivilege
+ * @param {Array} pArray permisos a verificar
+ * @param {Array} userPermissions permisos del usuario
+ */
 export const hasPrivilege = (pArray, userPermissions) => {
 	let res = false;
 	for (let i = 0; i < pArray.length; i++) {
@@ -9,7 +14,12 @@ export const hasPrivilege = (pArray, userPermissions) => {
 	}
 	return res;
 };
-
+/**
+ * Construye los links del sistema autorizados para el usuario, se basa en los permisos que el usuario cuenta.
+ * @function getNavlinks
+ * @param {Array} userPermissions permisos del usuario
+ * @export getNavlinks
+ */
 export const getNavlinks = userPermissions => {
 	const navlinks = [{ name: 'Inicio', path: 'home', icon: 'home' }];
 	hasPrivilege(['listar ofertas', 'gestionar ofertas'], userPermissions) &&
@@ -37,6 +47,11 @@ export const getNavlinks = userPermissions => {
 
 	return navlinks;
 };
+/**
+ * Busca en la lista de links y devuelve un link
+ * @function getLink
+ * @param {Object} link link, ruta que incluye: name, path y nombre del icono
+ */
 export const getLink = link => {
 	return links.find(l => l.name === link);
 };
@@ -57,7 +72,15 @@ export const links = [
 	// only Cajero
 	{ name: 'Cajero', path: 'cashier', icon: 'redeem' }, // canjear codigo
 ];
-
+/**
+ * Verifica si el usuario tiene los permisos necesarios en su lista de permisos,
+ * de ser correcto se devuelve el componente (principalmente pagina) a renderizar en la ruta,
+ * caso contrario redirige hacia 404 indicado que no esta autorizado
+ * @function construct
+ * @param {Array} pArray permisos a verificar
+ * @param {Component} component link, ruta que incluye: name, path y nombre del icono
+ * @param {Array} userPermissions permisos del usuario
+ */
 export const construct = (pArray, component, userPermissions) => {
 	for (let i = 0; i < pArray.length; i++) {
 		if (userPermissions.includes(pArray[i])) {

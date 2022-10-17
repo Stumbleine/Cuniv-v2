@@ -12,28 +12,30 @@ import {
 	MenuItem,
 	OutlinedInput,
 	Select,
-	Slide,
 	Stack,
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { green } from '@mui/material/colors';
 import API from '../../conection';
 import CheckFrequency from '../forms/CheckFrequency';
 import { useTheme } from '@emotion/react';
 import { updateOfferAsync } from '../../store/offersSlice';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo con formulario para editar los productos incluidos y sucursales donde se encuentra disponible la oferta
+ * @component EditOfferPB
+ * @property {Object} offer datos de la oferta a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports EditOfferPB
+ */
 export default function EditOfferPB({ offer, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
-
 	const [products, setProducts] = useState(null);
 	const [branchOffices, setBranchOffices] = useState(null);
 	const [prdInclude, setPrdInclude] = useState([]);
@@ -42,13 +44,21 @@ export default function EditOfferPB({ offer, handleSnack }) {
 	const [changeBranchs, setChangeBranchs] = useState(false);
 	const [changeProducts, setChangeProducts] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
-	const fetchPB = async () => {};
+
+	/**
+	 * Hace una llamada a funciones asincronas que hacen peticion de productos y sucursales de la empresa
+	 * y cambia el estado open a true (abre el dialogo),
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		fetchProducts(offer.companie.id_empresa);
 		fetchBranchs(offer.companie.id_empresa);
 		setOpen(true);
-		fetchPB();
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -56,6 +66,10 @@ export default function EditOfferPB({ offer, handleSnack }) {
 	const theme = useTheme();
 	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
+	/**
+	 * configuracion de propiedades con estilos para el component MenuItem
+	 * @constant MenuProps
+	 */
 	const MenuProps = {
 		PaperProps: {
 			style: {
@@ -64,27 +78,57 @@ export default function EditOfferPB({ offer, handleSnack }) {
 			},
 		},
 	};
-
+	/**
+	 * Otorga estilos para el item de un Item seleccionado en un componente Select
+	 * @function getStyles
+	 * @param {String} name
+	 * @param {Object} item
+	 * @param {Object} theme configuacion del tema MUI
+	 */
+	function getStyles(name, item, theme) {
+		return {
+			fontWeight:
+				item.indexOf(name) === -1
+					? theme.typography.fontWeightRegular
+					: theme.typography.fontWeightMedium,
+		};
+	}
+	/**
+	 * Hace una peticion al servidor para conseguir la lista de productos de la empresa a la que pertenece la oferta actual
+	 * @function {async} fetchProducts
+	 * @param {Number} id identificador de la empresa
+	 */
 	async function fetchProducts(id) {
 		const r = await API.get('select/products?empresa=' + id, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
 		setProducts(r.data);
 	}
+	/**
+	 * Hace una peticion al servidor para conseguir la lista de sucursales de la empresa a la que pertenece la oferta actual
+	 * @function {async} fetchBranchs
+	 * @param {Number} id identificador de la empresa
+	 */
 	async function fetchBranchs(id) {
 		const r = await API.get('select/sucursales?empresa=' + id, {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
 		setBranchOffices(r.data);
 	}
-
+	/**
+	 * Actualiza el estado de productos incluidos "prdInclude"
+	 * @function handleChange
+	 */
 	const handleChange = event => {
 		const {
 			target: { value },
 		} = event;
 		setPrdInclude(typeof value === 'string' ? value.split(',') : value);
 	};
-
+	/**
+	 * Actualiza el estado de sucursales disponibles "branchSelected"
+	 * @function handleSelectBranch
+	 */
 	const handleSelectBranch = event => {
 		const {
 			target: { value },
@@ -92,24 +136,22 @@ export default function EditOfferPB({ offer, handleSnack }) {
 		setBranchSelected(typeof value === 'string' ? value.split(',') : value);
 	};
 
-	function getStyles(name, itemName, theme) {
-		return {
-			fontWeight:
-				itemName.indexOf(name) === -1
-					? theme.typography.fontWeightRegular
-					: theme.typography.fontWeightMedium,
-		};
-	}
-
 	const [frequency, setFrequency] = useState(offer.frequency_redeem);
+	/**
+	 * Actualiza el estado frequency, asigna una frecuencia de canje
+	 * @function handleFrequency
+	 * @param {Object} event evento de Check
+	 */
 	const handleFrequency = event => {
 		setFrequency(event.target.value);
 	};
-
-	const submit = async () => {
+	/**
+	 * Configura el data para ser enviado atravez de una funcion POST para la edicion de la oferta
+	 * @function handleFrequency
+	 */
+	const submit = () => {
 		const branchsArray = [];
 		const productsArray = [];
-
 		branchSelected?.forEach(e => {
 			branchsArray.push(e.id_branch);
 		});
@@ -125,6 +167,10 @@ export default function EditOfferPB({ offer, handleSnack }) {
 				branchSelected.length !== 0 ? { ids: branchsArray } : { ids: null },
 			frequency_redeem: frequency,
 		};
+		/**
+		 * Realiza el dispatch hacia la peticion updateOfferAsync con la data configurado.
+		 * @function {async} update
+		 */
 		const update = async () => {
 			setSubmitting(true);
 			return await dispatch(updateOfferAsync(accessToken, data, null));

@@ -22,8 +22,13 @@ import DeleteItem from '../dialogs/DeleteItem';
 import EditRubro from '../dialogs/EditRubro';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
-
-function RubrosTable({ handleSnack }) {
+/**
+ * Tabla que enlista los rubros existentes
+ * @component RubrosTable
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports RubrosTable
+ */
+export default function RubrosTable({ handleSnack }) {
 	const dispatch = useDispatch();
 
 	const { rubros, isLoading, filterLoading, fetchFailed } = useSelector(
@@ -38,20 +43,40 @@ function RubrosTable({ handleSnack }) {
 	];
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const [page, setPage] = useState(0);
-
+	/**
+	 * Cambia de pagina en la tabla
+	 * @function handleChangePage
+	 * @param {Object} event
+	 */
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
+	/**
+	 * Cambia la cantidad de rubros a mostrarse en la tabla
+	 * @function handleChangeRowsPerPage
+	 * @param {Object} event
+	 */
 	const handleChangeRowsPerPage = event => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
-
+	/**
+	 * Busca rubros por caracteres con el buscador del componente <FilterBar/>
+	 * @function handleSearch
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		dispatch(filterRubrosAsync(accessToken, values.search));
 	};
-
+	/**
+	 * Realiza dispatch hacia la peticion deleteRubroAsync para eliminar un rubro
+	 * @function deleteAsync
+	 * @param {Number} id identificador de la locacion
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
 			await dispatch(deleteRubroAsync(accessToken, id));
 		};
@@ -155,5 +180,3 @@ function RubrosTable({ handleSnack }) {
 		</>
 	);
 }
-
-export default RubrosTable;

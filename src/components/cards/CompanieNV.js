@@ -19,14 +19,30 @@ import {
 } from '../../store/companiesSlice';
 import RejectCompanie from '../dialogs/RejectCompanie';
 
+/**
+ * Componente Card para mostrar empresas que solicito ingresar al sistema,
+ * y empresas que fueron rechazados. Muestra los datos
+ * @summary
+ * Tarjeta de empresa No verificada, Rechazada
+ *
+ * @component Comapanie NV
+ * @property {Object} companie datos de la empresa.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports CompanieNV
+ */
+
 export default function CompanieNV({ companie, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [isSubmitting, setSubmitting] = useState(false);
-
+	/**
+	 * Function const, que realiza el dispatch hacia la peticion asincrona de aprobacion de empresa,
+	 * ejecuta un snackbar verde en caso de exito o rojo en caso de error.
+	 *
+	 * @function submitApprove
+	 */
 	const submitApprove = () => {
 		setSubmitting(true);
-
 		const approve = async () => {
 			await dispatch(approveCompanieAsync(accessToken, companie.id_empresa));
 		};
@@ -40,9 +56,13 @@ export default function CompanieNV({ companie, handleSnack }) {
 				setSubmitting(false);
 			});
 	};
+	/**
+	 * Function const, hace la peticion asincrona para deshacer la decision de rechazo en una empresa,
+	 * convierte a la empresa rechazada en una empresa aprobada.
+	 * @function submitReconsider
+	 */
 	const submitReconsider = () => {
 		setSubmitting(true);
-
 		const approve = async () => {
 			await dispatch(reconsiderCompanieAsync(accessToken, companie.id_empresa));
 		};

@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { convertToB64 } from '../Utils/Helper';
-
+/**
+ * Slice para sitios y locaciones
+ * @module umssSlice
+ */
+/**
+ * Valores iniciales del slice empresas
+ * @constant initialState
+ */
 const initialState = {
 	locations: null,
 	webSites: null,
@@ -12,7 +19,10 @@ const initialState = {
 	fetchFailedL: false,
 	filterLoadingL: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant umssSlice
+ */
 const umssSlice = createSlice({
 	name: 'umss',
 	initialState,
@@ -68,7 +78,13 @@ export const {
 	setFilterLoadingLink,
 } = umssSlice.actions;
 export default umssSlice.reducer;
-
+/**
+ * Endpoint, realiza la peticion para listar locaciones
+ * @function {async} getLocationsAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ * la propiedad search tiene como valor defecto 'All' en caso de no aplicar una busqueda
+ */
 export const getLocationsAsync =
 	(token, search = 'All') =>
 	async dispatch => {
@@ -83,7 +99,13 @@ export const getLocationsAsync =
 			throw new Error(e);
 		}
 	};
-
+/**
+ * Endpoint, realiza la peticion para añadir una nueva locacion
+ * @function {async} addLocationAsync
+ * @param {String} token access_token del usuario
+ * @param {String} values datos de la locacion
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const addLocationAsync = (token, values, position) => async dispatch => {
 	const data = {
 		name: values.name,
@@ -100,7 +122,15 @@ export const addLocationAsync = (token, values, position) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para editar una locacion
+ * @function {async} editLocationAsync
+ * @param {String} token access_token del usuario
+ * @param {String} values datos de la locacion
+ * @param {Object} position coordenadas
+ * @param {Number} id identificador de la locacion
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const editLocationAsync = (token, values, position, id) => async dispatch => {
 	const data = {
 		name: values.name,
@@ -117,7 +147,13 @@ export const editLocationAsync = (token, values, position, id) => async dispatch
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para eliminar una locacion
+ * @function {async} deleteLocationAsync
+ * @param {String} token access_token del usuario
+ * @param {Number} id identificador de la locacion
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const deleteLocationAsync = (token, id) => async dispatch => {
 	try {
 		await API.delete(`location/delete?id=${id}`, {
@@ -128,7 +164,13 @@ export const deleteLocationAsync = (token, id) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para listar links
+ * @function {async} getSitesAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ * la propiedad search tiene como valor defecto 'All' en caso de no aplicar una busqueda
+ */
 export const getSitesAsync =
 	(token, search = 'All') =>
 	async dispatch => {
@@ -143,7 +185,13 @@ export const getSitesAsync =
 			throw new Error(e);
 		}
 	};
-
+/**
+ * Endpoint, realiza la peticion para añadir un nuevo link
+ * @function {async} addSiteASync
+ * @param {String} token access_token del usuario
+ * @param {String} values datos del link
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const addSiteASync = (token, values, image) => async dispatch => {
 	const b64 = image ? await convertToB64(image) : null;
 	const data = { ...values, image: b64 };
@@ -157,6 +205,13 @@ export const addSiteASync = (token, values, image) => async dispatch => {
 	}
 };
 
+/**
+ * Endpoint, realiza la peticion para eliminar un link
+ * @function {async} deleteSiteAsync
+ * @param {String} token access_token del usuario
+ * @param {Number} id identificador del link
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const deleteSiteAsync = (token, id) => async dispatch => {
 	try {
 		await API.delete(`link/delete?id=${id}`, {
@@ -167,7 +222,16 @@ export const deleteSiteAsync = (token, id) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para editar un link
+ * @function {async} editLinkAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values datos nuevos del link
+ * @param {Number} id identificador del link
+ * @param {File} imageFile datos nuevos del link
+ * @param {Boolean} editedFile datos nuevos del link
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const editLinkAsync = (token, values, id, image, editedFile) => async dispatch => {
 	let data = null;
 	if (editedFile) {

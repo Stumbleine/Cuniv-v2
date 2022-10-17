@@ -8,7 +8,6 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	Slide,
 	TextField,
 	Typography,
 } from '@mui/material';
@@ -18,22 +17,44 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { rejectCompanieAsync } from '../../store/companiesSlice';
 import { green } from '@mui/material/colors';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
+import { Transition } from '../../Utils/Transitions';
+/**
+ * Dialogo de confirmacion para rechazar la afiliacion de una empresa
+ * @component RejectCompanie
+ * @property {Object} companie datos de la empresa.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @property {Function} setReload function para recargar la lista de empresas, cambia el estado reload.
+ * @property {Boolean} reload
+ *
+ * @exports RejectCompanie
+ */
 export default function RejectCompanie({ companie, handleSnack, setReload, reload }) {
 	const dispatch = useDispatch();
 	const [open, setOpen] = React.useState(false);
 	const { accessToken } = useSelector(state => state.login);
 
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario para introducir la razon del rechazo
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			id_empresa: companie.id_empresa,
@@ -43,6 +64,10 @@ export default function RejectCompanie({ companie, handleSnack, setReload, reloa
 			rejection_reason: Yup.string().required('Ingrese el motivo del rechazo'),
 		}),
 		onSubmit: (values, { resetForm }) => {
+			/**
+			 * Ejecuta el dispatch hacia rejectCompanieAsync con valores del form para rechazar a la empresa
+			 * @function {async} update
+			 */
 			const reject = async () => {
 				return await dispatch(rejectCompanieAsync(accessToken, values));
 			};

@@ -1,5 +1,8 @@
-// ----------------------------------------------------------------------
-
+/**
+ * Personalizacion del componente Input de MUI.
+ * @function Input
+ * @exports Input
+ */
 export default function Input(theme) {
 	return {
 		MuiOutlinedInput: {

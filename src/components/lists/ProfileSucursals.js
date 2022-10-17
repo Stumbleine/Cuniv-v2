@@ -5,22 +5,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteBranchAsync } from '../../store/companiesSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import AddCompanyBranch from '../forms/AddCompanyBranch';
-
-export default function ProfileSucursals(props) {
+/**
+ * Componente lista para mostrar las sucursales en el perfil de una empresa
+ * @component ProfileSucursals
+ * @property {Array} sucursales lista de sucursales de la empresa
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports ProfileSucursals
+ */
+export default function ProfileSucursals({ sucursales, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
-	const { sucursales } = props;
+	/**
+	 * Realiza dispatch hacia la peticion deleteBranchAsync para eliminar una sucursal
+	 * @function deleteAsync
+	 * @param {Number} id identificador del link
+	 */
 	const deleteAsync = id => {
+		/**
+		 * @function {async} delet
+		 */
 		const delet = async () => {
-			await dispatch(deleteBranchAsync(accessToken, id, props.sucursales[0].id_empresa));
+			await dispatch(deleteBranchAsync(accessToken, id, sucursales[0].id_empresa));
 		};
 		delet()
 			.then(r => {
-				props.handleSnack('Sucursal eliminado exitosamente', 'success');
+				handleSnack('Sucursal eliminado exitosamente', 'success');
 			})
 			.catch(e => {
-				props.handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
 	return (
@@ -41,12 +53,12 @@ export default function ProfileSucursals(props) {
 						<ListItemText primary={sucursal.nombre} secondary={sucursal.direccion} />
 						<ListItemIcon>
 							<AddCompanyBranch
-								handleSnack={props.handleSnack}
+								handleSnack={handleSnack}
 								actionType="update-fetch"
 								editData={sucursal}
 							/>
 							<DeleteItem
-								handleSnack={props.handleSnack}
+								handleSnack={handleSnack}
 								deleteAsync={deleteAsync}
 								id={sucursal.id_sucursal}
 								itemName={sucursal.nombre}
@@ -59,7 +71,7 @@ export default function ProfileSucursals(props) {
 			<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 				<AddCompanyBranch
 					actionType="add-fetch"
-					handleSnack={props.handleSnack}
+					handleSnack={handleSnack}
 					idEmpresa={sucursales[0].id_empresa}
 				/>
 			</Box>

@@ -2,11 +2,22 @@ import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { convertToB64 } from '../Utils/Helper';
 import { setNavlinks } from './settingSlice';
+/**
+ * Slice para la cuenta de usuario
+ * @module userSlice
+ */
+/**
+ * Valores iniciales del slice usuario
+ * @constant initialState
+ */
 const initialState = {
 	user: {},
 	isAdmin: false,
 };
-
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant userSlice
+ */
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
@@ -28,7 +39,12 @@ const userSlice = createSlice({
 		},
 	},
 });
-
+/**
+ * Endpoint, realiza la peticion para cargar la informacion del usuario que inicio sesion
+ * @function {async} getUserAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const getUserAsync = token => async dispatch => {
 	try {
 		const r = await API.get(`user`, { headers: { Authorization: `Bearer ${token}` } });
@@ -39,7 +55,12 @@ export const getUserAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para actualizar sesion del usuario y cerrar sesion
+ * @function {async} logoutAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const logoutAsync = token => async dispatch => {
 	try {
 		await API.get('user/logout', {
@@ -52,6 +73,13 @@ export const logoutAsync = token => async dispatch => {
 		throw new Error(e);
 	}
 };
+/**
+ * Endpoint, realiza la peticion para cambiar la contraseña de la cuenta de usuario
+ * @function {async} changePasswordAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values nueva contraseña
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const changePasswordAsync = (token, values) => async dispatch => {
 	try {
 		await API.post(`user/change-password`, values, {
@@ -61,7 +89,15 @@ export const changePasswordAsync = (token, values) => async dispatch => {
 		throw new Error(e);
 	}
 };
-
+/**
+ * Endpoint, realiza la peticion para actualizar la informacion de la cuenta
+ * @function {async} updateAccountAsync
+ * @param {String} token access_token del usuario
+ * @param {Object} values datos de usario
+ * @param {File} imageFile
+ *
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const updateAccountAsync = (token, values, imageFile) => async dispatch => {
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {

@@ -1,5 +1,9 @@
 import { Card, CardActions, CardContent, CardMedia, Skeleton } from '@mui/material';
-
+/**
+ * Esqueleto para una oferta con animacion de olas, sirve para indicar que los datos se estan cargando
+ * @component SkeletonOffer
+ * @exports SkeletonOffer
+ */
 export default function SkeletonOffer() {
 	return (
 		<Card>

@@ -16,25 +16,33 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProductAsync } from '../../store/productsSlice';
 import { green } from '@mui/material/colors';
-
-function ProductAddForm({ handleSnack, companies }) {
+/**
+ * Formulario para registrar ofertas de una empresa
+ * @component ProductAddForm
+ * @property {Array} companies Lista de empresas para asignar producto.
+ * @property {Function} handleSnack llama al componente snackbar (alerta)
+ * @exports ProductAddForm
+ */
+export default function ProductAddForm({ handleSnack, companies }) {
 	const [fileImage, setFileImage] = useState(null);
 	const dispatch = useDispatch();
 	const { isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
-
+	/**
+	 * Asigna el archivo imagen proveniente de <UploadImage/>
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
-	const ProductFormSchema = Yup.object().shape({
-		nombre: Yup.string().required('El nombre es necesario'),
-		precio: Yup.number().required('El precio es necesario'),
-		tipo: Yup.string().required('El tipo es requerido'),
-		id_empresa: isAdmin
-			? Yup.number().typeError('Debe elegir la empresa').required()
-			: '',
-	});
+	/**
+	 * Creacion y configuracion del formulario para añadir un producto
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: configura la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			nombre: '',
@@ -43,9 +51,19 @@ function ProductAddForm({ handleSnack, companies }) {
 			tipo: 'Producto',
 			id_empresa: 'none',
 		},
-		validationSchema: ProductFormSchema,
+		validationSchema: Yup.object().shape({
+			nombre: Yup.string().required('El nombre es necesario'),
+			precio: Yup.number().required('El precio es necesario'),
+			tipo: Yup.string().required('El tipo es requerido'),
+			id_empresa: isAdmin
+				? Yup.number().typeError('Debe elegir la empresa').required()
+				: '',
+		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
-			console.log(values);
+			/**
+			 * Ejecuta el dispatch hacia addProductAsync con valores del form para añadir un producto
+			 * @function {async} add
+			 */
 			const add = async () => {
 				return await dispatch(addProductAsync(accessToken, values, fileImage));
 			};
@@ -166,5 +184,3 @@ function ProductAddForm({ handleSnack, companies }) {
 		</Card>
 	);
 }
-
-export default ProductAddForm;

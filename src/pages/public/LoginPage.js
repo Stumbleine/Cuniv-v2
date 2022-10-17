@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-
 import { Link } from 'react-router-dom';
 import {
 	Button,
@@ -18,29 +17,46 @@ import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../store/loginSlice';
-function LoginPage() {
+/**
+ * Pagina con formulario para iniciar sesion
+ * @component LoginPage
+ * @exports LoginPage
+ */
+export default function LoginPage() {
 	const dispatch = useDispatch();
 	const { isLoading, isAuthFailed } = useSelector(state => state.login);
 	const [showPassword, setShowPassword] = useState(false);
-
-	const LoginSchema = Yup.object().shape({
-		email: Yup.string()
-			.email('El correo electrónico debe ser una dirección de correo electrónico válida')
-			.required('Correo Electronico es requerido'),
-		password: Yup.string().required('Contraseña es requerido'),
-	});
+	/**
+	 * Creacion y configuracion del formulario para iniciar sesion
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			email: '',
 			password: '',
 			remember: true,
 		},
-		validationSchema: LoginSchema,
+		validationSchema: Yup.object().shape({
+			email: Yup.string()
+				.email(
+					'El correo electrónico debe ser una dirección de correo electrónico válida'
+				)
+				.required('Correo Electronico es requerido'),
+			password: Yup.string().required('Contraseña es requerido'),
+		}),
 		onSubmit: (values, { resetForm }) => {
 			dispatch(loginAsync(values));
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps } = formik;
+	/**
+	 * Muestra la contraseña oculta o vicerversa.
+	 * @constant handleShowPassword
+	 */
 	const handleShowPassword = () => {
 		setShowPassword(show => !show);
 	};
@@ -134,5 +150,3 @@ function LoginPage() {
 		</Container>
 	);
 }
-
-export default LoginPage;

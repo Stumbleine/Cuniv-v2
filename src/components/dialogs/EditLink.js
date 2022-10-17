@@ -8,41 +8,62 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Slide,
 	Stack,
 	TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { editLinkAsync } from '../../store/umssSlice';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo para editar informacion de un link
+ * @component EditLink
+ * @property {Object} link datos del link a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports EditLink
+ */
 export default function EditLink({ link, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [editFile, setEditFile] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Cambia el estado fileImage asigna la imagen recibido del componente UploadImage
+	 * @function handleChangeFile
+	 * @param {File} file
+	 */
 	const handleChangeFile = file => {
 		setEditFile(true);
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario edicion de link
+	 * propiedades:
+	 * 	initialValues que inicializa valores del formulario con los datos actuales del link,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			title: link.title,
@@ -55,6 +76,10 @@ export default function EditLink({ link, handleSnack }) {
 			priority: Yup.number().required('Debe introducir una prioridad'),
 		}),
 		onSubmit: (values, { resetForm }) => {
+			/**
+			 * Ejecuta el dispatch hacia editLinkAsync con valores del form y la imagen para editar el link
+			 * @function {async} edit
+			 */
 			const edit = async () => {
 				return await dispatch(
 					editLinkAsync(accessToken, values, link.id, fileImage, editFile)

@@ -15,27 +15,47 @@ import { grey } from '@mui/material/colors';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { loginGoogleAsync } from '../../store/loginSlice';
-
+/**
+ * Orgniza las imagenes de la lista
+ * @function srcset
+ * @param {String} image
+ * @param {Number} size
+ * @param {Number} [rows]
+ * @param {Number} [cols]
+ */
 function srcset(image, size, rows = 1, cols = 1) {
 	return {
 		src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
 		srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
 	};
 }
-
-function LandingPage() {
+/**
+ * Pagina principal y de presentacion del sistema.
+ * @component LandingPage
+ * @exports LandingPage
+ */
+export default function LandingPage() {
 	const dispatch = useDispatch();
-	const clientId =
-		'147363332194-u205vroo6c09j366f56qc6d7pbkob6q2.apps.googleusercontent.com';
+	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+	/**
+	 * realiza una peticion al servidor para iniciar sesion.
+	 * @function onLoginSuccess
+	 */
 	const onLoginSuccess = res => {
 		console.log('Login Success:', res.profileObj);
 		dispatch(loginGoogleAsync(res.profileObj));
 	};
-
+	/**
+	 * Evento que inprime el error al iniciar sesion con google
+	 * @function onLoginFailure
+	 */
 	const onLoginFailure = res => {
 		console.log('Login Failed:', res);
 	};
-
+	/**
+	 * Pasos para registrarse y publicar ofertas.
+	 * @constant pasos
+	 */
 	const pasos = [
 		{ paso: 1, texto: 'Ingresar con google' },
 		{ paso: 2, texto: 'Registrar su empresa o institucion' },
@@ -257,8 +277,6 @@ function LandingPage() {
 		</>
 	);
 }
-
-export default LandingPage;
 
 const empresas = [
 	{ nombre: 'NutreExplosion', image: '/imgs/empresas/nutrexplosion.jpg' },

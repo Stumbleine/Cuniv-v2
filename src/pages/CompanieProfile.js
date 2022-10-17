@@ -29,8 +29,12 @@ import WarningVerified from '../components/WarningVerified';
 import RejectCompanie from '../components/dialogs/RejectCompanie';
 import SnackCustom from '../components/SnackCustom';
 import { green } from '@mui/material/colors';
-
-function CompanieProfile() {
+/**
+ * Pagina perfil de empresa, que muestra toda la informacion de la empresa
+ * @component CompanieProfile
+ * @exports CompanieProfile
+ */
+export default function CompanieProfile() {
 	const dispatch = useDispatch();
 	const { idCompanie } = useParams();
 	const { user, isAdmin } = useSelector(state => state.user);
@@ -40,6 +44,10 @@ function CompanieProfile() {
 		state => state.companies
 	);
 	const [reload, setReload] = useState(false);
+	/**
+	 * Carga la informacion de la empresa
+	 * @function  useEffect
+	 */
 	useEffect(() => {
 		document.title = 'ssansi | empresa';
 		if (idCompanie) {
@@ -58,7 +66,10 @@ function CompanieProfile() {
 			document.title = 'ssansi | ' + profile?.companie?.razon_social;
 		}
 	}, [profile]);
-
+	/**
+	 * Componente para indicar que la empresa no ha sido registrado
+	 * @constant {Component} msgCompanieNull
+	 */
 	const msgCompanieNull = () => {
 		return (
 			<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
@@ -67,7 +78,6 @@ function CompanieProfile() {
 					registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas con
 					su empresa{' '}
 				</Typography>
-
 				<Button component={Link} to={`/main/registerCompanie`} variant="contained">
 					Registrar Empresa
 				</Button>
@@ -80,15 +90,32 @@ function CompanieProfile() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
-
+	/**
+	 * Realiza dispatch hacia approveCompanieAsync para aprobar una empresa
+	 * @function submitApprove
+	 */
 	const submitApprove = () => {
 		setSubmitting(true);
+		/**
+		 * @function {async} approve
+		 */
 		const approve = async () => {
 			await dispatch(approveCompanieAsync(accessToken, profile?.companie.id_empresa));
 		};
@@ -213,5 +240,3 @@ function CompanieProfile() {
 		</Container>
 	);
 }
-
-export default CompanieProfile;

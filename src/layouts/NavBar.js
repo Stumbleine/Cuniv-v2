@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { useSelector } from 'react-redux';
 import AccountPopover from '../components/AccountPopover';
-import { screenSizes } from '../Utils/Breakpoints';
+// import { screenSizes } from '../Utils/Breakpoints';
 import Logo from '../components/Logo';
 import Notifications from '../components/menus/Notifications';
 
@@ -22,10 +22,11 @@ import Notifications from '../components/menus/Notifications';
  * Es responsivo, cuando la pantalla se encuentre en el brakpoint "md" se contraera para mostrar el sideBar
  * siempre y cuando los links o rutas sean mayor a 8
  * caso contrario el navbar se contraera en el brekpoint "sm"
- * @component
- * @property { function } onOpenSidebar funcion que hacer set al valor openSideBar a true or false.
+ * @component NavBar
+ * @property { Function } onOpenSidebar funcion que hacer set al valor openSideBar a true or false.
+ * @exports NavBar
  */
-function NavBar({ onOpenSidebar }) {
+export default function NavBar({ onOpenSidebar }) {
 	const navlinks = useSelector(state => state.setting.navlinks);
 	/**
 	 * Componente itemNav una combicacion entre Boton y Link, cumple la funcion de redigir hacia la ruta desginada.
@@ -147,4 +148,3 @@ function NavBar({ onOpenSidebar }) {
 		</>
 	);
 }
-export default NavBar;

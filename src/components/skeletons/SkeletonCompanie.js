@@ -7,7 +7,11 @@ import {
 	Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
-
+/**
+ * Tarjeta esqueleto para empresas con animacion de olas, sirve para indicar que los datos se estan cargando
+ * @component SkeletonCompanie
+ * @exports SkeletonCompanie
+ */
 export default function SkeletonCompanie() {
 	return (
 		<Card>

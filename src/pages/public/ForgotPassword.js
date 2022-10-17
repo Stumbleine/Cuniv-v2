@@ -17,6 +17,11 @@ import { Link } from 'react-router-dom';
 import { AlternateEmail, ArrowBack } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 import SnackCustom from '../../components/SnackCustom';
+/**
+ * Pagina donde se puede pedir recuperar la cuenta mediane un correo, al cual se enviara su contraseña
+ * @component ForgotPassword
+ * @exports ForgotPassword
+ */
 export default function ForgotPassword() {
 	const dispatch = useDispatch();
 	const [forgot, setForgot] = useState(false);
@@ -26,12 +31,31 @@ export default function ForgotPassword() {
 		severity: 'success',
 		redirectPath: null,
 	});
+	/**
+	 * Cierra una alerta <SnackCustom/>
+	 * @function closeSnack
+	 */
 	const closeSnack = () => {
 		setSnack({ ...snack, open: false });
 	};
+	/**
+	 * Muestra una alerta <SnackCustom/> con su mensaje
+	 * @function handleSnack
+	 * @param {String} msg mensaje que se mostrara en la alerta
+	 * @param {String} sv tipo de severidad/evento afecta al color de la alerta.
+	 * @param {String} [path] ruta de redireccion
+	 */
 	const handleSnack = (msg, sv, path) => {
 		setSnack({ ...snack, open: true, msg: msg, severity: sv, redirectPath: path });
 	};
+	/**
+	 * Creacion y configuracion del formulario para ingresar el correo
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			email: '',
@@ -44,6 +68,10 @@ export default function ForgotPassword() {
 				.required('Correo Electronico es requerido'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Realiza dispatch a forgotPassword para solicitar una contraseña e instrucciones
+			 * @function {async} fetch
+			 */
 			const fetch = async () => {
 				return await dispatch(forgotPassword(values));
 			};

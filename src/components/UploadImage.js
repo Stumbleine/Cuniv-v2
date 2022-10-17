@@ -2,14 +2,38 @@ import { useState } from 'react';
 import { Image } from '@mui/icons-material';
 import { Box, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-
-function UploadImage({ handleChangeFile, id, type, label, preload, children }) {
+/**
+ * Menu para mostrar notificaciones del sistema
+ * @component Notifications
+ * @property {Function} handleChangeFile envia el archivo imagen
+ * @property {String} id indentificador del componente.
+ * @property {String} type tipo de input 'Circle' o 'Rectangle'
+ * @property {File} [preload] archivo imagen para previsualizar, si es necesario.
+ * @property {Component} [children]
+ * @exports Notifications
+ */
+export default function UploadImage({
+	handleChangeFile,
+	id,
+	type,
+	label,
+	preload,
+	children,
+}) {
 	const [uploadHover, setUploadHover] = useState(false);
 	const [logo, setLogo] = useState(preload !== undefined ? preload : null);
+	/**
+	 * Guarda el archivo imagen subido desde el input file
+	 * @function handleChangeLogo
+	 */
 	const handleChangeLogo = e => {
 		handleChangeFile(e.target.files);
 		setLogo(URL.createObjectURL(e.target?.files[0]));
 	};
+	/**
+	 * Estilos para el componente segun el type
+	 * @constant styles
+	 */
 	const styles = {
 		BoxContainerCircle: {
 			width: '100%',
@@ -147,5 +171,3 @@ function UploadImage({ handleChangeFile, id, type, label, preload, children }) {
 		</>
 	);
 }
-
-export default UploadImage;

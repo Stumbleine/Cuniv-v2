@@ -8,39 +8,59 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
-	Slide,
 	Stack,
 	TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { updateUserAsync } from '../../store/usersSlice';
+import { Transition } from '../../Utils/Transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
-
+/**
+ * Dialogo con formulario para editar informacion de un usuario,
+ * @component Edituser
+ * @property {Object} user datos del usuario a modificar.
+ * @property {Function} handleSnack function que llama al componente snackbar (alerta)
+ * @exports Edituser
+ */
 export default function Edituser({ user, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
 	const [fileImage, setFileImage] = useState(null);
-
+	/**
+	 * Asigna el archivo imagen proveniente de UploadImage
+	 * @function handleChangeFile
+	 */
 	const handleChangeFile = file => {
 		setFileImage(file);
 	};
-
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
 	const handleClose = () => {
 		setOpen(false);
 	};
-
+	/**
+	 * Creacion y configuracion del formulario para editar un usuario
+	 * propiedades:
+	 * 	initialValues: inicializa valores del formulario con los datos actuales del usuario,
+	 * 	validationSchema: especifica la validacion de los campos, usando la libreria yup
+	 * 	onSubmit: Funcion que se ejecuta con el evento "submit"
+	 * @constant formik
+	 */
 	const formik = useFormik({
 		initialValues: {
 			id: user?.id || '',
@@ -57,6 +77,10 @@ export default function Edituser({ user, handleSnack }) {
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
+			/**
+			 * Ejecuta el dispatch hacia updateOfferAsync con valores del form para editar el usuario
+			 * @function {async} update
+			 */
 			const update = async () => {
 				return await dispatch(updateUserAsync(accessToken, values, fileImage));
 			};

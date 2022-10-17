@@ -17,11 +17,23 @@ import DeleteItem from '../dialogs/DeleteItem';
 import EditOfferPB from '../dialogs/EditOfferPB';
 import StatusLabel from '../StatusLabel';
 
+/**
+ * Tarjeta de oferta que muestra informacion de una oferta, con la imagen, titulo, descuento y estado.
+ * Ademas de incluir las acciones de editar y eliminar.
+ * @component Offer
+ * @property {Object} offer datos de la oferta, que incluye datos de la empresa a la que pertenece.
+ * @property {Object} companies conjunto de empresas con id y razon social, es necesario para ustilizarlo en los componentes de edicion.
+ * @property {Function} handleSnack funcion que llamar a un SnackBar Alert, para mostrar el resultado de una accion
+ * @exports Offer
+ */
 export default function Offer({ offer, handleSnack, companies }) {
-	const AvatarCustom = styled(Avatar)(({ theme }) => ({
-		width: 37,
-		height: 37,
-	}));
+	/**
+	 * Componente Box estilizado con el theme de MUI que es un contenedor del logo de empresa de una oferta,
+	 * ubicada sobre el componente Image, con posicion absolute.
+	 * @component BorderAvatar
+	 * @property {Object} theme objeto de funciones que devuelven valores predeterminados del tema de MUI
+	 * @exports BorderAvatar
+	 */
 	const BorderAvatar = styled(Box)(({ theme }) => ({
 		width: 45,
 		height: 45,
@@ -37,7 +49,10 @@ export default function Offer({ offer, handleSnack, companies }) {
 	}));
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
-
+	/**
+	 * Ejecuta el dispatch hacia la funcion deleteOfferAsync que hace la peticion DELETE para una oferta.
+	 * @funcion deleteAsync
+	 */
 	const deleteAsync = id => {
 		const delet = async () => {
 			await dispatch(deleteOfferAsync(accessToken, id));
@@ -69,9 +84,9 @@ export default function Offer({ offer, handleSnack, companies }) {
 					image={offer?.image || '/imgs/defaultImg.svg'}></CardMedia>
 				<StatusLabel elevated={true} status={offer?.status} />
 				<BorderAvatar>
-					<AvatarCustom src={offer.companie.logo}>
+					<Avatar sx={{ width: 37, height: 37 }} src={offer.companie.logo}>
 						<Business />
-					</AvatarCustom>
+					</Avatar>
 				</BorderAvatar>
 				<CardContent sx={{ mt: 2 }}>
 					<Typography

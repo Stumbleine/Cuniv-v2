@@ -19,13 +19,12 @@ import Complaint from '../../components/cards/Complaint';
 import FilterBar from '../../components/FilterBar';
 import ShowRoles from '../../components/ShowRoles';
 import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSlice';
-
 /**
  * Pagina de reclamos, donde se lista los reclamos de los estudiantes en dos columnas.
- * @component
+ * @component ComplaintPage
+ * @exports ComplaintPage
  */
-
-function ComplaintPage() {
+export default function ComplaintPage() {
 	const dispatch = useDispatch();
 	const { isLoading, filterLoading, complaints } = useSelector(state => state.complaint);
 	const { accessToken } = useSelector(state => state.login);
@@ -37,16 +36,25 @@ function ComplaintPage() {
 		document.title = 'ssansi | reclamos';
 		dispatch(complaintsAsync(accessToken));
 	}, []);
-
+	/**
+	 * filtra los reclamos segun su tipo
+	 * @function handleType
+	 * @param {Object} event
+	 */
 	const handleType = event => {
 		setType(event.target.value);
 		dispatch(complaintsFilterAsync(accessToken, search, event.target.value));
 	};
+	/**
+	 * Buscador de reclamos segun los carecteres recibidos
+	 * @function handleSearch
+	 * @param {Object} values
+	 */
 	const handleSearch = values => {
 		setSearch(values.search);
 		dispatch(complaintsFilterAsync(accessToken, values.search, type));
 	};
-	/** Tipo de reclamos, objeto utilizado para el filtro de reclamos por tipo */
+	// Tipos de reclamo, objeto utilizado para el filtro de reclamos por tipo
 	const types = [
 		{ name: 'Tiempo de atención' },
 		{ name: 'No cumple con la oferta' },
@@ -56,7 +64,7 @@ function ComplaintPage() {
 	];
 
 	/** Componente mensaje que indica cuando no se recupero reportes en la peticion.
-	 * @component
+	 * @constant {Component} msgclaimsNull
 	 */
 	const msgclaimsNull = () => {
 		return (
@@ -126,11 +134,10 @@ function ComplaintPage() {
 		</Container>
 	);
 }
-export default ComplaintPage;
 
 /**
  * Component eskeleto para mostrar una animacion de carga en la pagina complaints (reclamos), es invocado cuando la variable isLoading es true.
- * @component
+ * @component Skeletonclaim
  */
 const Skeletonclaim = () => {
 	return (

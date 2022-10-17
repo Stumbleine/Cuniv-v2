@@ -1,12 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 import API from '../conection';
 import { getNavlinks } from '../Utils/RBAC';
-
+/**
+ * Slice para configuracion como navlinks, notificaciones
+ * @module settingSlice
+ */
+/**
+ * Valores iniciales del slice empresas
+ * @constant initialState
+ */
 const initialState = {
 	navlinks: [],
 	notilist: [],
 	badge: true,
 };
+/**
+ * Creacion y configuracion del Slice, reducers
+ * @constant settingSlice
+ */
 
 const settingSlice = createSlice({
 	name: 'setting',
@@ -28,7 +39,12 @@ const settingSlice = createSlice({
 		},
 	},
 });
-
+/**
+ * Endpoint, realiza la peticion para listar notificaciones
+ * @function {async} notificationsAsync
+ * @param {String} token access_token del usuario
+ * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
+ */
 export const notificationsAsync = token => async dispatch => {
 	try {
 		const r = await API.get(`notification/notis`, {
