@@ -24,8 +24,10 @@ import { loginAsync } from '../../store/loginSlice';
  */
 export default function LoginPage() {
 	const dispatch = useDispatch();
-	const { isLoading, isAuthFailed } = useSelector(state => state.login);
+	const { isLoading } = useSelector(state => state.login);
 	const [showPassword, setShowPassword] = useState(false);
+	const [loginError, setLoginError] = useState(false);
+
 	/**
 	 * Creacion y configuracion del formulario para iniciar sesion
 	 * propiedades:
@@ -49,7 +51,18 @@ export default function LoginPage() {
 			password: Yup.string().required('Contraseña es requerido'),
 		}),
 		onSubmit: (values, { resetForm }) => {
-			dispatch(loginAsync(values));
+			const login = async () => {
+				return await dispatch(loginAsync(values));
+			};
+			login()
+				.then(r => {
+					setLoginError(false);
+				})
+				.catch(e => {
+					console.log(e.msg);
+					setLoginError(true);
+					// setMsgError(e.response.data);
+				});
 		},
 	});
 	const { errors, touched, handleSubmit, getFieldProps } = formik;
@@ -138,10 +151,9 @@ export default function LoginPage() {
 								¿olvido su contraseña?
 							</Typography>
 						</Stack>
-						{isAuthFailed && (
-							<Typography color="error" variant="caption" textAlign="center">
-								{' '}
-								Las credenciales no son correctas, vuelva a intentarlo.
+						{loginError && (
+							<Typography color="error" variant="body2" textAlign="center">
+								Las credenciales no son validas, vuelva a intentarlo
 							</Typography>
 						)}
 					</Stack>

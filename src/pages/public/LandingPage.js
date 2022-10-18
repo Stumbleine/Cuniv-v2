@@ -12,6 +12,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { loginGoogleAsync } from '../../store/loginSlice';
@@ -37,13 +38,25 @@ function srcset(image, size, rows = 1, cols = 1) {
 export default function LandingPage() {
 	const dispatch = useDispatch();
 	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+	const [loginError, setLoginError] = useState(false);
+
 	/**
 	 * realiza una peticion al servidor para iniciar sesion.
 	 * @function onLoginSuccess
 	 */
 	const onLoginSuccess = res => {
 		console.log('Login Success:', res.profileObj);
-		dispatch(loginGoogleAsync(res.profileObj));
+		const login = async () => {
+			await dispatch(loginGoogleAsync(res.profileObj));
+		};
+		login()
+			.then(r => {
+				setLoginError(false);
+			})
+			.catch(e => {
+				setLoginError(true);
+				// console.log(e);
+			});
 	};
 	/**
 	 * Evento que inprime el error al iniciar sesion con google
@@ -134,6 +147,12 @@ export default function LandingPage() {
 												</Button>
 											)}
 										/>
+										{loginError && (
+											<Typography color="error" variant="body2" textAlign="center">
+												Algo salio mal vuelva a intentarlo, si el problema persiste
+												comuniquese con un administrador.
+											</Typography>
+										)}
 										<Box sx={{ textAlign: 'center' }}>
 											<Typography variant="body1" color={grey[300]}>
 												¿Eres estudiante?

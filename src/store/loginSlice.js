@@ -67,9 +67,8 @@ export const loginAsync = user => async dispatch => {
 	dispatch(setLoading());
 	try {
 		const r = await API.post('auth/login', user);
-		// console.log('loginManual->r :', r);
+		console.log('loginManual->r :', r);
 		dispatch(setToken(r.data.token));
-		// dispatch(setAuth());
 		await dispatch(getUserAsync(r.data.token));
 		dispatch(setAuth());
 	} catch (e) {
