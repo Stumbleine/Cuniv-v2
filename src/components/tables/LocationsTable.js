@@ -30,7 +30,7 @@ export default function LocationsTable({ handleSnack }) {
 	const { locations, isLoading, filterLoading, fetchFailed } = useSelector(
 		state => state.umss
 	);
-	const [rowsPerPage, setRowsPerPage] = useState(7);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 	const TABLE_HEAD = [
 		{ id: 'location', label: 'Locacion' },
@@ -155,7 +155,7 @@ export default function LocationsTable({ handleSnack }) {
 			)}
 			{locations && (
 				<TablePagination
-					rowsPerPageOptions={[7]}
+					rowsPerPageOptions={[10]}
 					component="div"
 					count={locations?.length}
 					rowsPerPage={rowsPerPage}

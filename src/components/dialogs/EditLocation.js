@@ -8,8 +8,11 @@ import {
 	DialogContent,
 	DialogTitle,
 	IconButton,
+	MenuItem,
+	Select,
 	Stack,
 	TextField,
+	Typography,
 } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useState } from 'react';
@@ -137,14 +140,31 @@ export default function EditLocation({ location, handleSnack }) {
 									error={Boolean(touched.name && errors.name)}
 									helperText={touched.name && errors.name}
 								/>
-								<TextField
+								{/* <TextField
 									variant="outlined"
 									size="small"
 									label="Tipo"
 									{...getFieldProps('type')}
 									error={Boolean(touched.type && errors.type)}
 									helperText={touched.type && errors.type}
-								/>
+								/> */}
+								<Box>
+									<Typography variant="body2" color="textSecondary">
+										Especificar el tipo *
+									</Typography>
+									<Select
+										sx={{ width: '100%', mt: 1 }}
+										size="small"
+										{...getFieldProps('type')}
+										error={Boolean(touched.type && errors.type)}>
+										<MenuItem value="Biblioteca"> Biblioteca</MenuItem>
+										<MenuItem value="Aula">Aula</MenuItem>
+										<MenuItem value="Otro">Otro</MenuItem>
+									</Select>
+									<Typography sx={{ ml: 2 }} variant="caption" color="error">
+										{errors.type}
+									</Typography>
+								</Box>
 								<Box sx={{ width: '100%', height: 280, background: 'pink', mt: 1 }}>
 									<MapView sendPosition={sendPosition} />
 								</Box>
