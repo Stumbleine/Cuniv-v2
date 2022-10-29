@@ -34,6 +34,7 @@ export default function LocationsTable({ handleSnack }) {
 	const [page, setPage] = useState(0);
 	const TABLE_HEAD = [
 		{ id: 'location', label: 'Locacion' },
+		{ id: 'description', label: 'Descripcion' },
 		{ id: 'cor', label: 'Coordenadas' },
 		{ id: 'actions', label: 'Acciones' },
 	];
@@ -93,7 +94,7 @@ export default function LocationsTable({ handleSnack }) {
 											<Box>
 												<Typography
 													style={{
-														maxWidth: 220,
+														maxWidth: 200,
 														whiteSpace: 'nowrap',
 														textOverflow: 'ellipsis',
 														overflow: 'hidden',
@@ -109,6 +110,18 @@ export default function LocationsTable({ handleSnack }) {
 												</Typography>
 											</Box>
 										</Stack>
+									</TableCell>
+									<TableCell sx={{ minWidth: 150 }}>
+										<Typography
+											sx={{
+												maxWidth: 220,
+												// whiteSpace: 'nowrap',
+												// textOverflow: 'ellipsis',
+												overflow: 'hidden',
+											}}
+											variant="body2">
+											{location.description}
+										</Typography>
 									</TableCell>
 									<TableCell>
 										<Typography variant="body2">{location.lat}</Typography>
