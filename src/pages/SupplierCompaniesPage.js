@@ -39,9 +39,8 @@ import { green } from '@mui/material/colors';
  */
 export default function SupplierCompaniesPage() {
 	const dispatch = useDispatch();
-	const { isLoading, companies, companiesNV, selectRubros, filterLoading } = useSelector(
-		state => state.companies
-	);
+	const { isLoading, companies, companiesNV, selectRubros, filterLoading, fetchFailed } =
+		useSelector(state => state.companies);
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { accessToken } = useSelector(state => state.login);
 	const [showButton, setShowButton] = useState(false);
@@ -124,19 +123,20 @@ export default function SupplierCompaniesPage() {
 	const listCompaniesNV = () => {
 		return (
 			<>
-				{companiesNV ? (
-					companiesNV?.pending.map((companie, index) => (
-						<Grid item key={index} xs={6} sm={4} md={3}>
-							<CompanieNV companie={companie} handleSnack={handleSnack} />
-						</Grid>
-					))
-				) : isLoading ? (
-					[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
-						<Grid item key={index} xs={6} sm={4} md={3}>
-							<SkeletonCompanie />
-						</Grid>
-					))
-				) : (
+				{companiesNV.pending.length >= 0 && !filterLoading && !fetchFailed
+					? companiesNV?.pending.map((companie, index) => (
+							<Grid item key={index} xs={6} sm={4} md={3}>
+								<CompanieNV companie={companie} handleSnack={handleSnack} />
+							</Grid>
+					  ))
+					: (isLoading || filterLoading) &&
+					  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]?.map((sk, index) => (
+							<Grid item key={index} xs={6} sm={4} md={3}>
+								<SkeletonCompanie />
+							</Grid>
+					  ))}
+				{(fetchFailed ||
+					(!companiesNV.pending.length >= 0 && !isLoading && !filterLoading)) && (
 					<MsgCompaniesNull>
 						No han llegado nuevas solicitudes de afiliacion
 					</MsgCompaniesNull>
@@ -154,20 +154,24 @@ export default function SupplierCompaniesPage() {
 	 * @constant {Component} listCompanies
 	 */
 	const listCompanies = () => {
-		return companies ? (
-			companies.map((companie, index) => (
-				<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
-					<SupplierCompany handleSnack={handleSnack} companie={companie} />
-				</Grid>
-			))
-		) : isLoading ? (
-			[1, 2, 3, 4, 5, 6, 7, 8, 9]?.map((sk, index) => (
-				<Grid item key={index} xs={6} sm={4} md={3}>
-					<SkeletonCompanie />
-				</Grid>
-			))
-		) : (
-			<MsgCompaniesNull>No se han registrado empresas aun.</MsgCompaniesNull>
+		return (
+			<>
+				{companies && !filterLoading && !fetchFailed
+					? companies.map((companie, index) => (
+							<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
+								<SupplierCompany handleSnack={handleSnack} companie={companie} />
+							</Grid>
+					  ))
+					: (isLoading || filterLoading) &&
+					  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]?.map((sk, index) => (
+							<Grid item key={index} xs={6} sm={4} md={3}>
+								<SkeletonCompanie />
+							</Grid>
+					  ))}
+				{(fetchFailed || (!companies && !isLoading && !filterLoading)) && (
+					<MsgCompaniesNull>No se han registrado empresas aun.</MsgCompaniesNull>
+				)}
+			</>
 		);
 	};
 	return (
@@ -234,11 +238,6 @@ export default function SupplierCompaniesPage() {
 					</Stack>
 				</Box>
 				<Grid container spacing={2}>
-					{filterLoading && (
-						<Box sx={{ display: 'flex', justifyContent: 'center', width: 1, py: 2 }}>
-							<CircularProgress size={24} sx={{ color: green[500] }} />
-						</Box>
-					)}
 					{showNVCompanies === true ? listCompaniesNV() : listCompanies()}
 				</Grid>
 			</Box>

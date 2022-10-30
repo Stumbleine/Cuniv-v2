@@ -160,15 +160,7 @@ export default function ProductsTable({ handleSnack, companies }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{filterLoading && (
-							<TableRow>
-								<TableCell component="th" scope="row" />
-								<TableCell component="th" scope="row" align="center">
-									<CircularProgress size={24} sx={{ color: green[500] }} />
-								</TableCell>
-							</TableRow>
-						)}
-						{products
+						{products && !filterLoading && !fetchFailed
 							? products
 									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map(product => (
@@ -234,30 +226,13 @@ export default function ProductsTable({ handleSnack, companies }) {
 											)}
 										</TableRow>
 									))
-							: isLoading && <SkeletonTable head={TABLE_HEAD} />}
+							: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}
 					</TableBody>
 				</Table>
-
-				{!products && !isLoading && !fetchFailed && (
+				{(fetchFailed || (!products && !isLoading && !filterLoading)) && (
 					<Box width={1} sx={{ py: 2 }}>
 						<Typography textAlign="center" color="textSecondary">
-							No se encontraron productos
-						</Typography>
-					</Box>
-				)}
-				{fetchFailed && (
-					<Box
-						width={1}
-						sx={{
-							py: 2,
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-						<Warning color="error" sx={{ mr: 2 }} />
-
-						<Typography textAlign="center" color="error">
-							Error del servidor
+							No se encontraron locaciones.
 						</Typography>
 					</Box>
 				)}

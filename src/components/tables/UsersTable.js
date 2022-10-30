@@ -1,4 +1,3 @@
-import { Warning } from '@mui/icons-material';
 import {
 	Stack,
 	Typography,
@@ -11,7 +10,6 @@ import {
 	TableHead,
 	TablePagination,
 	Paper,
-	CircularProgress,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
@@ -123,17 +121,7 @@ export default function UsersTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{filterLoading && (
-						<TableRow>
-							<TableCell component="th" scope="row" />
-							<TableCell component="th" scope="row"></TableCell>
-							<TableCell component="th" scope="row">
-								<CircularProgress size={24} sx={{ color: green[500] }} />
-							</TableCell>
-							<TableCell component="th" scope="row"></TableCell>
-						</TableRow>
-					)}
-					{users
+					{users && !filterLoading && !fetchFailed
 						? users
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((user, index = user.id) => (
@@ -200,27 +188,17 @@ export default function UsersTable() {
 										</TableCell>
 									</TableRow>
 								))
-						: isLoading && <SkeletonTable head={TABLE_HEAD} />}
+						: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}
 				</TableBody>
 			</Table>
-			{!users && !isLoading && !fetchFailed && (
+			{(fetchFailed || (!users && !isLoading && !filterLoading)) && (
 				<Box width={1} sx={{ py: 2 }}>
 					<Typography textAlign="center" color="textSecondary">
-						No se encontraron usuarios
+						No se encontraron usuarios.
 					</Typography>
 				</Box>
 			)}
-			{fetchFailed && (
-				<Box
-					width={1}
-					sx={{ py: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<Warning color="error" sx={{ mr: 2 }} />
 
-					<Typography textAlign="center" color="error">
-						Error del servidor
-					</Typography>
-				</Box>
-			)}
 			{users && (
 				<TablePagination
 					rowsPerPageOptions={[15, 20]}

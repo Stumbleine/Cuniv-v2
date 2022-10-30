@@ -1,4 +1,4 @@
-import { Book, HelpCenter, School, Warning } from '@mui/icons-material';
+import { Book, HelpCenter, School } from '@mui/icons-material';
 import {
 	Box,
 	Paper,
