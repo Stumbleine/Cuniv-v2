@@ -75,19 +75,22 @@ export const productsAsync = token => async dispatch => {
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
 
-export const filterProductsAsync = (token, search, idc) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(`producto/list?search=${search}&idc=${idc}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setProducts(r.data));
-		// console.log('filterData->r:', r.data);
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const filterProductsAsync =
+	(token, search = 'All', idc) =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(`producto/list?search=${search}&idc=${idc}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setProducts(r.data));
+			// console.log('filterData->r:', r.data);
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 /**
  * Endpoint, realiza la peticion para crear un nuevo producto
  * @function {async} addProductAsync

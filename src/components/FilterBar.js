@@ -1,6 +1,7 @@
 import { SearchRounded } from '@mui/icons-material';
 import { IconButton, Stack, TextField } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 /**
  * Barra de buscador y filtros diferentes
@@ -11,6 +12,15 @@ import * as Yup from 'yup';
  * @exports FilterBar
  */
 export default function FilterBar({ handleSearch, children, w }) {
+	const [backScapePressed, setBackScapePressed] = useState(false);
+	const handleKeyDown = event => {
+		if (event.key === 'Backspace') {
+			setBackScapePressed(true);
+		} else {
+			setBackScapePressed(false);
+		}
+	};
+
 	/**
 	 * Creacion y configuracion del formulario para buscar por caracteres
 	 * propiedades:
@@ -24,13 +34,20 @@ export default function FilterBar({ handleSearch, children, w }) {
 			search: '',
 		},
 		validationSchema: Yup.object({
-			search: Yup.string().required('heloo'),
+			search: Yup.string().required(),
 		}),
 		onSubmit: values => {
 			handleSearch(values);
 		},
 	});
-	const { getFieldProps } = formik;
+
+	const { getFieldProps, values } = formik;
+	useEffect(() => {
+		if (values.search === '' && backScapePressed) {
+			handleSearch(values);
+		}
+	}, [backScapePressed, values]);
+
 	return (
 		<Stack
 			direction={{ xs: 'column', sm: 'row' }}
@@ -44,6 +61,7 @@ export default function FilterBar({ handleSearch, children, w }) {
 						fullWidth
 						size="small"
 						name="search"
+						onKeyDown={handleKeyDown}
 						{...getFieldProps('search')}
 						variant="outlined"
 						placerholder="Buscar usuario"

@@ -16,7 +16,6 @@ import '../../styles/scroll.css';
  */
 export default function LocationsPage() {
 	const { accessToken } = useSelector(state => state.login);
-
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getLocationsAsync(accessToken));

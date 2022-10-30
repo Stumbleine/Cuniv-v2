@@ -47,6 +47,9 @@ export default function Complaint({ complaint }) {
 								{complaint?.student.names}
 							</Typography>
 							<Typography color="textSecondary" variant="body2">
+								{complaint?.student.email}
+							</Typography>
+							<Typography color="textSecondary" variant="body2">
 								{moment(complaint?.date).format('LL')}
 							</Typography>
 						</Box>

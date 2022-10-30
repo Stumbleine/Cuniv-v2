@@ -74,19 +74,22 @@ export const rubrosAsync = token => async dispatch => {
  * @param {String} search
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
-export const filterRubrosAsync = (token, search) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(`rubro/list?search=${search}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setRubros(r.data));
-		console.log('filterData->r:', r.data);
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const filterRubrosAsync =
+	(token, search = 'All') =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(`rubro/list?search=${search}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setRubros(r.data));
+			console.log('filterData->r:', r.data);
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 /**
  * Endpoint, realiza la peticion para eliminar un rubro
  * @function {async} deleteRubroAsync

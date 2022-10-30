@@ -71,19 +71,23 @@ export const usersAsync = token => async dispatch => {
  * @param {String} sesion
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
-export const filterUsersAsync = (token, search, rol, sesion) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(`/user/list?search=${search}&rol=${rol}&sesion=${sesion}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setUsers(r.data));
-		// console.log('usersData->r:', r.data);
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const filterUsersAsync =
+	(token, search = 'All', rol, sesion) =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(`/user/list?search=${search}&rol=${rol}&sesion=${sesion}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setUsers(r.data));
+			// console.log('usersData->r:', r.data);
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 /**
  * Endpoint, realiza la peticion para editar informacion de un usuario
  * @function {async} updateUserAsync

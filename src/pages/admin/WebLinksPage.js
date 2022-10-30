@@ -7,6 +7,7 @@ import AddLinkForm from '../../components/forms/AddLinkForm';
 import ListLinks from '../../components/lists/ListLinks';
 import ShowRoles from '../../components/ShowRoles';
 import SnackCustom from '../../components/SnackCustom';
+import LinksTable from '../../components/tables/LinksTable';
 import { getSitesAsync } from '../../store/umssSlice';
 /**
  * Pagina para gestionar links del sistema
@@ -72,7 +73,8 @@ export default function WebLinksPage() {
 				<Grid container spacing={2}>
 					<Grid item xs={12} md={6}>
 						<FilterBar handleSearch={handleSearch} />
-						<Paper
+						<LinksTable handleSnack={handleSnack} />
+						{/* <Paper
 							sx={{
 								p: 2,
 								mt: 2,
@@ -82,7 +84,7 @@ export default function WebLinksPage() {
 							}}
 							className="container">
 							<ListLinks handleSnack={handleSnack} />
-						</Paper>
+						</Paper> */}
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<AddLinkForm handleSnack={handleSnack} />

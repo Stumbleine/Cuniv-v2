@@ -82,7 +82,7 @@ export default function SupplierCompany({ companie, handleSnack }) {
 						justifyContent: 'center',
 					}}>
 					{companie.facebook ? (
-						<IconButton onClick={() => window.open(companie.facebook)}>
+						<IconButton onClick={() => window.open(companie.facebook, '_blank')}>
 							<Facebook
 								sx={{
 									color: blue[500],
@@ -91,7 +91,7 @@ export default function SupplierCompany({ companie, handleSnack }) {
 						</IconButton>
 					) : null}
 					{companie.instagram ? (
-						<IconButton onClick={() => window.open(companie.instagram)}>
+						<IconButton onClick={() => window.open(companie.instagram, '_blank')}>
 							<Instagram
 								sx={{
 									color: pink[500],
@@ -100,7 +100,7 @@ export default function SupplierCompany({ companie, handleSnack }) {
 						</IconButton>
 					) : null}
 					{companie.sitio_web ? (
-						<IconButton onClick={() => window.open(companie.sitio_web)}>
+						<IconButton onClick={() => window.open(companie.sitio_web, '_blank')}>
 							<Language
 								sx={{
 									color: grey[700],

@@ -74,21 +74,24 @@ export const getOffersAsync = token => async dispatch => {
  * @param {Number} idc identificador de empresa
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
-export const filterOffersAsync = (token, search, idc, status) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(
-			`beneficio/list?search=${search}&idc=${idc}&status=${status}`,
-			{
-				headers: { Authorization: `Bearer ${token}` },
-			}
-		);
-		dispatch(setOffers(r.data));
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const filterOffersAsync =
+	(token, search = 'All', idc, status) =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(
+				`beneficio/list?search=${search}&idc=${idc}&status=${status}`,
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
+			dispatch(setOffers(r.data));
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 /**
  * Endpoint, realiza la peticion para crear ofertas
  * @function {async} createOfferAsync

@@ -8,10 +8,10 @@ import { Skeleton, TableCell, TableRow } from '@mui/material';
 export default function SkeletonTable({ head }) {
 	return (
 		<>
-			{[1, 2, 3, 4, 5].map((r, index) => (
+			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((r, index) => (
 				<TableRow key={index}>
 					{head.map(e => (
-						<TableCell key={e.id}>
+						<TableCell sx={{ py: 1 }} key={e.id}>
 							<Skeleton animation="wave" variant="text" />
 						</TableCell>
 					))}

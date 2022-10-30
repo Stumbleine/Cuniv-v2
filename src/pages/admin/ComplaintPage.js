@@ -26,7 +26,9 @@ import { complaintsAsync, complaintsFilterAsync } from '../../store/complaintSli
  */
 export default function ComplaintPage() {
 	const dispatch = useDispatch();
-	const { isLoading, filterLoading, complaints } = useSelector(state => state.complaint);
+	const { isLoading, filterLoading, complaints, fetchFailed } = useSelector(
+		state => state.complaint
+	);
 	const { accessToken } = useSelector(state => state.login);
 
 	const [search, setSearch] = useState('All');
@@ -111,24 +113,37 @@ export default function ComplaintPage() {
 				<Grid container spacing={2} alignContent="center" justifyContent="center">
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{complaints?.slice(0, complaints.length / 2 + 1).map(claim => (
-								<Complaint key={claim.id} complaint={claim} />
-							))}
+							{complaints &&
+								!filterLoading &&
+								!fetchFailed &&
+								complaints
+									.slice(0, complaints.length / 2 + 1)
+									.map(claim => <Complaint key={claim.id} complaint={claim} />)}
+						</Stack>
+						<Stack spacing={2}>
+							{(isLoading || filterLoading) &&
+								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
 						</Stack>
 					</Grid>
 					{/* {compRow2 && ( */}
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{complaints?.slice(complaints.length / 2 + 1).map(claim => (
-								<Complaint key={claim.id} complaint={claim} />
-							))}
+							{complaints &&
+								!filterLoading &&
+								!fetchFailed &&
+								complaints
+									.slice(complaints.length / 2 + 1)
+									.map(claim => <Complaint key={claim.id} complaint={claim} />)}
 						</Stack>
 						<Stack spacing={2}>
-							{isLoading || filterLoading
-								? [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)
-								: !complaints && msgclaimsNull()}
+							{(isLoading || filterLoading) &&
+								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
 						</Stack>
 					</Grid>
+					<Stack>
+						{fetchFailed ||
+							(!complaints && !isLoading && !filterLoading && msgclaimsNull())}
+					</Stack>
 				</Grid>
 			</Box>
 		</Container>

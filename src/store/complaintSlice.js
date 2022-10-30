@@ -23,9 +23,9 @@ const complaintSlice = createSlice({
 	initialState,
 	reducers: {
 		setComplaints: (state, { payload }) => {
+			state.complaints = payload;
 			state.isLoading = false;
 			state.filterLoading = false;
-			state.complaints = payload;
 		},
 		setLoading: state => {
 			state.isLoading = true;
@@ -72,16 +72,19 @@ export const complaintsAsync = token => async dispatch => {
  * @param {String} type tipo de reclamo
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
-export const complaintsFilterAsync = (token, search, type) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(`reclamo/list?search=${search}&type=${type}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setComplaints(r.data));
-		// console.log('ComplaintsFilterData->r:', r.data);
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const complaintsFilterAsync =
+	(token, search = 'All', type) =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(`reclamo/list?search=${search}&type=${type}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setComplaints(r.data));
+			// console.log('ComplaintsFilterData->r:', r.data);
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};

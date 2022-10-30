@@ -88,7 +88,12 @@ export default umssSlice.reducer;
 export const getLocationsAsync =
 	(token, search = 'All') =>
 	async dispatch => {
-		dispatch(setLoading());
+		search = search === '' ? 'All' : search;
+		if (search === 'All') {
+			dispatch(setLoading());
+		} else {
+			dispatch(setFilterLoading());
+		}
 		try {
 			const r = await API.get(`location/list?search=${search}`, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -174,7 +179,12 @@ export const deleteLocationAsync = (token, id) => async dispatch => {
 export const getSitesAsync =
 	(token, search = 'All') =>
 	async dispatch => {
-		dispatch(setLoadingLink());
+		search = search === '' ? 'All' : search;
+		if (search === 'All') {
+			dispatch(setLoadingLink());
+		} else {
+			dispatch(setFilterLoadingLink());
+		}
 		try {
 			const r = await API.get(`link/list?search=${search}`, {
 				headers: { Authorization: `Bearer ${token}` },

@@ -113,18 +113,21 @@ export const getCompaniesAsync = token => async dispatch => {
  * @param {String} rubro nombre del rubro
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de companiesSlice
  */
-export const filterCompaniesAsync = (token, search, rubro) => async dispatch => {
-	dispatch(setFilterLoading());
-	try {
-		const r = await API.get(`empresa/list?search=${search}&rubro=${rubro}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setCompanies(r.data));
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
+export const filterCompaniesAsync =
+	(token, search = 'All', rubro) =>
+	async dispatch => {
+		search = search === '' ? 'All' : search;
+		dispatch(setFilterLoading());
+		try {
+			const r = await API.get(`empresa/list?search=${search}&rubro=${rubro}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			dispatch(setCompanies(r.data));
+		} catch (e) {
+			dispatch(setFetchFailed());
+			throw new Error(e);
+		}
+	};
 /**
  * Endpoint, realiza la peticion para listar las empresa no verificadas y rechazadas
  * @function {async} compNotVerifiedAsync
