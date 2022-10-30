@@ -140,14 +140,13 @@ export default function LocationsTable({ handleSnack }) {
 						: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}
 				</TableBody>
 			</Table>
-			{fetchFailed ||
-				(!locations && !isLoading && !filterLoading && (
-					<Box width={1} sx={{ py: 2 }}>
-						<Typography textAlign="center" color="textSecondary">
-							No se encontraron locaciones.
-						</Typography>
-					</Box>
-				))}
+			{(fetchFailed || (!locations && !isLoading && !filterLoading)) && (
+				<Box width={1} sx={{ py: 2 }}>
+					<Typography textAlign="center" color="textSecondary">
+						No se encontraron locaciones.
+					</Typography>
+				</Box>
+			)}
 			{locations && (
 				<TablePagination
 					rowsPerPageOptions={[10]}

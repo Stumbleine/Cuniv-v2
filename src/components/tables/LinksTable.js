@@ -150,14 +150,13 @@ export default function LinksTable({ handleSnack }) {
 						: (isLoadingL || filterLoadingL) && <SkeletonTable head={TABLE_HEAD} />}
 				</TableBody>
 			</Table>
-			{fetchFailedL ||
-				(!webSites && !isLoadingL && !filterLoadingL && (
-					<Box width={1} sx={{ py: 2 }}>
-						<Typography textAlign="center" color="textSecondary">
-							No se encontraron links.
-						</Typography>
-					</Box>
-				))}
+			{(fetchFailedL || (!webSites && !isLoadingL && !filterLoadingL)) && (
+				<Box width={1} sx={{ py: 2 }}>
+					<Typography textAlign="center" color="textSecondary">
+						No se encontraron links.
+					</Typography>
+				</Box>
+			)}
 			{webSites && (
 				<TablePagination
 					rowsPerPageOptions={[10]}

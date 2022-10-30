@@ -141,8 +141,8 @@ export default function ComplaintPage() {
 						</Stack>
 					</Grid>
 					<Stack>
-						{fetchFailed ||
-							(!complaints && !isLoading && !filterLoading && msgclaimsNull())}
+						{(fetchFailed || (!complaints && !isLoading && !filterLoading)) &&
+							msgclaimsNull()}
 					</Stack>
 				</Grid>
 			</Box>

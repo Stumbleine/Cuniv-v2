@@ -1,7 +1,12 @@
-import { Warning } from '@mui/icons-material';
 import {
+	Button,
 	CardMedia,
-	CircularProgress,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton,
 	Paper,
 	Stack,
 	Table,
@@ -13,7 +18,7 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import { green } from '@mui/material/colors';
+import { amber, green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +27,9 @@ import DeleteItem from '../dialogs/DeleteItem';
 import EditRubro from '../dialogs/EditRubro';
 import FilterBar from '../FilterBar';
 import SkeletonTable from '../skeletons/SkeletonTable';
+import { Transition } from '../../Utils/Transitions';
+import { Delete, WarningAmber } from '@mui/icons-material';
+
 /**
  * Tabla que enlista los rubros existentes
  * @component RubrosTable
@@ -104,15 +112,7 @@ export default function RubrosTable({ handleSnack }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{filterLoading && (
-							<TableRow>
-								<TableCell component="th" scope="row" />
-								<TableCell component="th" scope="row">
-									<CircularProgress size={24} sx={{ color: green[500] }} />
-								</TableCell>
-							</TableRow>
-						)}
-						{rubros
+						{rubros && !filterLoading && !fetchFailed
 							? rubros
 									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map(rubro => (
@@ -133,35 +133,26 @@ export default function RubrosTable({ handleSnack }) {
 											<TableCell align="right">
 												<Box sx={{ display: 'flex' }}>
 													<EditRubro rubro={rubro} handleSnack={handleSnack} />
-													<DeleteItem
-														deleteAsync={deleteAsync}
-														id={rubro.nombre}
-														itemName={rubro.nombre}
-													/>
+													{rubro.tieneEmpresas ? (
+														<Popup itemName={rubro.nombre} />
+													) : (
+														<DeleteItem
+															deleteAsync={deleteAsync}
+															id={rubro.nombre}
+															itemName={rubro.nombre}
+														/>
+													)}
 												</Box>
 											</TableCell>
 										</TableRow>
 									))
-							: isLoading && <SkeletonTable head={TABLE_HEAD} />}
+							: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}
 					</TableBody>
 				</Table>
-				{!rubros && !isLoading && !fetchFailed && (
-					<Box sx={{ width: '100%', textAlign: 'center', mt: 2, mb: 2 }}>
-						<Typography color="textSecondary">No se encontraron rubros</Typography>
-					</Box>
-				)}
-				{fetchFailed && (
-					<Box
-						width={1}
-						sx={{
-							py: 2,
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-						<Warning color="error" sx={{ mr: 2 }} />
-						<Typography textAlign="center" color="error">
-							Error del servidor
+				{(fetchFailed || (!rubros && !isLoading && !filterLoading)) && (
+					<Box width={1} sx={{ py: 2 }}>
+						<Typography textAlign="center" color="textSecondary">
+							No se encontraron rubros.
 						</Typography>
 					</Box>
 				)}
@@ -180,3 +171,53 @@ export default function RubrosTable({ handleSnack }) {
 		</>
 	);
 }
+
+const Popup = ({ itemName }) => {
+	const [open, setOpen] = useState(false);
+
+	/**
+	 * Cambia el estado open a true (abre el dialogo)
+	 * @function handleClickOpen
+	 */
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+	/**
+	 * Cambia el estado open a false (cierra el dialogo)
+	 * @function handleClose
+	 */
+	const handleClose = () => {
+		setOpen(false);
+	};
+	return (
+		<>
+			<IconButton size="small" onClick={handleClickOpen}>
+				<Delete
+					sx={{
+						color: 'text.icon',
+						'&:hover': {
+							color: 'error.light',
+						},
+					}}
+				/>
+			</IconButton>
+			<Dialog
+				PaperProps={{ style: { borderRadius: 15 } }}
+				open={open}
+				TransitionComponent={Transition}
+				onClose={handleClose}>
+				<DialogTitle>{'Aviso el rubro ' + itemName}</DialogTitle>
+				<DialogContent>
+					<DialogContentText display="flex" alignItems="center">
+						<WarningAmber sx={{ mr: 1 }} />
+						No puede ser eliminado, debido a que existen empresas clasificadas con este
+						rubro.
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose}>Cerrar</Button>
+				</DialogActions>
+			</Dialog>
+		</>
+	);
+};

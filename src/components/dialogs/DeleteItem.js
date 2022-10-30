@@ -63,7 +63,7 @@ export default function DeleteItem({ deleteAsync, id, itemName, disabled }) {
 				onClose={handleClose}>
 				<DialogTitle>{'Eliminar ' + itemName + '?'}</DialogTitle>
 				<DialogContent>
-					<DialogContentText display="flex">
+					<DialogContentText display="flex" alignItems="center">
 						<WarningAmber color="error" sx={{ mr: 1 }} />
 						Esta accion removera el item permanentemente.
 					</DialogContentText>
