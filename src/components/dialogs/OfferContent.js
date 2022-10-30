@@ -15,6 +15,7 @@ import {
 	ListItemIcon,
 	Chip,
 	Stack,
+	Tooltip,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import moment from 'moment';
@@ -59,6 +60,11 @@ export default function OfferContent({ offer, children }) {
 					<Typography component="div" sx={{ fontWeight: 'bold', ml: 1, flexGrow: 1 }}>
 						{offer.companie?.razon_social}
 					</Typography>
+					<Tooltip title="Cantidad reclamados">
+						<Typography sx={{ fontSize: 19, fontWeight: 'bold', mr: 2 }}>
+							{offer?.cant_redeemed}
+						</Typography>
+					</Tooltip>
 					<StatusLabel status={offer?.status} />
 				</Box>
 

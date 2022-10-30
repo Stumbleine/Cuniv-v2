@@ -48,7 +48,7 @@ export default function ProductAddForm({ handleSnack, companies }) {
 			nombre: '',
 			descripcion: '',
 			precio: '',
-			tipo: 'Producto',
+			tipo: 'producto',
 			id_empresa: 'none',
 		},
 		validationSchema: Yup.object().shape({

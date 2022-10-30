@@ -24,9 +24,8 @@ const offersSlice = createSlice({
 	initialState,
 	reducers: {
 		setOffers: (state, { payload }) => {
-			state.offers = [];
-
 			state.offers = payload;
+			state.fetchFailed = false;
 			state.isLoading = false;
 			state.filterLoading = false;
 		},

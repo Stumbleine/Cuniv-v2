@@ -81,7 +81,8 @@ export default function Offer({ offer, handleSnack, companies }) {
 						target.onError = null;
 						target.src = '/imgs/defaultImg.svg';
 					}}
-					image={offer?.image || '/imgs/defaultImg.svg'}></CardMedia>
+					image={offer?.image || '/imgs/defaultImg.svg'}
+				/>
 				<StatusLabel elevated={true} status={offer?.status} />
 				<BorderAvatar>
 					<Avatar sx={{ width: 37, height: 37 }} src={offer.companie.logo}>

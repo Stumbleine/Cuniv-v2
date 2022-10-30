@@ -113,32 +113,32 @@ export default function ComplaintPage() {
 				<Grid container spacing={2} alignContent="center" justifyContent="center">
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{complaints &&
-								!filterLoading &&
-								!fetchFailed &&
-								complaints
-									.slice(0, complaints.length / 2 + 1)
-									.map(claim => <Complaint key={claim.id} complaint={claim} />)}
+							{complaints && !filterLoading && !fetchFailed
+								? complaints
+										.slice(0, complaints.length / 2 + 1)
+										.map(claim => <Complaint key={claim.id} complaint={claim} />)
+								: (isLoading || filterLoading) &&
+								  [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
 						</Stack>
-						<Stack spacing={2}>
+						{/* <Stack spacing={2}>
 							{(isLoading || filterLoading) &&
 								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack>
+						</Stack> */}
 					</Grid>
 					{/* {compRow2 && ( */}
 					<Grid item md={6}>
 						<Stack spacing={2} direction="column">
-							{complaints &&
-								!filterLoading &&
-								!fetchFailed &&
-								complaints
-									.slice(complaints.length / 2 + 1)
-									.map(claim => <Complaint key={claim.id} complaint={claim} />)}
+							{complaints && !filterLoading && !fetchFailed
+								? complaints
+										.slice(complaints.length / 2 + 1)
+										.map(claim => <Complaint key={claim.id} complaint={claim} />)
+								: (isLoading || filterLoading) &&
+								  [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
 						</Stack>
-						<Stack spacing={2}>
+						{/* <Stack spacing={2}>
 							{(isLoading || filterLoading) &&
 								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack>
+						</Stack> */}
 					</Grid>
 					<Stack>
 						{(fetchFailed || (!complaints && !isLoading && !filterLoading)) &&

@@ -36,7 +36,9 @@ export default function OffersPage() {
 	const { user, isAdmin } = useSelector(state => state.user);
 	const { profile } = useSelector(state => state.companies);
 	const { accessToken } = useSelector(state => state.login);
-	const { isLoading, filterLoading, offers } = useSelector(state => state.offers);
+	const { isLoading, filterLoading, offers, fetchFailed } = useSelector(
+		state => state.offers
+	);
 	const dispatch = useDispatch();
 
 	const [showButton, setShowButton] = useState(false);
@@ -143,24 +145,19 @@ export default function OffersPage() {
 	const listOffers = () => {
 		return (
 			<Grid container spacing={2}>
-				{filterLoading && (
-					<Box sx={{ display: 'flex', justifyContent: 'center', width: 1, py: 2 }}>
-						<CircularProgress size={24} sx={{ color: green[500] }} />
-					</Box>
-				)}
-				{offers
+				{offers && !filterLoading && !fetchFailed
 					? offers.map(offer => (
 							<Grid item key={offer.id_offer} xs={6} sm={4} md={3} xl={3}>
 								<Offer offer={offer} handleSnack={handleSnack} companies={companies} />
 							</Grid>
 					  ))
-					: isLoading
-					? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]?.map((sk, index) => (
+					: (isLoading || filterLoading) &&
+					  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]?.map((sk, index) => (
 							<Grid item key={index} xs={6} sm={4} md={3} xl={3}>
 								<SkeletonOffer />
 							</Grid>
-					  ))
-					: msgOffersNull()}
+					  ))}
+				{(fetchFailed || (!offers && !isLoading && !filterLoading)) && msgOffersNull()}
 			</Grid>
 		);
 	};

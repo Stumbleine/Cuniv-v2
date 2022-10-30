@@ -27,6 +27,7 @@ const usersSlice = createSlice({
 			state.users = payload;
 			state.isLoading = false;
 			state.filterLoading = false;
+			state.fetchFailed = false;
 		},
 		setLoading: state => {
 			state.isLoading = true;

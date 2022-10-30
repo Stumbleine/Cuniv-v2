@@ -24,9 +24,10 @@ const rubrosSlice = createSlice({
 	initialState,
 	reducers: {
 		setRubros: (state, { payload }) => {
+			state.rubros = payload;
 			state.isLoading = false;
 			state.filterLoading = false;
-			state.rubros = payload;
+			state.fetchFailed = false;
 		},
 		setLoading: state => {
 			state.isLoading = true;

@@ -34,6 +34,7 @@ const companiesSlice = createSlice({
 			state.companies = payload;
 			state.isLoading = false;
 			state.filterLoading = false;
+			state.fetchFailed = false;
 		},
 		setCompaniesNV: (state, { payload }) => {
 			state.companiesNV = payload;
