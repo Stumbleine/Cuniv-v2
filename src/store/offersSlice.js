@@ -144,7 +144,7 @@ export const createOfferAsync =
 export const updateOfferAsync = (token, values, imageFile) => async dispatch => {
 	const b64 = imageFile ? await convertToB64(imageFile) : null;
 	if (b64 !== null) {
-		values = { ...values, picture: b64 };
+		values = { ...values, image: b64 };
 	}
 	// console.log(values);
 	try {

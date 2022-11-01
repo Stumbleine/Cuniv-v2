@@ -282,7 +282,7 @@ export const deleteCompanieAsync = (token, id) => async dispatch => {
 export const updateInfoAsync = (token, values, image) => async dispatch => {
 	const b64 = image ? await convertToB64(image) : null;
 	if (b64) {
-		values = { ...values, image: b64 };
+		values = { ...values, logo: b64 };
 	}
 	try {
 		await API.post(`empresa/update?id=${values.id_empresa}`, values, {

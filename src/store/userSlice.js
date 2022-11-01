@@ -48,7 +48,7 @@ const userSlice = createSlice({
 export const getUserAsync = token => async dispatch => {
 	try {
 		const r = await API.get(`user`, { headers: { Authorization: `Bearer ${token}` } });
-		dispatch(setNavlinks(r.data.permisos));
+		dispatch(setNavlinks(r.data));
 		dispatch(setUser(r.data));
 		// console.log('usersFilter->r:', r.data);
 	} catch (e) {

@@ -222,7 +222,7 @@ export default function CompanieProfile() {
 							sx={{
 								textAlign: 'center',
 							}}>
-							<Typography align="center">Error al cargar informacion</Typography>
+							<Typography align="center">No se encontro la empresa.</Typography>
 							<Button
 								sx={{ mt: 2 }}
 								variant="outlined"

@@ -24,7 +24,12 @@ const settingSlice = createSlice({
 	initialState,
 	reducers: {
 		setNavlinks: (state, { payload }) => {
-			state.navlinks = getNavlinks(payload);
+			console.log(payload);
+			let isAdmin = false;
+			payload?.roles.forEach(r => {
+				isAdmin = r.isadmin && true;
+			});
+			state.navlinks = getNavlinks(payload.permisos, isAdmin);
 		},
 
 		setNewNoti: (state, { payload }) => {

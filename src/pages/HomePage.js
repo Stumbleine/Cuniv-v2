@@ -1,6 +1,8 @@
 import { Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import ShowRoles from '../components/ShowRoles';
 import Steps from '../components/Steps';
@@ -12,6 +14,11 @@ import WarningVerified from '../components/WarningVerified';
  */
 export default function HomePage() {
 	const { user, isAdmin } = useSelector(state => state.user);
+	const navigate = useNavigate();
+	useEffect(() => {
+		isAdmin && navigate('/main/statics');
+	}, []);
+
 	return (
 		<Container maxWidth="xl">
 			<ShowRoles />

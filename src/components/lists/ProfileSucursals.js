@@ -72,7 +72,7 @@ export default function ProfileSucursals({ sucursales, handleSnack }) {
 				<AddCompanyBranch
 					actionType="add-fetch"
 					handleSnack={handleSnack}
-					idEmpresa={sucursales[0].id_empresa}
+					idEmpresa={sucursales[0]?.id_empresa}
 				/>
 			</Box>
 		</Box>

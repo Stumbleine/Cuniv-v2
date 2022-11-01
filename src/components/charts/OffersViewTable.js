@@ -7,6 +7,7 @@ import {
 	TableCell,
 	TableContainer,
 	TableHead,
+	TablePagination,
 	TableRow,
 	Typography,
 } from '@mui/material';
@@ -54,6 +55,17 @@ export default function OffersViewTable() {
 	const TABLE_HEAD = [{ id: 'oferta', label: 'Oferta' }];
 	isAdmin && TABLE_HEAD.push({ id: 'empresa', label: 'Empresa' });
 	TABLE_HEAD.push({ id: 'vis', label: 'Vistas' });
+	TABLE_HEAD.push({ id: 'canjeados', label: 'Canjeados' });
+
+	const [rowsPerPage, setRowsPerPage] = useState(7);
+	const [page, setPage] = useState(0);
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
+	const handleChangeRowsPerPage = event => {
+		setRowsPerPage(parseInt(event.target.value, 7));
+		setPage(0);
+	};
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
 			<Table size="small">
@@ -89,7 +101,7 @@ export default function OffersViewTable() {
 											<Box>
 												<Typography
 													style={{
-														maxWidth: 200,
+														maxWidth: 150,
 														whiteSpace: 'nowrap',
 														textOverflow: 'ellipsis',
 														overflow: 'hidden',
@@ -106,10 +118,15 @@ export default function OffersViewTable() {
 											</Box>
 										</Stack>
 									</TableCell>
-									{isAdmin && <TableCell>{offer.razon_social}</TableCell>}
+									{isAdmin && <TableCell align="center">{offer.razon_social}</TableCell>}
 									<TableCell align="center">
 										<Typography sx={{ fontSize: 20, fontWeight: 'bold' }}>
 											{offer.count}
+										</Typography>
+									</TableCell>
+									<TableCell align="center">
+										<Typography sx={{ fontSize: 20, fontWeight: 'bold' }}>
+											{offer.count_redeemed}
 										</Typography>
 									</TableCell>
 								</TableRow>
@@ -139,6 +156,17 @@ export default function OffersViewTable() {
 						Error del servidor
 					</Typography>
 				</Box>
+			)}
+			{offersView && (
+				<TablePagination
+					rowsPerPageOptions={[7, 10]}
+					component="div"
+					count={offersView?.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					onPageChange={handleChangePage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+				/>
 			)}
 		</TableContainer>
 	);

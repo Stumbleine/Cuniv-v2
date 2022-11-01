@@ -20,8 +20,11 @@ export const hasPrivilege = (pArray, userPermissions) => {
  * @param {Array} userPermissions permisos del usuario
  * @export getNavlinks
  */
-export const getNavlinks = userPermissions => {
-	const navlinks = [{ name: 'Inicio', path: 'home', icon: 'home' }];
+export const getNavlinks = (userPermissions, isAdmin) => {
+	const navlinks = [];
+
+	!isAdmin && navlinks.push({ name: 'Inicio', path: 'home', icon: 'home' });
+
 	hasPrivilege(['listar ofertas', 'gestionar ofertas'], userPermissions) &&
 		navlinks.push(getLink('Ofertas'));
 	hasPrivilege(['listar productos', 'gestionar productos'], userPermissions) &&
@@ -31,8 +34,14 @@ export const getNavlinks = userPermissions => {
 		: hasPrivilege(['perfil de empresa'], userPermissions) &&
 		  navlinks.push(getLink('Mi Empresa'));
 
-	hasPrivilege(['estadisticas'], userPermissions) &&
-		navlinks.push(getLink('Estadisticas'));
+	if (hasPrivilege(['estadisticas'], userPermissions)) {
+		if (isAdmin) {
+			navlinks.unshift(getLink('Estadisticas'));
+		} else {
+			navlinks.push(getLink('Estadisticas'));
+		}
+	}
+
 	hasPrivilege(['listar usuarios', 'gestionar usuarios'], userPermissions) &&
 		navlinks.push(getLink('Usuarios'));
 	hasPrivilege(['listar rubros', 'gestionar rubros'], userPermissions) &&
@@ -63,14 +72,14 @@ export const links = [
 	{ name: 'Rubros', path: 'rubros', icon: 'rubros' }, // listar rubros o gestionar rubros
 	{ name: 'Estadisticas', path: 'statics', icon: 'analytics' }, // estadisticas??
 	// only admins
-	{ name: 'Locaciones', path: 'locations', icon: 'home' },
-	{ name: 'Links', path: 'links', icon: 'home' },
-	{ name: 'Reclamos', path: 'complaints', icon: 'home' },
+	{ name: 'Locaciones', path: 'locations', icon: 'locations' },
+	{ name: 'Links', path: 'links', icon: 'links' },
+	{ name: 'Reclamos', path: 'complaints', icon: 'claims' },
 	{ name: 'Usuarios', path: 'users', icon: 'users' }, // listar usuarios
 	// only proveedor
-	{ name: 'Mi Empresa', path: 'profileCompanie', icon: 'mycompanie' }, // perfil de empresa
+	{ name: 'Mi Empresa', path: 'profileCompanie', icon: 'store' }, // perfil de empresa
 	// only Cajero
-	{ name: 'Cajero', path: 'cashier', icon: 'redeem' }, // canjear codigo
+	{ name: 'Cajero', path: 'cashier', icon: 'cashier' }, // canjear codigo
 ];
 /**
  * Verifica si el usuario tiene los permisos necesarios en su lista de permisos,

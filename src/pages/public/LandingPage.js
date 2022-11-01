@@ -15,6 +15,7 @@ import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
+import Popup from '../../components/dialogs/Popup';
 import { loginGoogleAsync } from '../../store/loginSlice';
 /**
  * Orgniza las imagenes de la lista
@@ -39,24 +40,33 @@ export default function LandingPage() {
 	const dispatch = useDispatch();
 	const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 	const [loginError, setLoginError] = useState(false);
-
+	const [open, setOpen] = useState(false);
+	const handleCloseFromFather = () => {
+		setOpen(false);
+	};
 	/**
 	 * realiza una peticion al servidor para iniciar sesion.
 	 * @function onLoginSuccess
 	 */
 	const onLoginSuccess = res => {
 		console.log('Login Success:', res.profileObj);
-		const login = async () => {
-			await dispatch(loginGoogleAsync(res.profileObj));
-		};
-		login()
-			.then(r => {
-				setLoginError(false);
-			})
-			.catch(e => {
-				setLoginError(true);
-				// console.log(e);
-			});
+		const cadenas = res.profileObj.email.split('@');
+		console.log(cadenas);
+		if (cadenas[1] === 'est.umss.edu') {
+			setOpen(true);
+		} else {
+			const login = async () => {
+				await dispatch(loginGoogleAsync(res.profileObj));
+			};
+			login()
+				.then(r => {
+					setLoginError(false);
+				})
+				.catch(e => {
+					setLoginError(true);
+					// console.log(e);
+				});
+		}
 	};
 	/**
 	 * Evento que inprime el error al iniciar sesion con google
@@ -76,6 +86,7 @@ export default function LandingPage() {
 	];
 	return (
 		<>
+			<Popup openFromFather={open} handleCloseFromFather={handleCloseFromFather} />
 			<Box
 				sx={{
 					background: '#0a1928',

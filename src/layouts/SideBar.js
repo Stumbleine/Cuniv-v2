@@ -45,10 +45,7 @@ export default function SideBar({ openSideBar, onCloseSideBar }) {
 							sx={{
 								ml: 2,
 							}}>
-							<Typography
-								variant="subtitle2"
-								noWrap
-								sx={{ color: 'text.primary', textTransform: 'lowercase' }}>
+							<Typography variant="subtitle2" noWrap sx={{ color: 'text.primary' }}>
 								{user.nombres + ' ' + user.apellidos}
 							</Typography>
 							<Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -74,11 +71,11 @@ export default function SideBar({ openSideBar, onCloseSideBar }) {
 						<Box
 							component="img"
 							src={`/svgs/icons/nav/${item.icon}.svg`}
-							style={{
+							style={{ color: 'red' }}
+							sx={{
 								marginRight: '20px',
-								width: 24,
-								height: 24,
-								color: 'text.secondary',
+								width: 26,
+								height: 26,
 							}}
 						/>
 						{item.name}

@@ -96,7 +96,7 @@ function AccountPopover() {
 				open={Boolean(anchorElUser)}
 				onClose={handleCloseUserMenu}>
 				<Box sx={{ my: 1, px: 2.5 }}>
-					<Typography variant="subtitle1" noWrap sx={{ textTransform: 'lowercase' }}>
+					<Typography variant="subtitle1" noWrap>
 						{user.nombres} {user.apellidos}
 					</Typography>
 					<Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
