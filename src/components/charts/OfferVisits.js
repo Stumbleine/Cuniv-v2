@@ -164,6 +164,10 @@ export default function OfferVisits() {
 
 	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
+	useEffect(() => {
+		console.log(status);
+	}, [status]);
+
 	return (
 		<Stack component={Card}>
 			<CardHeader
@@ -281,7 +285,8 @@ export default function OfferVisits() {
 						height={450}
 					/>
 				)}
-				{status.error && (
+				{/* 
+				{((offersViewChart.length !== 0 && !status.isLoading) || status.error) && (
 					<Box
 						width={1}
 						sx={{
@@ -289,13 +294,11 @@ export default function OfferVisits() {
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
+							background: 'pink',
 						}}>
-						<Warning color="error" sx={{ mr: 2 }} />
-						<Typography textAlign="center" color="error">
-							Error del servidor
-						</Typography>
+						<Typography textAlign="center">No hay datos para mostrar.</Typography>
 					</Box>
-				)}
+				)} */}
 			</Box>
 		</Stack>
 	);
