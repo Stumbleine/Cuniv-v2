@@ -67,11 +67,15 @@ export default function OfferVisits() {
 			name: 'Ofertas vistas',
 			data: offersViewChart
 				? chartMode === 'daily'
-					? offersViewChart?.daily.data
-					: offersViewChart?.monthly.data
+					? offersViewChart.daily?.data || []
+					: offersViewChart.monthly?.data || []
 				: [],
 		},
 	];
+	useEffect(() => {
+		console.log(data);
+	}, [data]);
+
 	/**
 	 * Configuracion de propiedades del grafico de tipo Area
 	 * @constant chartOptions
@@ -100,18 +104,18 @@ export default function OfferVisits() {
 				? chartMode === 'daily'
 					? offersViewChart?.daily.labels
 					: offersViewChart?.monthly.labels
-				: [],
+				: null,
 		},
 		noData: {
-			text: 'No hay datos...',
+			text: 'No hay datos para mostrar.',
 			align: 'center',
 			verticalAlign: 'middle',
 			offsetX: 0,
 			offsetY: 0,
 			style: {
-				color: '#000000',
-				fontSize: '14px',
-				fontFamily: 'Helvetica',
+				color: '#547290',
+				fontSize: '16px',
+				// fontFamily: 'Helvetica',
 			},
 		},
 	};
@@ -164,9 +168,9 @@ export default function OfferVisits() {
 
 	const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
-	useEffect(() => {
-		console.log(status);
-	}, [status]);
+	// useEffect(() => {
+	// 	console.log(status);
+	// }, [status]);
 
 	return (
 		<Stack component={Card}>
@@ -268,16 +272,6 @@ export default function OfferVisits() {
 						/>
 					</Box>
 				) : (
-					status.success && (
-						<ReactApexChart
-							type="area"
-							series={data}
-							options={chartViewOptions}
-							height={450}
-						/>
-					)
-				)}
-				{!offersViewChart && !status.isLoading && !status.error && (
 					<ReactApexChart
 						type="area"
 						series={data}
@@ -285,8 +279,17 @@ export default function OfferVisits() {
 						height={450}
 					/>
 				)}
-				{/* 
-				{((offersViewChart.length !== 0 && !status.isLoading) || status.error) && (
+
+				{/* {!offersViewChart && !status.isLoading && !status.error && (
+					<ReactApexChart
+						type="area"
+						series={data}
+						options={chartViewOptions}
+						height={450}
+					/>
+				)} */}
+
+				{/* {!status.isLoading && status.error && status.success && (
 					<Box
 						width={1}
 						sx={{

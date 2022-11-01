@@ -80,7 +80,9 @@ export default function StaticsPage() {
 							/>
 						) : (
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
-								{summary?.total_views ? summary.total_views : status.error && '?'}
+								{summary?.total_views || summary?.total_views === 0
+									? summary.total_views
+									: status.error && '?'}
 							</Typography>
 						)}
 						<Typography variant="body2" color="textSecondary">
@@ -97,7 +99,9 @@ export default function StaticsPage() {
 							/>
 						) : (
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
-								{summary?.total_codes ? summary.total_codes : status.error && '?'}
+								{summary?.total_codes || summary?.total_codes === 0
+									? summary.total_codes
+									: status.error && '?'}
 							</Typography>
 						)}
 						<Typography variant="body2" color="textSecondary">
@@ -114,11 +118,13 @@ export default function StaticsPage() {
 							/>
 						) : (
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
-								{summary?.total_redeemed ? summary.total_redeemed : status.error && '?'}
+								{summary?.total_redeemed || summary?.total_redeemed === 0
+									? summary.total_redeemed
+									: status.error && '?'}
 							</Typography>
 						)}
 						<Typography color="textSecondary" variant="body2">
-							codigo cajeados totales
+							codigos cajeados totales
 						</Typography>
 					</Box>
 				</Stack>

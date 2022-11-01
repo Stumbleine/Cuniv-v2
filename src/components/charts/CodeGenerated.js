@@ -71,8 +71,8 @@ export default function CodeGenerated() {
 			type: 'area',
 			data: codeGenerated
 				? chartMode === 'daily'
-					? codeGenerated?.daily.data
-					: codeGenerated?.monthly.data
+					? codeGenerated?.daily.data || []
+					: codeGenerated?.monthly.data || []
 				: [],
 		},
 	];
@@ -115,6 +115,18 @@ export default function CodeGenerated() {
 					? codeGenerated?.daily.labels
 					: codeGenerated?.monthly.labels
 				: [],
+		},
+		noData: {
+			text: 'No hay datos para mostrar.',
+			align: 'center',
+			verticalAlign: 'middle',
+			offsetX: 0,
+			offsetY: 0,
+			style: {
+				color: '#547290',
+				fontSize: '16px',
+				// fontFamily: 'Helvetica',
+			},
 		},
 	};
 	/**
@@ -267,32 +279,7 @@ export default function CodeGenerated() {
 						/>
 					</Box>
 				) : (
-					status.success && (
-						<ReactApexChart
-							type="area"
-							series={data}
-							options={chartOptions}
-							height={390}
-						/>
-					)
-				)}
-				{!codeGenerated && !status.isLoading && !status.error && (
 					<ReactApexChart type="area" series={data} options={chartOptions} height={390} />
-				)}
-				{status.error && (
-					<Box
-						width={1}
-						sx={{
-							py: 2,
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}>
-						<Warning color="error" sx={{ mr: 2 }} />
-						<Typography textAlign="center" color="error">
-							Error del servidor
-						</Typography>
-					</Box>
 				)}
 			</Box>
 		</Stack>

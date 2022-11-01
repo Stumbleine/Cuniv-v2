@@ -135,25 +135,10 @@ export default function OffersViewTable() {
 				</TableBody>
 			</Table>
 
-			{!offersView && !statusFetch.isLoading && !statusFetch.error && (
+			{(statusFetch.error || (!offersView && !statusFetch.isLoading)) && (
 				<Box width={1} sx={{ py: 2 }}>
 					<Typography textAlign="center" color="textSecondary">
-						No se encontraron las ofertas
-					</Typography>
-				</Box>
-			)}
-			{statusFetch.error && (
-				<Box
-					width={1}
-					sx={{
-						py: 2,
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-					<Warning color="error" sx={{ mr: 2 }} />
-					<Typography textAlign="center" color="error">
-						Error del servidor
+						No hay datos para mostrar.
 					</Typography>
 				</Box>
 			)}
