@@ -24,7 +24,6 @@ const settingSlice = createSlice({
 	initialState,
 	reducers: {
 		setNavlinks: (state, { payload }) => {
-			console.log(payload);
 			let isAdmin = false;
 			payload?.roles.forEach(r => {
 				isAdmin = r.isadmin && true;
@@ -56,7 +55,6 @@ export const notificationsAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setNotifications(r.data));
-		console.log('Notis=>', r.data);
 	} catch (e) {
 		throw new Error(e);
 	}

@@ -59,7 +59,6 @@ export default function LoginPage() {
 					setLoginError(false);
 				})
 				.catch(e => {
-					console.log(e.msg);
 					setLoginError(true);
 					// setMsgError(e.response.data);
 				});

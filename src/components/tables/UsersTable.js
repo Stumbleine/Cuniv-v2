@@ -14,7 +14,7 @@ import {
 import { green, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SkeletonTable from '../skeletons/SkeletonTable';
 import 'moment/locale/es';
@@ -105,6 +105,27 @@ export default function UsersTable() {
 				handleSnack('Algo salio, vuelva a intentarlo', 'error');
 			});
 	};
+	const Actions = ({ user }) => {
+		const [isProvider, setIsProvider] = useState(false);
+		useEffect(() => {
+			user?.roles.forEach(r => {
+				if (r.name === 'PRV') {
+					setIsProvider(true);
+				}
+			});
+		}, [user]);
+		return (
+			<Box sx={{ display: 'flex' }}>
+				<Edituser user={user} handleSnack={handleSnack} disabled={!isProvider} />
+				<DeleteItem
+					deleteAsync={deleteAsync}
+					id={user.id}
+					itemName={user.nombres}
+					disabled={!isProvider}
+				/>
+			</Box>
+		);
+	};
 
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
@@ -177,14 +198,7 @@ export default function UsersTable() {
 											</Box>
 										</TableCell>
 										<TableCell align="right">
-											<Box sx={{ display: 'flex' }}>
-												<Edituser user={user} handleSnack={handleSnack} />
-												<DeleteItem
-													deleteAsync={deleteAsync}
-													id={user.id}
-													itemName={user.nombres}
-												/>
-											</Box>
+											<Actions user={user} />
 										</TableCell>
 									</TableRow>
 								))

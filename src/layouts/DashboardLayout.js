@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBadge, setNewNoti } from '../store/settingSlice';
 import Waterdrop from '../assets/water-drop.mp3';
 import Footer from '../components/Footer';
+import { getUserAsync } from '../store/userSlice';
 
 const Page = styled('div')(({ theme }) => ({
 	minHeight: '100vh',
@@ -28,6 +29,8 @@ const Page = styled('div')(({ theme }) => ({
 export default function DashboardLayout() {
 	const dispatch = useDispatch();
 	const { user, isAdmin } = useSelector(state => state.user);
+	const { accessToken } = useSelector(state => state.login);
+
 	const [openSB, setOpenSB] = useState(false);
 	const [snack, setSnack] = useState({
 		open: false,
@@ -38,6 +41,9 @@ export default function DashboardLayout() {
 		},
 		redirectPath: null,
 	});
+	window.onload = function () {
+		dispatch(getUserAsync(accessToken));
+	};
 	/**
 	 * Funcion de cierre de la notificacion
 	 * @function closeSnack

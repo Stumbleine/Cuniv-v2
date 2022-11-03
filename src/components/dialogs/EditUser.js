@@ -11,7 +11,7 @@ import {
 	Stack,
 	TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,9 @@ import { Transition } from '../../Utils/Transitions';
  * @property {Function} handleSnack function que llama al componente snackbar (alerta)
  * @exports Edituser
  */
-export default function Edituser({ user, handleSnack }) {
+export default function Edituser({ user, handleSnack, disabled }) {
+	// console.log(user);
+
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [open, setOpen] = useState(false);
@@ -100,10 +102,10 @@ export default function Edituser({ user, handleSnack }) {
 
 	return (
 		<>
-			<IconButton size="small" onClick={handleClickOpen}>
+			<IconButton disabled={disabled} size="small" onClick={handleClickOpen}>
 				<Edit
 					sx={{
-						color: 'text.icon',
+						color: disabled ? '' : 'text.icon',
 						'&:hover': {
 							color: 'warning.light',
 						},

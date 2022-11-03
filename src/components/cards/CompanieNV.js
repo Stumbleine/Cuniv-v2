@@ -120,11 +120,11 @@ export default function CompanieNV({ companie, handleSnack }) {
 				</Box>
 			</CardActionArea>
 			<CardContent sx={{ textAlign: 'start' }}>
-				<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+				<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }} noWrap>
 					{companie.razon_social}
 				</Typography>
 				<Typography variant="body1">{companie.rubro}</Typography>
-				<Typography variant="body1" color="textSecondary">
+				<Typography variant="body1" color="textSecondary" noWrap>
 					{companie.email}
 				</Typography>
 			</CardContent>

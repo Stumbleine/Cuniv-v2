@@ -179,10 +179,10 @@ function UserCreateForm({ handleSnack }) {
 	);
 }
 export const rols = [
-	{ id_rol: 3, rol: 'SADM', label: 'Super Administrador' },
+	// { id_rol: 3, rol: 'SADM', label: 'Super Administrador' },
 	{ id_rol: 2, rol: 'ADM', label: 'Administrador' },
 	{ id_rol: 1, rol: 'PRV', label: 'Proveedor' },
-	{ id_rol: 4, rol: 'EST', label: 'Estudiante' },
+	// { id_rol: 4, rol: 'EST', label: 'Estudiante' },
 	// { id_rol: 5, rol: 'CJRO', label: 'Cajero' },
 ];
 

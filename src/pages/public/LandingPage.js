@@ -49,9 +49,7 @@ export default function LandingPage() {
 	 * @function onLoginSuccess
 	 */
 	const onLoginSuccess = res => {
-		console.log('Login Success:', res.profileObj);
 		const cadenas = res.profileObj.email.split('@');
-		console.log(cadenas);
 		if (cadenas[1] === 'est.umss.edu') {
 			setOpen(true);
 		} else {

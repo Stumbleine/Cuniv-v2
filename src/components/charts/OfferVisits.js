@@ -72,9 +72,6 @@ export default function OfferVisits() {
 				: [],
 		},
 	];
-	useEffect(() => {
-		console.log(data);
-	}, [data]);
 
 	/**
 	 * Configuracion de propiedades del grafico de tipo Area
@@ -182,7 +179,7 @@ export default function OfferVisits() {
 						sx={{ fontSize: 17, fontWeight: 'bold', alignItems: 'center' }}>
 						Ofertas visualizadas
 						<Typography sx={{ fontSize: 14, ml: 1, color: 'text.secondary' }}>
-							(Datos extraidos del ultimo año)
+							(Datos del último mes/año)
 						</Typography>
 					</Typography>
 				}

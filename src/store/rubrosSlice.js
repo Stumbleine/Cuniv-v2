@@ -62,7 +62,7 @@ export const rubrosAsync = token => async dispatch => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(setRubros(r.data));
-		console.log('RubrosData->r:', r.data);
+		// console.log('RubrosData->r:', r.data);
 	} catch (e) {
 		dispatch(setFetchFailed());
 		throw new Error(e);
@@ -85,7 +85,7 @@ export const filterRubrosAsync =
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			dispatch(setRubros(r.data));
-			console.log('filterData->r:', r.data);
+			// console.log('filterData->r:', r.data);
 		} catch (e) {
 			dispatch(setFetchFailed());
 			throw new Error(e);
@@ -99,7 +99,6 @@ export const filterRubrosAsync =
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
 export const deleteRubroAsync = (token, id) => async dispatch => {
-	console.log(id);
 	try {
 		await API.delete(`rubro/delete?id=${id}`, {
 			headers: { Authorization: `Bearer ${token}` },
@@ -122,7 +121,6 @@ export const updateRubroAsync = (token, values, icon) => async dispatch => {
 	if (b64 !== null) {
 		values = { ...values, icono: b64 };
 	}
-	console.log(values);
 	try {
 		await API.post(`user/update?id=${values.id}`, values, {
 			headers: { Authorization: `Bearer ${token}` },

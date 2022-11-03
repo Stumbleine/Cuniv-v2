@@ -189,7 +189,7 @@ export default function CodeGenerated() {
 						sx={{ fontSize: 17, fontWeight: 'bold', alignItems: 'center' }}>
 						Codigos generados
 						<Typography sx={{ fontSize: 14, ml: 1, color: 'text.secondary' }}>
-							(Datos del ultimo año)
+							(Datos del último mes/año)
 						</Typography>{' '}
 					</Typography>
 				}

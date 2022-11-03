@@ -136,7 +136,7 @@ export default function SupplierCompaniesPage() {
 							</Grid>
 					  ))}
 				{(fetchFailed ||
-					(!companiesNV.pending.length >= 0 && !isLoading && !filterLoading)) && (
+					(companiesNV.pending.length === 0 && !isLoading && !filterLoading)) && (
 					<MsgCompaniesNull>
 						No han llegado nuevas solicitudes de afiliacion
 					</MsgCompaniesNull>
