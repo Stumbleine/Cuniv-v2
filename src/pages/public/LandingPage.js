@@ -94,7 +94,7 @@ export default function LandingPage() {
 						<Grid item xs={12} md={6} lg={6}>
 							<Grid item>
 								<Box>
-									<Stack spacing={2}>
+									<Stack spacing={2} sx={{ mr: 1 }}>
 										<Typography
 											variant="h5"
 											color={grey[300]}
@@ -106,10 +106,11 @@ export default function LandingPage() {
 											Comparte ofertas, promociona productos y{' '}
 										</Typography>
 										<Typography
-											variant="h2"
+											// variant="h3"
 											sx={{
 												fontWeight: 'bold',
-												lineHeight: 1,
+												// lineHeight: 1,
+												fontSize: 55,
 												pr: 2,
 												color: grey[100],
 												textAlign: { xs: 'center', md: 'left' },
@@ -124,8 +125,8 @@ export default function LandingPage() {
 												textAlign: { xs: 'center', md: 'left' },
 											}}>
 											Se parte de una de las empresas afiliadas, obten una cuenta,
-											comienza a compartir tus promociones y productos con los estudiantes
-											de la UMSS.
+											comienza a compartir promociones y productos con los estudiantes de
+											la Universidad Mayor de San Simón.
 										</Typography>
 									</Stack>
 									<Stack
@@ -133,7 +134,7 @@ export default function LandingPage() {
 										sx={{ mt: 3, textAlign: 'center', alignItems: 'center' }}>
 										<Box sx={{ textAlign: 'center' }}>
 											<Typography variant="body1" color={grey[300]}>
-												¿Quieres afiliarte? Accede con Google para mayor información
+												¿Quieres afiliarte? Accede con Google
 											</Typography>
 										</Box>
 										<GoogleLogin
@@ -172,7 +173,7 @@ export default function LandingPage() {
 											startIcon={<Android />}
 											size="large"
 											variant="contained">
-											Descargar app
+											Descarga nuestra app
 										</Button>
 									</Stack>
 								</Box>

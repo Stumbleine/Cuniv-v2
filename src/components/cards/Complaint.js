@@ -4,6 +4,7 @@ import {
 	AccordionDetails,
 	AccordionSummary,
 	Avatar,
+	Button,
 	Card,
 	Divider,
 	Stack,
@@ -13,6 +14,7 @@ import { grey } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import moment from 'moment';
 import React from 'react';
+import ComplaintDetail from '../dialogs/ComplaintDetail';
 import StatusLabel from '../StatusLabel';
 /**
  * Tarjeta de reclamo que muestra informacion del reclamo, con la foto del estudiante, info de oferta y empresa a la que pertenecese
@@ -32,7 +34,7 @@ export default function Complaint({ complaint }) {
 	};
 	return (
 		<Card sx={{ p: 2 }}>
-			<Stack spacing={1} sx={{ mb: 1 }}>
+			<Stack spacing={1}>
 				<Box
 					sx={{
 						display: 'flex',
@@ -61,8 +63,11 @@ export default function Complaint({ complaint }) {
 					</Box>
 				</Box>
 				<Typography color="textSecondary">{complaint?.description}</Typography>
+				<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+					<ComplaintDetail complaint={complaint} />
+				</Box>
 			</Stack>
-
+			{/* 
 			<Accordion
 				sx={{ py: 0 }}
 				disableGutters
@@ -118,7 +123,7 @@ export default function Complaint({ complaint }) {
 						</Stack>
 					</Box>
 				</AccordionDetails>
-			</Accordion>
+			</Accordion> */}
 		</Card>
 	);
 }

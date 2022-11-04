@@ -1,5 +1,4 @@
 import { Container, Stack, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -26,22 +25,25 @@ export default function HomePage() {
 				<WarningVerified>¡Su empresa a un no fue verificado!</WarningVerified>
 			)}
 
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'center',
-				}}>
-				{isAdmin ? (
+			<Stack spacing={1} sx={{ mt: 2 }}>
+				{/* {isAdmin ? (
 					<Stack spacing={1}>
 						<Typography variant="h2" fontWeight="bold" aling="center">
 							¡Bienvenido administrador!
 						</Typography>
-						{/* <Typography color="textSecondary"  aling="center"></Typography> */}
 					</Stack>
-				) : (
-					<Steps />
-				)}
-			</Box>
+				) : ( */}
+				<Stack spacing={1}>
+					<Typography variant="h4" fontWeight="bold">
+						¡Hola {user.nombres}, Bienvenido!
+					</Typography>
+					<Typography variant="h5" color="textSecondary">
+						Estamos contentos de tenerte aqui.
+					</Typography>
+				</Stack>
+				{/* )} */}
+				{!isAdmin && <Steps />}
+			</Stack>
 		</Container>
 	);
 }

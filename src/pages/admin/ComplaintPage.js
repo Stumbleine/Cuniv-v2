@@ -110,36 +110,20 @@ export default function ComplaintPage() {
 						</FormControl>
 					</FilterBar>
 				</Box>
-				<Grid container spacing={2} alignContent="center" justifyContent="center">
-					<Grid item md={6}>
-						<Stack spacing={2} direction="column">
-							{complaints && !filterLoading && !fetchFailed
-								? complaints
-										.slice(0, complaints.length / 2 + 1)
-										.map(claim => <Complaint key={claim.id} complaint={claim} />)
-								: (isLoading || filterLoading) &&
-								  [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack>
-						{/* <Stack spacing={2}>
-							{(isLoading || filterLoading) &&
-								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack> */}
-					</Grid>
-					{/* {compRow2 && ( */}
-					<Grid item md={6}>
-						<Stack spacing={2} direction="column">
-							{complaints && !filterLoading && !fetchFailed
-								? complaints
-										.slice(complaints.length / 2 + 1)
-										.map(claim => <Complaint key={claim.id} complaint={claim} />)
-								: (isLoading || filterLoading) &&
-								  [1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack>
-						{/* <Stack spacing={2}>
-							{(isLoading || filterLoading) &&
-								[1, 2, 3, 4]?.map((sk, index) => <Skeletonclaim key={index} />)}
-						</Stack> */}
-					</Grid>
+				<Grid container spacing={2}>
+					{complaints && !filterLoading && !fetchFailed
+						? complaints.map(claim => (
+								<Grid key={claim.id} item xs={12} md={6}>
+									<Complaint complaint={claim} />
+								</Grid>
+						  ))
+						: (isLoading || filterLoading) &&
+						  [1, 2, 3, 4, 5, 6]?.map((sk, index) => (
+								<Grid key={index} item xs={12} md={6}>
+									<Skeletonclaim />
+								</Grid>
+						  ))}
+
 					<Stack>
 						{(fetchFailed || (!complaints && !isLoading && !filterLoading)) &&
 							msgclaimsNull()}
