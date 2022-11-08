@@ -73,10 +73,8 @@ export default function AccountProfile() {
 		},
 		validationSchema: Yup.object().shape({
 			email: Yup.string()
-				.email(
-					'El correo electrónico debe ser una dirección de correo electrónico válida'
-				)
-				.required('Correo Electronico es requerido'),
+				.email('El correo electrónico debe ser una dirección válida')
+				.required('Correo electrónico es requerido'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
@@ -88,11 +86,11 @@ export default function AccountProfile() {
 			};
 			fetch()
 				.then(r => {
-					handleSnack('Locacion agregado exitosamente', 'success');
+					handleSnack('Cuenta actualizada exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(r => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -188,7 +186,7 @@ export default function AccountProfile() {
 										variant="outlined"
 										size="small"
 										label="Email"
-										placeholder="Correo electronico"
+										placeholder="Correo electrónico"
 										{...getFieldProps('email')}
 										error={Boolean(touched.email && errors.email)}
 										helperText={touched.email && errors.email}

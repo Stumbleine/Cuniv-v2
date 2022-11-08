@@ -67,7 +67,7 @@ export default function CodeGenerated() {
 	 */
 	const data = [
 		{
-			name: 'Codigos generados',
+			name: 'Códigos generados',
 			type: 'area',
 			data: codeGenerated
 				? chartMode === 'daily'
@@ -187,7 +187,7 @@ export default function CodeGenerated() {
 						component="span"
 						display="flex"
 						sx={{ fontSize: 17, fontWeight: 'bold', alignItems: 'center' }}>
-						Codigos generados
+						Códigos generados
 						<Typography sx={{ fontSize: 14, ml: 1, color: 'text.secondary' }}>
 							(Datos del último mes/año)
 						</Typography>{' '}

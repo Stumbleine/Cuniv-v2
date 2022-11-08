@@ -87,12 +87,12 @@ export default function EditLink({ link, handleSnack }) {
 			};
 			edit()
 				.then(() => {
-					handleSnack('Link actualizado exitosamente', 'success');
+					handleSnack('Link actualizado exitosamente.', 'success');
 					handleClose();
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					isSubmitting(false);
 				});
 		},

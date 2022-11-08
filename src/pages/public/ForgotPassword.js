@@ -62,10 +62,8 @@ export default function ForgotPassword() {
 		},
 		validationSchema: Yup.object().shape({
 			email: Yup.string()
-				.email(
-					'El correo electrónico debe ser una dirección de correo electrónico válida'
-				)
-				.required('Correo Electronico es requerido'),
+				.email('El correo electrónico debe ser una dirección válida')
+				.required('Correo electrónico es requerido'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
@@ -78,11 +76,11 @@ export default function ForgotPassword() {
 			fetch()
 				.then(r => {
 					setForgot(true);
-					handleSnack('Locacion agregado exitosamente', 'success');
+					handleSnack('Email enviado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(r => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salio mal, vuelva a intentarlo', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -101,15 +99,15 @@ export default function ForgotPassword() {
 						<Box sx={{ my: 3 }}>
 							<Typography variant="h4">Reestablecer contraseña</Typography>
 							<Typography color="textSecondary" sx={{ mt: 1 }}>
-								Ingrese el correo electronico asociado con su cuenta de somossansi y
-								nosotros enviaremos un correo con las instrucciones para reestablecer su
-								contraseña
+								Ingrese el correo electrónico asociado con su cuenta de somossansi y
+								nosotros enviaremos un correo con las instrucciones para restablecer su
+								contraseña.
 							</Typography>
 						</Box>
 						<TextField
 							fullWidth
 							margin="normal"
-							label="Correo Electronico"
+							label="Correo electrónico"
 							type="email"
 							InputProps={{
 								startAdornment: (

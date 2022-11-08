@@ -97,8 +97,8 @@ export default function AddCompanyBranch({
 		},
 		enableReinitialize: true,
 		validationSchema: Yup.object().shape({
-			name: Yup.string().required('nombre de sucursal es requerido'),
-			address: Yup.string().required('direccion es requerido'),
+			name: Yup.string().required('Nombre de sucursal es requerido'),
+			address: Yup.string().required('Direccion es requerido'),
 		}),
 		validate: validateMap,
 		onSubmit: (valores, { resetForm, setSubmitting }) => {
@@ -135,12 +135,12 @@ export default function AddCompanyBranch({
 				};
 				editAsync()
 					.then(() => {
-						handleSnack('Sucursal actualizado exitosamente', 'success');
+						handleSnack('Sucursal actualizado exitosamente.', 'success');
 						resetForm();
 						handleClose();
 					})
 					.catch(() => {
-						handleSnack('Algo salio, vuelva a intentarlo', 'error');
+						handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 						setSubmitting(false);
 						handleClose();
 					});
@@ -154,12 +154,12 @@ export default function AddCompanyBranch({
 				};
 				addAsync()
 					.then(() => {
-						handleSnack('Sucursal añadido exitosamente', 'success');
+						handleSnack('Sucursal añadido exitosamente.', 'success');
 						resetForm();
 						handleClose();
 					})
 					.catch(() => {
-						handleSnack('Algo salio, vuelva a intentarlo', 'error');
+						handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 						setSubmitting(false);
 						handleClose();
 					});
@@ -202,10 +202,10 @@ export default function AddCompanyBranch({
 						<Form noValidate onSubmit={handleSubmit}>
 							<Box>
 								<TextField
-									required
-									variant="outlined"
-									label="nombre"
 									autoFocus
+									variant="outlined"
+									size="small"
+									label="Nombre"
 									InputProps={{
 										style: {
 											color: grey[900],
@@ -217,11 +217,10 @@ export default function AddCompanyBranch({
 									helperText={touched.name && errors.name}
 								/>
 								<TextField
-									required
 									variant="outlined"
-									label="Direccion"
-									placeholder="ejem. Av. Ayacucho #723"
-									autoFocus
+									label="Dirección"
+									size="small"
+									placeholder="Ejemplo: Av. Ayacucho #723"
 									InputProps={{
 										style: {
 											color: grey[900],

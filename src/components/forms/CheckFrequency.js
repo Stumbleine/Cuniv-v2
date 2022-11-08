@@ -26,9 +26,9 @@ export default function CheckFrequency({ handleFrequency, fr }) {
 		}
 	}
 	const frequencies = [
-		{ id: 1, time: 'unlimited', label: 'ilimitado' },
-		{ id: 2, time: 'one', label: 'una vez' },
-		{ id: 3, time: 'no-redeem', label: 'sin canje' },
+		{ id: 1, time: 'unlimited', label: 'Ilimitado' },
+		{ id: 2, time: 'one', label: 'Una vez' },
+		{ id: 3, time: 'no-redeem', label: 'Sin canje' },
 	];
 
 	const [isChecked, setIsChecked] = React.useState(frDefault);
@@ -44,7 +44,7 @@ export default function CheckFrequency({ handleFrequency, fr }) {
 		<Box sx={{ width: '100%' }}>
 			<Typography sx={{ fontWeight: 'bold' }}>Frecuencia de canje</Typography>
 			<InputLabel sx={{ mb: 1 }}>
-				Seleccione cuantas veces un universitario puede canjear la oferta.
+				Seleccione la cantidad de veces que puede ser canjeado la oferta.
 			</InputLabel>
 			<Stack direction="row">
 				{frequencies.map((item, index) => (

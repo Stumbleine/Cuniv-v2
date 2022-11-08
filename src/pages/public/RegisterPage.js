@@ -65,7 +65,7 @@ export default function RegisterPage() {
 				const r = await dispatch(registerAsync(values));
 				r
 					? handleSnack('Registro exitoso, redirigiendo...', 'success', '/login')
-					: handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					: handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			};
 			register();
 		},
@@ -134,7 +134,7 @@ export default function RegisterPage() {
 								fullWidth
 								autoComplete="email"
 								type="email"
-								label="Correo electronico"
+								label="Correo electrónico"
 								{...getFieldProps('email')}
 								error={Boolean(touched.email && errors.email)}
 								helperText={touched.email && errors.email}

@@ -90,11 +90,11 @@ export default function Security() {
 			};
 			fetch()
 				.then(() => {
-					handleSnack('Contraseña actualziado exitosamente', 'success');
+					handleSnack('Contraseña actualziado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},

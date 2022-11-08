@@ -97,7 +97,7 @@ export default function OfferContent({ offer, children }) {
 						</Box>
 						<Box>
 							<Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-								Duracion
+								Duración
 							</Typography>
 							<Typography component="div" color="textSecondary">
 								{moment(offer?.start_date).format('LL') +
@@ -108,7 +108,7 @@ export default function OfferContent({ offer, children }) {
 						{offer?.conditions ? (
 							<Box>
 								<Typography sx={{ fontWeight: 'bold' }}>
-									Condiciones/Descripcion
+									Descripción/Condiciones
 								</Typography>
 
 								<Typography color="textSecondary" component="div">
@@ -121,8 +121,10 @@ export default function OfferContent({ offer, children }) {
 							variant="subtitle1"
 							noWrap
 							sx={{ fontWeight: 'bold' }}>
-							Productos incluidos:
-							{!offer?.products && <Typography color="textSecondary">Todos</Typography>}
+							Productos incluidos
+							{!offer?.products && (
+								<Typography color="textSecondary">Todos los productos</Typography>
+							)}
 						</Typography>
 						<Box>
 							{offer.products?.map((p, index) => (
@@ -134,9 +136,9 @@ export default function OfferContent({ offer, children }) {
 							variant="subtitle1"
 							noWrap
 							sx={{ fontWeight: 'bold' }}>
-							Disponible en:{' '}
+							Disponible en{' '}
 							{!offer?.branch_offices && (
-								<Typography color="textSecondary">Todos</Typography>
+								<Typography color="textSecondary">Todas las sucursales</Typography>
 							)}
 						</Typography>
 						<List sx={{ width: '100%', borderRadius: 2 }} disablePadding>

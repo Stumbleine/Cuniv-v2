@@ -70,10 +70,10 @@ export default function CreateSupplierCompanyPage() {
 						</Typography>
 						{(!user.companieVerified || !isAdmin) && (
 							<WarningVerified>
-								AVISO: Los administradores revisaran la solicitud de afiliacion de su
-								empresa a los beneficios estudiantiles, este proceso dura 48 Hrs. Nos
-								pondremos en contacto a su correo electronico una vez terminada la
-								revision.
+								AVISO: Los administradores revisarán la solicitud de afiliación de su
+								empresa a los beneficios estudiantiles, este proceso dura aproximadamente
+								48 Hrs. Nos pondremos en contacto a su correo electrónico una vez
+								terminada la revisión.
 							</WarningVerified>
 						)}
 						<Button

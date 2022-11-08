@@ -71,7 +71,7 @@ export default function LandingPage() {
 	 * @function onLoginFailure
 	 */
 	const onLoginFailure = res => {
-		console.log('Login Failed:', res);
+		// console.log('Login Failed:', res);
 	};
 	/**
 	 * Pasos para registrarse y publicar ofertas.
@@ -79,7 +79,7 @@ export default function LandingPage() {
 	 */
 	const pasos = [
 		{ paso: 1, texto: 'Ingresar con google' },
-		{ paso: 2, texto: 'Registrar su empresa o institucion' },
+		{ paso: 2, texto: 'Registrar su empresa o institución' },
 		{ paso: 3, texto: 'Publique ofertas de productos y servicios' },
 	];
 	return (
@@ -109,8 +109,8 @@ export default function LandingPage() {
 											// variant="h3"
 											sx={{
 												fontWeight: 'bold',
-												// lineHeight: 1,
-												fontSize: 55,
+												lineHeight: 1.2,
+												fontSize: 50,
 												pr: 2,
 												color: grey[100],
 												textAlign: { xs: 'center', md: 'left' },
@@ -124,9 +124,9 @@ export default function LandingPage() {
 											sx={{
 												textAlign: { xs: 'center', md: 'left' },
 											}}>
-											Se parte de una de las empresas afiliadas, obten una cuenta,
-											comienza a compartir promociones y productos con los estudiantes de
-											la Universidad Mayor de San Simón.
+											Se parte de una de las empresas afiliadas, obtén una cuenta y
+											comienza a compartir promociones, productos con estudiantes de la
+											Universidad Mayor de San Simón.
 										</Typography>
 									</Stack>
 									<Stack
@@ -159,8 +159,8 @@ export default function LandingPage() {
 										/>
 										{loginError && (
 											<Typography color="error" variant="body2" textAlign="center">
-												Algo salio mal vuelva a intentarlo, si el problema persiste
-												comuniquese con un administrador.
+												Algo salió mal, vuelva a intentarlo, si el problema persiste
+												comuníquese con un administrador.
 											</Typography>
 										)}
 										<Box sx={{ textAlign: 'center' }}>

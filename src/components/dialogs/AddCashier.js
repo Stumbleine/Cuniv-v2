@@ -66,7 +66,7 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string().required('Los nombres son requeridos.'),
 			apellidos: Yup.string().required('Los apellidos son requeridos.'),
-			email: Yup.string().email().required('Correo electronico es requerido.'),
+			email: Yup.string().email().required('Correo electrónico es requerido.'),
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -79,14 +79,14 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 			};
 			add()
 				.then(r => {
-					handleSnack('Cajero creado exitosamente', 'success');
+					handleSnack('Cajero creado exitosamente.', 'success');
 					setReload(!reload);
 
 					resetForm();
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -139,7 +139,7 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 									variant="outlined"
 									size="small"
 									label="Email"
-									placeholder="Correo electronico"
+									placeholder="Correo electrónico"
 									{...getFieldProps('email')}
 									error={Boolean(touched.email && errors.email)}
 									helperText={
@@ -149,7 +149,7 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 								/>
 
 								<Typography variant="body2" color="textSecondary">
-									Nota: La contraseña se enviara al correo electronico
+									Nota: La contraseña se enviará al correo electrónico
 								</Typography>
 								<DialogActions sx={{ p: 0 }}>
 									<Button onClick={handleClose}>Cancelar</Button>

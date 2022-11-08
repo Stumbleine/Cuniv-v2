@@ -51,13 +51,13 @@ export default function AddLocationForm({ handleSnack }) {
 			pos: '',
 		},
 		validationSchema: Yup.object().shape({
-			name: Yup.string().required('El nombre de la locacion es necesario'),
-			type: Yup.string().required('Especifique el tipo'),
+			name: Yup.string().required('El nombre de la locación es requerido'),
+			type: Yup.string().required('Tipo es requerido'),
 		}),
 		validate: () => {
 			let errors = {};
 			if (position === null) {
-				errors.pos = 'Es necesario una ubicacion';
+				errors.pos = 'La ubicación es requerido';
 			}
 			return errors;
 		},
@@ -71,11 +71,11 @@ export default function AddLocationForm({ handleSnack }) {
 			};
 			add()
 				.then(() => {
-					handleSnack('Locacion agregado exitosamente', 'success');
+					handleSnack('Locación agregado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					resetForm();
 				});
 		},
@@ -93,7 +93,7 @@ export default function AddLocationForm({ handleSnack }) {
 						<TextField
 							variant="outlined"
 							size="small"
-							label="Nombre de locacion"
+							label="Nombre *"
 							{...getFieldProps('name')}
 							error={Boolean(touched.name && errors.name)}
 							helperText={touched.name && errors.name}
@@ -101,7 +101,7 @@ export default function AddLocationForm({ handleSnack }) {
 						<TextField
 							variant="outlined"
 							size="small"
-							label="Descripcion (opcional)"
+							label="Descripción"
 							{...getFieldProps('description')}
 						/>
 
@@ -132,7 +132,7 @@ export default function AddLocationForm({ handleSnack }) {
 							size="small"
 							value={position ? position.lat + ' , ' + position.lng : ''}
 							disabled={true}
-							placeholder="Coordenadas"
+							placeholder="Coordenadas *"
 							error={Boolean(position ? false : errors.pos)}
 							helperText={position ? '' : errors.pos}
 						/>

@@ -177,12 +177,12 @@ export default function EditOfferPB({ offer, handleSnack }) {
 		};
 		update()
 			.then(r => {
-				handleSnack('Oferta actualizada exitosamente', 'success');
+				handleSnack('Oferta actualizada exitosamente.', 'success');
 				setSubmitting(false);
 				handleClose();
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 				setSubmitting(false);
 				handleClose();
 			});
@@ -216,7 +216,7 @@ export default function EditOfferPB({ offer, handleSnack }) {
 							<Box>
 								<Typography fontWeight="bold">Sucursales</Typography>
 								<Typography color="textSecondary">
-									Acutalmente la oferta esta disponible en:
+									Actualmente, la oferta está disponible en:
 								</Typography>
 								{changeBranchs && branchSelected.length === 0 && <Chip label={'Todas'} />}
 								{!changeBranchs && (
@@ -267,7 +267,7 @@ export default function EditOfferPB({ offer, handleSnack }) {
 
 									{!branchOffices && (
 										<Typography color="textSecondary" variant="caption">
-											cargando..
+											Cargando..
 										</Typography>
 									)}
 								</>
@@ -279,7 +279,7 @@ export default function EditOfferPB({ offer, handleSnack }) {
 								<Typography sx={{ fontWeight: 'bold' }}>Productos</Typography>
 
 								<Typography color="textSecondary">
-									Acutalmente en la oferta estan incluidos:
+									Actualmente, en la oferta están incluidos:
 								</Typography>
 								{changeProducts && prdInclude.length === 0 && <Chip label={'Todas'} />}
 								{!changeProducts && (
@@ -329,7 +329,7 @@ export default function EditOfferPB({ offer, handleSnack }) {
 									</Select>
 									{!products && (
 										<Typography color="textSecondary" variant="caption">
-											cargando.. o puede no tener registros.
+											Cargando.. o no tiene registros.
 										</Typography>
 									)}
 								</>

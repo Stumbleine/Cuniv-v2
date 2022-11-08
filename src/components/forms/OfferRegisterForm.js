@@ -146,11 +146,13 @@ export default function OfferRegisterForm({ handleSnack }) {
 			id_empresa: '',
 		},
 		validationSchema: Yup.object().shape({
-			titulo: Yup.string().required('Titulo de oferta es necesario'),
-			fecha_inicio: Yup.string().required('es requerido'),
-			fecha_fin: Yup.string().required('es requerido'),
-			descuento: Yup.string().required('es requerido'),
-			id_empresa: isAdmin ? Yup.number().required('Es necesario asignar la empresa') : '',
+			titulo: Yup.string().required('Título es requerido'),
+			fecha_inicio: Yup.string().required('Es requerido'),
+			fecha_fin: Yup.string().required('Es requerido'),
+			descuento: Yup.string().required('Es requerido'),
+			id_empresa: isAdmin
+				? Yup.number().required('Es necesario asignar a una empresa')
+				: '',
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
@@ -171,12 +173,12 @@ export default function OfferRegisterForm({ handleSnack }) {
 			};
 			register()
 				.then(() => {
-					handleSnack('Oferta agregado exitosamente', 'success');
+					handleSnack('Oferta agregado exitosamente.', 'success');
 					setSubmitting(false);
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -234,8 +236,8 @@ export default function OfferRegisterForm({ handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="titulo *"
-									placeholder="Titulo de oferta"
+									label="Título *"
+									placeholder="Título de oferta"
 									{...getFieldProps('titulo')}
 									error={Boolean(touched.titulo && errors.titulo)}
 									helperText={touched.titulo && errors.titulo}
@@ -243,7 +245,7 @@ export default function OfferRegisterForm({ handleSnack }) {
 								<TextField
 									fullWidth
 									variant="outlined"
-									label="Descripcion/Condiciones"
+									label="Descripción/Condiciones"
 									multiline
 									{...getFieldProps('condiciones')}
 									size="small"
@@ -290,9 +292,9 @@ export default function OfferRegisterForm({ handleSnack }) {
 												{...getFieldProps('tipo_descuento')}
 												error={Boolean(touched.tipo_descuento && errors.tipo_descuento)}
 												inputProps={{ 'aria-label': 'Without label' }}>
-												<MenuItem value="Porcentual">porcentaje</MenuItem>
-												<MenuItem value="Monetario">monto</MenuItem>
-												<MenuItem value="Descripcion">descriptivo</MenuItem>
+												<MenuItem value="Porcentual">Porcentaje</MenuItem>
+												<MenuItem value="Monetario">Monto</MenuItem>
+												<MenuItem value="Descripcion">Descriptivo</MenuItem>
 											</Select>
 										</FormControl>
 										<TextField
@@ -360,10 +362,10 @@ export default function OfferRegisterForm({ handleSnack }) {
 								<Box>
 									<Typography fontWeight="bold">Sucursales</Typography>
 									<Typography color="textSecondary">
-										Seleccione sucursales donde aplica la oferta
+										Seleccione sucursales donde estará disponible la oferta.
 									</Typography>
 									<Typography sx={{ color: 'warning.main', mb: 1 }}>
-										Por defecto se mostrara en todas las sucursales
+										Por defecto estará disponible en todas las sucursales.
 									</Typography>
 									{/* Aqui checks de sucursales */}
 
@@ -375,7 +377,7 @@ export default function OfferRegisterForm({ handleSnack }) {
 										size="small"
 										value={branchSelected}
 										onChange={handleSelectBranch}
-										disabled={!branchOffices}
+										// disabled={!branchOffices}
 										input={<OutlinedInput />}
 										renderValue={s => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -396,16 +398,16 @@ export default function OfferRegisterForm({ handleSnack }) {
 									</Select>
 									{!branchOffices && (
 										<Typography color="textSecondary" variant="caption">
-											cargando..
+											Cargando..
 										</Typography>
 									)}
 								</Box>
 
 								<Box sx={{ width: '100%' }}>
 									<Typography sx={{ fontWeight: 'bold' }}>Productos</Typography>
-									<InputLabel>Seleccione los productos que incluye la oferta</InputLabel>
+									<InputLabel>Seleccione los productos que incluye la oferta.</InputLabel>
 									<Typography sx={{ color: 'warning.main', mb: 1 }}>
-										Por defecto se incluiran todos
+										Por defecto se incluirán todos.
 									</Typography>
 									<Select
 										labelId="prd-select-label"
@@ -414,7 +416,7 @@ export default function OfferRegisterForm({ handleSnack }) {
 										size="small"
 										value={prdInclude}
 										onChange={handleChange}
-										disabled={!products}
+										// disabled={!products}
 										input={<OutlinedInput />}
 										renderValue={selected => (
 											<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -435,7 +437,7 @@ export default function OfferRegisterForm({ handleSnack }) {
 									</Select>
 									{!products && (
 										<Typography color="textSecondary" variant="caption">
-											cargando.. o puede no tener registros.
+											Cargando... o no tiene productos registrados.
 										</Typography>
 									)}
 								</Box>

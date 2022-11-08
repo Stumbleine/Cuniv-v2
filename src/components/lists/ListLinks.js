@@ -42,10 +42,10 @@ export default function ListLinks({ handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Link eliminado exitosamente', 'success');
+				handleSnack('Link eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 	return (

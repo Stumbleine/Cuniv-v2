@@ -79,12 +79,12 @@ export default function EditRubro({ rubro, handleSnack }) {
 			};
 			update()
 				.then(r => {
-					handleSnack('Rubro actualizado exitosamente', 'success');
+					handleSnack('Rubro actualizado exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 					handleClose();
 				});
@@ -140,8 +140,8 @@ export default function EditRubro({ rubro, handleSnack }) {
 									variant="outlined"
 									size="small"
 									type="text"
-									label="Descripcion"
-									placeholder="Descripcion (opcional)"
+									label="Descripción"
+									placeholder="Descripción"
 									{...getFieldProps('descripcion')}
 								/>
 								<DialogActions sx={{ p: 0 }}>

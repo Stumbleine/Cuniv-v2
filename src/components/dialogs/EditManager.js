@@ -76,12 +76,12 @@ export default function EditManager({ data, handleSnack }) {
 			};
 			edit()
 				.then(() => {
-					handleSnack('Empresa actualizada exitosamente', 'success');
+					handleSnack('Empresa actualizada exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 					handleClose();
 				});

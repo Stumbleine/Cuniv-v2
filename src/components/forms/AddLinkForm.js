@@ -49,9 +49,9 @@ export default function AddLinkForm({ handleSnack }) {
 			priority: '',
 		},
 		validationSchema: Yup.object().shape({
-			title: Yup.string().required('El titulo del sitio es necesario'),
-			url: Yup.string().required('Especifique el URL'),
-			priority: Yup.number().required('Debe introducir una prioridad'),
+			title: Yup.string().required('El titulo del sitio es requerido'),
+			url: Yup.string().required('URL es requerido'),
+			priority: Yup.number().required('Prioridad es requerido'),
 		}),
 		onSubmit: (values, { resetForm }) => {
 			/**
@@ -63,12 +63,12 @@ export default function AddLinkForm({ handleSnack }) {
 			};
 			add()
 				.then(() => {
-					handleSnack('Link agregado exitosamente', 'success');
+					handleSnack('Link agregado exitosamente.', 'success');
 					resetForm();
 					setFileImage(null);
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					resetForm();
 				});
 		},
@@ -81,7 +81,7 @@ export default function AddLinkForm({ handleSnack }) {
 				<Form onSubmit={handleSubmit}>
 					<Stack spacing={2} sx={{ p: 2 }}>
 						<Typography align="center" sx={{ fontWeight: 'bold' }}>
-							Registro de setio web
+							Registro de link
 						</Typography>
 						<UploadImage
 							handleChangeFile={handleChangeFile}
@@ -92,7 +92,7 @@ export default function AddLinkForm({ handleSnack }) {
 						<TextField
 							variant="outlined"
 							size="small"
-							label="Titulo del sitio web"
+							label="Título del sitio web *"
 							{...getFieldProps('title')}
 							error={Boolean(touched.title && errors.title)}
 							helperText={touched.title && errors.title}
@@ -100,13 +100,13 @@ export default function AddLinkForm({ handleSnack }) {
 						<TextField
 							variant="outlined"
 							size="small"
-							label="Descripcion (opcional)"
+							label="Descripción"
 							{...getFieldProps('description')}
 						/>
 						<TextField
 							variant="outlined"
 							size="small"
-							label="Url"
+							label="Url *"
 							{...getFieldProps('url')}
 							error={Boolean(touched.url && errors.url)}
 							helperText={touched.url && errors.url}
@@ -115,7 +115,7 @@ export default function AddLinkForm({ handleSnack }) {
 							variant="outlined"
 							size="small"
 							type="number"
-							label="Prioridad (1-n)"
+							label="Prioridad (1-n) *"
 							{...getFieldProps('priority')}
 							error={Boolean(touched.priority && errors.priority)}
 							helperText={touched.priority && errors.priority}

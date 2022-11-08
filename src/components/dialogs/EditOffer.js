@@ -87,7 +87,7 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 			id_empresa: offer.companie.id_empresa || '',
 		},
 		validationSchema: Yup.object().shape({
-			titulo: Yup.string().required('Titulo de oferta es necesario'),
+			titulo: Yup.string().required('Título de oferta es requerido'),
 			fecha_inicio: Yup.string().required('es requerido'),
 			fecha_fin: Yup.string().required('es requerido'),
 			descuento: Yup.string().required('es requerido'),
@@ -103,12 +103,12 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 			};
 			update()
 				.then(r => {
-					handleSnack('Oferta actualizada exitosamente', 'success');
+					handleSnack('Oferta actualizada exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 					handleClose();
 				});
@@ -153,8 +153,8 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="titulo"
-									placeholder="Titulo de oferta"
+									label="Título"
+									placeholder="Título de oferta"
 									{...getFieldProps('titulo')}
 									error={Boolean(touched.titulo && errors.titulo)}
 									helperText={touched.titulo && errors.titulo}
@@ -162,7 +162,7 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 								<TextField
 									fullWidth
 									variant="outlined"
-									label="Condiciones de canje (opcional)"
+									label="Descripción/Condiciones"
 									multiline
 									{...getFieldProps('condiciones')}
 									size="small"
@@ -209,9 +209,9 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 												{...getFieldProps('tipo_descuento')}
 												error={Boolean(touched.tipo_descuento && errors.tipo_descuento)}
 												inputProps={{ 'aria-label': 'Without label' }}>
-												<MenuItem value="Porcentual">porcentaje</MenuItem>
-												<MenuItem value="Monetario">monto</MenuItem>
-												<MenuItem value="Descripcion">descriptivo</MenuItem>
+												<MenuItem value="Porcentual">Porcentaje</MenuItem>
+												<MenuItem value="Monetario">Monto</MenuItem>
+												<MenuItem value="Descripcion">Descriptivo</MenuItem>
 											</Select>
 										</FormControl>
 										<TextField
@@ -253,7 +253,7 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 												</MenuItem>
 											))}
 										</Select>
-										{!companies && <Typography variant="caption">cargando.. </Typography>}
+										{!companies && <Typography variant="caption">Cargando.. </Typography>}
 									</FormControl>
 								)}
 								<Stack direction="row" spacing={2} justifyContent="center">

@@ -63,7 +63,7 @@ export default function StaticsPage() {
 							color: 'text.title',
 							fontStyle: 'italic',
 						}}>
-						Analitica
+						Estadisticas
 					</Typography>
 				</Box>
 				<Stack
@@ -105,7 +105,7 @@ export default function StaticsPage() {
 							</Typography>
 						)}
 						<Typography variant="body2" color="textSecondary">
-							codigos generados totales
+							códigos generados totales
 						</Typography>
 					</Box>
 					<Box sx={{ textAlign: 'center', p: 2 }} component={Card}>
@@ -124,7 +124,7 @@ export default function StaticsPage() {
 							</Typography>
 						)}
 						<Typography color="textSecondary" variant="body2">
-							codigos cajeados totales
+							códigos cajeados totales
 						</Typography>
 					</Box>
 				</Stack>

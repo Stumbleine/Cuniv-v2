@@ -52,11 +52,11 @@ export default function ProductAddForm({ handleSnack, companies }) {
 			id_empresa: 'none',
 		},
 		validationSchema: Yup.object().shape({
-			nombre: Yup.string().required('El nombre es necesario'),
-			precio: Yup.number().required('El precio es necesario'),
+			nombre: Yup.string().required('El nombre es requerido'),
+			precio: Yup.number().required('El precio es requerido'),
 			tipo: Yup.string().required('El tipo es requerido'),
 			id_empresa: isAdmin
-				? Yup.number().typeError('Debe elegir la empresa').required()
+				? Yup.number().typeError('Debe asignar a una empresa').required()
 				: '',
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -69,11 +69,11 @@ export default function ProductAddForm({ handleSnack, companies }) {
 			};
 			add()
 				.then(() => {
-					handleSnack('Producto agregado exitosamente', 'success');
+					handleSnack('Producto agregado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -92,8 +92,8 @@ export default function ProductAddForm({ handleSnack, companies }) {
 							required
 							variant="outlined"
 							size="small"
-							label="nombre"
-							placeholder="nombre del producto"
+							label="Nombre"
+							placeholder="Nombre del producto"
 							{...getFieldProps('nombre')}
 							error={Boolean(touched.nombre && errors.nombre)}
 							helperText={touched.nombre && errors.nombre}
@@ -102,40 +102,36 @@ export default function ProductAddForm({ handleSnack, companies }) {
 							variant="outlined"
 							size="small"
 							multiline
-							label="descripcion (opcional)"
-							placeholder="descripcion"
+							label="Descripción"
+							placeholder="Descripción"
 							{...getFieldProps('descripcion')}
 						/>
 						<TextField
 							required
 							variant="outlined"
 							size="small"
-							label="precio"
+							label="Precio"
 							type="number"
-							placeholder="precio en Bs."
+							placeholder="Precio en Bs."
 							{...getFieldProps('precio')}
 							error={Boolean(touched.precio && errors.precio)}
 							helperText={touched.precio && errors.precio}
 						/>
 						<Box>
-							<Typography color="textSecondary">
-								Especificar si es producto o servicio *
-							</Typography>
+							<Typography color="textSecondary">Especificar el tipo *</Typography>
 							<Select
 								sx={{ width: '100%', mt: 1 }}
 								size="small"
 								inputProps={{ 'aria-label': 'Without label' }}
 								{...getFieldProps('tipo')}
 								error={Boolean(touched.tipo && errors.tipo)}>
-								<MenuItem value="producto">producto</MenuItem>
-								<MenuItem value="servicio">servicio</MenuItem>
+								<MenuItem value="producto">Producto</MenuItem>
+								<MenuItem value="servicio">Servicio</MenuItem>
 							</Select>
 						</Box>
 						{isAdmin && (
 							<Box>
-								<Typography color="textSecondary">
-									Especificar la empresa a la que pertenece *
-								</Typography>
+								<Typography color="textSecondary">Asignar a una empresa *</Typography>
 								<Select
 									sx={{ width: '100%', mt: 1 }}
 									size="small"

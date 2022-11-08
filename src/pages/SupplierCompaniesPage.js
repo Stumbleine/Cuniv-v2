@@ -33,7 +33,7 @@ import FilterBar from '../components/FilterBar';
 import SnackCustom from '../components/SnackCustom';
 import { green } from '@mui/material/colors';
 /**
- * Pagina que enlista las empresas registradas, aprobadas y que enviaron solicitud de afiliacion
+ * Pagina que enlista las empresas registradas, aprobadas y que enviaron solicitud de afiliación
  * @component SupplierCompaniesPage
  * @exports SupplierCompaniesPage
  */
@@ -137,9 +137,7 @@ export default function SupplierCompaniesPage() {
 					  ))}
 				{(fetchFailed ||
 					(companiesNV.pending.length === 0 && !isLoading && !filterLoading)) && (
-					<MsgCompaniesNull>
-						No han llegado nuevas solicitudes de afiliacion
-					</MsgCompaniesNull>
+					<MsgCompaniesNull>No hay solicitudes de afiliación</MsgCompaniesNull>
 				)}
 				{companiesNV?.rejected.map((companie, index) => (
 					<Grid item key={index} xs={6} sm={4} md={3}>
@@ -169,7 +167,7 @@ export default function SupplierCompaniesPage() {
 							</Grid>
 					  ))}
 				{(fetchFailed || (!companies && !isLoading && !filterLoading)) && (
-					<MsgCompaniesNull>No se han registrado empresas aun.</MsgCompaniesNull>
+					<MsgCompaniesNull>No se han registrado empresas.</MsgCompaniesNull>
 				)}
 			</>
 		);

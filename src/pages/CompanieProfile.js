@@ -73,9 +73,9 @@ export default function CompanieProfile() {
 	const msgCompanieNull = () => {
 		return (
 			<Stack maxWidth="lg" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-				<Typography>No ha registrado su empresa aun</Typography>
+				<Typography>No ha registrado su empresa</Typography>
 				<Typography color="textSecondary">
-					registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas con
+					Registrar su empresa ayudará a que sus ofertas sean fácilmente relacionadas con
 					su empresa{' '}
 				</Typography>
 				<Button component={Link} to={`/main/registerCompanie`} variant="contained">
@@ -121,12 +121,12 @@ export default function CompanieProfile() {
 		};
 		approve()
 			.then(() => {
-				handleSnack('Se aprobó la empresa exitosamente', 'success');
+				handleSnack('Se aprobó la empresa exitosamente.', 'success');
 				setSubmitting(false);
 				setReload(!reload);
 			})
 			.catch(() => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 				setSubmitting(false);
 			});
 	};
@@ -144,11 +144,12 @@ export default function CompanieProfile() {
 						color: 'text.title',
 						fontStyle: 'italic',
 					}}>
-					Perfil
+					Perfil{' '}
+					{profile?.companie.razon_social && 'de ' + profile?.companie.razon_social}
 				</Typography>
 				{!isAdmin &&
 					(user?.companieVerified === false || profile?.companie?.verified === false) && (
-						<WarningVerified>En proceso de verificacion.</WarningVerified>
+						<WarningVerified>En proceso de verificación.</WarningVerified>
 					)}
 				{isLoadingProfile && isAdmin ? (
 					<SkeletonProfile />
@@ -222,7 +223,7 @@ export default function CompanieProfile() {
 							sx={{
 								textAlign: 'center',
 							}}>
-							<Typography align="center">No se encontro la empresa.</Typography>
+							<Typography align="center">No se encontró la empresa.</Typography>
 							<Button
 								sx={{ mt: 2 }}
 								variant="outlined"

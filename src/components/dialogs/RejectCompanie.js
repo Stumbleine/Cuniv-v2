@@ -19,7 +19,7 @@ import { rejectCompanieAsync } from '../../store/companiesSlice';
 import { green } from '@mui/material/colors';
 import { Transition } from '../../Utils/Transitions';
 /**
- * Dialogo de confirmacion para rechazar la afiliacion de una empresa
+ * Dialogo de confirmacion para rechazar la afiliación de una empresa
  * @component RejectCompanie
  * @property {Object} companie datos de la empresa.
  * @property {Function} handleSnack function que llama al componente snackbar (alerta)
@@ -73,13 +73,13 @@ export default function RejectCompanie({ companie, handleSnack, setReload, reloa
 			};
 			reject()
 				.then(() => {
-					handleSnack('Se ha rechazo con exito agregado exitosamente', 'success');
+					handleSnack('Se ha rechazo con exito agregado exitosamente.', 'success');
 					setReload(!reload);
 					resetForm();
 					handleClose();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					resetForm();
 					handleClose();
 				});
@@ -103,11 +103,11 @@ export default function RejectCompanie({ companie, handleSnack, setReload, reloa
 						<DialogContent sx={{ py: 0 }}>
 							<DialogContentText display="flex">
 								<WarningAmber color="error" sx={{ mr: 1 }} />
-								Esta accion removera el acceso a beneficios estudiantiles, para la empresa{' '}
+								Esta acción removerá el acceso a beneficios estudiantiles, para la empresa{' '}
 								{companie.razon_social} y su responsable.
 							</DialogContentText>
 							<Typography component="div" sx={{ color: 'warning.main', mt: 2 }}>
-								Nota: debe ingresar las razones por cual se rechaza la solicitud.
+								Nota: debe ingresar las razones por cuál se rechaza la solicitud.
 							</Typography>
 							<TextField
 								sx={{ mt: 1 }}

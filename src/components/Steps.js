@@ -13,17 +13,17 @@ export default function Steps() {
 		<Stack spacing={2} maxWidth="md">
 			<Box>
 				<Typography variant="h5" sx={{ mt: 2 }}>
-					Primero lo primero, aqui algunos pasos a seguir sugeridos.
+					Primero lo primero, aquí algunos pasos a seguir sugeridos.
 				</Typography>
 				<Typography variant="h6" color="textSecondary">
-					Si ya completo estos pasos, ignorelos.
+					Si ya completo estos pasos, ignórelos.
 				</Typography>
 			</Box>
 			<Paper sx={{ p: 2 }}>
 				<Typography variant="h6">#1 Registrar su empresa</Typography>
 				<Typography color="textSecondary">
 					Antes de publicar su ofertas, es necesario registrar su empresa y ser aprobado
-					por los administradores, de esta forma los estudiantes conoceran más sobre su
+					por los administradores, de esta forma los estudiantes conocerán más sobre su
 					empresa.
 				</Typography>
 				<Box sx={{ textAlign: 'end', mt: 2 }}>
@@ -51,12 +51,12 @@ export default function Steps() {
 			<Paper sx={{ p: 2 }}>
 				<Typography variant="h6">#3 Publicar sus ofertas</Typography>
 				<Typography color="textSecondary">
-					Al publicar sus ofertas se mostraran a los beneficiarios con todos los detalles
+					Al publicar sus ofertas se mostrarán a los beneficiarios con todos los detalles
 					acerca de su empresa y productos.
 				</Typography>
 				<Box sx={{ textAlign: 'end', mt: 2 }}>
 					<Button component={Link} to={`/main/createOffer`} variant="contained">
-						publicar oferta
+						Publicar oferta
 					</Button>
 				</Box>
 			</Paper>

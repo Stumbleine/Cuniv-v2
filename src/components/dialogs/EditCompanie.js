@@ -82,8 +82,8 @@ export default function EditCompanie({ companie, handleSnack }) {
 		},
 		validationSchema: Yup.object().shape({
 			razon_social: Yup.string().required('El titulo del sitio es necesario'),
-			descripcion: Yup.string().required('Especifique la descripcion'),
-			telefono: Yup.string().required('Debe introducir una prioridad'),
+			descripcion: Yup.string().required('Descripcón es requerido'),
+			telefono: Yup.string().required('Teléfono/Celular es requerido'),
 		}),
 		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -96,12 +96,12 @@ export default function EditCompanie({ companie, handleSnack }) {
 			};
 			edit()
 				.then(() => {
-					handleSnack('Empresa actualizada exitosamente', 'success');
+					handleSnack('Empresa actualizada exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 					handleClose();
 				});
@@ -162,7 +162,7 @@ export default function EditCompanie({ companie, handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="Telefono *"
+									label="Teléfono *"
 									{...getFieldProps('telefono')}
 									error={Boolean(touched.telefono && errors.telefono)}
 									helperText={touched.telefono && errors.telefono}
@@ -170,7 +170,7 @@ export default function EditCompanie({ companie, handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="NIT (opcional)"
+									label="NIT"
 									{...getFieldProps('nit')}
 									error={Boolean(touched.nit && errors.nit)}
 									helperText={touched.nit && errors.nit}

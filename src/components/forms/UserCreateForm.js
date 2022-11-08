@@ -56,7 +56,7 @@ function UserCreateForm({ handleSnack }) {
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string().required('Los nombres son requeridos.'),
 			apellidos: Yup.string().required('Los apellidos son requeridos.'),
-			email: Yup.string().email().required('Correo electronico es requerido.'),
+			email: Yup.string().email().required('Correo electrónico es requerido.'),
 			rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -69,12 +69,12 @@ function UserCreateForm({ handleSnack }) {
 			};
 			create()
 				.then(() => {
-					handleSnack('Usuario creado exitosamente', 'success');
+					handleSnack('Usuario creado exitosamente.', 'success');
 					resetForm();
 					setFileImage(null);
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -119,7 +119,7 @@ function UserCreateForm({ handleSnack }) {
 							variant="outlined"
 							size="small"
 							label="Email"
-							placeholder="Correo electronico"
+							placeholder="Correo electrónico"
 							{...getFieldProps('email')}
 							error={Boolean(touched.email && errors.email)}
 							helperText={touched.email && errors.email}
@@ -147,7 +147,7 @@ function UserCreateForm({ handleSnack }) {
 							</FormHelperText>
 						</FormControl>
 						<Typography variant="body2" color="textSecondary">
-							Nota: La contraseña se enviara al correo electronico
+							Nota: La contraseña se enviara al correo electrónico
 						</Typography>
 						<Box sx={{ position: 'relative' }}>
 							<Button

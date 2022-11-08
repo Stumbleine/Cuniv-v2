@@ -95,12 +95,12 @@ export default function EditLocation({ location, handleSnack }) {
 			};
 			edit()
 				.then(() => {
-					handleSnack('Locacion actualizado exitosamente', 'success');
+					handleSnack('Locacion actualizado exitosamente.', 'success');
 					handleClose();
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					handleClose();
 					resetForm();
 				});

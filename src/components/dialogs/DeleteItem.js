@@ -65,7 +65,7 @@ export default function DeleteItem({ deleteAsync, id, itemName, disabled }) {
 				<DialogContent>
 					<DialogContentText display="flex" alignItems="center">
 						<WarningAmber color="error" sx={{ mr: 1 }} />
-						Esta accion removera el item permanentemente.
+						Esta acción removerá el ítem permanentemente.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

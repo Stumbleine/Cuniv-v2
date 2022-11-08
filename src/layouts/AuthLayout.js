@@ -77,7 +77,7 @@ export default function AuthLayout() {
 							<Stack direction="row" spacing={2}>
 								<Typography color="textPrimary">¿Ya tiene una cuenta?</Typography>
 								<Link component={RouterLink} to="/login">
-									Iniciar Sesion
+									Iniciar Sesión
 								</Link>
 							</Stack>
 						) : null}
@@ -90,7 +90,7 @@ export default function AuthLayout() {
 									sx={{ mr: 2 }}
 									to="/login">
 									<Button size="small" color="inherit">
-										Iniciar Sesion
+										Iniciar Sesión
 									</Button>
 								</Link>
 								<Link

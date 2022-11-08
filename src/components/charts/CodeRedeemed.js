@@ -66,7 +66,7 @@ export default function CodeRedeemed() {
 	 */
 	const data = [
 		{
-			name: 'Codigos Canjeados',
+			name: 'Códigos Canjeados',
 			type: 'area',
 			data: codeRedeemed
 				? chartMode === 'daily'
@@ -185,7 +185,7 @@ export default function CodeRedeemed() {
 						component="span"
 						display="flex"
 						sx={{ fontSize: 17, fontWeight: 'bold', alignItems: 'center' }}>
-						Codigos canjeados
+						Códigos canjeados
 						<Typography sx={{ fontSize: 14, ml: 1, color: 'text.secondary' }}>
 							(Datos del último mes/año)
 						</Typography>{' '}

@@ -18,7 +18,6 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import { amber, green } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,8 +44,8 @@ export default function RubrosTable({ handleSnack }) {
 	const { accessToken } = useSelector(state => state.login);
 
 	const TABLE_HEAD = [
-		{ id: 'nombre', label: 'Nombre rubro', alignRight: false },
-		{ id: 'descripcion', label: 'Descripcion', alignRight: false },
+		{ id: 'nombre', label: 'Nombre', alignRight: false },
+		{ id: 'descripcion', label: 'Descripción', alignRight: false },
 		{ id: 'acciones', label: 'Acciones', alignRight: false },
 	];
 	const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -90,10 +89,10 @@ export default function RubrosTable({ handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Rubro eliminado exitosamente', 'success');
+				handleSnack('Rubro eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 

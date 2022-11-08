@@ -33,8 +33,8 @@ export default function LocationsTable({ handleSnack }) {
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 	const TABLE_HEAD = [
-		{ id: 'location', label: 'Locacion' },
-		{ id: 'description', label: 'Descripcion' },
+		{ id: 'location', label: 'Locación' },
+		{ id: 'description', label: 'Descripción' },
 		{ id: 'cor', label: 'Coordenadas' },
 		{ id: 'actions', label: 'Acciones' },
 	];
@@ -59,10 +59,10 @@ export default function LocationsTable({ handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Locacion eliminado exitosamente', 'success');
+				handleSnack('Locación eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 

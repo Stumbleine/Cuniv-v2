@@ -48,11 +48,11 @@ export default function CompanieNV({ companie, handleSnack }) {
 		};
 		approve()
 			.then(() => {
-				handleSnack('Empreesa aprobado exitosamente', 'success');
+				handleSnack('Empreesa aprobado exitosamente.', 'success');
 				setSubmitting(false);
 			})
 			.catch(() => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 				setSubmitting(false);
 			});
 	};
@@ -68,11 +68,11 @@ export default function CompanieNV({ companie, handleSnack }) {
 		};
 		approve()
 			.then(() => {
-				handleSnack('Empresa aprobado exitosamente', 'success');
+				handleSnack('Empresa aprobado exitosamente.', 'success');
 				setSubmitting(false);
 			})
 			.catch(() => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 				setSubmitting(false);
 			});
 	};

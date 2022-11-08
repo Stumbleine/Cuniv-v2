@@ -67,7 +67,7 @@ export default function WebLinksPage() {
 							color: 'text.title',
 							fontStyle: 'italic',
 						}}>
-						Sitios web de la universidad
+						Links de la universidad
 					</Typography>
 				</Box>
 				<Grid container spacing={2}>

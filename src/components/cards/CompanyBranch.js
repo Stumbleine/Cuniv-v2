@@ -18,9 +18,9 @@ import AddCompanyBranch from '../forms/AddCompanyBranch';
 export default function CompanyBranch({ updateListBranchs }) {
 	const defaultBranch = {
 		nombre: 'Sucursal central',
-		direccion: '-',
-		latitud: '-',
-		longitud: '-',
+		direccion: '',
+		latitud: '',
+		longitud: '',
 	};
 	const [branchs, setBranchs] = useState([defaultBranch]);
 	useEffect(() => {
@@ -53,9 +53,9 @@ export default function CompanyBranch({ updateListBranchs }) {
 	return (
 		<>
 			<Box>
-				<Typography sx={{ fontWeight: 'bold' }}>Sucursales*</Typography>
-				<Typography variant="body2" color="textSecondary">
-					Modifique los datos de la sucursal principal (direccion, geolocalización)
+				<Typography sx={{ fontWeight: 'bold' }}>Sucursales *</Typography>
+				<Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+					Modifique los datos de la sucursal principal (nombre, dirección y coordenadas)
 				</Typography>
 			</Box>
 			<Stack
@@ -86,7 +86,7 @@ export default function CompanyBranch({ updateListBranchs }) {
 						<Box sx={{ ml: 2, flexGrow: 1 }}>
 							<Typography variant="body1">{b.nombre}</Typography>
 							<Typography variant="body2" color="textSecondary">
-								dir: {b.direccion}
+								Dir.: {b.direccion}
 							</Typography>
 						</Box>
 						<Box sx={{ mr: 1 }}>

@@ -54,7 +54,7 @@ export default function ProfileOffers({ offers }) {
 				{offers && (
 					<Box sx={{ textAlign: 'end', width: '100%' }}>
 						<Button component={Link} to="/main/offers">
-							Ver mas ofertas
+							Ver más ofertas
 						</Button>
 					</Box>
 				)}

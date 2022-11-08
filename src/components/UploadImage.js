@@ -164,8 +164,8 @@ export default function UploadImage({
 			{children}
 			<Box sx={{ width: '100%', textAlign: 'center', my: 1 }}>
 				<Typography variant="body2" color="textSecondary">
-					Recomendacion: imagenes de dimensiones {type === 'Circle' ? '4:3' : '16:9'} y
-					formato *.png *.jpg
+					Recomendación: subir imágenes de dimensiones{' '}
+					{type === 'Circle' ? '4:3' : '16:9'} y formato *.png *.jpg
 				</Typography>
 			</Box>
 		</>

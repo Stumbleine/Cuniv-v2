@@ -44,10 +44,8 @@ export default function LoginPage() {
 		},
 		validationSchema: Yup.object().shape({
 			email: Yup.string()
-				.email(
-					'El correo electrónico debe ser una dirección de correo electrónico válida'
-				)
-				.required('Correo Electronico es requerido'),
+				.email('El correo electrónico debe ser una dirección válida')
+				.required('Correo electrónico es requerido'),
 			password: Yup.string().required('Contraseña es requerido'),
 		}),
 		onSubmit: (values, { resetForm }) => {
@@ -80,7 +78,7 @@ export default function LoginPage() {
 						Inicio
 					</Button>
 					<Box sx={{ my: 2 }}>
-						<Typography variant="h4">Iniciar Sesion</Typography>
+						<Typography variant="h4">Iniciar Sesión</Typography>
 						<Typography>Ingrese sus datos</Typography>
 					</Box>
 					<Stack spacing={3}>
@@ -88,7 +86,7 @@ export default function LoginPage() {
 							fullWidth
 							autoComplete="username"
 							margin="normal"
-							label="Correo Electronico"
+							label="Correo electrónico"
 							type="email"
 							variant="outlined"
 							{...getFieldProps('email')}
@@ -124,7 +122,7 @@ export default function LoginPage() {
 								type="submit"
 								disabled={isLoading}
 								variant="contained">
-								Iniciar Sesion
+								Iniciar Sesión
 							</Button>
 							{isLoading && (
 								<CircularProgress

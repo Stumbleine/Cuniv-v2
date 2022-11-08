@@ -93,12 +93,12 @@ export default function EditProduct({ product, companies, handleSnack }) {
 			};
 			update()
 				.then(r => {
-					handleSnack('Usuario actualizado exitosamente', 'success');
+					handleSnack('Usuario actualizado exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					handleClose();
 					setSubmitting(false);
 				});
@@ -140,8 +140,8 @@ export default function EditProduct({ product, companies, handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="nombre"
-									placeholder="nombre del producto"
+									label="Nombre"
+									placeholder="Nombre del producto"
 									{...getFieldProps('nombre')}
 									error={Boolean(touched.nombre && errors.nombre)}
 									helperText={touched.nombre && errors.nombre}
@@ -150,16 +150,16 @@ export default function EditProduct({ product, companies, handleSnack }) {
 									variant="outlined"
 									size="small"
 									multiline
-									label="descripcion (opcional)"
-									placeholder="descripcion"
+									label="Descripción"
+									placeholder="Descripción"
 									{...getFieldProps('descripcion')}
 								/>
 								<TextField
 									variant="outlined"
 									size="small"
-									label="precio"
+									label="Precio"
 									type="number"
-									placeholder="precio en Bs."
+									placeholder="Precio en Bs."
 									{...getFieldProps('precio')}
 									error={Boolean(touched.precio && errors.precio)}
 									helperText={touched.precio && errors.precio}
@@ -174,15 +174,13 @@ export default function EditProduct({ product, companies, handleSnack }) {
 										inputProps={{ 'aria-label': 'Without label' }}
 										{...getFieldProps('tipo')}
 										error={Boolean(touched.tipo && errors.tipo)}>
-										<MenuItem value="producto">producto</MenuItem>
-										<MenuItem value="servicio">servicio</MenuItem>
+										<MenuItem value="producto">Producto</MenuItem>
+										<MenuItem value="servicio">Servicio</MenuItem>
 									</Select>
 								</Box>
 								{isAdmin && (
 									<Box>
-										<Typography color="textSecondary">
-											Especificar la empresa a la que pertenece *
-										</Typography>
+										<Typography color="textSecondary">Especificar el tipo *</Typography>
 										<Select
 											sx={{ width: '100%', mt: 1 }}
 											size="small"

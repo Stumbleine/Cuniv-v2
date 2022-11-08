@@ -149,7 +149,7 @@ function AccountPopover() {
 									color: 'text.secondary',
 								}}
 							/>{' '}
-							Cerrar Sesion
+							Cerrar Sesión
 						</MenuItem>
 					)}
 				/>

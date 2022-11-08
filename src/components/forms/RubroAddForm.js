@@ -69,11 +69,11 @@ export default function RubroAddForm({ handleSnack }) {
 			};
 			add()
 				.then(() => {
-					handleSnack('Rubro agregado exitosamente', 'success');
+					handleSnack('Rubro agregado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -116,7 +116,7 @@ export default function RubroAddForm({ handleSnack }) {
 							size="small"
 							type="text"
 							label="Descripcion"
-							placeholder="Descripcion (opcional)"
+							placeholder="Descripción"
 							{...getFieldProps('descripcion')}
 						/>
 						<Box sx={{ position: 'relative', py: 1 }}>

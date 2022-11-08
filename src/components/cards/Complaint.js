@@ -67,63 +67,6 @@ export default function Complaint({ complaint }) {
 					<ComplaintDetail complaint={complaint} />
 				</Box>
 			</Stack>
-			{/* 
-			<Accordion
-				sx={{ py: 0 }}
-				disableGutters
-				elevation={0}
-				expanded={expanded}
-				onChange={handleChange}>
-				<AccordionSummary
-					sx={{ color: 'textSecondary', p: 0 }}
-					expandIcon={<ExpandMore color="textSecondary" />}>
-					<Typography color="textSecondary">Mas detalles</Typography>
-				</AccordionSummary>
-				<AccordionDetails sx={{ p: 0 }}>
-					<Box
-						sx={{
-							display: 'flex',
-							alignItems: 'start',
-							justifyContent: 'space-around',
-						}}>
-						<Stack
-							sx={{ width: '49%', p: 1, px: 2, background: grey[200], borderRadius: 2 }}>
-							<Typography variant="body2" color="textSecondary">
-								Oferta:{' '}
-							</Typography>
-							<Divider />
-							<Typography sx={{ fontWeight: 'bold', mt: 1 }}>
-								{complaint?.offer}{' '}
-							</Typography>
-							<Typography color="textSecondary" sx={{ mb: 0.5 }}>
-								Descuento: {complaint?.offer_discount}
-							</Typography>
-							<StatusLabel status={complaint?.offer_status} />
-						</Stack>
-						<Stack
-							direction="column"
-							sx={{
-								width: '49%',
-								p: 1,
-								px: 2,
-								background: grey[200],
-								borderRadius: 2,
-							}}>
-							<Typography variant="body2" color="textSecondary">
-								Empresa:{' '}
-							</Typography>
-							<Divider />
-							<Typography sx={{ fontWeight: 'bold', mt: 1 }}>
-								{complaint?.companie}{' '}
-							</Typography>
-							<Typography color="textSecondary">{complaint?.companie_phone}</Typography>
-							<Typography color="textSecondary" noWrap>
-								{complaint?.companie_email}
-							</Typography>
-						</Stack>
-					</Box>
-				</AccordionDetails>
-			</Accordion> */}
 		</Card>
 	);
 }

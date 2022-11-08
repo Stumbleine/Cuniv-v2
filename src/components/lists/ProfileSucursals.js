@@ -29,10 +29,10 @@ export default function ProfileSucursals({ sucursales, handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Sucursal eliminado exitosamente', 'success');
+				handleSnack('Sucursal eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 	return (

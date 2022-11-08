@@ -26,7 +26,7 @@ export default function NotFoundPage() {
 					/>
 					<Box sx={{ textAlign: 'center', maxWidth: 450 }}>
 						<Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-							Pagina no encontrada
+							Página no encontrada
 						</Typography>
 						<Typography color="textSecondary">
 							Lo sentimos, no pudimos encontrar la página que está buscando. ¿Quizás has

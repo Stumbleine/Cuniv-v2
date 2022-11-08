@@ -61,7 +61,7 @@ export default function ProfileProducts({ products }) {
 			{products && (
 				<Box sx={{ textAlign: 'end', width: '100%' }}>
 					<Button component={Link} to="/main/products">
-						Ver mas productos
+						Ver más productos
 					</Button>
 				</Box>
 			)}

@@ -46,7 +46,7 @@ export default function ComplaintDetail({ complaint }) {
 
 	return (
 		<>
-			<Button onClick={handleClickOpen}>Ver Mas Detalles</Button>
+			<Button onClick={handleClickOpen}>Ver Más Detalles</Button>
 
 			<Dialog
 				PaperProps={{ style: { borderRadius: 15 } }}
@@ -59,7 +59,7 @@ export default function ComplaintDetail({ complaint }) {
 						<Typography sx={{ fontWeight: 'bold' }}>Sobre la empresa</Typography>
 						{companie.name && (
 							<Box sx={{ display: 'flex', width: '100%', alignItems: 'center', pl: 1 }}>
-								<Typography sx={{ mr: 1 }}>Razon social:</Typography>
+								<Typography sx={{ mr: 1 }}>Razón social:</Typography>
 								<Typography color="textSecondary" sx={{ ml: 0.5 }}>
 									{companie.name}
 								</Typography>
@@ -68,7 +68,7 @@ export default function ComplaintDetail({ complaint }) {
 						{companie.phone && (
 							<Box sx={{ display: 'flex', width: '100%', alignItems: 'center', pl: 1 }}>
 								<Typography component={Box} sx={{ mr: 1 }}>
-									Telefono:
+									Teléfono:
 								</Typography>
 								<Typography component={Box} color="textSecondary" sx={{ ml: 0.5 }}>
 									{companie.phone}
@@ -99,7 +99,7 @@ export default function ComplaintDetail({ complaint }) {
 						{offer.title && (
 							<Box sx={{ display: 'flex', width: '100%', alignItems: 'center', pl: 1 }}>
 								<Typography component={Box} sx={{ mr: 1 }}>
-									Titulo:
+									Título:
 								</Typography>
 								<Typography component={Box} color="textSecondary" sx={{ ml: 0.5 }}>
 									{offer.title}
@@ -109,7 +109,7 @@ export default function ComplaintDetail({ complaint }) {
 						{offer.description && (
 							<Box sx={{ display: 'flex', width: '100%', alignItems: 'center', pl: 1 }}>
 								<Typography component={Box} sx={{ mr: 1 }}>
-									Descripcion:
+									Descripción:
 								</Typography>
 								<Typography component={Box} color="textSecondary" sx={{ ml: 0.5 }}>
 									{offer.description}

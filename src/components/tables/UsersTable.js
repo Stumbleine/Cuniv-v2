@@ -99,10 +99,10 @@ export default function UsersTable() {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente', 'success');
+				handleSnack('Usuario eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 	const Actions = ({ user }) => {
@@ -198,7 +198,20 @@ export default function UsersTable() {
 											</Box>
 										</TableCell>
 										<TableCell align="right">
-											<Actions user={user} />
+											{/* <Actions user={user} /> */}
+											<Box sx={{ display: 'flex' }}>
+												<Edituser
+													user={user}
+													handleSnack={handleSnack}
+													// disabled={!isProvider}
+												/>
+												<DeleteItem
+													deleteAsync={deleteAsync}
+													id={user.id}
+													itemName={user.nombres}
+													// disabled={!isProvider}
+												/>
+											</Box>
 										</TableCell>
 									</TableRow>
 								))

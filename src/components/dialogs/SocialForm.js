@@ -74,11 +74,11 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 			};
 			add()
 				.then(() => {
-					handleSnack('Link actualizado exitosamente', 'success');
+					handleSnack('Link actualizado exitosamente.', 'success');
 					handleClose();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					handleClose();
 					setSubmitting(false);
 				});
@@ -153,7 +153,7 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="Correo electronico"
+									label="Correo electrónico"
 									{...getFieldProps('email')}
 									error={Boolean(touched.email && errors.email)}
 									helperText={touched.email && errors.email}

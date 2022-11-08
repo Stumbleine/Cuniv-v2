@@ -74,7 +74,7 @@ export default function Edituser({ user, handleSnack, disabled }) {
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string().required('Los nombres son requeridos.'),
 			apellidos: Yup.string().required('Los apellidos son requeridos.'),
-			email: Yup.string().email().required('Correo electronico es requerido.'),
+			email: Yup.string().email().required('Correo electrónico es requerido.'),
 			// rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),
 		enableReinitialize: true,
@@ -88,12 +88,12 @@ export default function Edituser({ user, handleSnack, disabled }) {
 			};
 			update()
 				.then(r => {
-					handleSnack('Usuario actualizado exitosamente', 'success');
+					handleSnack('Usuario actualizado exitosamente.', 'success');
 					handleClose();
 					resetForm();
 				})
 				.catch(e => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -157,7 +157,7 @@ export default function Edituser({ user, handleSnack, disabled }) {
 									variant="outlined"
 									size="small"
 									label="Email"
-									placeholder="Correo electronico"
+									placeholder="Correo electrónico"
 									{...getFieldProps('email')}
 									error={Boolean(touched.email && errors.email)}
 									helperText={touched.email && errors.email}

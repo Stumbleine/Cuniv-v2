@@ -181,9 +181,9 @@ export default function OffersPage() {
 	const msgCompanyNull = () => {
 		return (
 			<Stack maxWidth="lg" spacing={2} width={1} alignItems="center" sx={{ mt: 2 }}>
-				<Typography>No ha registrado su empresa aun</Typography>
+				<Typography>No ha registrado su empresa</Typography>
 				<Typography color="textSecondary">
-					registrar su empresa ayudara a que sus ofertas sean facilmente relacionadas con
+					Registrar su empresa ayudará a que sus ofertas sean fácilmente relacionadas con
 					su empresa
 				</Typography>
 				<Button component={Link} to={`/main/registerCompanie`} variant="contained">

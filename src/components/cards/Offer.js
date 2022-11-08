@@ -59,10 +59,10 @@ export default function Offer({ offer, handleSnack, companies }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Oferta eliminada exitosamente', 'success');
+				handleSnack('Oferta eliminada exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 
@@ -103,7 +103,7 @@ export default function Offer({ offer, handleSnack, companies }) {
 						noWrap
 						sx={{ overflow: 'hidden', color: 'text.secondary' }}>
 						{offer.discount}
-						{offer.discount_type === 'Porcentual' ? '%' : 'Bs.'} de descuento
+						{offer.discount_type === 'Porcentual' ? '%' : 'Bs.'} de descuento.
 					</Typography>
 				</CardContent>
 			</OfferContent>

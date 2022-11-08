@@ -87,12 +87,11 @@ export default function CompanieRegisterForm({ handleSnack }) {
 			id_proveedor: '',
 		},
 		validationSchema: Yup.object().shape({
-			razon_social: Yup.string().required('Es necesario el nombre'),
-			descripcion: Yup.string().required('Es necesario una descripcion'),
-			rubro: Yup.string().required('Es necesario indicar su rubro'),
-			telefono: Yup.string().required('Es necesario el telefono'),
-			id_proveedor:
-				isAdmin && Yup.number().required('Es necesario asingar el responsable'),
+			razon_social: Yup.string().required('Razón social es requerido'),
+			descripcion: Yup.string().required('Descripción es requerido'),
+			rubro: Yup.string().required('Rubro es requerido'),
+			telefono: Yup.string().required('Teléfono/Celular es requerido'),
+			id_proveedor: isAdmin && Yup.number().required('Debe asignar al responsable'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
@@ -106,11 +105,11 @@ export default function CompanieRegisterForm({ handleSnack }) {
 			}
 			post()
 				.then(() => {
-					handleSnack('Empresa registrado exitosamente', 'success');
+					handleSnack('Empresa registrado exitosamente.', 'success');
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salio, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},
@@ -130,15 +129,15 @@ export default function CompanieRegisterForm({ handleSnack }) {
 									handleChangeFile={handleChangeFile}
 									id="register-companie"
 								/>
-								<Typography sx={{ fontWeight: 'bold' }}>Informacion</Typography>
+								<Typography sx={{ fontWeight: 'bold' }}>Información</Typography>
 								<FastField name="razon_social">
 									{({ field, form, meta }) => (
 										<TextField
 											fullWidth
 											variant="outlined"
 											size="small"
-											label="Razon social"
-											placeholder="nombre de la empresa"
+											label="Razón social *"
+											placeholder="Razón social de la empresa"
 											{...field}
 											error={Boolean(meta.touched && meta.error)}
 											helperText={meta.touched && meta.error}
@@ -151,10 +150,10 @@ export default function CompanieRegisterForm({ handleSnack }) {
 										<TextField
 											fullWidth
 											variant="outlined"
-											label="Descripcion"
+											label="Descripción  *"
 											size="small"
 											multiline
-											placeholder="Descripcion"
+											placeholder="Descripción"
 											{...field}
 											error={Boolean(meta.touched && meta.error)}
 											helperText={meta.touched && meta.error}
@@ -166,9 +165,9 @@ export default function CompanieRegisterForm({ handleSnack }) {
 										<TextField
 											fullWidth
 											variant="outlined"
-											label="telefono"
+											label="Teléfono/Celular  *"
 											size="small"
-											placeholder="telefono"
+											placeholder="Teléfono/Celular"
 											{...field}
 											error={Boolean(meta.touched && meta.error)}
 											helperText={meta.touched && meta.error}
@@ -182,13 +181,13 @@ export default function CompanieRegisterForm({ handleSnack }) {
 
 							<Stack component={Paper} sx={{ p: 2, borderRadius: 2 }} spacing={2}>
 								<FormControl fullWidth size="small">
-									<InputLabel id="rubro-label">rubro</InputLabel>
+									<InputLabel id="rubro-label">Rubro *</InputLabel>
 									<FastField name="rubro">
 										{({ field, form, meta }) => (
 											<Select
 												labelId="rubro-label"
 												id="select-rubro-c"
-												input={<OutlinedInput id="select-rubro-c" label="rubro" />}
+												input={<OutlinedInput id="select-rubro-c" label="Rubro *" />}
 												{...field}
 												error={Boolean(meta.touched && meta.errors)}>
 												{selectRubros?.map(r => (
@@ -206,25 +205,27 @@ export default function CompanieRegisterForm({ handleSnack }) {
 										<TextField
 											fullWidth
 											variant="outlined"
-											label="NIT (opcional)"
+											label="NIT"
 											size="small"
-											placeholder="nit del negocio"
+											placeholder="NIT del negocio"
 											{...field}
 										/>
 									)}
 								</FastField>
-								{isAdmin && providers && (
+								{isAdmin && (
 									<FormControl fullWidth size="small">
-										<InputLabel id="resp-label">Responsable</InputLabel>
+										<InputLabel id="resp-label">Responsable *</InputLabel>
 										<FastField name="id_proveedor">
 											{({ field, form, meta }) => (
 												<Select
 													{...field}
 													labelId="resp-label"
 													id="select-resp-c"
-													input={<OutlinedInput id="select-resp-c" label="Responsable" />}
+													input={
+														<OutlinedInput id="select-resp-c" label="Responsable *" />
+													}
 													error={Boolean(meta.touched && meta.errors)}>
-													{providers.map(r => (
+													{providers?.map(r => (
 														<MenuItem key={r.id} value={r.id}>
 															{r.nombres} {r.apellidos}
 														</MenuItem>

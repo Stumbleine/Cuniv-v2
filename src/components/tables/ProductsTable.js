@@ -60,10 +60,10 @@ export default function ProductsTable({ handleSnack, companies }) {
 
 	const TABLE_HEAD = [
 		{ id: 'producto', label: 'Producto/Servicio', alignRight: false },
-		{ id: 'descripcion', label: 'Descripcion', alignRight: false },
-		{ id: 'precio', label: 'precio', alignRight: false },
+		{ id: 'descripcion', label: 'Descripción', alignRight: false },
+		{ id: 'precio', label: 'Precio', alignRight: false },
 	];
-	isAdmin && TABLE_HEAD.push({ id: 'empresa', label: 'empresa', alignRight: false });
+	isAdmin && TABLE_HEAD.push({ id: 'empresa', label: 'Empresa', alignRight: false });
 
 	if (privilegeEdit || privilegeDelete) {
 		TABLE_HEAD.push({ id: 'acciones', label: 'Acciones', alignRight: false });
@@ -119,10 +119,10 @@ export default function ProductsTable({ handleSnack, companies }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente', 'success');
+				handleSnack('Usuario eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 
@@ -232,7 +232,7 @@ export default function ProductsTable({ handleSnack, companies }) {
 				{(fetchFailed || (!products && !isLoading && !filterLoading)) && (
 					<Box width={1} sx={{ py: 2 }}>
 						<Typography textAlign="center" color="textSecondary">
-							No se encontraron locaciones.
+							No se encontraron productos.
 						</Typography>
 					</Box>
 				)}

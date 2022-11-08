@@ -119,11 +119,11 @@ export default function RedeemPage() {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente', 'success');
+				handleSnack('Usuario eliminado exitosamente.', 'success');
 				setReload(!reload);
 			})
 			.catch(e => {
-				handleSnack('Algo salio, vuelva a intentarlo', 'error');
+				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
 	/**
@@ -134,7 +134,7 @@ export default function RedeemPage() {
 		return (
 			<Box width={1} sx={{ borderRadius: 3, background: red[100], p: 2, mt: 2 }}>
 				<Typography color="error" textAlign="center">
-					¡El codigo no esta relacionado con sus ofertas, o no existe!
+					¡El código no está relacionado con sus ofertas, o no existe!
 				</Typography>
 			</Box>
 		);
@@ -147,7 +147,7 @@ export default function RedeemPage() {
 		return (
 			<Box width={1} sx={{ borderRadius: 3, background: amber[200], p: 2, mt: 2 }}>
 				<Typography color="warning" textAlign="center">
-					¡El codigo ya fue canjeado anteriormente!
+					¡El código ya fue canjeado anteriormente!
 				</Typography>
 				<Typography color="warning" textAlign="center">
 					por el estudiante:{' '}
@@ -297,24 +297,8 @@ export default function RedeemPage() {
 										</React.Fragment>
 									))
 								)}
-								{!cashiers && !isLoading && !fetchFailed && (
+								{(fetchFailed || (!cashiers && !isLoading)) && (
 									<Typography align="center">No se econtraron cajeros</Typography>
-								)}
-								{fetchFailed && (
-									<Box
-										width={1}
-										sx={{
-											py: 2,
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}>
-										<Warning color="error" sx={{ mr: 2 }} />
-
-										<Typography textAlign="center" color="error">
-											Error del servidor
-										</Typography>
-									</Box>
 								)}
 							</List>
 						</Grid>
