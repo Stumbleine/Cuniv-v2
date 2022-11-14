@@ -7,6 +7,7 @@ import {
 	CardMedia,
 	Divider,
 	IconButton,
+	Stack,
 	Tooltip,
 	Typography,
 } from '@mui/material';
@@ -15,6 +16,7 @@ import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { deleteCompanieAsync } from '../../store/companiesSlice';
+import { hasPrivilege } from '../../Utils/RBAC';
 import DeleteItem from '../dialogs/DeleteItem';
 /**
  * Tarjeta para mostrar una empresa en un componente Card, que incluye acciones de eliminar y editar
@@ -26,6 +28,8 @@ import DeleteItem from '../dialogs/DeleteItem';
 export default function SupplierCompany({ companie, handleSnack }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
+	const { user } = useSelector(state => state.user);
+
 	/**
 	 * Ejecuta el dispatch hacia la funcion deleteCompanieAsync que hace la peticion DELETE para una empresa.
 	 * @funcion deleteAsync
@@ -42,7 +46,14 @@ export default function SupplierCompany({ companie, handleSnack }) {
 				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
-
+	const privilegeDelete = hasPrivilege(
+		['gestionar empresas', 'eliminar empresa'],
+		user.permisos
+	);
+	const privilegeEdit = hasPrivilege(
+		['gestionar empresas', 'editar empresa'],
+		user.permisos
+	);
 	return (
 		<Card
 			sx={{
@@ -66,22 +77,12 @@ export default function SupplierCompany({ companie, handleSnack }) {
 				/>
 			</CardActionArea>
 			<CardContent sx={{ textAlign: 'center' }}>
-				<Typography
-					gutterBottom
-					component="div"
-					variant="subtitle1"
-					noWrap
-					sx={{ fontWeight: 'bold' }}>
+				<Typography component="div" noWrap sx={{ fontWeight: 'bold' }}>
 					{companie.razon_social}
 				</Typography>
 
-				<Box
-					sx={{
-						display: 'flex',
-						width: '100%',
-						justifyContent: 'center',
-					}}>
-					{companie.facebook ? (
+				<Stack direction="row" alignItems="center" justifyContent="center">
+					{companie.facebook && (
 						<IconButton onClick={() => window.open(companie.facebook, '_blank')}>
 							<Facebook
 								sx={{
@@ -89,8 +90,8 @@ export default function SupplierCompany({ companie, handleSnack }) {
 								}}
 							/>
 						</IconButton>
-					) : null}
-					{companie.instagram ? (
+					)}
+					{companie.instagram && (
 						<IconButton onClick={() => window.open(companie.instagram, '_blank')}>
 							<Instagram
 								sx={{
@@ -98,8 +99,8 @@ export default function SupplierCompany({ companie, handleSnack }) {
 								}}
 							/>
 						</IconButton>
-					) : null}
-					{companie.sitio_web ? (
+					)}
+					{companie.sitio_web && (
 						<IconButton onClick={() => window.open(companie.sitio_web, '_blank')}>
 							<Language
 								sx={{
@@ -107,8 +108,8 @@ export default function SupplierCompany({ companie, handleSnack }) {
 								}}
 							/>
 						</IconButton>
-					) : null}
-					{companie.email ? (
+					)}
+					{companie.email && (
 						<IconButton
 							onClick={e => {
 								window.location = 'mailto:' + companie.email;
@@ -121,34 +122,43 @@ export default function SupplierCompany({ companie, handleSnack }) {
 								}}
 							/>
 						</IconButton>
-					) : null}
-				</Box>
+					)}
+				</Stack>
 			</CardContent>
 
-			<Divider />
-			<CardActions sx={{ justifyContent: 'end' }}>
-				<Tooltip title="Editar informacion">
-					<IconButton
-						component={Link}
-						size="small"
-						to={`/main/supplierCompanies/${companie.id_empresa}`}>
-						<Edit
-							sx={{
-								// fontSize: 22,
-								color: 'text.icon',
-								'&:hover': {
-									color: 'warning.light',
-								},
-							}}
-						/>
-					</IconButton>
-				</Tooltip>
-				<DeleteItem
-					deleteAsync={deleteAsync}
-					id={companie.id_empresa}
-					itemName={companie.razon_social}
-				/>
-			</CardActions>
+			{(privilegeEdit || privilegeDelete) && (
+				<>
+					<Divider />
+					<CardActions sx={{ justifyContent: 'end' }}>
+						{privilegeEdit && (
+							<Tooltip title="Editar informacion">
+								<IconButton
+									component={Link}
+									size="small"
+									to={`/main/supplierCompanies/${companie.id_empresa}`}>
+									<Edit
+										sx={{
+											// fontSize: 22,
+											color: 'text.icon',
+											'&:hover': {
+												color: 'warning.light',
+											},
+										}}
+									/>
+								</IconButton>
+							</Tooltip>
+						)}
+
+						{privilegeDelete && (
+							<DeleteItem
+								deleteAsync={deleteAsync}
+								id={companie.id_empresa}
+								itemName={companie.razon_social}
+							/>
+						)}
+					</CardActions>
+				</>
+			)}
 		</Card>
 	);
 }

@@ -13,7 +13,6 @@ const initialState = {
 	cashiers: null,
 	isLoading: false,
 	fetchFailed: false,
-
 	redeemResponse: null,
 };
 /**

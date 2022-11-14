@@ -119,7 +119,7 @@ export default function RedeemPage() {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente.', 'success');
+				handleSnack('Cajero eliminado exitosamente.', 'success');
 				setReload(!reload);
 			})
 			.catch(e => {
@@ -192,53 +192,54 @@ export default function RedeemPage() {
 					<Grid item xs={12} md={8}>
 						<FormikProvider value={formik}>
 							<Form onSubmit={handleSubmit}>
-								<Card sx={{ p: 2 }}>
-									<Stack spacing={2}>
-										{/* panel resumen */}
-										<Typography variant="h6" fontWeight="bold" textAlign="center">
-											Formulario de canje
-										</Typography>
-										<TextField
-											label="Codigo"
-											size="small"
-											placeholder="introduce el codigo de canje"
-											maxRows={10}
-											{...getFieldProps('code')}
-											error={Boolean(touched.code && errors.code)}
-											helperText={touched.code && errors.code}
-										/>
-										<Box sx={{ position: 'relative' }}>
-											<Button
-												color="primary"
-												fullWidth
-												type="submit"
-												disabled={isSubmitting}
-												variant="contained">
-												Verificar codigo
-											</Button>
-											{isSubmitting && (
-												<CircularProgress
-													size={24}
-													sx={{
-														color: green[500],
-														position: 'absolute',
-														top: '50%',
-														left: '50%',
-														marginTop: '-12px',
-														marginLeft: '-12px',
-													}}
-												/>
-											)}
-										</Box>
-									</Stack>
-								</Card>
+								<Stack component={Card} sx={{ p: 2 }} spacing={2}>
+									{/* panel resumen */}
+									<Typography variant="h6" fontWeight="bold" textAlign="center">
+										Formulario de canje
+									</Typography>
+									<TextField
+										label="Codigo"
+										size="small"
+										placeholder="introduce el codigo de canje"
+										maxRows={10}
+										{...getFieldProps('code')}
+										error={Boolean(touched.code && errors.code)}
+										helperText={touched.code && errors.code}
+									/>
+									<Box sx={{ position: 'relative' }}>
+										<Button
+											color="primary"
+											fullWidth
+											type="submit"
+											disabled={isSubmitting}
+											variant="contained">
+											Verificar codigo
+										</Button>
+										{isSubmitting && (
+											<CircularProgress
+												size={24}
+												sx={{
+													color: green[500],
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													marginTop: '-12px',
+													marginLeft: '-12px',
+												}}
+											/>
+										)}
+									</Box>
+								</Stack>
 								{redeemError
 									? codeError()
 									: redeemResponse?.redeemed
 									? codeErrorRedeemed(redeemResponse?.redeemed)
 									: redeemSuccess && (
 											<Paper sx={{ p: 2, mt: 2 }}>
-												<StudentCard data={redeemResponse} />
+												<StudentCard
+													offer={redeemResponse?.offer}
+													student={redeemResponse?.student}
+												/>
 											</Paper>
 									  )}
 							</Form>
@@ -297,7 +298,7 @@ export default function RedeemPage() {
 										</React.Fragment>
 									))
 								)}
-								{(fetchFailed || (!cashiers && !isLoading)) && (
+								{(fetchFailed || cashiers.length <= 0 || (!cashiers && !isLoading)) && (
 									<Typography align="center">No se econtraron cajeros</Typography>
 								)}
 							</List>

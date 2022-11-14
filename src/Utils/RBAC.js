@@ -22,17 +22,20 @@ export const hasPrivilege = (pArray, userPermissions) => {
  */
 export const getNavlinks = (userPermissions, isAdmin) => {
 	const navlinks = [];
-
 	!isAdmin && navlinks.push({ name: 'Inicio', path: 'home', icon: 'home' });
 
-	hasPrivilege(['listar ofertas', 'gestionar ofertas'], userPermissions) &&
-		navlinks.push(getLink('Ofertas'));
-	hasPrivilege(['listar productos', 'gestionar productos'], userPermissions) &&
-		navlinks.push(getLink('Productos'));
 	hasPrivilege(['listar empresas', 'gestionar empresas'], userPermissions)
 		? navlinks.push(getLink('Empresas'))
 		: hasPrivilege(['perfil de empresa'], userPermissions) &&
 		  navlinks.push(getLink('Mi Empresa'));
+
+	hasPrivilege(['listar ofertas', 'gestionar ofertas'], userPermissions) &&
+		navlinks.push(getLink('Ofertas'));
+
+	hasPrivilege(['listar productos', 'gestionar productos'], userPermissions) &&
+		navlinks.push(getLink('Productos'));
+
+	hasPrivilege(['cajero'], userPermissions) && navlinks.push(getLink('Cajero'));
 
 	if (hasPrivilege(['estadisticas'], userPermissions)) {
 		if (isAdmin) {
@@ -44,14 +47,16 @@ export const getNavlinks = (userPermissions, isAdmin) => {
 
 	hasPrivilege(['listar usuarios', 'gestionar usuarios'], userPermissions) &&
 		navlinks.push(getLink('Usuarios'));
+
 	hasPrivilege(['listar rubros', 'gestionar rubros'], userPermissions) &&
 		navlinks.push(getLink('Rubros'));
-	// hasPrivilege(['gestionar roles'], userPermissions) && navlinks.push(getLink('Roles'));
-	hasPrivilege(['cajero'], userPermissions) && navlinks.push(getLink('Cajero'));
+
 	hasPrivilege(['gestionar reclamos'], userPermissions) &&
 		navlinks.push(getLink('Reclamos'));
+
 	hasPrivilege(['gestionar locaciones'], userPermissions) &&
 		navlinks.push(getLink('Locaciones'));
+
 	hasPrivilege(['gestionar links'], userPermissions) && navlinks.push(getLink('Links'));
 
 	return navlinks;

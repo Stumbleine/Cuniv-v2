@@ -16,6 +16,7 @@ import { deleteOfferAsync } from '../../store/offersSlice';
 import DeleteItem from '../dialogs/DeleteItem';
 import EditOfferPB from '../dialogs/EditOfferPB';
 import StatusLabel from '../StatusLabel';
+import { hasPrivilege } from '../../Utils/RBAC';
 
 /**
  * Tarjeta de oferta que muestra informacion de una oferta, con la imagen, titulo, descuento y estado.
@@ -49,6 +50,8 @@ export default function Offer({ offer, handleSnack, companies }) {
 	}));
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
+	const { user } = useSelector(state => state.user);
+
 	/**
 	 * Ejecuta el dispatch hacia la funcion deleteOfferAsync que hace la peticion DELETE para una oferta.
 	 * @funcion deleteAsync
@@ -65,7 +68,15 @@ export default function Offer({ offer, handleSnack, companies }) {
 				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
 			});
 	};
+	const privilegeEdit = hasPrivilege(
+		['gestionar ofertas', 'editar oferta'],
+		user.permisos
+	);
 
+	const privilegeDelete = hasPrivilege(
+		['gestionar ofertas', 'eliminar oferta'],
+		user.permisos
+	);
 	return (
 		<Card
 			sx={{
@@ -107,15 +118,23 @@ export default function Offer({ offer, handleSnack, companies }) {
 					</Typography>
 				</CardContent>
 			</OfferContent>
-			<CardActions sx={{ justifyContent: 'end' }}>
-				<EditOfferPB offer={offer} handleSnack={handleSnack} />
-				<EditOffer companies={companies} offer={offer} handleSnack={handleSnack} />
-				<DeleteItem
-					deleteAsync={deleteAsync}
-					id={offer.id_offer}
-					itemName={offer.title}
-				/>
-			</CardActions>
+			{(privilegeEdit || privilegeDelete) && (
+				<CardActions sx={{ justifyContent: 'end' }}>
+					{privilegeEdit && (
+						<>
+							<EditOfferPB offer={offer} handleSnack={handleSnack} />
+							<EditOffer companies={companies} offer={offer} handleSnack={handleSnack} />
+						</>
+					)}
+					{privilegeDelete && (
+						<DeleteItem
+							deleteAsync={deleteAsync}
+							id={offer.id_offer}
+							itemName={offer.title}
+						/>
+					)}
+				</CardActions>
+			)}
 		</Card>
 	);
 }

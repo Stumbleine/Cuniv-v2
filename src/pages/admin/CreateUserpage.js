@@ -1,7 +1,8 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Button, Container, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import UserCreateForm from '../../components/forms/UserCreateForm';
 import ShowRoles from '../../components/ShowRoles';
@@ -12,12 +13,32 @@ import SnackCustom from '../../components/SnackCustom';
  * @exports CreateUserpage
  */
 export default function CreateUserpage() {
+	const { user } = useSelector(state => state.user);
+
 	const [snack, setSnack] = useState({
 		open: false,
 		msg: '',
 		severity: 'success',
 		redirectPath: null,
 	});
+	const [isSADM, setSADM] = useState(false);
+	const [isADM, setADM] = useState(false);
+
+	const recognizeRole = () => {
+		user?.roles.forEach(r => {
+			if (r.name === 'SADM') {
+				setSADM(true);
+			}
+			if (r.name === 'ADM') {
+				setADM(true);
+			}
+		});
+	};
+
+	useEffect(() => {
+		recognizeRole();
+	}, [isSADM]);
+
 	/**
 	 * Cierra una alerta <SnackCustom/>
 	 * @function closeSnack
@@ -49,7 +70,7 @@ export default function CreateUserpage() {
 						color: 'text.title',
 						fontStyle: 'italic',
 					}}>
-					Registro de usuarios
+					{isSADM ? 'Registro de usuarios' : isADM && 'Registro de proveedor'}
 				</Typography>
 			</Box>
 			<Grid container spacing={2} justifyContent="center" justifyItems="center">
@@ -61,7 +82,7 @@ export default function CreateUserpage() {
 						startIcon={<ArrowBack></ArrowBack>}>
 						Volver
 					</Button>
-					<UserCreateForm handleSnack={handleSnack} />
+					<UserCreateForm handleSnack={handleSnack} isSADM={isSADM} isADM={isADM} />
 				</Grid>
 			</Grid>
 		</Container>

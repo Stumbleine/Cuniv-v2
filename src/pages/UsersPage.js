@@ -6,6 +6,7 @@ import {
 	InputLabel,
 	MenuItem,
 	OutlinedInput,
+	Pagination,
 	Select,
 	Stack,
 	Typography,
@@ -18,7 +19,8 @@ import FilterBar from '../components/FilterBar';
 import ShowRoles from '../components/ShowRoles';
 import UsersTable from '../components/tables/UsersTable';
 import API from '../conection';
-import { filterUsersAsync, usersAsync } from '../store/usersSlice';
+import { setPage, usersAsync } from '../store/usersSlice';
+import { hasPrivilege } from '../Utils/RBAC';
 /**
  * Pagina que muestra la tabla de usuarios del sistema
  * @component UsersPage
@@ -27,6 +29,25 @@ import { filterUsersAsync, usersAsync } from '../store/usersSlice';
 export default function UsersPage() {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
+	const { page, total } = useSelector(state => state.users);
+	const { user } = useSelector(state => state.user);
+	const [isSADM, setSADM] = useState(false);
+	const [isADM, setADM] = useState(false);
+	const recognizeRole = () => {
+		user?.roles.forEach(r => {
+			if (r.name === 'SADM') {
+				setSADM(true);
+			}
+			if (r.name === 'ADM') {
+				setADM(true);
+			}
+		});
+	};
+
+	useEffect(() => {
+		recognizeRole();
+	}, [isSADM]);
+
 	const [roles, setRoles] = useState([
 		{ name: 'PRV', label: 'Proveedor' },
 		{ name: 'ADM', label: 'Administrador' },
@@ -39,13 +60,21 @@ export default function UsersPage() {
 	const [rol, setRol] = useState('All');
 	const [sesion, setSesion] = useState('All');
 
+	const privilegeCreate = hasPrivilege(
+		['gestionar usuarios', 'crear producto'],
+		user.permisos
+	);
+
 	useEffect(() => {
 		document.title = 'ssansi | usuarios';
-		dispatch(usersAsync(accessToken));
+		dispatch(usersAsync(accessToken, page, search, rol, sesion));
 		/**
 		 * Realiza una peticion para traer roles del sistema para usarlo en el filtrador
 		 * @function {async} getRoles
 		 */
+	}, [page]);
+
+	useEffect(() => {
 		const getRoles = async () => {
 			const r = await API.get('select/roles', {
 				headers: { Authorization: `Bearer ${accessToken}` },
@@ -54,6 +83,7 @@ export default function UsersPage() {
 		};
 		getRoles();
 	}, []);
+
 	/**
 	 * Realiza dispatch hacia filterUsersAsync para filtrar usuarios por ROL
 	 * @function handleRol
@@ -61,7 +91,7 @@ export default function UsersPage() {
 	 */
 	const handleRol = event => {
 		setRol(event.target.value);
-		dispatch(filterUsersAsync(accessToken, search, event.target.value, sesion));
+		dispatch(usersAsync(accessToken, page, search, event.target.value, sesion));
 	};
 	/**
 	 * Realiza dispatch hacia filterUsersAsync para filtrar usuarios por estado de sesion
@@ -70,7 +100,7 @@ export default function UsersPage() {
 	 */
 	const handleSesion = event => {
 		setSesion(event.target.value);
-		dispatch(filterUsersAsync(accessToken, search, rol, event.target.value));
+		dispatch(usersAsync(accessToken, page, search, rol, event.target.value));
 	};
 	/**
 	 * Realiza dispatch hacia filterUsersAsync para buscar usuarios por caracteres ingresado
@@ -79,7 +109,20 @@ export default function UsersPage() {
 	 */
 	const handleSearch = values => {
 		setSearch(values.search);
-		dispatch(filterUsersAsync(accessToken, values.search, rol, sesion));
+		dispatch(usersAsync(accessToken, page, values.search, rol, sesion));
+	};
+
+	// let { pageUrl } = useParams();
+	const count = Math.ceil(total / 60);
+
+	// useEffect(() => {
+	// 	if (pageUrl != undefined) {
+	// 		dispatch(setPageActual(pageUrl));
+	// 	}
+	// }, [pageUrl]);
+
+	const handlePageActual = (event, value) => {
+		dispatch(setPage(parseInt(value) - 1));
 	};
 
 	return (
@@ -135,18 +178,28 @@ export default function UsersPage() {
 								</Select>
 							</FormControl>
 						</FilterBar>
-
-						<Button
-							to={`/main/createUser`}
-							component={Link}
-							sx={{ textDecoration: 'none', width: { xs: '100%', md: 'auto' } }}
-							startIcon={<Add />}
-							variant="contained">
-							Usuario
-						</Button>
+						{privilegeCreate && (
+							<Button
+								to={`/main/createUser`}
+								component={Link}
+								sx={{ textDecoration: 'none', width: { xs: '100%', md: 'auto' } }}
+								startIcon={<Add />}
+								variant="contained">
+								{isSADM ? 'Usuario' : isADM && 'Proveedor'}
+							</Button>
+						)}
 					</Stack>
 				</Box>
 				<UsersTable></UsersTable>
+				<Stack spacing={2} sx={{ mt: 2 }} alignItems="center">
+					<Pagination
+						count={count}
+						variant="outlined"
+						shape="rounded"
+						page={parseInt(page) + 1}
+						onChange={handlePageActual}
+					/>
+				</Stack>
 			</Box>
 		</Container>
 	);

@@ -40,7 +40,7 @@ export default function ProductsPage() {
 			});
 			setCompanies(r.data);
 		};
-		getCompanies();
+		isAdmin && getCompanies();
 	}, []);
 
 	const [snack, setSnack] = useState({

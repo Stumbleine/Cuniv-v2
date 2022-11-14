@@ -22,6 +22,7 @@ import { deleteUserAsync } from '../../store/usersSlice';
 import SnackCustom from '../SnackCustom';
 import Edituser from '../dialogs/EditUser';
 import DeleteItem from '../dialogs/DeleteItem';
+import { hasPrivilege } from '../../Utils/RBAC';
 /**
  * Tabla que enlista usuarios del sistema
  * @component UsersTable
@@ -33,15 +34,27 @@ export default function UsersTable() {
 		state => state.users
 	);
 	const { accessToken } = useSelector(state => state.login);
+	const { user, isAdmin } = useSelector(state => state.user);
 
+	const privilegeEdit = hasPrivilege(
+		['gestionar usuarios', 'editar usuario'],
+		user.permisos
+	);
+
+	const privilegeDelete = hasPrivilege(
+		['gestionar usuarios', 'eliminar usuario'],
+		user.permisos
+	);
 	const TABLE_HEAD = [
 		{ id: 'nombres', label: 'Nombres', alignRight: false },
 		{ id: 'role', label: 'Roles', alignRight: false },
 		{ id: 'entidad', label: 'Entidad', alignRight: false },
 		{ id: 'fechaRegistro', label: 'Fecha Registro', alignRight: false },
 		{ id: 'estado', label: 'Estado', alignRight: false },
-		{ id: 'acciones', label: 'Acciones', alignRight: false },
 	];
+	if (privilegeEdit || privilegeDelete) {
+		TABLE_HEAD.push({ id: 'acciones', label: 'Acciones', alignRight: false });
+	}
 	const [rowsPerPage, setRowsPerPage] = useState(15);
 	const [page, setPage] = useState(0);
 	/**
@@ -197,22 +210,28 @@ export default function UsersTable() {
 												</Typography>
 											</Box>
 										</TableCell>
-										<TableCell align="right">
-											{/* <Actions user={user} /> */}
-											<Box sx={{ display: 'flex' }}>
-												<Edituser
-													user={user}
-													handleSnack={handleSnack}
-													// disabled={!isProvider}
-												/>
-												<DeleteItem
-													deleteAsync={deleteAsync}
-													id={user.id}
-													itemName={user.nombres}
-													// disabled={!isProvider}
-												/>
-											</Box>
-										</TableCell>
+										{(privilegeEdit || privilegeDelete) && (
+											<TableCell align="right">
+												{/* <Actions user={user} /> */}
+												<Box sx={{ display: 'flex' }}>
+													{privilegeEdit && (
+														<Edituser
+															user={user}
+															handleSnack={handleSnack}
+															// disabled={!isProvider}
+														/>
+													)}
+													{privilegeDelete && (
+														<DeleteItem
+															deleteAsync={deleteAsync}
+															id={user.id}
+															itemName={user.nombres}
+															// disabled={!isProvider}
+														/>
+													)}
+												</Box>
+											</TableCell>
+										)}
 									</TableRow>
 								))
 						: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}

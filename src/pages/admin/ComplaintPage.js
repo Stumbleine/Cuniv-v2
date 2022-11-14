@@ -70,7 +70,7 @@ export default function ComplaintPage() {
 	 */
 	const msgclaimsNull = () => {
 		return (
-			<Stack width={1} spacing={2} alignItems="center">
+			<Stack width={1} spacing={2} alignItems="center" sx={{ py: 2 }}>
 				<Typography>No se han encontrado reportes</Typography>
 			</Stack>
 		);
@@ -124,10 +124,8 @@ export default function ComplaintPage() {
 								</Grid>
 						  ))}
 
-					<Stack>
-						{(fetchFailed || (!complaints && !isLoading && !filterLoading)) &&
-							msgclaimsNull()}
-					</Stack>
+					{(fetchFailed || (!complaints && !isLoading && !filterLoading)) &&
+						msgclaimsNull()}
 				</Grid>
 			</Box>
 		</Container>

@@ -12,10 +12,11 @@ import {
 	Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import Popup from '../../components/dialogs/Popup';
+import API from '../../conection';
 import { loginGoogleAsync } from '../../store/loginSlice';
 /**
  * Orgniza las imagenes de la lista
@@ -82,6 +83,22 @@ export default function LandingPage() {
 		{ paso: 2, texto: 'Registrar su empresa o institución' },
 		{ paso: 3, texto: 'Publique ofertas de productos y servicios' },
 	];
+
+	const [companies, setCompanies] = useState(null);
+	useEffect(() => {
+		const fetchLogos = async () => {
+			return await API.get('public/logo-companies');
+		};
+		fetchLogos()
+			.then(r => {
+				console.log(r.data);
+				setCompanies(r.data);
+			})
+			.catch(e => {
+				console.log('error');
+			});
+	}, []);
+
 	return (
 		<>
 			<Popup openFromFather={open} handleCloseFromFather={handleCloseFromFather} />
@@ -228,19 +245,6 @@ export default function LandingPage() {
 							</Box>
 						</Grid>
 						<Grid item xs={12} md={6} lg={6}>
-							{/* <ImageList variant="masonry" cols={3} gap={8}>
-							{itemData.map(item => (
-								<ImageListItem key={item.img}>
-									<img
-										style={{ borderRadius: 15 }}
-										src={`${item.img}?w=248&fit=crop&auto=format`}
-										srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-										alt={item.title}
-										loading="lazy"
-									/>
-								</ImageListItem>
-							))}
-						</ImageList> */}
 							<ImageList
 								// sx={{ width: 500, height: 450 }}
 								variant="quilted"
@@ -281,28 +285,27 @@ export default function LandingPage() {
 					</Grid>
 				</Container>
 			</Box>
-			<Container maxWidth="xl" sx={{ mb: 3 }}>
-				<Typography
-					sx={{
-						textAlign: 'center',
-						color: 'text.primary',
-						fontWeight: 'bold',
-						fontSize: 27,
-						py: 3,
-					}}>
-					Empresas afiliadas
-				</Typography>
-				<Grid container spacing={2} justifyContent="center">
-					{empresas.map((e, index) => (
-						<Grid key={index} item>
-							<Box
-								component="img"
-								src={e.image}
-								sx={{ borderRadius: 4, height: 150 }}></Box>
-						</Grid>
-					))}
-				</Grid>
-			</Container>
+			{companies && (
+				<Container maxWidth="xl" sx={{ mb: 3 }}>
+					<Typography
+						sx={{
+							textAlign: 'center',
+							color: 'text.primary',
+							fontWeight: 'bold',
+							fontSize: 27,
+							py: 3,
+						}}>
+						Empresas afiliadas
+					</Typography>
+					<Grid container spacing={2} justifyContent="center">
+						{companies?.map((e, index) => (
+							<Grid key={index} item>
+								<Box component="img" src={e.logo} sx={{ borderRadius: 4, height: 130 }} />
+							</Grid>
+						))}
+					</Grid>
+				</Container>
+			)}
 		</>
 	);
 }

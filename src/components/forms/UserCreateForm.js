@@ -25,10 +25,11 @@ import UploadImage from '../UploadImage';
  * @property {Function} handleSnack llama al componente snackbar (alerta)
  * @exports UserCreateForm
  */
-function UserCreateForm({ handleSnack }) {
+function UserCreateForm({ handleSnack, isSADM, isADM }) {
 	const dispatch = useDispatch();
 	const { accessToken } = useSelector(state => state.login);
 	const [fileImage, setFileImage] = useState(null);
+
 	/**
 	 * Asigna el archivo imagen proveniente de <UploadImage/>
 	 * @function handleChangeFile
@@ -51,7 +52,7 @@ function UserCreateForm({ handleSnack }) {
 			nombres: '',
 			apellidos: '',
 			email: '',
-			rol: '',
+			rol: isSADM === true ? '' : 'PRV',
 		},
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string().required('Los nombres son requeridos.'),
@@ -69,7 +70,10 @@ function UserCreateForm({ handleSnack }) {
 			};
 			create()
 				.then(() => {
-					handleSnack('Usuario creado exitosamente.', 'success');
+					handleSnack(
+						isSADM ? 'Usuario' : 'Proveedor' + 'creado exitosamente.',
+						'success'
+					);
 					resetForm();
 					setFileImage(null);
 				})
@@ -83,51 +87,49 @@ function UserCreateForm({ handleSnack }) {
 	return (
 		<FormikProvider value={formik}>
 			<Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-				<Card sx={{ p: 2 }}>
-					<Stack spacing={2}>
-						<UploadImage
-							id="create-user"
-							label="foto"
-							type="Circle"
-							handleChangeFile={handleChangeFile}
-						/>
-						<TextField
-							required
-							fullWidth
-							variant="outlined"
-							size="small"
-							label="Nombres"
-							placeholder="nombres"
-							{...getFieldProps('nombres')}
-							error={Boolean(touched.nombres && errors.nombres)}
-							helperText={touched.nombres && errors.nombres}
-						/>
-						<TextField
-							required
-							fullWidth
-							variant="outlined"
-							size="small"
-							label="Apellidos"
-							placeholder="Titulo de oferta"
-							{...getFieldProps('apellidos')}
-							error={Boolean(touched.apellidos && errors.apellidos)}
-							helperText={touched.apellidos && errors.apellidos}
-						/>
-						<TextField
-							required
-							fullWidth
-							variant="outlined"
-							size="small"
-							label="Email"
-							placeholder="Correo electrónico"
-							{...getFieldProps('email')}
-							error={Boolean(touched.email && errors.email)}
-							helperText={touched.email && errors.email}
-						/>
-
+				<Stack component={Card} sx={{ p: 2 }} spacing={2}>
+					<UploadImage
+						id="create-user"
+						label="foto"
+						type="Circle"
+						handleChangeFile={handleChangeFile}
+					/>
+					<TextField
+						required
+						fullWidth
+						variant="outlined"
+						size="small"
+						label="Nombres"
+						placeholder="nombres"
+						{...getFieldProps('nombres')}
+						error={Boolean(touched.nombres && errors.nombres)}
+						helperText={touched.nombres && errors.nombres}
+					/>
+					<TextField
+						required
+						fullWidth
+						variant="outlined"
+						size="small"
+						label="Apellidos"
+						placeholder="Titulo de oferta"
+						{...getFieldProps('apellidos')}
+						error={Boolean(touched.apellidos && errors.apellidos)}
+						helperText={touched.apellidos && errors.apellidos}
+					/>
+					<TextField
+						required
+						fullWidth
+						variant="outlined"
+						size="small"
+						label="Email"
+						placeholder="Correo electrónico"
+						{...getFieldProps('email')}
+						error={Boolean(touched.email && errors.email)}
+						helperText={touched.email && errors.email}
+					/>
+					{isSADM && (
 						<FormControl fullWidth size="small">
 							<InputLabel id="role-label">Rol</InputLabel>
-
 							<Select
 								labelId="role-label"
 								label="Rol"
@@ -146,44 +148,41 @@ function UserCreateForm({ handleSnack }) {
 								{touched.rol && errors.rol}
 							</FormHelperText>
 						</FormControl>
-						<Typography variant="body2" color="textSecondary">
-							Nota: La contraseña se enviara al correo electrónico
-						</Typography>
-						<Box sx={{ position: 'relative' }}>
-							<Button
-								color="primary"
-								fullWidth
-								type="submit"
-								disabled={isSubmitting}
-								variant="contained">
-								Crear Usuario
-							</Button>
-							{isSubmitting && (
-								<CircularProgress
-									size={24}
-									sx={{
-										color: green[500],
-										position: 'absolute',
-										top: '50%',
-										left: '50%',
-										marginTop: '-12px',
-										marginLeft: '-12px',
-									}}
-								/>
-							)}
-						</Box>
-					</Stack>
-				</Card>
+					)}
+					<Typography variant="body2" color="textSecondary">
+						Nota: La contraseña se enviara al correo electrónico
+					</Typography>
+					<Box sx={{ position: 'relative' }}>
+						<Button
+							color="primary"
+							fullWidth
+							type="submit"
+							disabled={isSubmitting}
+							variant="contained">
+							Crear Usuario
+						</Button>
+						{isSubmitting && (
+							<CircularProgress
+								size={24}
+								sx={{
+									color: green[500],
+									position: 'absolute',
+									top: '50%',
+									left: '50%',
+									marginTop: '-12px',
+									marginLeft: '-12px',
+								}}
+							/>
+						)}
+					</Box>
+				</Stack>
 			</Form>
 		</FormikProvider>
 	);
 }
 export const rols = [
-	// { id_rol: 3, rol: 'SADM', label: 'Super Administrador' },
 	{ id_rol: 2, rol: 'ADM', label: 'Administrador' },
 	{ id_rol: 1, rol: 'PRV', label: 'Proveedor' },
-	// { id_rol: 4, rol: 'EST', label: 'Estudiante' },
-	// { id_rol: 5, rol: 'CJRO', label: 'Cajero' },
 ];
 
 export default UserCreateForm;

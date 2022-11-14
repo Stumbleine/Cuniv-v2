@@ -25,7 +25,7 @@ export default function HomePage() {
 				<WarningVerified>¡Su empresa a un no fue verificado!</WarningVerified>
 			)}
 
-			<Stack spacing={1} sx={{ mt: 2 }}>
+			<Stack spacing={1} sx={{ mt: 2 }} alignItems="center">
 				{/* {isAdmin ? (
 					<Stack spacing={1}>
 						<Typography variant="h2" fontWeight="bold" aling="center">
@@ -34,10 +34,10 @@ export default function HomePage() {
 					</Stack>
 				) : ( */}
 				<Stack spacing={1}>
-					<Typography variant="h4" fontWeight="bold">
+					<Typography variant="h4" fontWeight="bold" textAlign="center">
 						¡Hola {user.nombres}, Bienvenido!
 					</Typography>
-					<Typography variant="h5" color="textSecondary">
+					<Typography variant="h5" color="textSecondary" textAlign="center">
 						Estamos contentos de tenerte aqui.
 					</Typography>
 				</Stack>

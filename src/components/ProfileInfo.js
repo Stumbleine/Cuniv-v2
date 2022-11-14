@@ -1,6 +1,8 @@
 import { Email, Facebook, Instagram, Language } from '@mui/icons-material';
 import { Box, Stack, Typography } from '@mui/material';
 import { blue, grey, pink } from '@mui/material/colors';
+import { useSelector } from 'react-redux';
+import { hasPrivilege } from '../Utils/RBAC';
 import EditCompanie from './dialogs/EditCompanie';
 import SocialForm from './dialogs/SocialForm';
 /**
@@ -18,6 +20,11 @@ export default function ProfileInfo({ companie, handleSnack }) {
 	 * @component SocialList
 	 * @exports SocialList
 	 */
+	const { user } = useSelector(state => state.user);
+	const privilegeEdit = hasPrivilege(
+		['gestionar empresas', 'editar empresa'],
+		user.permisos
+	);
 	const SocialList = () => {
 		return (
 			<>
@@ -119,7 +126,9 @@ export default function ProfileInfo({ companie, handleSnack }) {
 				<Box sx={{ textAlign: 'center', mt: 1 }}>
 					<Box sx={{ display: 'flex', ml: 4, alignItems: 'center' }}>
 						<Typography variant="h5">{companie?.razon_social} </Typography>
-						<EditCompanie companie={companie} handleSnack={handleSnack} />
+						{privilegeEdit && (
+							<EditCompanie companie={companie} handleSnack={handleSnack} />
+						)}
 					</Box>
 					<Typography variant="body1"> {companie?.telefono} </Typography>
 				</Box>
@@ -153,14 +162,17 @@ export default function ProfileInfo({ companie, handleSnack }) {
 				</Typography>
 			</Typography>
 
-			<Box sx={{ display: 'flex', alignItems: 'center' }}>
-				<Typography sx={{ fontWeight: 'bold' }}>Redes sociales</Typography>
-				{!noSocial ? (
-					<SocialForm mode="add" companie={companie} handleSnack={handleSnack} />
-				) : (
-					<SocialForm mode="edit" companie={companie} handleSnack={handleSnack} />
-				)}
-			</Box>
+			{privilegeEdit && (
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					<Typography sx={{ fontWeight: 'bold' }}>Redes sociales</Typography>
+					{!noSocial ? (
+						<SocialForm mode="add" companie={companie} handleSnack={handleSnack} />
+					) : (
+						<SocialForm mode="edit" companie={companie} handleSnack={handleSnack} />
+					)}
+				</Box>
+			)}
+
 			{!noSocial ? (
 				<Typography
 					sx={{ fontStyle: 'italic', pl: 2 }}

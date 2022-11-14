@@ -94,6 +94,20 @@ export default function OffersPage() {
 			setShowList(false);
 		}
 	}, [offers, user]);
+
+	useEffect(() => {
+		/**
+		 * Hace peticion al servidor para traer empresas, que es usado en el filtro
+		 * @function {async} getCompanies
+		 */
+		const getCompanies = async () => {
+			const r = await API.get('select/companies', {
+				headers: { Authorization: `Bearer ${accessToken}` },
+			});
+			setCompanies(r.data);
+		};
+		isAdmin && getCompanies();
+	}, []);
 	/**
 	 * Realiza dispatch hacia filterOffersAsync para filtrar ofertas por empresa
 	 * @function handleCompanie
@@ -226,11 +240,11 @@ export default function OffersPage() {
 										onChange={handleCompanie}
 										input={<OutlinedInput id="companie-filter" label="Empresa" />}>
 										<MenuItem value="All">Todos</MenuItem>
-										<MenuItem value={5}>Panchita</MenuItem>
-										<MenuItem value={14}>Jugos tropicales</MenuItem>
-										<MenuItem value={6}>Cine Center</MenuItem>
-										<MenuItem value={12}>Sky Box</MenuItem>
-										<MenuItem value={8}>Optica America</MenuItem>
+										{companies?.map(c => (
+											<MenuItem key={c.id_empresa} value={c.id_empresa}>
+												{c.razon_social}
+											</MenuItem>
+										))}
 									</Select>
 								</FormControl>
 							)}

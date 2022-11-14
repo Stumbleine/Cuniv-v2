@@ -19,16 +19,6 @@ export default function StudentCard({ offer, student }) {
 						src={student?.picture}
 						sx={{ borderRadius: 5, minWidth: 200, height: 'auto' }}></Box>
 				</Box>
-				<Box
-					sx={{
-						fontWeight: 'bold',
-						color: green[500],
-						textAlign: 'center',
-						width: 1,
-						p: 1,
-					}}>
-					¡Codigo canjeado!
-				</Box>
 			</Grid>
 			<Grid item sm={6} xs={12}>
 				<Stack sx={{ p: 1 }} spacing={1}>
@@ -61,6 +51,16 @@ export default function StudentCard({ offer, student }) {
 								)}
 							</Box>
 						</Card>
+					</Box>
+					<Box
+						sx={{
+							fontWeight: 'bold',
+							color: green[500],
+							textAlign: 'center',
+							width: 1,
+							p: 1,
+						}}>
+						¡Código canjeado!
 					</Box>
 				</Stack>
 			</Grid>

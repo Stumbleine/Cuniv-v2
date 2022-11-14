@@ -14,6 +14,8 @@ const initialState = {
 	isLoading: false,
 	filterLoading: false,
 	fetchFailed: false,
+	page: 0,
+	total: 0,
 };
 /**
  * Creacion y configuracion del Slice, reducers
@@ -24,7 +26,8 @@ const usersSlice = createSlice({
 	initialState,
 	reducers: {
 		setUsers: (state, { payload }) => {
-			state.users = payload;
+			state.users = payload.users;
+			state.total = payload.total;
 			state.isLoading = false;
 			state.filterLoading = false;
 			state.fetchFailed = false;
@@ -42,6 +45,9 @@ const usersSlice = createSlice({
 			state.filterLoading = false;
 			state.isLoading = false;
 		},
+		setPage: (state, { payload }) => {
+			state.page = payload;
+		},
 	},
 });
 /**
@@ -50,38 +56,18 @@ const usersSlice = createSlice({
  * @param {String} token access_token del usuario
  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
  */
-export const usersAsync = token => async dispatch => {
-	dispatch(setLoading());
-	try {
-		const r = await API.get(`/user/list`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		dispatch(setUsers(r.data));
-		// console.log('usersData->r:', r.data);
-	} catch (e) {
-		dispatch(setFetchFailed());
-		throw new Error(e);
-	}
-};
-/**
- * Endpoint, realiza la peticion para listar usuarios
- * @function {async} filterUsersAsync
- * @param {String} token access_token del usuario
- * @param {String} search
- * @param {String} rol
- * @param {String} sesion
- * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
- */
-export const filterUsersAsync =
-	(token, search = 'All', rol, sesion) =>
+export const usersAsync =
+	(token, page, search = 'All', rol = 'All', sesion = 'All') =>
 	async dispatch => {
 		search = search === '' ? 'All' : search;
-
-		dispatch(setFilterLoading());
+		dispatch(setLoading());
 		try {
-			const r = await API.get(`/user/list?search=${search}&rol=${rol}&sesion=${sesion}`, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
+			const r = await API.get(
+				`/user/list?pag=${page}&search=${search}&rol=${rol}&sesion=${sesion}`,
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
 			dispatch(setUsers(r.data));
 			// console.log('usersData->r:', r.data);
 		} catch (e) {
@@ -89,6 +75,32 @@ export const filterUsersAsync =
 			throw new Error(e);
 		}
 	};
+// /**
+//  * Endpoint, realiza la peticion para listar usuarios
+//  * @function {async} filterUsersAsync
+//  * @param {String} token access_token del usuario
+//  * @param {String} search
+//  * @param {String} rol
+//  * @param {String} sesion
+//  * @property {Function} dispatch funcion que ejecuta funciones del reducer de complaintSlice
+//  */
+// export const filterUsersAsync =
+// 	(token, search = 'All', rol, sesion) =>
+// 	async dispatch => {
+// 		search = search === '' ? 'All' : search;
+
+// 		dispatch(setFilterLoading());
+// 		try {
+// 			const r = await API.get(`/user/list?search=${search}&rol=${rol}&sesion=${sesion}`, {
+// 				headers: { Authorization: `Bearer ${token}` },
+// 			});
+// 			dispatch(setUsers(r.data));
+// 			// console.log('usersData->r:', r.data);
+// 		} catch (e) {
+// 			dispatch(setFetchFailed());
+// 			throw new Error(e);
+// 		}
+// 	};
 /**
  * Endpoint, realiza la peticion para editar informacion de un usuario
  * @function {async} updateUserAsync
@@ -150,6 +162,6 @@ export const createUserAsync = (token, values, imageFile) => async dispatch => {
 	}
 };
 
-export const { setUsers, setLoading, setFetchFailed, setFilterLoading } =
+export const { setUsers, setLoading, setFetchFailed, setFilterLoading, setPage } =
 	usersSlice.actions;
 export default usersSlice.reducer;
