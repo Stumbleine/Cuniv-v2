@@ -72,10 +72,17 @@ export default function AccountProfile() {
 			apellidos: user.apellidos,
 		},
 		validationSchema: Yup.object().shape({
+			nombres: Yup.string()
+				.required('Nombres son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
+			apellidos: Yup.string()
+				.required('Apellidos son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			email: Yup.string()
 				.email('El correo electrónico debe ser una dirección válida')
 				.required('Correo electrónico es requerido'),
 		}),
+		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
 			 * Realiza dispatch a updateAccountAsync para editar la informacion del usuario

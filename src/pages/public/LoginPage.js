@@ -150,7 +150,7 @@ export default function LoginPage() {
 						</Stack>
 						{loginError && (
 							<Typography color="error" variant="body2" textAlign="center">
-								Las credenciales no son validas, vuelva a intentarlo
+								Las credenciales no son válidas, vuelva a intentarlo
 							</Typography>
 						)}
 					</Stack>

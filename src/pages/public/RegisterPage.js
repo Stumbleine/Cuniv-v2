@@ -46,8 +46,12 @@ export default function RegisterPage() {
 			rol: 'proveedor',
 		},
 		validationSchema: Yup.object().shape({
-			nombres: Yup.string().required('Nombres son requeridos'),
-			apellidos: Yup.string().required('Apellidos son requeridos'),
+			nombres: Yup.string()
+				.required('Nombres son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
+			apellidos: Yup.string()
+				.required('Apellidos son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			email: Yup.string().email('Correo no valido').required('Correo es requerido'),
 			password: Yup.string()
 				.required('Contraseña es requerido')

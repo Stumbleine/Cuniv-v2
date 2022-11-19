@@ -44,8 +44,8 @@ export default function Popup({ openFromFather, handleCloseFromFather }) {
 
 			<DialogContent>
 				<DialogContentText display="flex" alignItems="center">
-					Usted esta intentando ingresar con una cuenta institucional para estudiantes, si
-					es estudiante descargue la aplicacion movil o intente con otro tipo de cuenta
+					Usted está intentando ingresar con una cuenta institucional para estudiantes, si
+					es estudiante descargue la aplicacion móvil o intente con otro tipo de cuenta
 					google.
 				</DialogContentText>
 			</DialogContent>

@@ -11,7 +11,7 @@ import {
 	Stack,
 	TextField,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -72,8 +72,12 @@ export default function Edituser({ user, handleSnack, disabled }) {
 			// rol: '',
 		},
 		validationSchema: Yup.object().shape({
-			nombres: Yup.string().required('Los nombres son requeridos.'),
-			apellidos: Yup.string().required('Los apellidos son requeridos.'),
+			nombres: Yup.string()
+				.required('Los nombres son requeridos.')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
+			apellidos: Yup.string()
+				.required('Los apellidos son requeridos.')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			email: Yup.string().email().required('Correo electrónico es requerido.'),
 			// rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),

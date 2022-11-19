@@ -188,6 +188,9 @@ export default function LandingPage() {
 										<Button
 											color="success"
 											startIcon={<Android />}
+											onClick={() =>
+												window.open('https://play.google.com/store/games', '_blank')
+											}
 											size="large"
 											variant="contained">
 											Descarga nuestra app
@@ -309,23 +312,6 @@ export default function LandingPage() {
 		</>
 	);
 }
-
-const empresas = [
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/nutrexplosion.jpg' },
-	{ nombre: 'Cine Center', image: '/imgs/empresas/cineCenter.png' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/fotoStudioProlab.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/lyncoln.png' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/opticaAmerica.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/pbchVintage.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/spaNatura.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/tinta-latte.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/skyBox.png' },
-
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/sernap.png' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/escuelaGorilas.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/chicago.jpg' },
-	{ nombre: 'NutreExplosion', image: '/imgs/empresas/milcar2.png' },
-];
 
 const itemData = [
 	{

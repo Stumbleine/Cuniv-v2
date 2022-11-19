@@ -24,8 +24,16 @@ export default function Footer() {
 				bottom: 0,
 				width: '100%',
 				py: 0.5,
+				// display: 'flex',
+				// justifyContent: 'center',
 			}}>
-			<Container maxWidth="xl" sx={{ display: 'flex', alignItems: 'center' }}>
+			<Container
+				maxWidth="xl"
+				sx={{
+					alignItems: 'center',
+					display: 'flex',
+					flexDirection: { xs: 'column-reverse', md: 'row' },
+				}}>
 				<Stack direction="row" spacing={1} sx={{ flexGrow: 1, alignItems: 'center' }}>
 					<Box component="img" src="/imgs/umss.png" sx={{ height: 30 }} />
 					<Typography

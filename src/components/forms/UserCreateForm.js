@@ -55,11 +55,16 @@ function UserCreateForm({ handleSnack, isSADM, isADM }) {
 			rol: isSADM === true ? '' : 'PRV',
 		},
 		validationSchema: Yup.object().shape({
-			nombres: Yup.string().required('Los nombres son requeridos.'),
-			apellidos: Yup.string().required('Los apellidos son requeridos.'),
+			nombres: Yup.string()
+				.required('Los nombres son requeridos.')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
+			apellidos: Yup.string()
+				.required('Los apellidos son requeridos.')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			email: Yup.string().email().required('Correo electrónico es requerido.'),
 			rol: Yup.string().required('Es necesario asginar un rol al usuario.'),
 		}),
+		enableReinitialize: true,
 		onSubmit: (values, { resetForm, setSubmitting }) => {
 			/**
 			 * Ejecuta el dispatch hacia createUserAsync con valores del form para crear un usario
