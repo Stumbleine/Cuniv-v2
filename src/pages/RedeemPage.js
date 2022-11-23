@@ -298,7 +298,7 @@ export default function RedeemPage() {
 										</React.Fragment>
 									))
 								)}
-								{(fetchFailed || cashiers.length <= 0 || (!cashiers && !isLoading)) && (
+								{(fetchFailed || cashiers?.length <= 0 || (!cashiers && !isLoading)) && (
 									<Typography align="center">No se econtraron cajeros</Typography>
 								)}
 							</List>
