@@ -155,7 +155,7 @@ function UserCreateForm({ handleSnack, isSADM, isADM }) {
 						</FormControl>
 					)}
 					<Typography variant="body2" color="textSecondary">
-						Nota: La contraseña se enviara al correo electrónico
+						Nota: La contraseña se enviará al correo electrónico.
 					</Typography>
 					<Box sx={{ position: 'relative' }}>
 						<Button
@@ -164,7 +164,7 @@ function UserCreateForm({ handleSnack, isSADM, isADM }) {
 							type="submit"
 							disabled={isSubmitting}
 							variant="contained">
-							Crear Usuario
+							{isSADM ? 'Crear Usuario' : isADM && 'Crear Proveedor'}
 						</Button>
 						{isSubmitting && (
 							<CircularProgress

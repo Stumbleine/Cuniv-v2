@@ -82,11 +82,11 @@ export default function StaticsPage() {
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
 								{summary?.total_views || summary?.total_views === 0
 									? summary.total_views
-									: status.error && '?'}
+									: status.error && '0'}
 							</Typography>
 						)}
 						<Typography variant="body2" color="textSecondary">
-							visualizaciones totales
+							Visualizaciones totales
 						</Typography>
 					</Box>
 					<Box sx={{ textAlign: 'center', alingItems: 'center', p: 2 }} component={Card}>
@@ -101,11 +101,11 @@ export default function StaticsPage() {
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
 								{summary?.total_codes || summary?.total_codes === 0
 									? summary.total_codes
-									: status.error && '?'}
+									: status.error && '0'}
 							</Typography>
 						)}
 						<Typography variant="body2" color="textSecondary">
-							códigos generados totales
+							Códigos generados totales
 						</Typography>
 					</Box>
 					<Box sx={{ textAlign: 'center', p: 2 }} component={Card}>
@@ -120,11 +120,11 @@ export default function StaticsPage() {
 							<Typography sx={{ fontSize: 30, lineHeight: 1, fontWeight: 'bold' }}>
 								{summary?.total_redeemed || summary?.total_redeemed === 0
 									? summary.total_redeemed
-									: status.error && '?'}
+									: status.error && '0'}
 							</Typography>
 						)}
 						<Typography color="textSecondary" variant="body2">
-							códigos cajeados totales
+							Códigos canjeados totales
 						</Typography>
 					</Box>
 				</Stack>

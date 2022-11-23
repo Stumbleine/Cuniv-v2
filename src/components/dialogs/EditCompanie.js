@@ -145,7 +145,7 @@ export default function EditCompanie({ companie, handleSnack }) {
 								<TextField
 									variant="outlined"
 									size="small"
-									label="Razon social *"
+									label="Razón social *"
 									{...getFieldProps('razon_social')}
 									error={Boolean(touched.razon_social && errors.razon_social)}
 									helperText={touched.razon_social && errors.razon_social}
@@ -176,13 +176,13 @@ export default function EditCompanie({ companie, handleSnack }) {
 									helperText={touched.nit && errors.nit}
 								/>
 								<FormControl fullWidth size="small">
-									<InputLabel id="rubro-label-e">rubro</InputLabel>
+									<InputLabel id="rubro-label-e">Rubro</InputLabel>
 									<FastField name="rubro">
 										{({ field, form, meta }) => (
 											<Select
 												labelId="rubro-label-e"
 												id="select-rubro-e"
-												input={<OutlinedInput id="select-rubro-e" label="rubro" />}
+												input={<OutlinedInput id="select-rubro-e" label="Rubro" />}
 												{...field}
 												error={Boolean(meta.touched && meta.errors)}>
 												{selectRubros?.map(r => (

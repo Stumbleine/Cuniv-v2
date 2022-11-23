@@ -205,7 +205,7 @@ export default function AddCompanyBranch({
 									autoFocus
 									variant="outlined"
 									size="small"
-									label="Nombre"
+									label="Nombre *"
 									InputProps={{
 										style: {
 											color: grey[900],
@@ -218,7 +218,7 @@ export default function AddCompanyBranch({
 								/>
 								<TextField
 									variant="outlined"
-									label="Dirección"
+									label="Dirección *"
 									size="small"
 									placeholder="Ejemplo: Av. Ayacucho #723"
 									InputProps={{
@@ -276,7 +276,9 @@ export default function AddCompanyBranch({
 								<Button onClick={handleClose}>Cancelar</Button>
 								<Box sx={{ position: 'relative' }}>
 									<Button fullWidth type="submit" disabled={isSubmitting}>
-										Guardar
+										{actionType === 'edit' || actionType === 'update-fetch'
+											? 'Guardar'
+											: 'Añadir'}
 									</Button>
 									{isSubmitting && (
 										<CircularProgress
