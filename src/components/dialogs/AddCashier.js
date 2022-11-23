@@ -64,8 +64,12 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 			cajero_de: user?.companie || null,
 		},
 		validationSchema: Yup.object().shape({
-			nombres: Yup.string().required('Los nombres son requeridos.'),
-			apellidos: Yup.string().required('Los apellidos son requeridos.'),
+			nombres: Yup.string()
+				.required('Nombres son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
+			apellidos: Yup.string()
+				.required('Apellidos son requeridos')
+				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			email: Yup.string().email().required('Correo electrónico es requerido.'),
 		}),
 		enableReinitialize: true,
