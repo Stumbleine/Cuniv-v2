@@ -62,6 +62,7 @@ export default function ComplaintPage() {
 		{ name: 'No cumple con la oferta' },
 		{ name: 'Higiene' },
 		{ name: 'No se acepta código de canje' },
+		{ name: 'Seguridad' },
 		{ name: 'Otro' },
 	];
 

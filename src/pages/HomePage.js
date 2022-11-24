@@ -24,7 +24,33 @@ export default function HomePage() {
 			{user?.companieVerified === false && !isAdmin && (
 				<WarningVerified>¡Su empresa a un no fue verificado!</WarningVerified>
 			)}
-
+			<Stack
+				spacing={1}
+				sx={{ bgcolor: 'primary.main', p: 2, borderRadius: 2, mt: 2, py: 3 }}
+				alignItems="center">
+				<Typography
+					color="white"
+					sx={{
+						fontWeight: 'bold',
+						lineHeight: 1,
+						textAlign: { xs: 'center', md: 'left' },
+						fontSize: 40,
+						fontFamily: 'Roboto condensed',
+					}}>
+					AMIGOS DE
+				</Typography>
+				<Typography
+					color="secondary"
+					sx={{
+						fontWeight: 'bold',
+						lineHeight: 1,
+						textAlign: { xs: 'center', md: 'left' },
+						fontSize: 40,
+						fontFamily: 'Roboto condensed',
+					}}>
+					SAN SIMÓN
+				</Typography>
+			</Stack>
 			<Stack spacing={1} sx={{ mt: 2 }} alignItems="center">
 				{/* {isAdmin ? (
 					<Stack spacing={1}>
@@ -33,7 +59,8 @@ export default function HomePage() {
 						</Typography>
 					</Stack>
 				) : ( */}
-				<Stack spacing={1}>
+
+				<Stack spacing={1} alignItems="center">
 					<Typography variant="h4" fontWeight="bold" textAlign="center">
 						¡Hola {user.nombres}, Bienvenido!
 					</Typography>

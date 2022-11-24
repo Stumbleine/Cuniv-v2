@@ -61,7 +61,7 @@ export default function UsersPage() {
 	const [sesion, setSesion] = useState('All');
 
 	const privilegeCreate = hasPrivilege(
-		['gestionar usuarios', 'crear producto'],
+		['gestionar usuarios', 'crear usuario'],
 		user.permisos
 	);
 

@@ -107,11 +107,35 @@ export default function LandingPage() {
 					background: '#0a1928',
 				}}>
 				<Container maxWidth="xl">
-					<Grid sx={{ py: 5 }} container spacing={2}>
+					<Grid sx={{ py: 4 }} container spacing={2}>
 						<Grid item xs={12} md={6} lg={6}>
 							<Grid item>
 								<Box>
 									<Stack spacing={2} sx={{ mr: 1 }}>
+										<Stack spacing={1}>
+											<Typography
+												color="white"
+												sx={{
+													fontWeight: 'bold',
+													lineHeight: 1,
+													textAlign: { xs: 'center', md: 'left' },
+													fontSize: 40,
+													fontFamily: 'Roboto condensed',
+												}}>
+												AMIGOS DE
+											</Typography>
+											<Typography
+												color="secondary"
+												sx={{
+													fontWeight: 'bold',
+													lineHeight: 1,
+													textAlign: { xs: 'center', md: 'left' },
+													fontSize: 40,
+													fontFamily: 'Roboto condensed',
+												}}>
+												SAN SIMÓN
+											</Typography>
+										</Stack>
 										<Typography
 											variant="h5"
 											color={grey[300]}
