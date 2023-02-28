@@ -73,13 +73,13 @@ export default function RejectCompanie({ companie, handleSnack, setReload, reloa
 			};
 			reject()
 				.then(() => {
-					handleSnack('Se ha rechazo con exito agregado exitosamente.', 'success');
+					handleSnack('Se ha rechazado con exito a la empresa.', 'success');
 					setReload(!reload);
 					resetForm();
 					handleClose();
 				})
 				.catch(() => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					resetForm();
 					handleClose();
 				});

@@ -97,7 +97,7 @@ export default function Edituser({ user, handleSnack, disabled }) {
 					resetForm();
 				})
 				.catch(e => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},

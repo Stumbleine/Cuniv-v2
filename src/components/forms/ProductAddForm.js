@@ -73,7 +73,7 @@ export default function ProductAddForm({ handleSnack, companies }) {
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 				});
 		},

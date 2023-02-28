@@ -92,7 +92,7 @@ export default function EditLink({ link, handleSnack }) {
 					resetForm();
 				})
 				.catch(() => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					isSubmitting(false);
 				});
 		},

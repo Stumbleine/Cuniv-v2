@@ -115,7 +115,7 @@ export default function UsersTable() {
 				handleSnack('Usuario eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 	const Actions = ({ user }) => {

@@ -200,7 +200,7 @@ export default function LandingPage() {
 										/>
 										{loginError && (
 											<Typography color="error" variant="body2" textAlign="center">
-												Algo salió mal, vuelva a intentarlo, si el problema persiste
+												Algo salió mal mal, vuelva a intentarlo, si el problema persiste
 												comuníquese con un administrador.
 											</Typography>
 										)}

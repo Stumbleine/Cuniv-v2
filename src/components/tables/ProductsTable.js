@@ -119,10 +119,10 @@ export default function ProductsTable({ handleSnack, companies }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente.', 'success');
+				handleSnack('Producto eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 

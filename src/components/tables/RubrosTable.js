@@ -92,7 +92,7 @@ export default function RubrosTable({ handleSnack }) {
 				handleSnack('Rubro eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 

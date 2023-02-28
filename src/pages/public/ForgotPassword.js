@@ -80,7 +80,7 @@ export default function ForgotPassword() {
 					resetForm();
 				})
 				.catch(r => {
-					handleSnack('Algo salio mal, vuelva a intentarlo', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo', 'error');
 					setSubmitting(false);
 				});
 		},

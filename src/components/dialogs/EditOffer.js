@@ -108,7 +108,7 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					setSubmitting(false);
 					handleClose();
 				});

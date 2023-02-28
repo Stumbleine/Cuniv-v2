@@ -93,12 +93,12 @@ export default function EditProduct({ product, companies, handleSnack }) {
 			};
 			update()
 				.then(r => {
-					handleSnack('Usuario actualizado exitosamente.', 'success');
+					handleSnack('Producto actualizado exitosamente.', 'success');
 					resetForm();
 					handleClose();
 				})
 				.catch(e => {
-					handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 					handleClose();
 					setSubmitting(false);
 				});

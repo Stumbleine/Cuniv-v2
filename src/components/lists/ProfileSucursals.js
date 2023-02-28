@@ -32,7 +32,7 @@ export default function ProfileSucursals({ sucursales, handleSnack }) {
 				handleSnack('Sucursal eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 	return (

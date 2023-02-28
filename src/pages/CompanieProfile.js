@@ -126,7 +126,7 @@ export default function CompanieProfile() {
 				setReload(!reload);
 			})
 			.catch(() => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 				setSubmitting(false);
 			});
 	};

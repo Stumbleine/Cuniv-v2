@@ -69,7 +69,7 @@ export default function RegisterPage() {
 				const r = await dispatch(registerAsync(values));
 				r
 					? handleSnack('Registro exitoso, redirigiendo...', 'success', '/login')
-					: handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+					: handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			};
 			register();
 		},

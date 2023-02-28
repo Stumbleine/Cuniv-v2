@@ -123,7 +123,7 @@ export default function RedeemPage() {
 				setReload(!reload);
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 	/**

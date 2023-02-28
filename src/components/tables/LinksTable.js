@@ -47,7 +47,7 @@ export default function LinksTable({ handleSnack }) {
 				handleSnack('Link eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 	const [rowsPerPage, setRowsPerPage] = useState(10);

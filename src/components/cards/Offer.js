@@ -65,7 +65,7 @@ export default function Offer({ offer, handleSnack, companies }) {
 				handleSnack('Oferta eliminada exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 	const privilegeEdit = hasPrivilege(

@@ -62,7 +62,7 @@ export default function LocationsTable({ handleSnack }) {
 				handleSnack('Locación eliminado exitosamente.', 'success');
 			})
 			.catch(e => {
-				handleSnack('Algo salió, vuelva a intentarlo.', 'error');
+				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
 			});
 	};
 
