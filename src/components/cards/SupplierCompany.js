@@ -40,7 +40,7 @@ export default function SupplierCompany({ companie, handleSnack }) {
 		};
 		delet()
 			.then(r => {
-				handleSnack('Usuario eliminado exitosamente.', 'success');
+				handleSnack('Empresa eliminada exitosamente.', 'success');
 			})
 			.catch(e => {
 				handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
