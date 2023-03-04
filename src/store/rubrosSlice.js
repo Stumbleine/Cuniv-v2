@@ -122,7 +122,7 @@ export const updateRubroAsync = (token, values, icon) => async dispatch => {
 		values = { ...values, icono: b64 };
 	}
 	try {
-		await API.post(`user/update?id=${values.id}`, values, {
+		await API.post(`user/update?id=${values.nombre}`, values, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(rubrosAsync(token));

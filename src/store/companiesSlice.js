@@ -222,7 +222,7 @@ export const reconsiderCompanieAsync = (token, id) => async dispatch => {
 		id_empresa: id,
 	};
 	try {
-		await API.post('empresa/re', data, {
+		await API.post('empresa/reconsider', data, {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		dispatch(compNotVerifiedAsync(token));

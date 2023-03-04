@@ -76,7 +76,7 @@ function UserCreateForm({ handleSnack, isSADM, isADM }) {
 			create()
 				.then(() => {
 					handleSnack(
-						isSADM ? 'Usuario' : 'Proveedor' + 'creado exitosamente.',
+						isSADM ? 'Usuario creado exitosamente' : 'Proveedor' + 'creado exitosamente.',
 						'success'
 					);
 					resetForm();
