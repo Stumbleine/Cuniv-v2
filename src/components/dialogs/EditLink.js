@@ -70,6 +70,7 @@ export default function EditLink({ link, handleSnack }) {
 			url: link.url,
 			priority: link.priority,
 		},
+		enableReinitialize: true,
 		validationSchema: Yup.object().shape({
 			title: Yup.string().required('El titulo del sitio es necesario'),
 			url: Yup.string().required('Especifique el URL'),

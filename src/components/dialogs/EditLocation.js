@@ -72,6 +72,7 @@ export default function EditLocation({ location, handleSnack }) {
 			type: location.type,
 			pos: '',
 		},
+		enableReinitialize: true,
 		validationSchema: Yup.object().shape({
 			name: Yup.string().required('Nombre de locacion es necesario'),
 			type: Yup.string().required('Especifique el tipo'),
