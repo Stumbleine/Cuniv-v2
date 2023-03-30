@@ -76,6 +76,7 @@ export default function DashboardLayout() {
 		if (user !== null && isAdmin) {
 			socket.on('web', data => {
 				handleNotiSnack(data);
+			   socket.emit("response", {id:data.id});		 
 			});
 		}
 	}, []);
