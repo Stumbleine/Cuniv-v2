@@ -99,6 +99,7 @@ export default function EditCompanie({ companie, handleSnack }) {
 					handleSnack('Empresa actualizada exitosamente.', 'success');
 					resetForm();
 					handleClose();
+					setSubmitting(false);
 				})
 				.catch(() => {
 					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');

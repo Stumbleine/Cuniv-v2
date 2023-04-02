@@ -102,6 +102,7 @@ export default function AccountProfile() {
 			fetch()
 				.then(r => {
 					handleSnack('Cuenta actualizada exitosamente.', 'success');
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(r => {

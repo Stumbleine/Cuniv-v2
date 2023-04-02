@@ -102,6 +102,7 @@ export default function Edituser({ user, handleSnack, disabled }) {
 				.then(r => {
 					handleSnack('Usuario actualizado exitosamente.', 'success');
 					handleClose();
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(e => {

@@ -105,6 +105,7 @@ export default function EditOffer({ offer, handleSnack, companies }) {
 				.then(r => {
 					handleSnack('Oferta actualizada exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(e => {
