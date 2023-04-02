@@ -55,25 +55,6 @@ export default function UsersTable() {
 	if (privilegeEdit || privilegeDelete) {
 		TABLE_HEAD.push({ id: 'acciones', label: 'Acciones', alignRight: false });
 	}
-	const [rowsPerPage, setRowsPerPage] = useState(15);
-	const [page, setPage] = useState(0);
-	/**
-	 * Cambia de pagina en la tabla
-	 * @function handleChangePage
-	 * @param {Object} event
-	 */
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
-	/**
-	 * Cambia la cantidad de usuarios a mostrarse en la tabla
-	 * @function handleChangeRowsPerPage
-	 * @param {Object} event
-	 */
-	const handleChangeRowsPerPage = event => {
-		setRowsPerPage(parseInt(event.target.value, 20));
-		setPage(0);
-	};
 
 	const [snack, setSnack] = useState({
 		open: false,
@@ -156,84 +137,80 @@ export default function UsersTable() {
 				</TableHead>
 				<TableBody>
 					{users && !filterLoading && !fetchFailed
-						? users
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((user, index = user.id) => (
-									<TableRow key={index} hover>
-										<TableCell component="th" scope="row">
-											<Stack direction="row" alignItems="center" spacing={2}>
-												<Avatar alt={user.nombres} src={user.picture} />
-												<Box>
-													<Typography
-														sx={{
-															maxWidth: 200,
-															whiteSpace: 'nowrap',
-															textOverflow: 'ellipsis',
-															overflow: 'hidden',
-														}}
-														variant="subtitle2">
-														{user.nombres + ' ' + user.apellidos}
-													</Typography>
-
-													<Typography
-														variant="subtitle2"
-														sx={{ color: 'text.secondary' }}>
-														{user.email}
-													</Typography>
-												</Box>
-											</Stack>
-										</TableCell>
-										<TableCell align="left">
-											{user.roles?.map(e => (
-												<Typography key={e.name}>{e.label}</Typography>
-											))}
-										</TableCell>
-										<TableCell align="left">{user.empresa}</TableCell>
-										<TableCell align="left">
-											{moment(user.created_at).format('LL')}
-										</TableCell>
-
-										<TableCell align="center">
-											<Box
-												sx={{
-													p: 0.5,
-													px: 1,
-													borderRadius: 2,
-													width: 'auto',
-													background:
-														user.sesion_status === 'offline' ? red[400] : green[500],
-												}}>
+						? users.map((user, index = user.id) => (
+								<TableRow key={index} hover>
+									<TableCell component="th" scope="row">
+										<Stack direction="row" alignItems="center" spacing={2}>
+											<Avatar alt={user.nombres} src={user.picture} />
+											<Box>
 												<Typography
-													variant="body2"
-													sx={{ color: 'white', lineHeight: 1, letterSpacing: 0.5 }}>
-													{user.sesion_status}
+													sx={{
+														maxWidth: 200,
+														whiteSpace: 'nowrap',
+														textOverflow: 'ellipsis',
+														overflow: 'hidden',
+													}}
+													variant="subtitle2">
+													{user.nombres + ' ' + user.apellidos}
+												</Typography>
+
+												<Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+													{user.email}
 												</Typography>
 											</Box>
+										</Stack>
+									</TableCell>
+									<TableCell align="left">
+										{user.roles?.map(e => (
+											<Typography key={e.name}>{e.label}</Typography>
+										))}
+									</TableCell>
+									<TableCell align="left">{user.empresa}</TableCell>
+									<TableCell align="left">
+										{moment(user.created_at).format('LL')}
+									</TableCell>
+
+									<TableCell align="center">
+										<Box
+											sx={{
+												p: 0.5,
+												px: 1,
+												borderRadius: 2,
+												width: 'auto',
+												background:
+													user.sesion_status === 'offline' ? red[400] : green[500],
+											}}>
+											<Typography
+												variant="body2"
+												sx={{ color: 'white', lineHeight: 1, letterSpacing: 0.5 }}>
+												{user.sesion_status}
+											</Typography>
+										</Box>
+									</TableCell>
+									{(privilegeEdit || privilegeDelete) && (
+										<TableCell align="right">
+											{/* <Actions user={user} /> */}
+											<Box sx={{ display: 'flex' }}>
+												{privilegeEdit && (
+													<Edituser
+														user={user}
+														handleSnack={handleSnack}
+														// disabled={!isProvider}
+													/>
+												)}
+												{privilegeDelete && (
+													<DeleteItem
+														deleteAsync={deleteAsync}
+														id={user.id}
+														itemName={user.nombres}
+														// disabled={!isProvider}
+													/>
+												)}
+											</Box>
 										</TableCell>
-										{(privilegeEdit || privilegeDelete) && (
-											<TableCell align="right">
-												{/* <Actions user={user} /> */}
-												<Box sx={{ display: 'flex' }}>
-													{privilegeEdit && (
-														<Edituser
-															user={user}
-															handleSnack={handleSnack}
-															// disabled={!isProvider}
-														/>
-													)}
-													{privilegeDelete && (
-														<DeleteItem
-															deleteAsync={deleteAsync}
-															id={user.id}
-															itemName={user.nombres}
-															// disabled={!isProvider}
-														/>
-													)}
-												</Box>
-											</TableCell>
-										)}
-									</TableRow>
-								))
+									)}
+								</TableRow>
+						  ))
 						: (isLoading || filterLoading) && <SkeletonTable head={TABLE_HEAD} />}
 				</TableBody>
 			</Table>
@@ -243,18 +220,6 @@ export default function UsersTable() {
 						No se encontraron usuarios.
 					</Typography>
 				</Box>
-			)}
-
-			{users && (
-				<TablePagination
-					rowsPerPageOptions={[15, 20]}
-					component="div"
-					count={users?.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
 			)}
 		</TableContainer>
 	);
