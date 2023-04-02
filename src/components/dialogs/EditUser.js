@@ -19,6 +19,7 @@ import UploadImage from '../UploadImage';
 import { green } from '@mui/material/colors';
 import { updateUserAsync } from '../../store/usersSlice';
 import { Transition } from '../../Utils/Transitions';
+import { isEstudentEmail } from '../../Utils/Validations.js';
 
 /**
  * Dialogo con formulario para editar informacion de un usuario,
@@ -70,6 +71,13 @@ export default function Edituser({ user, handleSnack, disabled }) {
 			apellidos: user?.apellidos || '',
 			email: user?.email || '',
 			// rol: '',
+		},
+		validate: values => {
+			let errors = {};
+			if (isEstudentEmail(values.email)) {
+				errors.email = 'El correo no puede ser de un estudiante';
+			}
+			return errors;
 		},
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string()
