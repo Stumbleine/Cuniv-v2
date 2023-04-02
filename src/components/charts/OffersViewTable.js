@@ -1,4 +1,3 @@
-import { Warning } from '@mui/icons-material';
 import {
 	Paper,
 	Stack,
@@ -7,7 +6,6 @@ import {
 	TableCell,
 	TableContainer,
 	TableHead,
-	TablePagination,
 	TableRow,
 	Typography,
 } from '@mui/material';
@@ -57,15 +55,6 @@ export default function OffersViewTable() {
 	TABLE_HEAD.push({ id: 'vis', label: 'Vistas' });
 	TABLE_HEAD.push({ id: 'canjeados', label: 'Canjeados' });
 
-	const [rowsPerPage, setRowsPerPage] = useState(7);
-	const [page, setPage] = useState(0);
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
-	const handleChangeRowsPerPage = event => {
-		setRowsPerPage(parseInt(event.target.value, 7));
-		setPage(0);
-	};
 	return (
 		<TableContainer component={Paper} sx={{ borderRadius: 2 }}>
 			<Table size="small">
@@ -141,17 +130,6 @@ export default function OffersViewTable() {
 						No hay datos para mostrar.
 					</Typography>
 				</Box>
-			)}
-			{offersView && (
-				<TablePagination
-					rowsPerPageOptions={[7, 10]}
-					component="div"
-					count={offersView?.length}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
 			)}
 		</TableContainer>
 	);
