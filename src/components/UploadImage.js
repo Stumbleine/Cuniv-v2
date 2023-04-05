@@ -100,12 +100,12 @@ export default function UploadImage({
 				sx={type === 'Circle' ? styles.BoxContainerCircle : styles.BoxContainerRectangle}>
 				<label htmlFor={id}>
 					<TextField
-						type="file"
+						type={"file"}
 						multiple
-						accept="image/*"
 						id={id}
 						onChange={handleChangeLogo}
 						sx={{ display: 'none' }}
+						inputProps={{accept:"image/*"}}
 					/>
 					<Box sx={type === 'Circle' ? styles.BoxContainer2Circle : null}>
 						<Box
