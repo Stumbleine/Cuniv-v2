@@ -90,7 +90,8 @@ export default function CompanieRegisterForm({ handleSnack }) {
 			razon_social: Yup.string().required('Razón social es requerido'),
 			descripcion: Yup.string().required('Descripción es requerido'),
 			rubro: Yup.string().required('Rubro es requerido'),
-			telefono: Yup.string().required('Teléfono/Celular es requerido'),
+			telefono: Yup.number().typeError('Teléfono/Celular no válido').positive('Teléfono/Celular no válido').max(99999999,'Teléfono/Celular permite como máximo 8 dígitos').required('Teléfono/Celular es requerido'),
+			nit: Yup.number().typeError('NIT no válido').max(999999999999999,'NIT solo permite 15 dígitos'),
 			id_proveedor: isAdmin && Yup.number().required('Debe asignar al responsable'),
 		}),
 		onSubmit: (values, { resetForm, setSubmitting }) => {
@@ -210,6 +211,8 @@ export default function CompanieRegisterForm({ handleSnack }) {
 											size="small"
 											placeholder="NIT del negocio"
 											{...field}
+											error={Boolean(meta.touched && meta.error)}
+											helperText={meta.touched && meta.error}
 										/>
 									)}
 								</FastField>
