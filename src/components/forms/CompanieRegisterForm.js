@@ -104,7 +104,6 @@ export default function CompanieRegisterForm({ handleSnack }) {
 					createCompanieAsync(accessToken, values, fileLogo, branchs)
 				);
 			}
-			console.log(post());
 			post()
 				.then(() => {
 					handleSnack('Empresa registrado exitosamente.', 'success');
@@ -252,7 +251,6 @@ export default function CompanieRegisterForm({ handleSnack }) {
 									</Button>
 									<Box sx={{ position: 'relative' }}>
 										<Button disabled={isSubmitting} type="submit" variant="contained">
-										{console.log('valos submitting', isSubmitting)}
 											Guardar
 										</Button>
 										{isSubmitting && (
