@@ -81,6 +81,7 @@ export default function EditRubro({ rubro, handleSnack }) {
 				.then(r => {
 					handleSnack('Rubro actualizado exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(e => {

@@ -78,6 +78,7 @@ export default function EditManager({ data, handleSnack }) {
 				.then(() => {
 					handleSnack('Responsable actualizada exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(() => {

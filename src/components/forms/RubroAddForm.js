@@ -70,6 +70,7 @@ export default function RubroAddForm({ handleSnack }) {
 			add()
 				.then(() => {
 					handleSnack('Rubro agregado exitosamente.', 'success');
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(() => {

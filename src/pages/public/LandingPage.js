@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import Popup from '../../components/dialogs/Popup';
 import API from '../../conection';
 import { loginGoogleAsync } from '../../store/loginSlice';
+import { isEstudentEmail } from '../../Utils/Validations.js';
 /**
  * Orgniza las imagenes de la lista
  * @function srcset
@@ -50,8 +51,7 @@ export default function LandingPage() {
 	 * @function onLoginSuccess
 	 */
 	const onLoginSuccess = res => {
-		const cadenas = res.profileObj.email.split('@');
-		if (cadenas[1] === 'est.umss.edu') {
+		if (isEstudentEmail(res.profileObj.email)) {
 			setOpen(true);
 		} else {
 			const login = async () => {

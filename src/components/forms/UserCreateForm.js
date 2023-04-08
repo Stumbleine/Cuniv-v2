@@ -81,6 +81,7 @@ function UserCreateForm({ handleSnack, isSADM, isADM }) {
 					);
 					resetForm();
 					setFileImage(null);
+					setSubmitting(false);
 				})
 				.catch(() => {
 					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');
