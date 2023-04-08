@@ -92,6 +92,7 @@ export default function Security() {
 				.then(() => {
 					handleSnack('Contraseña actualizado exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 				})
 				.catch(() => {
 					handleSnack('Algo salió mal, vuelva a intentarlo.', 'error');

@@ -70,6 +70,7 @@ export default function ProductAddForm({ handleSnack, companies }) {
 			add()
 				.then(() => {
 					handleSnack('Producto agregado exitosamente.', 'success');
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(() => {

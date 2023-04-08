@@ -113,7 +113,7 @@ export default function UsersPage() {
 	};
 
 	// let { pageUrl } = useParams();
-	const count = Math.ceil(total / 60);
+	const count = Math.ceil(total / 20);
 
 	// useEffect(() => {
 	// 	if (pageUrl != undefined) {

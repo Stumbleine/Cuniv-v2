@@ -95,6 +95,7 @@ export default function EditProduct({ product, companies, handleSnack }) {
 				.then(r => {
 					handleSnack('Producto actualizado exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(e => {

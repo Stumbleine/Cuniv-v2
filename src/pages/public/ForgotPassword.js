@@ -78,6 +78,7 @@ export default function ForgotPassword() {
 					setForgot(true);
 					handleSnack('Email enviado exitosamente.', 'success');
 					resetForm();
+					setSubmitting(false);
 				})
 				.catch(r => {
 					handleSnack('Algo salió mal, vuelva a intentarlo', 'error');

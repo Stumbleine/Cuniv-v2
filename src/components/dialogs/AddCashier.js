@@ -85,8 +85,8 @@ export default function AddCashier({ handleSnack, setReload, reload }) {
 				.then(r => {
 					handleSnack('Cajero creado exitosamente.', 'success');
 					setReload(!reload);
-
 					resetForm();
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(e => {

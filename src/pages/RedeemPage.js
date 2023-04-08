@@ -73,6 +73,7 @@ export default function RedeemPage() {
 					setRedeemSuccess(true);
 					resetForm();
 					setRedeemError(false);
+					setSubmitting(false);
 				})
 				.catch(e => {
 					setRedeemError(true);

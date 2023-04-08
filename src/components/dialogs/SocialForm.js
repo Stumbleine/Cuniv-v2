@@ -75,6 +75,7 @@ export default function SocialForm({ companie, mode, handleSnack }) {
 			add()
 				.then(() => {
 					handleSnack('Link actualizado exitosamente.', 'success');
+					setSubmitting(false);
 					handleClose();
 				})
 				.catch(() => {

@@ -106,6 +106,7 @@ export default function CompanieRegisterForm({ handleSnack }) {
 			post()
 				.then(() => {
 					handleSnack('Empresa registrado exitosamente.', 'success');
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(() => {

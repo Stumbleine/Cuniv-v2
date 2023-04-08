@@ -20,6 +20,7 @@ import { updateAccountAsync } from '../store/userSlice';
 import SnackCustom from '../components/SnackCustom';
 import { green } from '@mui/material/colors';
 import UploadImage from '../components/UploadImage';
+import { isEstudentEmail } from '../Utils/Validations.js';
 /**
  * Pagina perfil de usuario que muestra la informacion del usuario
  * @component AccountProfile
@@ -71,6 +72,13 @@ export default function AccountProfile() {
 			nombres: user.nombres,
 			apellidos: user.apellidos,
 		},
+		validate: values => {
+			let errors = {};
+			if (isEstudentEmail(values.email)) {
+				errors.email = 'El correo no puede ser de un estudiante';
+			}
+			return errors;
+		},
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string()
 				.required('Nombres son requeridos')
@@ -94,6 +102,7 @@ export default function AccountProfile() {
 			fetch()
 				.then(r => {
 					handleSnack('Cuenta actualizada exitosamente.', 'success');
+					setSubmitting(false);
 					resetForm();
 				})
 				.catch(r => {
