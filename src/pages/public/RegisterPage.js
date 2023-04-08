@@ -47,22 +47,23 @@ export default function RegisterPage() {
 		},
 		validationSchema: Yup.object().shape({
 			nombres: Yup.string()
-				.required('Nombres son requeridos')
+				.required('El campo nombres es obligatorio.')
 				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
 			apellidos: Yup.string()
-				.required('Apellidos son requeridos')
+				.required('El campo apellidos es obligatorio.')
 				.matches(/[A-Za-z]+$/, 'No puede contener caracteres especiales y numeros.'),
-			email: Yup.string().email('Correo no valido').required('Correo es requerido'),
+			email: Yup.string()
+				.email('El email es invalido.')
+				.required('El campo email es obligatorio.'),
 			password: Yup.string()
-				.required('Contraseña es requerido')
+				.required('El campo contraseña es obligatorio.')
 				.matches(
 					/^(?=.*[A-Za-z])(?=.*\d)(?=.)[A-Za-z\d]{8,}$/,
-					'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero'
+					'Debe contener almenos 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero.'
 				),
-			confirm: Yup.string().oneOf(
-				[Yup.ref('password'), null],
-				'Las contraseñas deben ser iguales'
-			),
+			confirm: Yup.string()
+				.oneOf([Yup.ref('password'), null], 'Las contraseñas deben ser iguales')
+				.required('El campo confirmar contraseña es obligatorio.'),
 		}),
 		onSubmit: async (values, { resetForm }) => {
 			const register = async () => {
